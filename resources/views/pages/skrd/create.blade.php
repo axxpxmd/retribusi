@@ -1,0 +1,302 @@
+@extends('layouts.app')
+@section('title', '| '.$title.'')
+@section('content')
+<div class="page has-sidebar-left height-full">
+    <header class="blue accent-3 relative nav-sticky">
+        <div class="container-fluid text-white">
+            <div class="row p-t-b-10 ">
+                <div class="col">
+                    <h4>
+                        <i class="icon icon-document mr-2"></i>
+                        Tambah | {{ $title }}
+                    </h4>
+                </div>
+            </div>
+            <div class="row justify-content-between">
+                <ul role="tablist" class="nav nav-material nav-material-white responsive-tab">
+                    <li>
+                        <a class="nav-link" href="{{ route($route.'index') }}"><i class="icon icon-arrow_back"></i>Semua Data</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active show" id="tab1" data-toggle="tab" href="#semua-data" role="tab"><i class="icon icon-add"></i>Tambah Data</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+    <div class="container-fluid relative animatedParent animateOnce">
+        <div class="tab-content my-3" id="pills-tabContent">
+            <div class="tab-pane animated fadeInUpShort show active" id="semua-data" role="tabpanel">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="alert"></div>
+                        <div class="card">
+                            <h6 class="card-header"><strong>Tambah Data</strong></h6>
+                            <div class="card-body">
+                                <form class="needs-validation" id="form" method="POST"  enctype="multipart/form-data" novalidate>
+                                    {{ method_field('POST') }}
+                                    <input type="hidden" name="id_opd" value="{{ $opd->id }}">
+                                    <input type="hidden" name="id_jenis_pendapatan" value="{{ $jenis_pendapatan->id }}">
+
+                                    <input type="hidden" name="no_skrd" value="{{ $no_skrd }}">
+                                    <input type="hidden" name="nip_ttd" value="{{ $opd->nip_ttd }}">
+                                    <input type="hidden" name="no_bayar" value="{{ $no_bayar }}">
+                                    <div class="form-row form-inline">
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group m-0">
+                                                        <label for="n_opd" class="col-form-label s-12 col-md-4">Nama OPD<span class="text-danger ml-1">*</span></label>
+                                                        <input type="text" name="n_opd" id="n_opd" value="{{ $opd->n_opd }}"  class="form-control r-0 light s-12 col-md-8" autocomplete="off" readonly required/>
+                                                    </div>
+                                                    <div class="form-group m-0">
+                                                        <label for="rincian_jenis_pendapatan" class="col-form-label s-12 col-md-4">Jenis Pendapatan<span class="text-danger ml-1">*</span></label>
+                                                        <input type="text" name="rincian_jenis_pendapatan" id="rincian_jenis_pendapatan" value="{{ $jenis_pendapatan->jenis_pendapatan }}"  class="form-control r-0 light s-12 col-md-8" autocomplete="off" readonly required/>
+                                                    </div>
+                                                    <div class="form-group m-0">
+                                                        <label class="col-form-label s-12 col-md-4">Rincian Jenis Pendapatan<span class="text-danger ml-1">*</span></label>
+                                                        <div class="col-md-8 p-0 bg-light">
+                                                            <select class="select2 form-control r-0 light s-12" id="id_rincian_jenis_pendapatan" name="id_rincian_jenis_pendapatan" autocomplete="off">
+                                                                <option value="">Pilih</option>
+                                                                @foreach ($rincians as $i)
+                                                                    <option value="{{ $i->id }}">{{ $i->rincian_pendapatan }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group m-0">
+                                                        <label for="kode_rekening" class="col-form-label s-12 col-md-4">Kode Rekening<span class="text-danger ml-1">*</span></label>
+                                                        <input type="text" name="kode_rekening" id="kode_rekening" class="form-control r-0 light s-12 col-md-8" autocomplete="off" readonly required/>
+                                                    </div>
+                                                    <div class="form-group m-0">
+                                                        <label for="uraian_retribusi" class="col-form-label s-12 col-md-4">Uraian Retribusi<span class="text-danger ml-1">*</span></label>
+                                                        <textarea type="text" rows="3" name="uraian_retribusi" id="uraian_retribusi" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group m-0">
+                                                        <label for="nmr_daftar" class="col-form-label s-12 col-md-4">Nomor Daftar<span class="text-danger ml-1">*</span></label>
+                                                        <input type="text" name="nmr_daftar" id="nmr_daftar" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
+                                                    </div>
+                                                    <div class="form-group m-0">
+                                                        <label for="nm_wajib_pajak" class="col-form-label s-12 col-md-4">Nama Wajib Pajak<span class="text-danger ml-1">*</span></label>
+                                                        <input type="text" name="nm_wajib_pajak" id="nm_wajib_pajak" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
+                                                    </div>
+                                                    <div class="form-group m-0">
+                                                        <label for="alamat_wp" class="col-form-label s-12 col-md-4">Alamat Wajib Pajak<span class="text-danger ml-1">*</span></label>
+                                                        <input type="text" name="alamat_wp" id="alamat_wp" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
+                                                    </div>
+                                                    <div class="form-group m-0">
+                                                        <label class="col-form-label s-12 col-md-4">Kecamatan<span class="text-danger ml-1">*</span></label>
+                                                        <div class="col-md-8 p-0 bg-light">
+                                                            <select class="select2 form-control r-0 light s-12" id="kecamatan_id" name="kecamatan_id" autocomplete="off">
+                                                                <option value="">Pilih</option>
+                                                                @foreach ($kecamatans as $i)
+                                                                    <option value="{{ $i->id }}">{{ $i->n_kecamatan }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group mt-1">
+                                                        <label class="col-form-label s-12 col-md-4">Kelurahan<span class="text-danger ml-1">*</span></label>
+                                                        <div class="col-md-8 p-0 bg-light">
+                                                            <select class="select2 form-control r-0 light s-12" id="kelurahan_id" name="kelurahan_id" autocomplete="off">
+                                                                <option value="">Pilih</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group mt-1">
+                                                        <label for="lokasi" class="col-form-label s-12 col-md-4">Lokasi<span class="text-danger ml-1">*</span></label>
+                                                        <input type="text" name="lokasi" id="lokasi" placeholder="Contoh: Ruko Sektor 1.2 BSD" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
+                                                    </div>
+                                                    <div class="form-group m-0">
+                                                        <label class="col-form-label s-12 col-md-4">No Bayar<span class="text-danger ml-1">*</span></label>
+                                                        <input type="text" value="{{ $no_bayar }}" disabled class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group m-0">
+                                                        <label for="no_skrd" class="col-form-label s-12 col-md-4">Nomor SKRD<span class="text-danger ml-1">*</span></label>
+                                                        <input type="text" name="no_skrd" id="no_skrd" value="{{ $no_skrd }}" readonly class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
+                                                    </div>
+                                                    <div class="form-group m-0">
+                                                        <label for="tgl_skrd_awal" class="col-form-label s-12 col-md-4">Tanggal SKRD<span class="text-danger ml-1">*</span></label>
+                                                        <input type="date" onchange="setDate()" name="tgl_skrd_awal" id="tgl_skrd_awal" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
+                                                    </div>
+                                                    <div class="form-group m-0">
+                                                        <label for="tgl_skrd_akhir" class="col-form-label s-12 col-md-4">Jatuh Tempo<span class="text-danger ml-1">*</span></label>
+                                                        <input type="date" name="tgl_skrd_akhir" id="tgl_skrd_akhir" readonly class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
+                                                    </div>
+                                                    <div class="form-group m-0">
+                                                        <label for="nm_ttd" class="col-form-label s-12 col-md-4">Nama Penandatangan<span class="text-danger ml-1">*</span></label>
+                                                        <input type="text" name="nm_ttd" id="nm_ttd" value="{{ $opd->nm_ttd }}" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
+                                                    </div>
+                                                    <div class="form-group m-0">
+                                                        <label for="tgl_ttd" class="col-form-label s-12 col-md-4">Tanggal TTD<span class="text-danger ml-1">*</span></label>
+                                                        <input type="date" name="tgl_ttd" id="tgl_ttd" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
+                                                    </div>
+                                                    <div class="form-group m-0">
+                                                        <label for="jumlah_bayar" class="col-form-label s-12 col-md-4">Ketetapan<span class="text-danger ml-1">*</span></label>
+                                                        <input type="text" name="jumlah_bayar" id="rupiah1" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
+                                                    </div>
+                                                    <input type="hidden" id="rupiah2">
+                                                </div>
+                                            </div> 
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group mt-2">
+                                                        <div class="col-md-4"></div>
+                                                        <button type="submit" class="btn btn-primary btn-sm"><i class="icon-save mr-2"></i>Simpan</button>
+                                                    </div>  
+                                                </div>
+                                                <div class="col-md-6">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@include('pages.pengguna.show')
+@endsection
+@section('script')
+<script type="text/javascript">
+    function setDate(){
+        var date = document.getElementById('tgl_skrd_awal').value
+        var someDate = new Date(date);
+        someDate.setDate(someDate.getDate() + 30); //number  of days to add, e.x. 30 days
+        var dateFormated = someDate.toISOString().substr(0,10);
+        $('#tgl_skrd_akhir').val(dateFormated);
+    }
+
+    $('#id_rincian_jenis_pendapatan').on('change', function(){
+        val = $(this).val();
+        url = "{{ route('skrd.getKodeRekening', ':id') }}".replace(':id', val);
+        $.get(url, function(data){
+            $('#kode_rekening').val(data.nmr_rekening);
+            console.log(data.nmr_rekening);
+        }, 'JSON');
+    });
+
+    $('#form').on('submit', function (e) {
+        if ($(this)[0].checkValidity() === false) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        else{
+            $('#alert').html('');
+            url = "{{ route($route.'store') }}",
+            $.ajax({
+                url : url,
+                type : 'POST',
+                data: new FormData(($(this)[0])),
+                contentType: false,
+                processData: false,
+                success : function(data) {
+                    $.confirm({
+                        title: 'Success',
+                        content: data.message,
+                        icon: 'icon icon-check', 
+                        theme: 'modern',
+                        animation: 'scale',
+                        autoClose: 'ok|3000',
+                        type: 'green',
+                        buttons: {
+                            ok: {
+                                text: "ok!",
+                                btnClass: 'btn-primary',
+                                keys: ['enter'],
+                                action: function () {
+                                    location.reload();
+                                }
+                            }
+                        }
+                    });
+                },
+                error : function(data){
+                    err = '';
+                    respon = data.responseJSON;
+                    if(respon.errors){
+                        $.each(respon.errors, function( index, value ) {
+                            err = err + "<li>" + value +"</li>";
+                        });
+                    }
+                    $('#alert').html("<div role='alert' class='alert alert-danger alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button><strong>Error!</strong> " + respon.message + "<ol class='pl-3 m-0'>" + err + "</ol></div>");
+                }
+            });
+            return false;
+        }
+        $(this).addClass('was-validated');
+    });
+
+    $('#kecamatan_id').on('change', function(){
+        val = $(this).val();
+        option = "<option value=''>&nbsp;</option>";
+        if(val == ""){
+            $('#kelurahan_id').html(option);
+        }else{
+            $('#kelurahan_id').html("<option value=''>Loading...</option>");
+            url = "{{ route('skrd.kelurahanByKecamatan', ':id') }}".replace(':id', val);
+            $.get(url, function(data){
+                if(data){
+                    $.each(data, function(index, value){
+                        option += "<option value='" + value.id + "'>" + value.n_kelurahan +"</li>";
+                    });
+                    $('#kelurahan_id').empty().html(option);
+
+                    $("#kelurahan_id").val($("#kelurahan_id option:first").val()).trigger("change.select2");
+                }else{
+                    $('#kelurahan_id').html(option);
+                }
+            }, 'JSON');
+        }
+    });
+
+    var rupiah = [];
+    for (let index = 1; index <= 2; index++) {
+        console.log('rupiah'+index);
+        rupiah[index] = document.getElementById('rupiah'+index);
+        rupiah[index].addEventListener('keyup', function(e){
+            // tambahkan 'Rp.' pada saat form di ketik
+            // gunakan fungsi formatRupiah() untuk mengubah angka yang di ketik menjadi format angka
+            rupiah[index].value = formatRupiah(this.value, 'Rp. ');
+        });
+
+        /* Fungsi formatRupiah */
+        function formatRupiah(angka, prefix){
+            var number_string = angka.replace(/[^,\d]/g, '').toString(),
+            split   		= number_string.split(','),
+            sisa     		= split[0].length % 3,
+            rupiah     		= split[0].substr(0, sisa),
+            ribuan     		= split[0].substr(sisa).match(/\d{3}/gi);
+
+            // tambahkan titik jika yang di input sudah menjadi angka ribuan
+            if(ribuan){
+                separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+
+            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+            return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+        }
+    }
+
+</script>
+@endsection
