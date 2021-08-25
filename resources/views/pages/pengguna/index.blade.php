@@ -49,13 +49,13 @@
                                 <div class="table-responsive">
                                     <table id="dataTable" class="table table-striped table-bordered" style="width:100%">
                                         <thead>
-                                            <th width="4%">No</th>
-                                            <th>Nama</th>
-                                            <th width="15%">Email</th>
+                                            <th width="5%">No</th>
+                                            <th width="15%">Nama</th>
+                                            <th width="40%">OPD</th>
                                             <th width="10%">No Telp</th>
                                             <th width="10%">Nama Login</th>
-                                            <th width="8%">Foto</th>
-                                            <th width="4%"></th>
+                                            <th width="10%">Foto</th>
+                                            <th width="5%"></th>
                                         </thead>
                                         <tbody></tbody>
                                     </table>
@@ -143,7 +143,7 @@
         columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false, align: 'center', className: 'text-center'},
             {data: 'full_name', name: 'full_name'},
-            {data: 'email', name: 'email'},
+            {data: 'opd', name: 'opd'},
             {data: 'phone', name: 'phone'},
             {data: 'user_id', name: 'user_id'},
             {data: 'photo', name: 'photo'},

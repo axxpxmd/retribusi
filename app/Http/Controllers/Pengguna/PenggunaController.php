@@ -70,6 +70,13 @@ class PenggunaController extends Controller
             ->editColumn('full_name', function ($p) {
                 return "<a href='" . route($this->route . 'edit', $p->id) . "' class='text-primary' title='Show Data'>" . $p->full_name . "</a>";
             })
+            ->editColumn('opd', function ($p) {
+                if ($p->opd == null) {
+                    return '-';
+                } else {
+                    return $p->opd->n_opd;
+                }
+            })
             ->editColumn('user_id', function ($p) {
                 return $p->user->username;
             })
