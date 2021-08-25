@@ -79,13 +79,17 @@ class ReportController extends Controller
             })
             ->addColumn('tgl_bayar', function ($p) {
                 if ($p->tgl_bayar != null) {
-                    return Carbon::createFromFormat('Y-m-d', $p->tgl_bayar)->format('d M Y');
+                    return Carbon::createFromFormat('Y-m-d H:i:s', $p->tgl_bayar)->format('d M Y | H:i:s');
                 } else {
                     return '-';
                 }
             })
             ->editColumn('total_bayar', function ($p) {
-                return 'Rp. ' . number_format($p->total_bayar);
+                if ($p->total_bayar != null) {
+                    return 'Rp. ' . number_format($p->total_bayar);
+                } else {
+                    return '-';
+                }
             })
             ->editColumn('status_bayar', function ($p) {
                 if ($p->status_bayar == 1) {
