@@ -56,7 +56,7 @@ class HomeController extends Controller
             ->get();
 
         foreach ($higherIncome as $key => $value) {
-            $color = ['#85C955', '#FFDE31', '#2979FF', '#F44336', '#99A6AE', '#36A2EB', '#00e5ff', '#f57f17', '#6d4c41', '#d500f9'];
+            $color = ['#26a69a', '#26c6da', '#42a5f5', '#ef5350', '#ff7043', '#5c6bc0', '#ffee58', '#bdbdbd', '#66bb6a ', '#ec407a'];
 
             $response[$key] = [
                 'y' => $value->y,

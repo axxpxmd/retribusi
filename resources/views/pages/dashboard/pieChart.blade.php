@@ -47,11 +47,11 @@
             data: [{
                 name: 'SKRD',
                 y: {{ $totalSKRD }},
-                color: '#2979FF'
+                color: '#2196f3'
             }, {
                 name: 'STS',
                 y: {{ $totalSTS }},
-                color: '#FFC518',
+                color: '#ffee58',
                 sliced: true
             }]
         }]
