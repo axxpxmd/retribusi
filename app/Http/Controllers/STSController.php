@@ -54,6 +54,7 @@ class STSController extends Controller
         $to   = $request->tgl_bayar1;
         $status_bayar = $request->status_bayar;
         $jenis_tanggal = $request->jenis_tanggal;
+        $no_bayar = $request->no_bayar;
 
         $checkOPD = Auth::user()->pengguna->opd_id;
         if ($checkOPD == 0 || $checkOPD == 99999) {
@@ -62,7 +63,7 @@ class STSController extends Controller
             $opd_id = $checkOPD;
         }
 
-        $data = TransaksiOPD::querySTS($from, $to, $opd_id, $status_bayar, $jenis_tanggal);
+        $data = TransaksiOPD::querySTS($from, $to, $opd_id, $status_bayar, $jenis_tanggal, $no_bayar);
 
         return DataTables::of($data)
             ->addColumn('action', function ($p) {

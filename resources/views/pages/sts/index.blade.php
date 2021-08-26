@@ -64,6 +64,12 @@
                             </div>
                         </div> 
                         <div class="form-group row" style="margin-top: -8px !important">
+                            <label for="no_bayar" class="col-form-label s-12 col-md-4 text-right font-weight-bolder">No Bayar : </label>
+                            <div class="col-sm-4">
+                                <input type="text" name="no_bayar" id="no_bayar" class="form-control r-0 s-12 col-md-12" autocomplete="off" required/>
+                            </div>
+                        </div>
+                        <div class="form-group row" style="margin-top: -8px !important">
                             <label class="col-form-label s-12 col-md-4 text-right font-weight-bolder">
                                 Tanggal &nbsp;
                                 <select class="r-0 light s-12 b-0 bg-transparent" name="jenis_tanggal" id="jenis_tanggal">
@@ -138,6 +144,7 @@
                 data.opd_id = $('#opd').val();
                 data.status_bayar = $('#status_bayar').val();
                 data.jenis_tanggal = $('#jenis_tanggal').val();
+                data.no_bayar = $('#no_bayar').val();
             }
         },
         columns: [

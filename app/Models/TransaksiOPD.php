@@ -163,7 +163,7 @@ class TransaksiOPD extends Model
     }
 
     // 
-    public static function querySTS($from, $to, $opd_id, $status_bayar, $jenis_tanggal)
+    public static function querySTS($from, $to, $opd_id, $status_bayar, $jenis_tanggal, $no_bayar)
     {
         $data = TransaksiOPD::orderBy('id', 'DESC');
 
@@ -173,6 +173,10 @@ class TransaksiOPD extends Model
 
         if ($status_bayar != null) {
             $data->where('status_bayar', $status_bayar);
+        }
+
+        if ($no_bayar != null) {
+            $data->where('no_bayar', 'like', '%' . $no_bayar . '%');
         }
 
         if ($jenis_tanggal == 1) {
