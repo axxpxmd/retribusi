@@ -56,11 +56,14 @@ class HomeController extends Controller
             ->get();
 
         foreach ($higherIncome as $key => $value) {
+            $color = ['#85C955', '#FFDE31', '#2979FF', '#F44336', '#99A6AE', '#36A2EB', '#00e5ff', '#f57f17', '#6d4c41', '#d500f9'];
+
             $response[$key] = [
                 'y' => $value->y,
                 'name' => $value->name,
                 'drilldown' => $value->drilldown,
                 'id_opd' => $value->id_opd,
+                'color' => $color[$key]
             ];
 
             $higherIncomeRetribution = TransaksiOPD::select(DB::raw("SUM(total_bayar) as y"), 'id_jenis_pendapatan', 'id_opd')
@@ -79,7 +82,8 @@ class HomeController extends Controller
             $dataTest1[$key] = [
                 'name' => 'Jenis Pendapatan',
                 'id' => $value1->opd->n_opd,
-                'data' => $dalem1
+                'data' => $dalem1,
+                'color' => $color[$key]
             ];
         }
         $data = json_encode($response);

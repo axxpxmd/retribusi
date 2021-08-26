@@ -27,7 +27,7 @@
                 @include('pages.dashboard.card2')
             @endif
             @if ($opd_id == 0 || $opd_id == 99999)
-            <div class="row pl-0 col-md-12">
+            <div class="row pl-0 pr-0 col-md-12">
                 <div class="col-md-8">
                     @include('pages.dashboard.chartDiagram')
                 </div>
