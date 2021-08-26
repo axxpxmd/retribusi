@@ -29,14 +29,10 @@
             @if ($opd_id == 0 || $opd_id == 99999)
             <div class="row pl-0 col-md-12">
                 <div class="col-md-8">
-                    @include('pages.dashboard.chart')
+                    @include('pages.dashboard.chartDiagram')
                 </div>
                 <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            pie chart
-                        </div>
-                    </div>
+                    @include('pages.dashboard.pieChart')
                 </div>
             </div>
             @endif

@@ -51,7 +51,6 @@
     <div class="card-body">
         <figure class="highcharts-figure">
             <div id="container"></div>
-            <p class="highcharts-description"></p>
         </figure>
     </div>
 </div>
@@ -72,7 +71,7 @@
             type: 'column'
         },
         title: {
-            text: 'Pendapatan Tiap Dinas '+ year
+            text: 'Total Pendapatan Retribusi Tiap Dinas, '+ year
         },
         subtitle: {
             text: ''

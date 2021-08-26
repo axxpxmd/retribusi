@@ -49,7 +49,7 @@ class HomeController extends Controller
         $monthsskrd = TransaksiOPD::where('id_opd', $opd_id)->where('status_bayar', 0)->whereRaw('extract(month from created_at) = ?', [$month])->count();
         $monthssts = TransaksiOPD::where('id_opd', $opd_id)->where('status_bayar', 1)->whereRaw('extract(month from created_at) = ?', [$month])->count();
 
-        $higherIncome = TransaksiOPD::select(DB::raw("SUM(total_bayar) as y"), 'tmopds.n_opd as name', 'tmopds.n_opd as drilldown', 'tmopds.id as id_opd')
+        $higherIncome = TransaksiOPD::select(DB::raw("SUM(total_bayar) as y"), 'tmopds.n_opd as name', 'tmopds.n_opd as drilldown', 'id_opd')
             ->join('tmopds', 'tmopds.id', '=', 'tmtransaksi_opd.id_opd')
             ->groupBy('id_opd')
             ->orderBy('y', 'DESC')
@@ -62,7 +62,6 @@ class HomeController extends Controller
                 'drilldown' => $value->drilldown,
                 'id_opd' => $value->id_opd,
             ];
-
 
             $higherIncomeRetribution = TransaksiOPD::select(DB::raw("SUM(total_bayar) as y"), 'id_jenis_pendapatan', 'id_opd')
                 ->where('id_opd', $value->id_opd)
@@ -86,6 +85,9 @@ class HomeController extends Controller
         $data = json_encode($response);
         $dataJson = json_encode($dataTest1);
 
+        $totalSKRD = TransaksiOPD::where('status_bayar', 0)->count();
+        $totalSTS = TransaksiOPD::where('status_bayar', 1)->count();
+
         return view('home', compact(
             'transaksiOPD',
             'transaksiTotal',
@@ -101,7 +103,9 @@ class HomeController extends Controller
             'monthssts',
             'data',
             'higherIncome',
-            'dataJson'
+            'dataJson',
+            'totalSKRD',
+            'totalSTS'
         ));
     }
 }
