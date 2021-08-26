@@ -64,6 +64,7 @@
 <script type="text/javascript">
     var userData = <?php echo $data?>;
     var userData1 = <?php echo $dataJson?>;
+    console.log(userData1);
     var year =  new Date().getFullYear();
     
     Highcharts.chart('container', {
@@ -97,8 +98,7 @@
             series: {
                 borderWidth: 0,
                 dataLabels: {
-                    enabled: true,
-                    // format:'Rp.'+'{point.y}'
+                    enabled: true
                 }
             }
         },
@@ -120,10 +120,7 @@
             }
         }],
         drilldown: {
-            series: [
-                userData1
-            ]
-            
+            series: userData1
         }
     });
 

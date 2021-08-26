@@ -62,28 +62,29 @@ class HomeController extends Controller
                 'drilldown' => $value->drilldown,
                 'id_opd' => $value->id_opd,
             ];
-        }
-        $data = json_encode($response);
 
-        $higherIncomeRetribution = TransaksiOPD::select(DB::raw("SUM(total_bayar) as y"), 'id_jenis_pendapatan', 'id_opd')
-            ->where('id_opd', $higherIncome[0]->id_opd)
-            ->groupBy('id_jenis_pendapatan')
-            ->get();
 
-        foreach ($higherIncomeRetribution as $key1 => $value1) {
-            $dalem1[$key1] = [
-                $value1->jenis_pendapatan->jenis_pendapatan,
-                $value1->y
+            $higherIncomeRetribution = TransaksiOPD::select(DB::raw("SUM(total_bayar) as y"), 'id_jenis_pendapatan', 'id_opd')
+                ->where('id_opd', $value->id_opd)
+                ->groupBy('id_jenis_pendapatan')
+                ->orderBy('y', 'DESC')
+                ->get();
+
+            foreach ($higherIncomeRetribution as $key1 => $value1) {
+                $dalem1[$key1] = [
+                    $value1->jenis_pendapatan->jenis_pendapatan,
+                    $value1->y
+                ];
+            }
+
+            $dataTest1[$key] = [
+                'name' => 'Jenis Pendapatan',
+                'id' => $value1->opd->n_opd,
+                'data' => $dalem1
             ];
         }
-
-        $dataTest = [
-            'name' => 'Jenis Pendapatan',
-            'id' => $higherIncomeRetribution[0]->opd->n_opd,
-            'data' => $dalem1
-        ];
-
-        $dataJson = json_encode($dataTest);
+        $data = json_encode($response);
+        $dataJson = json_encode($dataTest1);
 
         return view('home', compact(
             'transaksiOPD',
