@@ -26,6 +26,20 @@
             @if ($opd_id != 0 && $opd_id != 99999)
                 @include('pages.dashboard.card2')
             @endif
+            @if ($opd_id == 0 || $opd_id == 99999)
+            <div class="row pl-0 col-md-12">
+                <div class="col-md-8">
+                    @include('pages.dashboard.chart')
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            pie chart
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endif
             </div>
         </div>
     </div>

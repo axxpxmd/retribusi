@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+use App\Libraries\Html\Html_number;
 
 // Models
 use App\Models\OPD;
@@ -47,7 +49,41 @@ class HomeController extends Controller
         $monthsskrd = TransaksiOPD::where('id_opd', $opd_id)->where('status_bayar', 0)->whereRaw('extract(month from created_at) = ?', [$month])->count();
         $monthssts = TransaksiOPD::where('id_opd', $opd_id)->where('status_bayar', 1)->whereRaw('extract(month from created_at) = ?', [$month])->count();
 
-        $date = Carbon::create(2021, 8, \rand(1, 30));
+        $higherIncome = TransaksiOPD::select(DB::raw("SUM(total_bayar) as y"), 'tmopds.n_opd as name', 'tmopds.n_opd as drilldown', 'tmopds.id as id_opd')
+            ->join('tmopds', 'tmopds.id', '=', 'tmtransaksi_opd.id_opd')
+            ->groupBy('id_opd')
+            ->orderBy('y', 'DESC')
+            ->get();
+
+        foreach ($higherIncome as $key => $value) {
+            $response[$key] = [
+                'y' => $value->y,
+                'name' => $value->name,
+                'drilldown' => $value->drilldown,
+                'id_opd' => $value->id_opd,
+            ];
+        }
+        $data = json_encode($response);
+
+        $higherIncomeRetribution = TransaksiOPD::select(DB::raw("SUM(total_bayar) as y"), 'id_jenis_pendapatan', 'id_opd')
+            ->where('id_opd', $higherIncome[0]->id_opd)
+            ->groupBy('id_jenis_pendapatan')
+            ->get();
+
+        foreach ($higherIncomeRetribution as $key1 => $value1) {
+            $dalem1[$key1] = [
+                $value1->jenis_pendapatan->jenis_pendapatan,
+                $value1->y
+            ];
+        }
+
+        $dataTest = [
+            'name' => 'Jenis Pendapatan',
+            'id' => $higherIncomeRetribution[0]->opd->n_opd,
+            'data' => $dalem1
+        ];
+
+        $dataJson = json_encode($dataTest);
 
         return view('home', compact(
             'transaksiOPD',
@@ -61,7 +97,10 @@ class HomeController extends Controller
             'todaysskrd',
             'todayssts',
             'monthsskrd',
-            'monthssts'
+            'monthssts',
+            'data',
+            'higherIncome',
+            'dataJson'
         ));
     }
 }
