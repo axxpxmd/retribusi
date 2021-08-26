@@ -139,12 +139,16 @@ class TransaksiOPD extends Model
     }
 
     // 
-    public static function querySKRD($from, $to, $opd_id)
+    public static function querySKRD($from, $to, $opd_id, $no_skrd)
     {
         $data = TransaksiOPD::orderBy('id', 'DESC');
 
         if ($opd_id != 0) {
             $data->where('id_opd', $opd_id);
+        }
+
+        if ($no_skrd != null) {
+            $data->where('no_skrd', 'like', '%' . $no_skrd . '%');
         }
 
         if ($from != null ||  $to != null) {

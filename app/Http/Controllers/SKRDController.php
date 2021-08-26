@@ -57,6 +57,7 @@ class SKRDController extends Controller
     {
         $from  = $request->tgl_skrd;
         $to = $request->tgl_skrd1;
+        $no_skrd = $request->no_skrd;
 
         $checkOPD = Auth::user()->pengguna->opd_id;
         if ($checkOPD == 0 || $checkOPD == 99999) {
@@ -65,7 +66,7 @@ class SKRDController extends Controller
             $opd_id = $checkOPD;
         }
 
-        $data = TransaksiOPD::querySKRD($from, $to, $opd_id);
+        $data = TransaksiOPD::querySKRD($from, $to, $opd_id, $no_skrd);
 
         return DataTables::of($data)
             ->addColumn('action', function ($p) {

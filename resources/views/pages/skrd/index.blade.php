@@ -57,6 +57,12 @@
                         </div> 
                         @endif
                         <div class="form-group row" style="margin-top: -8px !important">
+                            <label for="no_skrd" class="col-form-label s-12 col-md-4 text-right font-weight-bolder">No SKRD : </label>
+                            <div class="col-sm-4">
+                                <input type="text" name="no_skrd" id="no_skrd" class="form-control r-0 s-12 col-md-12" autocomplete="off" required/>
+                            </div>
+                        </div> 
+                        <div class="form-group row" style="margin-top: -8px !important">
                             <label class="col-form-label s-12 col-md-4 text-right font-weight-bolder">Tanggal SKRD:</label>
                             <div class="col-sm-5 row">
                                 <input type="date" placeholder="MM/DD/YYYY" value="{{ $today }}" name="tgl_skrd" id="tgl_skrd" class="form-control r-0 light s-12 col-md-4 ml-3" autocomplete="off"/>
@@ -165,6 +171,7 @@
                 data.tgl_skrd = $('#tgl_skrd').val();
                 data.tgl_skrd1 = $('#tgl_skrd1').val();
                 data.opd_id = $('#opd').val();
+                data.no_skrd = $('#no_skrd').val();
             }
         },
         columns: [
