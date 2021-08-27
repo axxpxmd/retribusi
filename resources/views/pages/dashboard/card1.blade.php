@@ -6,7 +6,7 @@
         <div class="lightSlider" data-item="6" data-item-xl="4" data-item-md="2" data-item-sm="1" data-pause="5000" data-pager="false" data-auto="true" data-loop="true">
             <div class="p-5 bg-primary text-white">
                 <h5 class="font-weight-normal s-14" style="margin-bottom: 20px">Total Transaksi</h5>
-                <span class="s-48 font-weight-lighter text-primary sc-counter">{{ $transaksiTotal }}</span>
+                <span class="s-48 font-weight-lighter text-primary">{{ $transaksiTotal }}</span>
             </div>
             <?php $no = 0;?>
             @foreach ($transaksiOPD as $i)
