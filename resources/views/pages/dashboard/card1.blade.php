@@ -1,4 +1,4 @@
-<div class="card my-3 mr-3">
+<div class="card my-3">
     {{-- <div class="card-header white">
         <h6>DASHBOARD</h6>
     </div> --}}

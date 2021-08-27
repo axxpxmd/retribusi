@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card" style="margin-right: -15px !important">
     <div class="card-body">
         <figure class="highcharts-figure">
             <div id="pieChart"></div>
