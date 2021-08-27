@@ -45,17 +45,20 @@
                                         <tr class="no-b">
                                             <th></th>
                                             <th>Jenis Pendapatan</th>
+                                            <th>Total Bayar</th>
                                             <th>Jumlah</th>
                                         </tr>
                                         @forelse ($jenisPendapatanOpds as $index => $i)
                                         <tr>
-                                            <td class="text-center">{{  $index + $jenisPendapatanOpds->firstItem() }}</td>
-                                            <td class="text-uppercase" style="font-size: 13px !important">{{ $i->jenis_pendapatan->jenis_pendapatan }}</td>
-                                            <td class="sc-counter">{{ $i->transaksi_pendapatan_count }}</td>
+                                            <td width="5%" class="text-center">{{  $index + $jenisPendapatanOpds->firstItem() }}</td>
+                                            <td width="50%" class="text-uppercase" style="font-size: 13px !important">{{ $i->jenis_pendapatan->jenis_pendapatan }}</td>
+                                            <td width="30%">Rp. {{ number_format($i->total_bayar) }}</td>
+                                            <td width="15%" class="sc-counter">{{ $i->jumlah }}</td>
                                         </tr>
                                         @empty
                                         <tr>
                                             <td></td>
+                                            <td>-</td>
                                             <td>-</td>
                                             <td>-</td>
                                         </tr>
@@ -64,8 +67,17 @@
                                         <tfoot>
                                             <tr>
                                                 <th></th>
+                                                <th>Total Sudah Bayar</th>
+                                                <th>Rp. {{ number_format($jenisPendapatanTotalSudahBayar->total_bayar) }}</th>
+                                                <th>{{ $jenisPendapatanTotalSudahBayar->jumlah }}</th>
+                                            </tr>
+                                        </tfoot>
+                                        <tfoot>
+                                            <tr>
+                                                <th></th>
                                                 <th>Total</th>
-                                                <th>{{ $jenisPendapatanTotal }}</th>
+                                                <th>Rp. {{ number_format($jenisPendapatanTotal->total_bayar) }}</th>
+                                                <th>{{ $jenisPendapatanTotal->jumlah }}</th>
                                             </tr>
                                         </tfoot>
                                     </table>

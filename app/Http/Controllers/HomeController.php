@@ -35,11 +35,15 @@ class HomeController extends Controller
         $transaksiTotal = TransaksiOPD::count();
 
         // Card 2 
-        $sudahBayar = TransaksiOPD::where('id_opd', $opd_id)->where('status_bayar', 1)->count();
-        $belumBayar = TransaksiOPD::where('id_opd', $opd_id)->where('status_bayar', 0)->count();
+        $sudahBayar = TransaksiOPD::select(DB::raw("SUM(total_bayar) as total_bayar"), DB::raw("COUNT(id) as total_data"))->where('status_bayar', 1)->where('id_opd', $opd_id)->groupBy('id_opd')->first();
+        $belumBayar = TransaksiOPD::select(DB::raw("SUM(total_bayar) as total_bayar"), DB::raw("COUNT(id) as total_data"))->where('status_bayar', 0)->where('id_opd', $opd_id)->groupBy('id_opd')->first();
 
-        $jenisPendapatanOpds = OPDJenisPendapatan::where('id_opd', $opd_id)->withCount('transaksi_pendapatan')->orderBy('transaksi_pendapatan_count', 'DESC')->paginate(5);
-        $jenisPendapatanTotal = TransaksiOPD::where('id_opd', $opd_id)->count();
+        $jenisPendapatanOpds = TransaksiOPD::select(DB::raw("SUM(total_bayar) as total_bayar"), DB::raw("COUNT(id_jenis_pendapatan) as jumlah"), 'id_jenis_pendapatan')
+            ->where('id_opd', $opd_id)
+            ->groupBy('id_jenis_pendapatan')
+            ->paginate(5);
+        $jenisPendapatanTotal = TransaksiOPD::select(DB::raw("SUM(total_bayar) as total_bayar"), DB::raw("COUNT(id_jenis_pendapatan) as jumlah"))->where('id_opd', $opd_id)->first();
+        $jenisPendapatanTotalSudahBayar = TransaksiOPD::select(DB::raw("SUM(total_bayar) as total_bayar"), DB::raw("COUNT(id_jenis_pendapatan) as jumlah"))->where('id_opd', $opd_id)->where('status_bayar', 1)->first();
 
         $todays = TransaksiOPD::where('id_opd', $opd_id)->whereDate('created_at', $day)->orderBy('id', 'DESC')->get();
         $todaysskrd = TransaksiOPD::where('id_opd', $opd_id)->where('status_bayar', 0)->whereDate('created_at', $day)->count();
@@ -112,7 +116,8 @@ class HomeController extends Controller
             'dataJson',
             'totalSKRD',
             'totalSTS',
-            'todayDatas'
+            'todayDatas',
+            'jenisPendapatanTotalSudahBayar'
         ));
     }
 }
