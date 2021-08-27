@@ -58,7 +58,7 @@ $template = App\Models\Template::select('id', 'logo', 'logo_title', 'logo_auth')
                             </div>
                             @endif
                         </div>
-                        <button class="btn btn-primary btn-lg btn-block">Login</button>
+                        <button class="btn btn-primary btn-lg btn-block">Login<i class="icon-sign-in ml-2"></i></button>
                     </form>
                 </div>
             </div>

@@ -16,7 +16,7 @@
             <div class="tab-pane animated fadeInRightShort show active" id="v-pills-w1-tab1" role="tabpanel" aria-labelledby="v-pills-w1-tab1">
                 <div class="row p-3">
                     <div class="col-md-5 pt-2">
-                        @include('pages.dashboard.chart')
+                        @include('pages.dashboard.pieChart2')
                     </div>
                     <div class="col-md-7">
                         <div class="card-body pt-0">

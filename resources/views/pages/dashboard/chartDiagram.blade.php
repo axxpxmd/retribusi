@@ -73,9 +73,6 @@
         title: {
             text: 'Total Pendapatan Retribusi Tiap Dinas, '+ year
         },
-        subtitle: {
-            text: ''
-        },
         accessibility: {
             announceNewData: {
                 enabled: true
@@ -88,7 +85,6 @@
             title: {
                 text: 'Total Pendapatan'
             }
-
         },
         legend: {
             enabled: false
@@ -101,7 +97,6 @@
                 }
             }
         },
-
         tooltip: {
             headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
             pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>Rp.{point.y}</b> of total<br/>'
@@ -109,7 +104,6 @@
 
         series: [{
             name: "Nama Dinas",
-            colorByPoint: true,
             data: userData,
             dataLabels: {
                 enabled: true,
