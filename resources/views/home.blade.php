@@ -72,7 +72,7 @@
                                         </tr>
                                         @empty
                                         <tr>
-                                            <td colspan="4" class="text-center">Tidak ada data hari ini</td>
+                                            <td colspan="7" class="text-center">Tidak ada data hari ini</td>
                                         </tr>
                                         @endforelse
                                     </tbody>
