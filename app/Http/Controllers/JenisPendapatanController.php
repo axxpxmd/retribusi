@@ -37,11 +37,11 @@ class JenisPendapatanController extends Controller
             ->addColumn('action', function ($p) {
                 $check = OPDJenisPendapatan::where('id_jenis_pendapatan', $p->id)->count();
                 $check1 = TransaksiOPD::where('id_jenis_pendapatan', $p->id)->count();
-                if ($check == 0 || $check1 == 0) {
+                if ($check == 0 && $check1 == 0) {
+                    return "<a href='#' onclick='edit(" . $p->id . ")' title='Edit Permission'><i class='icon-edit mr-1'></i></a>";
+                } else {
                     return "<a href='#' onclick='edit(" . $p->id . ")' title='Edit Permission'><i class='icon-edit mr-1'></i></a>
                             <a href='#' onclick='remove(" . $p->id . ")' class='text-danger' title='Hapus Role'><i class='icon-remove'></i></a>";
-                } else {
-                    return "<a href='#' onclick='edit(" . $p->id . ")' title='Edit Permission'><i class='icon-edit mr-1'></i></a>";
                 }
             })
             ->addIndexColumn()
