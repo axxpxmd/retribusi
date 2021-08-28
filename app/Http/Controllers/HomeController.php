@@ -96,7 +96,7 @@ class HomeController extends Controller
         $totalSKRD = TransaksiOPD::where('status_bayar', 0)->count();
         $totalSTS = TransaksiOPD::where('status_bayar', 1)->count();
 
-        $todayDatas = TransaksiOPD::orderBy('id', 'DESC')->get()->take(4);
+        $todayDatas = TransaksiOPD::orderBy('id', 'DESC')->whereDate('created_at', $day)->get();
 
         return view('home', compact(
             'transaksiOPD',
