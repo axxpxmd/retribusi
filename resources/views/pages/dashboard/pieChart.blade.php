@@ -19,6 +19,9 @@
             plotShadow: false,
             type: 'pie'
         },
+        credits: {
+            enabled: false
+        },
         title: {
             text: 'Total Transaksi Retribusi, ' + year
         },

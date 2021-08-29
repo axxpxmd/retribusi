@@ -70,6 +70,9 @@
         chart: {
             type: 'column'
         },
+        credits: {
+            enabled: false
+        },
         title: {
             text: 'Total Pendapatan Retribusi Tiap Dinas, '+ year
         },
