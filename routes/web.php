@@ -30,6 +30,22 @@ Route::group(['middleware' => ['auth']], function () {
      * For Admin
      */
     Route::group(['middleware' => ['admin']], function () {
+        // Master Roles
+        Route::prefix('master-roles')->namespace('MasterRole')->name('master-role.')->group(function () {
+            // Role
+            Route::resource('role', 'RoleController');
+            Route::prefix('role')->name('role.')->group(function () {
+                Route::post('api', 'RoleController@api')->name('api');
+                Route::get('{id}/addPermissions', 'RoleController@permission')->name('addPermissions');
+                Route::post('storePermissions', 'RoleController@storePermission')->name('storePermissions');
+                Route::get('{id}/getPermissions', 'RoleController@getPermissions')->name('getPermissions');
+                Route::delete('{name}/destroyPermission', 'RoleController@destroyPermission')->name('destroyPermission');
+            });
+            // Permission
+            Route::resource('permission', 'PermissionController');
+            Route::post('permission/api', 'PermissionController@api')->name('permission.api');
+        });
+
         // Pengguna
         Route::namespace('Pengguna')->group(function () {
             Route::resource('pengguna', 'PenggunaController');
