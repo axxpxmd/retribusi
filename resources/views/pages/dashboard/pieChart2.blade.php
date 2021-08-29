@@ -51,15 +51,15 @@
             name: 'Jumlah',
             data: [{
                 name: 'Belum Bayar',
-                y: {{ $belumBayar->total_data }},
+                y: {{ $belumBayarTotalData }},
                 color: '#2196f3',
-                bayar: {{ $belumBayar->total_bayar }}
+                bayar: {{ $belumBayarTotalBayar }}
             }, {
                 name: 'Sudah Bayar',
-                y: {{ $sudahBayar->total_data }},
+                y: {{ $sudahBayarTotalData }},
                 color: '#ffee58',
                 sliced: true, 
-                bayar: {{ $sudahBayar->total_bayar }}
+                bayar: {{ $sudahBayarTotalBayar }}
             }],
         }]
     });
