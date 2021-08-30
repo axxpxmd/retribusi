@@ -90,14 +90,16 @@
                                     <table id="dataTable" class="table table-striped table-bordered" style="width:100%">
                                         <thead>
                                             <th width="5%">No</th>
-                                            <th width="8%">Nomor SKRD</th>
-                                            <th width="22%">Nama Dinas</th>
-                                            <th width="23%">Jenis Retribusi</th>
-                                            <th width="8%">Tanggal SKRD</th>
-                                            <th width="8%">Masa Berlaku</th>
+                                            <th width="8%">Nomor Bayar </th>
+                                            <th width="8%">Nomor SKRD </th>
+                                            <th width="11%">Nama Pembayar</th>
+                                            <th width="25%">Jenis Retribusi</th>
+                                            <th width="8%">Tanggal SKRD </th>
                                             <th width="8%">Tanggal Bayar</th>
-                                            <th width="8%">Total Bayar</th>
-                                            <th width="9%">Status Bayar</th>
+                                            <th width="10%">NTB </th>
+                                            <th width="9%">Total Bayar </th>
+                                            <th width="8%">Status Bayar</th>
+                                            {{-- <th width="5%"></th> --}}
                                         </thead>
                                         <tbody></tbody>
                                     </table>
@@ -148,14 +150,16 @@
         },
         columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false, align: 'center', className: 'text-center'},
+            {data: 'no_bayar', name: 'no_bayar'},
             {data: 'no_skrd', name: 'no_skrd'},
-            {data: 'id_opd', name: 'id_opd'},
+            {data: 'nm_wajib_pajak', name: 'nm_wajib_pajak'},
             {data: 'id_jenis_pendapatan', name: 'id_jenis_pendapatan'},
             {data: 'tgl_skrd', name: 'tgl_skrd'},
-            {data: 'masa_berlaku', name: 'masa_berlaku'},
             {data: 'tgl_bayar', name: 'tgl_bayar'},
+            {data: 'ntb', name: 'ntb'},
             {data: 'total_bayar', name: 'total_bayar'},
             {data: 'status_bayar', name: 'status_bayar'},
+            // {data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center'}
         ]
     });
 

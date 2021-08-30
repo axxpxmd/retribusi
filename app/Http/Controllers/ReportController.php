@@ -8,6 +8,7 @@ use DataTables;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Crypt;
 
 // Models
 use App\Models\OPD;
@@ -62,20 +63,19 @@ class ReportController extends Controller
         $data = TransaksiOPD::queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis);
 
         return DataTables::of($data)
-            // ->editColumn('no_skrd', function ($p) {
-            //     return "<a href='" . route($this->route . 'show', $p->id) . "' class='text-primary' title='Show Data'>" . $p->no_skrd . "</a>";
+            // ->addColumn('action', function ($p) {
+            //     return "
+            //         <a href='" . route($this->route . 'edit', Crypt::encrypt($p->id)) . "' class='text-primary mr-2' title='Hapus Data'><i class='icon icon-edit'></i></a>
+            //         <a href='" . route($this->route . 'report', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
             // })
-            ->editColumn('id_opd', function ($p) {
+            ->editColumn('no_bayar', function ($p) {
+                return "<a href='" . route($this->route . 'show', Crypt::encrypt($p->id)) . "' class='text-primary' title='Show Data'>" . $p->no_bayar . "</a>";
+            })
+            ->editColumn('opd_id', function ($p) {
                 return $p->opd->n_opd;
             })
             ->editColumn('id_jenis_pendapatan', function ($p) {
                 return $p->jenis_pendapatan->jenis_pendapatan;
-            })
-            ->addColumn('tgl_skrd', function ($p) {
-                return Carbon::createFromFormat('Y-m-d', $p->tgl_skrd_awal)->format('d M Y');
-            })
-            ->addColumn('masa_berlaku', function ($p) {
-                return Carbon::createFromFormat('Y-m-d', $p->tgl_skrd_akhir)->format('d M Y');
             })
             ->addColumn('tgl_bayar', function ($p) {
                 if ($p->tgl_bayar != null) {
@@ -84,12 +84,11 @@ class ReportController extends Controller
                     return '-';
                 }
             })
+            ->addColumn('tgl_skrd', function ($p) {
+                return Carbon::createFromFormat('Y-m-d', $p->tgl_skrd_awal)->format('d M Y');
+            })
             ->editColumn('total_bayar', function ($p) {
-                if ($p->total_bayar != null) {
-                    return 'Rp. ' . number_format($p->total_bayar);
-                } else {
-                    return '-';
-                }
+                return 'Rp. ' . number_format($p->total_bayar);
             })
             ->editColumn('status_bayar', function ($p) {
                 if ($p->status_bayar == 1) {
@@ -101,8 +100,24 @@ class ReportController extends Controller
                 }
             })
             ->addIndexColumn()
-            ->rawColumns(['no_skrd', 'id_opd', 'id_jenis_pendapatan', 'tgl_skrd', 'masa_berlaku'])
+            ->rawColumns(['no_bayar', 'opd_id', 'id_jenis_pendapatan', 'tgl_skrd', 'masa_berlaku', 'status_bayar'])
             ->toJson();
+    }
+
+    public function show($id)
+    {
+        $route = $this->route;
+        $title = $this->title;
+
+        $id = \Crypt::decrypt($id);
+
+        $data = TransaksiOPD::find($id);
+
+        return view($this->view . 'show', compact(
+            'route',
+            'title',
+            'data'
+        ));
     }
 
     public function getJenisPendapatanByOpd($opd_id)

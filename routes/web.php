@@ -99,6 +99,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     // Report
     Route::get('report', 'ReportController@index')->name('report.index');
+    Route::get('repost/{id}', 'ReportController@show')->name('report.show');
     Route::post('report/api-skrd', 'ReportController@api')->name('report.api');
     Route::get('report/cetak-skrd', 'ReportController@cetakSKRD')->name('report.cetakSKRD');
     Route::get('report/get-jenis-pendapatan/{opd_id}', 'ReportController@getJenisPendapatanByOpd')->name('report.getJenisPendapatan');
