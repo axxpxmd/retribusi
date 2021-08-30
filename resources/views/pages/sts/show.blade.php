@@ -166,17 +166,17 @@
                                                 @endif
                                             </div>
                                             <div class="row">
-                                                <label class="col-md-4 text-right s-12"><strong>No BKU :</strong></label>
-                                                <label class="col-md-8 s-12">{{ $data->no_bku != null ? $data->no_bku : '-' }}</label>
+                                                <label class="col-md-4 text-right s-12"><strong>Channel Bayar :</strong></label>
+                                                <label class="col-md-8 s-12">{{ $data->channel_bayar }}</label>
                                             </div> 
-                                            <div class="row">
+                                            {{-- <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>Tanggal BKU :</strong></label>
                                                 @if ($data->tgl_bku != null)
                                                 <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_bku)->format('d M Y') }}</label>
                                                 @else
                                                 <label class="col-md-8 s-12">-</label>
                                                 @endif
-                                            </div>
+                                            </div> --}}
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>Jumlah Cetak :</strong></label>
                                                 <label class="col-md-8 s-12">{{ $data->jumlah_cetak }}</label>
