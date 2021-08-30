@@ -133,6 +133,9 @@
             <tr class="c">
                 <td><p class="m-b-0">No Bayar </p></td>
                 <td><p class="m-b-0">: {{ $data->no_bayar }}</p></td>
+                <td></td>
+                <td><p class="m-b-0">NTB </p></td>
+                <td><p class="m-b-0">: {{ $data->ntb }}</p></td>
             </tr>
             <tr class="c">
                 <td><p class="m-t-0 m-b-0">No Pendaftaran </p></td>
