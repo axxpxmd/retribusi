@@ -141,10 +141,10 @@
                                                         <label for="tgl_bayar" class="col-form-label s-12 col-md-4">Tanggal Bayar</label>
                                                         <input type="datetime-local" name="tgl_bayar" value="{{ date('Y-m-d\TH:i', strtotime($data->tgl_bayar)) }}" id="tgl_bayar" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
                                                     </div>
-                                                    {{-- <div class="form-group m-0">
+                                                    <div class="form-group m-0">
                                                         <label for="no_bku" class="col-form-label s-12 col-md-4">Nomor BKU</label>
                                                         <input type="text" name="no_bku" value="{{ $data->no_bku }}" id="no_bku" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
-                                                    </div> --}}
+                                                    </div>
                                                     <div class="form-group m-0">
                                                         <label for="chanel_bayar" class="col-form-label s-12 col-md-4">Chanel Bayar</label>
                                                         <input type="text" name="chanel_bayar" value="{{ $data->chanel_bayar }}" readonly id="chanel_bayar" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>

@@ -152,7 +152,7 @@ class STSController extends Controller
         $data->update([
             'status_bayar' => $request->status,
             'tgl_bayar' => $request->tgl_bayar,
-            // 'no_bku' => $request->no_bku,
+            'no_bku' => $request->no_bku,
             // 'tgl_bku' => $request->tgl_bku,
             'denda' => $request->denda,
             'diskon' => $request->diskon,
