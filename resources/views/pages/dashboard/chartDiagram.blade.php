@@ -61,9 +61,9 @@
 <script src="https://code.highcharts.com/modules/export-data.js"></script>
 <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 <script type="text/javascript">
-    var userData = <?php echo $data?>;
-    var userData1 = <?php echo $dataJson?>;
-    console.log(userData1);
+    var parents = <?php echo $parentJson?>;
+    var childs = <?php echo $childJson?>;
+
     var year =  new Date().getFullYear();
     
     Highcharts.chart('container', {
@@ -106,17 +106,18 @@
         },
 
         series: [{
-            name: "Nama Dinas",
-            data: userData,
-            dataLabels: {
-                enabled: true,
-                formatter: function() {
-                    return 'Rp.'+ Highcharts.numberFormat(this.y, 0);
+                name: "Nama Dinas",
+                data: parents,
+                dataLabels: {
+                    enabled: true,
+                    formatter: function() {
+                        return 'Rp.'+ Highcharts.numberFormat(this.y, 0);
+                    }
                 }
             }
-        }],
+        ],
         drilldown: {
-            series: userData1
+            series: childs
         }
     });
 

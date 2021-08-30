@@ -68,12 +68,12 @@ class HomeController extends Controller
         foreach ($higherIncome as $key => $value) {
             $color = ['#26a69a', '#26c6da', '#42a5f5', '#ef5350', '#ff7043', '#5c6bc0', '#ffee58', '#bdbdbd', '#66bb6a ', '#ec407a'];
 
-            $response[$key] = [
-                'y' => $value->y,
+            $parents[$key] = [
+                'y'    => $value->y,
                 'name' => $value->name,
                 'drilldown' => $value->drilldown,
-                'id_opd' => $value->id_opd,
-                'color' => $color[$key]
+                'id_opd'    => $value->id_opd,
+                'color'     => $color[$key]
             ];
 
             $higherIncomeRetribution = TransaksiOPD::select(DB::raw("SUM(total_bayar) as y"), 'id_jenis_pendapatan', 'id_opd')
@@ -83,21 +83,21 @@ class HomeController extends Controller
                 ->get();
 
             foreach ($higherIncomeRetribution as $key1 => $value1) {
-                $dalem1[$key1] = [
-                    $value1->jenis_pendapatan->jenis_pendapatan,
-                    $value1->y
+                $dataChills[$key1] = [
+                    'name' => $value1->jenis_pendapatan->jenis_pendapatan,
+                    'y' => $value1->y
                 ];
             }
 
-            $dataTest1[$key] = [
-                'name' => 'Jenis Pendapatan',
-                'id' => $value1->opd->n_opd,
-                'data' => $dalem1,
+            $childs[$key] = [
+                'name'  => 'Jenis Pendapatan',
+                'id'    => $value1->opd->n_opd,
+                'data'  => $dataChills,
                 'color' => $color[$key]
             ];
         }
-        $data = json_encode($response);
-        $dataJson = json_encode($dataTest1);
+        $parentJson = json_encode($parents);
+        $childJson = json_encode($childs);
 
         $totalSKRD = TransaksiOPD::where('status_bayar', 0)->count();
         $totalSTS = TransaksiOPD::where('status_bayar', 1)->count();
@@ -119,9 +119,9 @@ class HomeController extends Controller
             'todayssts',
             'monthsskrd',
             'monthssts',
-            'data',
+            'parentJson',
             'higherIncome',
-            'dataJson',
+            'childJson',
             'totalSKRD',
             'totalSTS',
             'todayDatas',
