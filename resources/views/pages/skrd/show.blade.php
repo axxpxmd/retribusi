@@ -36,19 +36,27 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="row">
+                                                <label class="col-md-4 text-right s-12"><strong>Nama OPD :</strong></label>
+                                                <label class="col-md-8 s-12">{{ $data->opd->n_opd }}</label>
+                                            </div>
+                                            <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>Jenis Pendapatan:</strong></label>
                                                 <label class="col-md-8 s-12">{{ $data->jenis_pendapatan->jenis_pendapatan }}</label>
+                                            </div>
+                                            <div class="row">
+                                                <label class="col-md-4 text-right s-12"><strong>Rincian Jenis Retribusi:</strong></label>
+                                                <label class="col-md-8 s-12">{{ $data->rincian_jenis != null ? $data->rincian_jenis->rincian_pendapatan : '-' }}</label>
                                             </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>Uraian Retribusi:</strong></label>
                                                 <label class="col-md-8 s-12">{{ $data->uraian_retribusi }}</label>
                                             </div>
-                                            <div class="row">
-                                                <label class="col-md-4 text-right s-12"><strong>Nama OPD :</strong></label>
-                                                <label class="col-md-8 s-12">{{ $data->opd->n_opd }}</label>
-                                            </div>
                                         </div>
                                         <div class="col-md-6">
+                                            <div class="row">
+                                                <label class="col-md-4 text-right s-12"><strong>Nomor Rekening :</strong></label>
+                                                <label class="col-md-8 s-12">{{ $data->rincian_jenis != null ? $data->rincian_jenis->nmr_rekening : '-' }}</label>
+                                            </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>Nama TTD :</strong></label>
                                                 <label class="col-md-8 s-12">{{ $data->nm_ttd }}</label>
@@ -124,6 +132,14 @@
                                                 <label class="col-md-4 text-right s-12"><strong>Denda :</strong></label>
                                                 @if ($data->denda != null)
                                                 <label class="col-md-8 s-12">@currency($data->denda)</label>
+                                                @else
+                                                <label class="col-md-8 s-12">-</label>
+                                                @endif
+                                            </div> 
+                                            <div class="row">
+                                                <label class="col-md-4 text-right s-12"><strong>Diskon :</strong></label>
+                                                @if ($data->diskon != null)
+                                                <label class="col-md-8 s-12">@currency($data->diskon)</label>
                                                 @else
                                                 <label class="col-md-8 s-12">-</label>
                                                 @endif

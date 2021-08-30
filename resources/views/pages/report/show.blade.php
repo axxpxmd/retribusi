@@ -45,7 +45,7 @@
                                             </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>Rincian Jenis Retribusi:</strong></label>
-                                                <label class="col-md-8 s-12">{{ $data->rincian_jenis->rincian_pendapatan }}</label>
+                                                <label class="col-md-8 s-12">{{ $data->rincian_jenis != null ? $data->rincian_jenis->rincian_pendapatan : '-' }}</label>
                                             </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>Uraian Retribusi:</strong></label>
@@ -55,7 +55,7 @@
                                         <div class="col-md-6">
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>Nomor Rekening :</strong></label>
-                                                <label class="col-md-8 s-12">{{ $data->rincian_jenis->nmr_rekening }}</label>
+                                                <label class="col-md-8 s-12">{{ $data->rincian_jenis != null ? $data->rincian_jenis->nmr_rekening : '-' }}</label>
                                             </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>Nama TTD :</strong></label>
