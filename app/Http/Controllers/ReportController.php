@@ -132,12 +132,18 @@ class ReportController extends Controller
 
     public function cetakSKRD(Request $request)
     {
-        $opd_id = $request->opd_id;
         $jenis_pendapatan_id = $request->jenis_pendapatan_id;
         $status_bayar = $request->status_bayar;
         $from = $request->tgl_skrd;
         $to = $request->tgl_skrd1;
         $jenis = $request->jenis;
+
+        $checkOPD = Auth::user()->pengguna->opd_id;
+        if ($checkOPD == 0 || $checkOPD == 99999) {
+            $opd_id = $request->opd_id;
+        } else {
+            $opd_id = $checkOPD;
+        }
 
         $data = TransaksiOPD::queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis);
 
