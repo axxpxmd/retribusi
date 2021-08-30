@@ -106,7 +106,7 @@
                                             <th width="8%">Tanggal SKRD </th>
                                             <th width="8%">Tanggal Bayar</th>
                                             <th width="10%">NTB </th>
-                                            <th width="9%">Total Bayar </th>
+                                            <th width="9%">Total Bayar Bank </th>
                                             <th width="8%">Status Bayar</th>
                                             <th width="5%"></th>
                                         </thead>
