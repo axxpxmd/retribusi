@@ -71,13 +71,13 @@
                         <div class="bg-primary text-white lighten-2">
                             <div class="pt-5 pb-2 pl-5 pr-5">
                                 <div class="float-left">
-                                    <h5 class="font-weight-normal s-14">Bulan Ini</h5>
+                                    <h5 class="font-weight-normal s-14">SKRD</h5>
                                     <span class="s-48 font-weight-lighter text-primary">
                                         {{ $monthsskrd }}
                                     </span>
                                 </div>
                                 <div class="float-right">
-                                    <h5 class="font-weight-normal s-14">Bulan Ini</h5>
+                                    <h5 class="font-weight-normal s-14">STS</h5>
                                     <span class="s-48 font-weight-lighter text-primary">
                                         {{ $monthssts }}
                                     </span>
