@@ -1,6 +1,7 @@
 <style>
     #pieChart2 {
         height: auto;
+        width: 500px
     }
 </style>
 <figure class="highcharts-figure">
