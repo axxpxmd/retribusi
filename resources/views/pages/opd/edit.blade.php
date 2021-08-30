@@ -51,24 +51,16 @@
                                                 <input type="text" name="initial" id="initial" readonly class="form-control r-0 light s-12 col-md-4" value="{{ $data->initial }}" autocomplete="off" required/>
                                             </div> 
                                             <div class="form-group m-0">
-                                                <label for="nm_ttd" class="col-form-label s-12 col-md-2">Nama TTd</label>
+                                                <label for="nm_ttd" class="col-form-label s-12 col-md-2">Nama TTD</label>
                                                 <input type="text" name="nm_ttd" id="nm_ttd" class="form-control r-0 light s-12 col-md-4" value="{{ $data->nm_ttd }}" autocomplete="off"/>
                                             </div> 
                                             <div class="form-group m-0">
-                                                <label for="nip_ttd" class="col-form-label s-12 col-md-2">NIP TTd</label>
+                                                <label for="nip_ttd" class="col-form-label s-12 col-md-2">NIP TTD</label>
                                                 <input type="text" name="nip_ttd" id="nip_ttd" class="form-control r-0 light s-12 col-md-4" value="{{ $data->nip_ttd }}" autocomplete="off"/>
                                             </div> 
                                             <div class="form-group m-0">
                                                 <label for="npwpd" class="col-form-label s-12 col-md-2">NPWPD</label>
                                                 <input type="text" name="npwpd" id="npwpd" class="form-control r-0 light s-12 col-md-4" value="{{ $data->npwpd }}" autocomplete="off"/>
-                                            </div> 
-                                            <div class="form-group m-0">
-                                                <label for="no_rek" class="col-form-label s-12 col-md-2">No Rekening</label>
-                                                <input type="text" name="no_rek" id="no_rek" class="form-control r-0 light s-12 col-md-4" value="{{ $data->no_rek }}" autocomplete="off"/>
-                                            </div> 
-                                            <div class="form-group m-0">
-                                                <label for="kd_rek" class="col-form-label s-12 col-md-2">Kode Rekening</label>
-                                                <input type="text" name="kd_rek" id="kd_rek" class="form-control r-0 light s-12 col-md-4" value="{{ $data->kd_rek }}" autocomplete="off"/>
                                             </div> 
                                             <div class="form-group m-0">
                                                 <label for="alamat" class="col-form-label s-12 col-md-2">Alamat</label>
