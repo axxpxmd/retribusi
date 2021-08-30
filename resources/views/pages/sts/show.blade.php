@@ -170,6 +170,10 @@
                                                 <label class="col-md-8 s-12">{{ $data->channel_bayar != null ? $data->channel_bayar : '-'}}</label>
                                             </div> 
                                             <div class="row">
+                                                <label class="col-md-4 text-right s-12"><strong>NO BKU :</strong></label>
+                                                <label class="col-md-8 s-12">{{ $data->no_bku != null ? $data->no_bku : '-'}}</label>
+                                            </div> 
+                                            <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>NTB :</strong></label>
                                                 <label class="col-md-8 s-12">{{ $data->ntb != null ? $data->ntb : '-'}}</label>
                                             </div> 
