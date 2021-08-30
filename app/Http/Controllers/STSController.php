@@ -91,7 +91,11 @@ class STSController extends Controller
                 return Carbon::createFromFormat('Y-m-d', $p->tgl_skrd_awal)->format('d M Y');
             })
             ->editColumn('total_bayar', function ($p) {
-                return 'Rp. ' . number_format($p->total_bayar);
+                if ($p->total_bayar_bjb != null) {
+                    return 'Rp. ' . number_format($p->total_bayar_bjb);
+                } else {
+                    return '-';
+                }
             })
             ->editColumn('status_bayar', function ($p) {
                 if ($p->status_bayar == 1) {

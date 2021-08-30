@@ -173,14 +173,6 @@
                                                 <label class="col-md-4 text-right s-12"><strong>NTB :</strong></label>
                                                 <label class="col-md-8 s-12">{{ $data->ntb != null ? $data->ntb : '-'}}</label>
                                             </div> 
-                                            {{-- <div class="row">
-                                                <label class="col-md-4 text-right s-12"><strong>Tanggal BKU :</strong></label>
-                                                @if ($data->tgl_bku != null)
-                                                <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_bku)->format('d M Y') }}</label>
-                                                @else
-                                                <label class="col-md-8 s-12">-</label>
-                                                @endif
-                                            </div> --}}
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>Jumlah Cetak :</strong></label>
                                                 <label class="col-md-8 s-12">{{ $data->jumlah_cetak }}</label>
