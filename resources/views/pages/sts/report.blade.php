@@ -228,15 +228,17 @@
             </tr>
             <tr class="a">
                 <td colspan="4" class="a">
-                    <div class="text-right m-r-20">
+                    <div style="text-align:center; margin-right: -500px !important">
                         @if ($data->tgl_ttd != null)
                         <p>Serpong, {{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_ttd)->format('d M Y') }}</p>
                         @else
                         <p>Serpong, </p>
                         @endif
-                        {{-- <p class="t-bold">KEPALA {{ $data->opd->n_opd }}</p> --}}
-                        <p class="m-b-0 m-t-100 t-bold m-r-20"><u></u></p>
-                        <p class="m-t-0 t-bold m-r-20" style="margin-top: 5px"></p>
+                        <br>
+                        <br>
+                        <br>
+                        <p class="m-b-0"><u>{{ $data->opd->nm_ttd }}</u></p>
+                        <p class="m-t-0">{{ $data->opd->nip_ttd }}</p>
                     </div>
                 </td>
             </tr>
