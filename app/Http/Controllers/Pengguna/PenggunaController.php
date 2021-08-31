@@ -81,7 +81,11 @@ class PenggunaController extends Controller
                 }
             })
             ->editColumn('role', function ($p) {
-                return $p->role->name;
+                if ($p->role == null) {
+                    return '-';
+                } else {
+                    return $p->role->name;
+                }
             })
             ->editColumn('user_id', function ($p) {
                 return $p->user->username;

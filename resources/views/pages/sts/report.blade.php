@@ -92,6 +92,9 @@
         .m-t-15{
             margin-top: 15px
         }
+        .fs-12{
+            font-size: 12px 
+        }
 	</style>
 </head>
 <body >
@@ -133,9 +136,9 @@
             <tr class="c">
                 <td><p class="m-b-0">No Bayar </p></td>
                 <td><p class="m-b-0">: {{ $data->no_bayar }}</p></td>
-                <td></td>
+                {{-- <td></td>
                 <td><p class="m-b-0">NTB </p></td>
-                <td><p class="m-b-0">: {{ $data->ntb }}</p></td>
+                <td><p class="m-b-0">: {{ $data->ntb }}</p></td> --}}
             </tr>
             <tr class="c">
                 <td><p class="m-t-0 m-b-0">No Pendaftaran </p></td>
@@ -207,7 +210,9 @@
                 <td rowspan="2" class="a"><p class="m-l-5">-</p></td>
                 <td class="a">
                     <p class="m-l-5 m-b-0">Jumlah Ketetapan Pokok Retribusi :</p>
-                    <p class="m-l-5 m-t-1">Jumlah Sanksi : &nbsp; 1.Bunga &nbsp; 2.Kenaikan</p>
+                    <p class="m-l-5 m-t-1">Jumlah Sanksi :</p>
+                    <p>a. Bunga</p>
+                    <p>b</p>
                 </td>
                 <td class="a">
                     <p class="m-l-5 m-b-0 text-right m-r-10">@currency($data->denda),-</p>
@@ -246,6 +251,8 @@
                 </td>
             </tr>
         </table>
+        <p class="fs-12">NO NTB : {{ $data->ntb }}</p>
+        <p class="fs-12 m-t-0">TANGGAL BAYAR : {{ Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $data->tgl_bayar)->format('d M Y | H:i:s') }}</p>
     </div>
 </body>
 </html>
