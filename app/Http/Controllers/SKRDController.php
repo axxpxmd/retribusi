@@ -163,7 +163,7 @@ class SKRDController extends Controller
 
         $opd = OPD::find($opd_id);
         $jenis_pendapatan = JenisPendapatan::find($jenis_pendapatan_id);
-        $kecamatans = Kecamatan::select('id', 'n_kecamatan')->get();
+        $kecamatans = Kecamatan::select('id', 'n_kecamatan')->where('kabupaten_id', 40)->get();
         $rincians = RincianJenisPendapatan::where('id_jenis_pendapatan', $jenis_pendapatan_id)->get();
 
         $check = TransaksiOPD::where('id_opd', $opd_id)->count();
