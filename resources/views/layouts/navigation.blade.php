@@ -9,7 +9,7 @@
             <span>Dashboard</span>
         </a>
     </li>
-    <li class="header light"><strong>MASTER ROLES</strong></li>
+    {{-- <li class="header light"><strong>MASTER ROLES</strong></li>
     <li>
         <a href="{{ route('master-role.role.index') }}">
             <i class="icon icon-key3 amber-text s-18"></i> 
@@ -21,7 +21,7 @@
             <i class="icon icon-clipboard-list text-success s-18"></i> 
             <span>Permission</span>
         </a>
-    </li>
+    </li> --}}
     @if ($opd_id == 0)
     <li class="header light"><strong>MASTER DATA</strong></li>
     <li class="no-b">
