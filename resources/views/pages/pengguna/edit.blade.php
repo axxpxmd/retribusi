@@ -18,13 +18,13 @@
                         <a class="nav-link" href="{{ route($route.'index') }}"><i class="icon icon-arrow_back"></i>Semua Data</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active show" id="tab1" data-toggle="tab" href="#semua-data" role="tab"><i class="icon icon-user"></i>Pengguna</a>
+                        <a class="nav-link active show" id="tab1" data-toggle="tab" href="#semua-data" role="tab"><i class="icon icon-user-o"></i>Pengguna</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="tab2" data-toggle="tab" href="#edit-data" role="tab"><i class="icon icon-edit"></i>Edit Data</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('profile.editPassword', $pengguna->user_id) }}"><i class="icon icon-key4"></i>Ganti Password</a>
+                        <a class="nav-link" href="{{ route('profile.editPassword', $pengguna->user_id) }}"><i class="icon icon-key3"></i>Ganti Password</a>
                     </li>
                 </ul>
             </div>
@@ -48,6 +48,10 @@
                                         <label class="col-md-3 s-12">{{ $pengguna->full_name }}</label>
                                     </div>
                                     <div class="row">
+                                        <label class="col-md-2 text-right s-12"><strong>Role :</strong></label>
+                                        <label class="col-md-3 s-12">{{ $pengguna->role->name }}</label>
+                                    </div>
+                                    <div class="row">
                                         <label class="col-md-2 text-right s-12"><strong>OPD :</strong></label>
                                         <label class="col-md-3 s-12">{{ $pengguna->opd->n_opd }}</label>
                                     </div>
@@ -69,7 +73,7 @@
                     </div>
                 </div>
             </div>
-            <div class="tab-pane animated fadeInUpShort show" id="tambah-data" role="tabpanel">
+            <div class="tab-pane animated fadeInUpShort show" id="edit-data" role="tabpanel">
                 <div class="row">
                     <div class="col-md-12">
                         <div id="alert"></div>
@@ -82,6 +86,17 @@
                                     <div class="form-row form-inline">
                                         <div class="col-md-8">
                                             <div class="form-group m-0">
+                                                <label for="role_id" class="col-form-label s-12 col-md-2">Role<span class="text-danger ml-1">*</span></label>
+                                                <div class="col-md-6 p-0 bg-light">
+                                                    <select class="select2 form-control r-0 light s-12" name="role_id" id="role_id" autocomplete="off">
+                                                        <option value="0">Pilih</option>
+                                                        @foreach ($roles as $i)
+                                                            <option value="{{ $i->id }}">{{ $i->name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group mt-1">
                                                 <label for="username" class="col-form-label s-12 col-md-2">Username<span class="text-danger ml-1">*</span></label>
                                                 <input type="text" name="username" id="username" class="form-control r-0 light s-12 col-md-6" value="{{ $pengguna->user->username }}" autocomplete="off" required/>
                                             </div> 
@@ -129,6 +144,8 @@
 <script type="text/javascript">
     $('#opd_id').val("{{ $pengguna->opd_id }}");
     $('#opd_id').trigger('change.select2');
+    $('#role_id').val("{{ $pengguna->role_id }}");
+    $('#role_id').trigger('change.select2');
 
     $('#form').on('submit', function (e) {
         if ($(this)[0].checkValidity() === false) {

@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
-use App\User;
 use Illuminate\Database\Eloquent\Model;
+
+// Models
+use App\User;
+use Spatie\Permission\Models\Role;
 
 class Pengguna extends Model
 {
@@ -18,6 +21,11 @@ class Pengguna extends Model
     public function opd()
     {
         return $this->belongsTo(OPD::class, 'opd_id');
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class, 'role_id');
     }
 
     /**

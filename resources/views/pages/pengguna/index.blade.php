@@ -51,7 +51,8 @@
                                         <thead>
                                             <th width="5%">No</th>
                                             <th width="15%">Nama</th>
-                                            <th width="40%">OPD</th>
+                                            <th width="30%">OPD</th>
+                                            <th width="10%">Role</th>
                                             <th width="10%">No Telp</th>
                                             <th width="10%">Nama Login</th>
                                             <th width="10%">Foto</th>
@@ -77,6 +78,17 @@
                                     <div class="form-row form-inline">
                                         <div class="col-md-8">
                                             <div class="form-group m-0">
+                                                <label for="role_id" class="col-form-label s-12 col-md-2">Role<span class="text-danger ml-1">*</span></label>
+                                                <div class="col-md-6 p-0 bg-light">
+                                                    <select class="select2 form-control r-0 light s-12" name="role_id" id="role_id" autocomplete="off">
+                                                        <option value="0">Pilih</option>
+                                                        @foreach ($roles as $i)
+                                                            <option value="{{ $i->id }}">{{ $i->name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group mt-1">
                                                 <label for="username" class="col-form-label s-12 col-md-2">Username<span class="text-danger ml-1">*</span></label>
                                                 <input type="text" name="username" id="username" class="form-control r-0 light s-12 col-md-6" autocomplete="off" required/>
                                             </div>
@@ -144,6 +156,7 @@
             {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false, align: 'center', className: 'text-center'},
             {data: 'full_name', name: 'full_name'},
             {data: 'opd', name: 'opd'},
+            {data: 'role', name: 'role'},
             {data: 'phone', name: 'phone'},
             {data: 'user_id', name: 'user_id'},
             {data: 'photo', name: 'photo'},

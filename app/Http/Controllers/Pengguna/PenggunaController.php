@@ -26,6 +26,7 @@ use App\User;
 use App\Models\OPD;
 use App\Models\Pengguna;
 use App\Models\OPDJenisPendapatan;
+use Spatie\Permission\Models\Role;
 
 class PenggunaController extends Controller
 {
@@ -41,13 +42,15 @@ class PenggunaController extends Controller
         $path  = $this->path;
 
         $opdArray = OPDJenisPendapatan::select('id_opd')->get()->toArray();
+        $roles = Role::select('id', 'name')->get();
         $opds = OPD::select('id', 'n_opd')->whereIn('id', $opdArray)->get();
 
         return view($this->view . 'index', compact(
             'route',
             'title',
             'path',
-            'opds'
+            'opds',
+            'roles'
         ));
     }
 
@@ -77,6 +80,9 @@ class PenggunaController extends Controller
                     return $p->opd->n_opd;
                 }
             })
+            ->editColumn('role', function ($p) {
+                return $p->role->name;
+            })
             ->editColumn('user_id', function ($p) {
                 return $p->user->username;
             })
@@ -101,22 +107,26 @@ class PenggunaController extends Controller
             'username'  => 'required|max:50|unique:tmusers,username',
             'password'  => 'required|min:8',
             'full_name' => 'required|max:100',
-            'email'  => 'required|max:100|email|unique:tmpenggunas,email',
-            'opd_id' => 'required',
-            'phone'  => 'required|max:20'
+            'email'   => 'required|max:100|email|unique:tmpenggunas,email',
+            'opd_id'  => 'required',
+            'role_id' => 'required',
+            'phone'   => 'required|max:20'
         ]);
 
         // Get Data
+        $path = 'app\User';
         $username  = $request->username;
         $password  = $request->password;
         $full_name = $request->full_name;
-        $email  = $request->email;
-        $phone  = $request->phone;
-        $opd_id = $request->opd_id;
+        $email   = $request->email;
+        $phone   = $request->phone;
+        $opd_id  = $request->opd_id;
+        $role_id = $request->role_id;
 
         /* Tahapan : 
          * 1. tmusers
          * 2. tmpenggunas
+         * 3. model_has_roles
          */
 
         // Tahap 1
@@ -129,11 +139,19 @@ class PenggunaController extends Controller
         $pengguna = new Pengguna();
         $pengguna->user_id = $user->id;
         $pengguna->opd_id  = $opd_id;
+        $pengguna->role_id = $role_id;
         $pengguna->full_name = $full_name;
         $pengguna->email = $email;
         $pengguna->phone = $phone;
         $pengguna->photo = 'default.png';
         $pengguna->save();
+
+        // Tahap 3
+        $model_has_role = new ModelHasRoles();
+        $model_has_role->role_id    = $role_id;
+        $model_has_role->model_type = $path;
+        $model_has_role->model_id   = $user->id;
+        $model_has_role->save();
 
         return response()->json([
             'message' => "Data " . $this->title . " berhasil tersimpan."
@@ -147,9 +165,12 @@ class PenggunaController extends Controller
         $path  = $this->path;
 
         $pengguna = Pengguna::find($id);
+
+        $roles = Role::select('id', 'name')->get();
         $opds = OPD::select('id', 'n_opd')->get();
 
         return view($this->view . 'edit', compact(
+            'roles',
             'route',
             'title',
             'path',
@@ -169,15 +190,17 @@ class PenggunaController extends Controller
             'full_name' => 'required|max:100',
             'email' => 'required|max:100|email|unique:tmpenggunas,email,' . $id,
             'phone' => 'required|max:20',
-            'opd_id' => 'required'
+            'opd_id'  => 'required',
+            'role_id' => 'required'
         ]);
 
         // Get Data
-        $username = $request->username;
+        $username  = $request->username;
         $full_name = $request->full_name;
-        $email  = $request->email;
-        $phone  = $request->phone;
-        $opd_id = $request->opd_id;
+        $email   = $request->email;
+        $phone   = $request->phone;
+        $opd_id  = $request->opd_id;
+        $role_id = $request->role_id;
 
         /* Tahapan : 
          * 1. tmusers
@@ -192,9 +215,10 @@ class PenggunaController extends Controller
         // Tahap 2
         $pengguna->update([
             'full_name' => $full_name,
-            'email'  => $email,
-            'phone'  => $phone,
-            'opd_id' => $opd_id
+            'email'   => $email,
+            'phone'   => $phone,
+            'opd_id'  => $opd_id,
+            'role_id' => $role_id
         ]);
 
         return response()->json([

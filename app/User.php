@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -11,6 +12,7 @@ use App\Models\Pengguna;
 class User extends Authenticatable
 {
     use Notifiable;
+    use HasRoles;
 
     protected $table = 'tmusers';
     protected $fillable = ['username', 'password'];
