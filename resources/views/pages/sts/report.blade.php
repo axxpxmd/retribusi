@@ -83,7 +83,9 @@
         .m-r-10{
             margin-right: 10px;
         }
-
+        .m-b-5{
+            margin-bottom: 5px
+        }
 
         .m-l-50{
             margin-left: 50px;
@@ -210,13 +212,15 @@
                 <td rowspan="2" class="a"><p class="m-l-5">-</p></td>
                 <td class="a">
                     <p class="m-l-5 m-b-0">Jumlah Ketetapan Pokok Retribusi :</p>
-                    <p class="m-l-5 m-t-1">Jumlah Sanksi :</p>
-                    <p>a. Bunga</p>
-                    <p>b</p>
+                    <p class="m-l-5 m-t-1 m-b-0">Jumlah Sanksi :</p>
+                    <p class="m-l-5 m-t-1 m-b-0">a. Bunga</p>
+                    <p class="m-l-5 m-t-1">b. Kenaikan</p>
                 </td>
                 <td class="a">
-                    <p class="m-l-5 m-b-0 text-right m-r-10">@currency($data->denda),-</p>
-                    <p class="m-l-5 m-t-1">-</p>
+                    <p class="m-l-5 m-b-0 m-r-10 text-right">@currency($data->denda),-</p>
+                    <p class="m-l-5 m-t-1 m-b-0">&nbsp;</p>
+                    <p class="m-l-5 m-t-1 m-b-0">&nbsp;</p>
+                    <p class="m-l-5 m-t-1">&nbsp;</p>
                 </td>
             </tr>
             <tr>
@@ -245,13 +249,13 @@
                         <br>
                         <br>
                         <br>
-                        <p class="m-b-0"><u>{{ $data->opd->nm_ttd }}</u></p>
+                        <p class="m-b-5"><u>{{ $data->opd->nm_ttd }}</u></p>
                         <p class="m-t-0">{{ $data->opd->nip_ttd }}</p>
                     </div>
                 </td>
             </tr>
         </table>
-        <p class="fs-12">NO NTB : {{ $data->ntb }}</p>
+        <p class="fs-12 m-b-5">NO NTB : {{ $data->ntb }}</p>
         <p class="fs-12 m-t-0">TANGGAL BAYAR : {{ Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $data->tgl_bayar)->format('d M Y | H:i:s') }}</p>
     </div>
 </body>
