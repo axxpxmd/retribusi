@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Libraries\Html\Html_number;
 use App\Http\Controllers\Controller;
+use App\Models\DataWP;
 use Illuminate\Support\Facades\Crypt;
 
 // Models
@@ -268,7 +269,12 @@ class SKRDController extends Controller
             'tgl_ttd' => 'required'
         ]);
 
-        // get data
+        /* Tahapan : 
+         * 1. tmtransaksi_opd
+         * 2. tmdata_wp
+         */
+
+        // Tahap 1
         $data = [
             'id_opd'  => $request->id_opd,
             'tgl_ttd' => $request->tgl_ttd,
@@ -298,6 +304,30 @@ class SKRDController extends Controller
         ];
 
         TransaksiOPD::create($data);
+
+        // Tahap 2
+        $where = [
+            'id_opd' => $request->id_opd,
+            'nm_wajib_pajak' => $request->nm_wajib_pajak,
+            'id_jenis_pendapatan' => $request->id_jenis_pendapatan,
+            'id_rincian_jenis_pendapatan' => \Crypt::decrypt($request->id_rincian_jenis_pendapatan)
+        ];
+
+        $data = [
+            'id_opd'  => $request->id_opd,
+            'id_jenis_pendapatan'         => $request->id_jenis_pendapatan,
+            'id_rincian_jenis_pendapatan' => \Crypt::decrypt($request->id_rincian_jenis_pendapatan),
+            'nm_wajib_pajak'   => $request->nm_wajib_pajak,
+            'alamat_wp'        => $request->alamat_wp,
+            'lokasi'           => $request->lokasi,
+            'kelurahan_id'     => $request->kelurahan_id,
+            'kecamatan_id'     => $request->kecamatan_id
+        ];
+
+        $check = DataWP::where($where)->count();
+        if ($check == 0) {
+            DataWP::create($data);
+        }
 
         return response()->json([
             'message' => "Data " . $this->title . " berhasil tersimpan."
@@ -346,9 +376,10 @@ class SKRDController extends Controller
 
         $data->update($input);
         $data->update([
-            'total_bayar' => (int) str_replace(['.', 'Rp', ' '], '', $request->jumlah_bayar),
+            'total_bayar'  => (int) str_replace(['.', 'Rp', ' '], '', $request->jumlah_bayar),
             'jumlah_bayar' => (int) str_replace(['.', 'Rp', ' '], '', $request->jumlah_bayar),
-            'id_rincian_jenis_pendapatan' => \Crypt::decrypt($request->id_rincian_jenis_pendapatan),
+            'updated_by'   => Auth::user()->pengguna->full_name,
+            'id_rincian_jenis_pendapatan' => \Crypt::decrypt($request->id_rincian_jenis_pendapatan)
         ]);
 
         return response()->json([

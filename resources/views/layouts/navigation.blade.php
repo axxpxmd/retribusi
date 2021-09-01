@@ -53,7 +53,7 @@
     @endrole
     @role('super-admin|admin-opd|bendahara-opd')
     <li class="no-b">
-        <a href="#">
+        <a href="{{ route('datawp.index') }}">
             <i class="icon icon-document-list purple-text s-18"></i> 
             <span>Data WP</span>
         </a>

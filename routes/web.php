@@ -73,6 +73,10 @@ Route::group(['middleware' => ['auth']], function () {
      * For User
      */
     Route::group(['middleware' => ['user']], function () {
+        // Data WP
+        Route::resource('datawp', 'DataWPController');
+        Route::post('datawp/api', 'DataWPController@api')->name('datawp.api');
+
         // SKRD
         Route::resource('skrd', 'SKRDController');
         Route::post('skrd/api', 'SKRDController@api')->name('skrd.api');
