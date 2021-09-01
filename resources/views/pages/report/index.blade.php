@@ -86,20 +86,21 @@
                     <div class="col-md-12">
                         <div class="card no-b">
                             <div class="card-body">
-                                <div class="table-responsive">
-                                    <table id="dataTable" class="table table-striped table-bordered" style="width:100%">
+                                <div class="">
+                                    <table id="dataTable" class="table display nowrap table-striped table-bordered" style="width:100%">
                                         <thead>
-                                            <th width="5%">No</th>
-                                            <th width="8%">Nomor Bayar </th>
-                                            <th width="8%">Nomor SKRD </th>
-                                            <th width="11%">Nama Pembayar</th>
-                                            <th width="25%">Jenis Retribusi</th>
-                                            <th width="8%">Tanggal SKRD </th>
-                                            <th width="8%">Tanggal Bayar</th>
-                                            <th width="10%">NTB </th>
-                                            <th width="9%">Total Bayar </th>
-                                            <th width="8%">Status Bayar</th>
-                                            {{-- <th width="5%"></th> --}}
+                                            <th>No</th>
+                                            <th>Nomor Bayar </th>
+                                            <th>Nomor SKRD </th>
+                                            <th>Nama Pembayar</th>
+                                            <th>Jenis Retribusi</th>
+                                            <th>Tanggal SKRD </th>
+                                            <th>Tanggal Bayar</th>
+                                            <th>NTB </th>
+                                            <th>Diskon </th>
+                                            <th>Denda </th>
+                                            <th>Total Bayar </th>
+                                            <th>Status Bayar</th>
                                         </thead>
                                         <tbody></tbody>
                                     </table>
@@ -132,6 +133,7 @@
     });
 
     var table = $('#dataTable').dataTable({
+        scrollX: true,
         processing: true,
         serverSide: true,
         order: [ 0, 'asc' ],
@@ -157,6 +159,8 @@
             {data: 'tgl_skrd', name: 'tgl_skrd'},
             {data: 'tgl_bayar', name: 'tgl_bayar'},
             {data: 'ntb', name: 'ntb'},
+            {data: 'diskon', name: 'diskon'},
+            {data: 'denda', name: 'denda'},
             {data: 'total_bayar', name: 'total_bayar'},
             {data: 'status_bayar', name: 'status_bayar'},
             // {data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center'}

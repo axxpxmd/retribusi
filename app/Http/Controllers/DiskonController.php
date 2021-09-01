@@ -84,10 +84,11 @@ class DiskonController extends Controller
                 return 'Rp. ' . number_format($p->total_bayar);
             })
             ->editColumn('diskon', function ($p) {
+                $diskonHarga = ((int) $p->diskon / 100) * $p->total_bayar;
                 if ($p->status_diskon == 0) {
-                    return '-';
+                    return "-";
                 } else {
-                    return 'Diskon ' . '( ' . $p->diskon . '% )';
+                    return '( ' . $p->diskon . '% )' . ' Rp. ' . number_format($diskonHarga);
                 }
             })
             ->addIndexColumn()

@@ -90,6 +90,21 @@ class ReportController extends Controller
             ->editColumn('total_bayar', function ($p) {
                 return 'Rp. ' . number_format($p->total_bayar);
             })
+            ->editColumn('diskon', function ($p) {
+                $diskonHarga = ((int) $p->diskon / 100) * $p->total_bayar;
+                if ($p->status_diskon == 0) {
+                    return "-";
+                } else {
+                    return '( ' . $p->diskon . '% )' . ' Rp. ' . number_format($diskonHarga);
+                }
+            })
+            ->editColumn('denda', function ($p) {
+                if ($p->status_denda == 0) {
+                    return '-';
+                } else {
+                    return ' Rp. ' . number_format($p->denda);
+                }
+            })
             ->editColumn('status_bayar', function ($p) {
                 if ($p->status_bayar == 1) {
                     // return "Sudah Dibayar <i class='icon icon-check-circle text-primary'></i>";
@@ -100,7 +115,7 @@ class ReportController extends Controller
                 }
             })
             ->addIndexColumn()
-            ->rawColumns(['no_bayar', 'opd_id', 'id_jenis_pendapatan', 'tgl_skrd', 'masa_berlaku', 'status_bayar'])
+            ->rawColumns(['no_bayar', 'opd_id', 'id_jenis_pendapatan', 'tgl_skrd', 'masa_berlaku', 'status_bayar', 'diskon'])
             ->toJson();
     }
 

@@ -22,9 +22,10 @@
                         <div class="table-responsive">
                             <table id="dataTable" class="table table-striped table-bordered" style="width:100%">
                                 <thead>
-                                    <th width="30">No</th>
-                                    <th>Jenis Pendapatan</th>
-                                    <th width="60"></th>
+                                    <th width="5%">No</th>
+                                    <th width="55%">Jenis Pendapatan</th>
+                                    <th width="20%">Target Pendapatan</th>
+                                    <th width="10%"></th>
                                 </thead>
                                 <tbody></tbody>
                             </table>
@@ -45,6 +46,10 @@
                                     <div class="form-group m-0">
                                         <label for="jenis_pendapatan" class="col-form-label s-12 col-md-4">Nama</label>
                                         <textarea type="text" rows="5" name="jenis_pendapatan" id="jenis_pendapatan" placeholder="" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required></textarea>
+                                    </div>
+                                    <div class="form-group m-0">
+                                        <label for="target_pendapatan" class="col-form-label s-12 col-md-4">Target Pendapatan</label>
+                                        <input type="text" name="target_pendapatan" id="rupiah" placeholder="" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
                                     </div>
                                     <div class="form-group mt-2">
                                         <div class="col-md-4"></div>
@@ -74,6 +79,7 @@
         columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false, align: 'center', className: 'text-center'},
             {data: 'jenis_pendapatan', name: 'jenis_pendapatan'},
+            {data: 'target_pendapatan', name: 'target_pendapatan'},
             {data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center'}
         ]
     });
@@ -128,6 +134,7 @@
         $.get("{{ route($route.'edit', ':id') }}".replace(':id', id), function(data){
             $('#id').val(data.id);
             $('#jenis_pendapatan').val(data.jenis_pendapatan).focus();
+            $('#rupiah').val(data.target_pendapatan).focus();
         }, "JSON").fail(function(){
             reload();
         });
@@ -160,6 +167,32 @@
             }
         });
     }
+   
+    rupiah = document.getElementById('rupiah');
+    rupiah.addEventListener('keyup', function(e){
+        // tambahkan 'Rp.' pada saat form di ketik
+        // gunakan fungsi formatRupiah() untuk mengubah angka yang di ketik menjadi format angka
+        rupiah.value = formatRupiah(this.value, 'Rp. ');
+    });
+
+    /* Fungsi formatRupiah */
+    function formatRupiah(angka, prefix){
+        var number_string = angka.replace(/[^,\d]/g, '').toString(),
+        split   		= number_string.split(','),
+        sisa     		= split[0].length % 3,
+        rupiah     		= split[0].substr(0, sisa),
+        ribuan     		= split[0].substr(sisa).match(/\d{3}/gi);
+
+        // tambahkan titik jika yang di input sudah menjadi angka ribuan
+        if(ribuan){
+            separator = sisa ? '.' : '';
+            rupiah += separator + ribuan.join('.');
+        }
+
+        rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+        return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+    }
+    
 
 </script>
 @endsection

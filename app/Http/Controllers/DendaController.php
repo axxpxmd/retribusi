@@ -85,9 +85,9 @@ class DendaController extends Controller
             })
             ->editColumn('denda', function ($p) {
                 if ($p->status_denda == 0) {
-                    return 'Tidak Ada';
+                    return '-';
                 } else {
-                    return 'Ada';
+                    return ' Rp. ' . number_format($p->denda);
                 }
             })
             ->addIndexColumn()

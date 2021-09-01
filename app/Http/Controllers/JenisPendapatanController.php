@@ -44,6 +44,13 @@ class JenisPendapatanController extends Controller
                             <a href='#' onclick='remove(" . $p->id . ")' class='text-danger' title='Hapus Role'><i class='icon-remove'></i></a>";
                 }
             })
+            ->editColumn('target_pendapatan', function ($p) {
+                if ($p->target_pendapatan != null) {
+                    return 'Rp. ' . number_format($p->target_pendapatan);
+                } else {
+                    return '-';
+                }
+            })
             ->addIndexColumn()
             ->rawColumns(['action'])
             ->toJson();
@@ -55,7 +62,11 @@ class JenisPendapatanController extends Controller
             'jenis_pendapatan' => 'required|unique:tmjenis_pendapatan,jenis_pendapatan',
         ]);
 
-        $input = $request->all();
+        $input = [
+            'jenis_pendapatan'  => $request->jenis_pendapatan,
+            'target_pendapatan' => (int) str_replace(['.', 'Rp', ' '], '', $request->target_pendapatan)
+        ];
+
         JenisPendapatan::create($input);
 
         return response()->json([
@@ -75,7 +86,11 @@ class JenisPendapatanController extends Controller
             'jenis_pendapatan' => 'required|unique:tmjenis_pendapatan,jenis_pendapatan,' . $id,
         ]);
 
-        $input = $request->all();
+        $input = [
+            'jenis_pendapatan'  => $request->jenis_pendapatan,
+            'target_pendapatan' => (int) str_replace(['.', 'Rp', ' '], '', $request->target_pendapatan)
+        ];
+
         $jenis_pendapatan = JenisPendapatan::where('id', $id)->first();
         $jenis_pendapatan->update($input);
 

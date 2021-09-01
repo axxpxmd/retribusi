@@ -255,8 +255,12 @@
                 </td>
             </tr>
         </table>
-        <p class="fs-12 m-b-5">NO NTB : {{ $data->ntb }}</p>
+        <p class="fs-12 m-b-5">NO NTB : {{ $data->ntb != null ? $data->ntb : '-' }}</p>
+        @if ($data->tgl_bayar != null)
         <p class="fs-12 m-t-0">TANGGAL BAYAR : {{ Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $data->tgl_bayar)->format('d M Y | H:i:s') }}</p>
+        @else
+        <p class="fs-12 m-t-0">TANGGAL BAYAR : -</p>
+        @endif
     </div>
 </body>
 </html>
