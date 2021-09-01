@@ -97,7 +97,7 @@
             url: "{{ route($route.'api') }}",
             method: 'POST',
             data: function (data) {
-                data.opd_id = $('#opd').val();
+                data.opd_id = $('#opd_id').val();
                 data.jenis_pendapatan_id = $('#jenis_pendapatan_id').val();
             }
         },
