@@ -62,10 +62,10 @@
                                         <thead>
                                             <th width="5%">No</th>
                                             <th width="10%">Nama WP</th>
-                                            <th width="30%">Nama Dinas</th>
+                                            <th width="24%">Nama Dinas</th>
                                             <th width="30%">Jenis Retribusi</th>
                                             <th width="20%">Alamat WP</th>
-                                            <th width="5%"></th>
+                                            <th width="6%"></th>
                                         </thead>
                                         <tbody></tbody>
                                     </table>

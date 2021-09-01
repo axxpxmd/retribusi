@@ -57,6 +57,7 @@ class DataWPController extends Controller
         return DataTables::of($data)
             ->addColumn('action', function ($p) {
                 return "
+                <a href='#' onclick='remove(" . $p->id . ")' class='text-danger mr-2 fs-18' title='Hapus Data'><i class='icon icon-remove'></i></a>
                 <a href='#' onclick='show(" . $p->id . ")' title='Tampilkan Data' class='fs-20 text-success'><i class='icon icon-eye3 mr-1'></i></a>
                 <a href='#' title='Buat SKRD' class='fs-20'><i class='icon-add_box mr-1'></i></a>";
             })
@@ -69,5 +70,14 @@ class DataWPController extends Controller
             ->addIndexColumn()
             ->rawColumns(['action'])
             ->toJson();
+    }
+
+    public function destroy($id)
+    {
+        DataWP::where('id', $id)->delete();
+
+        return response()->json([
+            'message' => 'Data ' . $this->title . ' berhasil dihapus.'
+        ]);
     }
 }
