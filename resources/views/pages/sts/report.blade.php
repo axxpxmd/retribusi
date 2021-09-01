@@ -249,8 +249,16 @@
                         <br>
                         <br>
                         <br>
-                        <p class="m-b-5"><u>{{ $data->opd->nm_ttd }}</u></p>
-                        <p class="m-t-0">{{ $data->opd->nip_ttd }}</p>
+                        @if ($data->nm_ttd != null)
+                            <p class="m-b-5"><u>{{ $data->nm_ttd }}</u></p>
+                        @else 
+                            <p class="m-b-5"><u>{{ $data->opd->nm_ttd }}</u></p>
+                        @endif
+                        @if ($data->nip_ttd != null)
+                            <p class="m-t-0">{{ $data->nip_ttd }}</p>
+                        @else
+                            <p class="m-t-0">{{ $data->opd->nip_ttd }}</p>
+                        @endif
                     </div>
                 </td>
             </tr>

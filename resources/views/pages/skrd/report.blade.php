@@ -195,11 +195,15 @@
                 <td rowspan="2" class="a"><p class="m-l-5">-</p></td>
                 <td class="a">
                     <p class="m-l-5 m-b-0">Jumlah Ketetapan Pokok Retribusi :</p>
-                    <p class="m-l-5 m-t-1">Jumlah Sanksi : &nbsp; 1.Bunga &nbsp; 2.Kenaikan</p>
+                    <p class="m-l-5 m-t-1 m-b-0">Jumlah Sanksi :</p>
+                    <p class="m-l-5 m-t-1 m-b-0">a. Bunga</p>
+                    <p class="m-l-5 m-t-1">b. Kenaikan</p>
                 </td>
                 <td class="a">
-                    <p class="m-l-5 m-b-0 text-right"></p>
-                    <p class="m-l-5 m-t-1"></p>
+                    <p class="m-l-5 m-b-0 m-r-10 text-right">@currency($data->denda),-</p>
+                    <p class="m-l-5 m-t-1 m-b-0">&nbsp;</p>
+                    <p class="m-l-5 m-t-1 m-b-0">&nbsp;</p>
+                    <p class="m-l-5 m-t-1">&nbsp;</p>
                 </td>
             </tr>
             <tr>
@@ -228,8 +232,16 @@
                         <br>
                         <br>
                         <br>
-                        <p class="m-b-0"><u>{{ $data->opd->nm_ttd }}</u></p>
-                        <p class="m-t-0">{{ $data->opd->nip_ttd }}</p>
+                        @if ($data->nm_ttd != null)
+                            <p class="m-b-5"><u>{{ $data->nm_ttd }}</u></p>
+                        @else 
+                            <p class="m-b-5"><u>{{ $data->opd->nm_ttd }}</u></p>
+                        @endif
+                        @if ($data->nip_ttd != null)
+                            <p class="m-t-0">{{ $data->nip_ttd }}</p>
+                        @else
+                            <p class="m-t-0">{{ $data->opd->nip_ttd }}</p>
+                        @endif
                     </div>
                 </td>
             </tr>
