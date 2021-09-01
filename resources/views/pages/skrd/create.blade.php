@@ -7,7 +7,7 @@
             <div class="row p-t-b-10 ">
                 <div class="col">
                     <h4>
-                        <i class="icon icon-document mr-2"></i>
+                        <i class="icon icon-document-list mr-2"></i>
                         Tambah | {{ $title }}
                     </h4>
                 </div>
@@ -39,7 +39,7 @@
                                     <input type="hidden" name="id_jenis_pendapatan" value="{{ $jenis_pendapatan->id }}">
 
                                     <input type="hidden" name="no_skrd" value="{{ $no_skrd }}">
-                                    <input type="hidden" name="nip_ttd" value="{{ $opd->nip_ttd }}">
+                                    {{-- <input type="hidden" name="nip_ttd" value="{{ $opd->nip_ttd }}"> --}}
                                     <input type="hidden" name="no_bayar" value="{{ $no_bayar }}">
                                     <div class="form-row form-inline">
                                         <div class="col-md-12">
@@ -57,9 +57,9 @@
                                                         <label class="col-form-label s-12 col-md-4">Rincian Jenis Pendapatan<span class="text-danger ml-1">*</span></label>
                                                         <div class="col-md-8 p-0 bg-light">
                                                             <select class="select2 form-control r-0 light s-12" id="id_rincian_jenis_pendapatan" name="id_rincian_jenis_pendapatan" autocomplete="off">
-                                                                <option value="">Pilih</option>
-                                                                @foreach ($rincians as $i)
-                                                                    <option value="{{ $i->id }}">{{ $i->rincian_pendapatan }}</option>
+                                                                <option value="{{ \Crypt::encrypt(0) }}">Pilih</option>
+                                                                @foreach ($rincian_jenis_pendapatans as $i)
+                                                                    <option value="{{ \Crypt::encrypt($i->id) }}">{{ $i->rincian_pendapatan }}</option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
@@ -113,7 +113,7 @@
                                                     </div>
                                                     <div class="form-group mt-1">
                                                         <label for="lokasi" class="col-form-label s-12 col-md-4">Lokasi<span class="text-danger ml-1">*</span></label>
-                                                        <input type="text" name="lokasi" id="lokasi" placeholder="Contoh: Ruko Sektor 1.2 BSD" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
+                                                        <textarea type="text" name="lokasi" id="lokasi" placeholder="Contoh: Ruko Sektor 1.2 BSD" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required></textarea>
                                                     </div>
                                                     <div class="form-group m-0">
                                                         <label class="col-form-label s-12 col-md-4">No Bayar<span class="text-danger ml-1">*</span></label>
@@ -138,14 +138,17 @@
                                                         <input type="text" name="nm_ttd" id="nm_ttd" value="{{ $opd->nm_ttd }}" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
                                                     </div>
                                                     <div class="form-group m-0">
+                                                        <label for="nip_ttd" class="col-form-label s-12 col-md-4">NIP Penandatangan</label>
+                                                        <input type="text" name="nip_ttd" id="nip_ttd" value="{{ $opd->nip_ttd }}" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
+                                                    </div>
+                                                    <div class="form-group m-0">
                                                         <label for="tgl_ttd" class="col-form-label s-12 col-md-4">Tanggal TTD<span class="text-danger ml-1">*</span></label>
                                                         <input type="date" name="tgl_ttd" id="tgl_ttd" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
                                                     </div>
                                                     <div class="form-group m-0">
                                                         <label for="jumlah_bayar" class="col-form-label s-12 col-md-4">Ketetapan<span class="text-danger ml-1">*</span></label>
-                                                        <input type="text" name="jumlah_bayar" id="rupiah1" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
+                                                        <input type="text" name="jumlah_bayar" id="rupiah" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
                                                     </div>
-                                                    <input type="hidden" id="rupiah2">
                                                 </div>
                                             </div> 
 
@@ -269,33 +272,29 @@
         }
     });
 
-    var rupiah = [];
-    for (let index = 1; index <= 2; index++) {
-        console.log('rupiah'+index);
-        rupiah[index] = document.getElementById('rupiah'+index);
-        rupiah[index].addEventListener('keyup', function(e){
-            // tambahkan 'Rp.' pada saat form di ketik
-            // gunakan fungsi formatRupiah() untuk mengubah angka yang di ketik menjadi format angka
-            rupiah[index].value = formatRupiah(this.value, 'Rp. ');
-        });
+    rupiah = document.getElementById('rupiah');
+    rupiah.addEventListener('keyup', function(e){
+        // tambahkan 'Rp.' pada saat form di ketik
+        // gunakan fungsi formatRupiah() untuk mengubah angka yang di ketik menjadi format angka
+        rupiah.value = formatRupiah(this.value, 'Rp. ');
+    });
 
-        /* Fungsi formatRupiah */
-        function formatRupiah(angka, prefix){
-            var number_string = angka.replace(/[^,\d]/g, '').toString(),
-            split   		= number_string.split(','),
-            sisa     		= split[0].length % 3,
-            rupiah     		= split[0].substr(0, sisa),
-            ribuan     		= split[0].substr(sisa).match(/\d{3}/gi);
+    /* Fungsi formatRupiah */
+    function formatRupiah(angka, prefix){
+        var number_string = angka.replace(/[^,\d]/g, '').toString(),
+        split   		= number_string.split(','),
+        sisa     		= split[0].length % 3,
+        rupiah     		= split[0].substr(0, sisa),
+        ribuan     		= split[0].substr(sisa).match(/\d{3}/gi);
 
-            // tambahkan titik jika yang di input sudah menjadi angka ribuan
-            if(ribuan){
-                separator = sisa ? '.' : '';
-                rupiah += separator + ribuan.join('.');
-            }
-
-            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-            return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+        // tambahkan titik jika yang di input sudah menjadi angka ribuan
+        if(ribuan){
+            separator = sisa ? '.' : '';
+            rupiah += separator + ribuan.join('.');
         }
+
+        rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+        return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
     }
 
 </script>

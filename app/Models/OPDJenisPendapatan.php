@@ -24,4 +24,15 @@ class OPDJenisPendapatan extends Model
     {
         return $this->hasMany(TransaksiOPD::class, 'id_jenis_pendapatan', 'id_jenis_pendapatan');
     }
+
+    // 
+    public static function getJenisPendapatanByOpd($opd_id)
+    {
+        $datas = OPDJenisPendapatan::select('tmopd_jenis_pendapatan.id_jenis_pendapatan as id', 'tmjenis_pendapatan.jenis_pendapatan')
+            ->join('tmjenis_pendapatan', 'tmjenis_pendapatan.id', '=', 'tmopd_jenis_pendapatan.id_jenis_pendapatan')
+            ->where('tmopd_jenis_pendapatan.id_opd', $opd_id)
+            ->get();
+
+        return $datas;
+    }
 }

@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use Auth;
-use DateTime;
 use DataTables;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Libraries\Html\Html_number;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Crypt;
@@ -56,7 +56,7 @@ class SKRDController extends Controller
     public function api(Request $request)
     {
         $from  = $request->tgl_skrd;
-        $to = $request->tgl_skrd1;
+        $to    = $request->tgl_skrd1;
         $no_skrd = $request->no_skrd;
 
         $checkOPD = Auth::user()->pengguna->opd_id;
@@ -107,10 +107,7 @@ class SKRDController extends Controller
     {
         $opd_id = \Crypt::decrypt($opd_id);
 
-        $datas = OPDJenisPendapatan::select('tmopd_jenis_pendapatan.id_jenis_pendapatan as id', 'tmjenis_pendapatan.jenis_pendapatan')
-            ->join('tmjenis_pendapatan', 'tmjenis_pendapatan.id', '=', 'tmopd_jenis_pendapatan.id_jenis_pendapatan')
-            ->where('tmopd_jenis_pendapatan.id_opd', $opd_id)
-            ->get();
+        $datas = OPDJenisPendapatan::getJenisPendapatanByOpd($opd_id);
 
         // encrypt id
         if ($datas->count() == 0) {
@@ -129,9 +126,17 @@ class SKRDController extends Controller
 
     public function getKodeRekening($id_rincian_jenis_pendapatan)
     {
-        $id_rincian_jenis_pendapatan = $id_rincian_jenis_pendapatan;
+        $id_rincian_jenis_pendapatan = \Crypt::decrypt($id_rincian_jenis_pendapatan);
 
-        $data = RincianJenisPendapatan::select('nmr_rekening')->where('id', $id_rincian_jenis_pendapatan)->first();
+        if ($id_rincian_jenis_pendapatan != 0) {
+            $data = RincianJenisPendapatan::select('nmr_rekening')->where('id', $id_rincian_jenis_pendapatan)->first();
+        } else {
+            $data = [
+                'nmr_rekening' => ""
+            ];
+
+            $data = json_encode($data);
+        }
 
         return $data;
     }
@@ -148,25 +153,39 @@ class SKRDController extends Controller
         $route = $this->route;
         $title = $this->title;
 
+        // Get params
         $opd_id = $request->opd_id;
         $jenis_pendapatan_id = $request->jenis_pendapatan_id;
 
-
+        // Validation
         if ($opd_id == '' || $jenis_pendapatan_id == '') {
             return redirect()
                 ->route($this->route . 'index')
                 ->withErrors('Semua form wajid diisi.');
         }
 
+        // Decrypt params
         $opd_id = \Crypt::decrypt($opd_id);
         $jenis_pendapatan_id = \Crypt::decrypt($jenis_pendapatan_id);
 
         $opd = OPD::find($opd_id);
         $jenis_pendapatan = JenisPendapatan::find($jenis_pendapatan_id);
         $kecamatans = Kecamatan::select('id', 'n_kecamatan')->where('kabupaten_id', 40)->get();
-        $rincians = RincianJenisPendapatan::where('id_jenis_pendapatan', $jenis_pendapatan_id)->get();
+        $rincian_jenis_pendapatans = RincianJenisPendapatan::where('id_jenis_pendapatan', $jenis_pendapatan_id)->get();
 
-        $check = TransaksiOPD::where('id_opd', $opd_id)->count();
+        // Get Time
+        $date = carbon::now();
+        $day = $date->day;
+        $month = $date->month;
+        $year = substr($date->year, 2);
+
+        // Check amount OPD by year
+        $check = TransaksiOPD::where('id_opd', $opd_id)->where(DB::raw('YEAR(created_at)'), '=', $date->year)->count();
+        if ($check != 0) {
+            $result = $check + 1;
+        } else {
+            $result = '1';
+        }
 
         // Kode Dinas
         $kodeDinas = $opd->id;
@@ -183,12 +202,6 @@ class SKRDController extends Controller
             $generateJenisPendapatanId = $jenis_pendapatan_id;
         }
 
-        // Get Time
-        $date = carbon::now();
-        $day = $date->day;
-        $month = $date->month;
-        $year = substr($date->year, 2);
-
         // Day
         if (\strlen($day) == 1) {
             $generateDay = '0' . $day;
@@ -204,11 +217,6 @@ class SKRDController extends Controller
         }
 
         // Antrian No SKRD
-        if ($check != 0) {
-            $result = $check + 1;
-        } else {
-            $result = '1';
-        }
         if (\strlen($result) == 1) {
             $generateSKRD = '000' . $result;
         } elseif (\strlen($result) == 2) {
@@ -220,11 +228,6 @@ class SKRDController extends Controller
         }
 
         // Antrian No Bayar
-        if ($check != 0) {
-            $result = $check + 1;
-        } else {
-            $result = '1';
-        }
         if (\strlen($result) == 1) {
             $generateNoBayar = '0000' . $result;
         } elseif (\strlen($result) == 2) {
@@ -248,17 +251,21 @@ class SKRDController extends Controller
             'no_skrd',
             'kecamatans',
             'no_bayar',
-            'rincians'
+            'rincian_jenis_pendapatans'
         ));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'no_skrd' => 'required|unique:tmtransaksi_opd,no_skrd',
-            'id_rincian_jenis_pendapatan' => 'required',
+            'id_opd'   => 'required',
+            'no_skrd'  => 'required',
+            'no_bayar' => 'required|unique:tmtransaksi_opd,no_bayar',
             'kecamatan_id' => 'required',
-            'kelurahan_id' => 'required'
+            'kelurahan_id' => 'required',
+            'id_jenis_pendapatan'         => 'required',
+            'id_rincian_jenis_pendapatan' => 'required',
+            'tgl_ttd' => 'required'
         ]);
 
         // get data
@@ -269,7 +276,7 @@ class SKRDController extends Controller
             'nip_ttd' => $request->nip_ttd,
             'id_jenis_pendapatan'      => $request->id_jenis_pendapatan,
             'rincian_jenis_pendapatan' => $request->rincian_jenis_pendapatan,
-            'id_rincian_jenis_pendapatan' => $request->id_rincian_jenis_pendapatan,
+            'id_rincian_jenis_pendapatan' => \Crypt::decrypt($request->id_rincian_jenis_pendapatan),
             'nmr_daftar'       => $request->nmr_daftar,
             'nm_wajib_pajak'   => $request->nm_wajib_pajak,
             'alamat_wp'        => $request->alamat_wp,
@@ -286,7 +293,8 @@ class SKRDController extends Controller
             'no_skrd'          => $request->no_skrd,
             'tgl_skrd_awal'    => $request->tgl_skrd_awal,
             'tgl_skrd_akhir'   => $request->tgl_skrd_akhir,
-            'no_bayar'         => $request->no_bayar
+            'no_bayar'         => $request->no_bayar,
+            'created_by'       => Auth::user()->pengguna->full_name
         ];
 
         TransaksiOPD::create($data);
@@ -303,15 +311,14 @@ class SKRDController extends Controller
 
         $id = \Crypt::decrypt($id);
 
-        $data = TransaksiOPD::find($id);
-
-        $rincians = RincianJenisPendapatan::where('id_jenis_pendapatan', $data->id_jenis_pendapatan)->get();
+        $data     = TransaksiOPD::find($id);
+        $rincian_jenis_pendapatans = RincianJenisPendapatan::where('id_jenis_pendapatan', $data->id_jenis_pendapatan)->get();
 
         return view($this->view . 'edit', compact(
             'route',
             'title',
             'data',
-            'rincians'
+            'rincian_jenis_pendapatans'
         ));
     }
 
@@ -340,7 +347,8 @@ class SKRDController extends Controller
         $data->update($input);
         $data->update([
             'total_bayar' => (int) str_replace(['.', 'Rp', ' '], '', $request->jumlah_bayar),
-            'jumlah_bayar' => (int) str_replace(['.', 'Rp', ' '], '', $request->jumlah_bayar)
+            'jumlah_bayar' => (int) str_replace(['.', 'Rp', ' '], '', $request->jumlah_bayar),
+            'id_rincian_jenis_pendapatan' => \Crypt::decrypt($request->id_rincian_jenis_pendapatan),
         ]);
 
         return response()->json([
@@ -355,6 +363,9 @@ class SKRDController extends Controller
         $data = TransaksiOPD::find($id);
         $terbilang = Html_number::terbilang($data->total_bayar) . 'rupiah';
 
+        // Update Jumlah Cetak
+        $this->updateJumlahCetak($id, $data->jumlah_cetak);
+
         $pdf = app('dompdf.wrapper');
         $pdf->getDomPDF()->set_option("enable_php", true);
         $pdf->loadView($this->view . 'report', compact(
@@ -362,18 +373,20 @@ class SKRDController extends Controller
             'terbilang'
         ));
 
+        return $pdf->download($data->nm_wajib_pajak . '-' . $data->no_skrd . ".pdf");
+    }
+
+    public function updateJumlahCetak($id, $jumlah_cetak)
+    {
         $time    = Carbon::now();
         $tanggal = $time->toDateString();
         $jam     = $time->toTimeString();
-        $now = $tanggal . ' ' . $jam;
+        $now     = $tanggal . ' ' . $jam;
 
-        // Update Jumlah Cetak
-        $data->update([
-            'jumlah_cetak' => $data->jumlah_cetak + 1,
+        TransaksiOPD::where('id', $id)->update([
+            'jumlah_cetak' => $jumlah_cetak + 1,
             'tgl_cetak_trkhr' => $now
         ]);
-
-        return $pdf->download($data->nm_wajib_pajak . '-' . $data->no_skrd . ".pdf");
     }
 
     public function destroy($id)

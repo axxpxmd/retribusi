@@ -6,9 +6,9 @@
         <div class="container-fluid text-white">
             <div class="row">
                 <div class="col">
-                    <h4 class="ml-1">
-                        <i class="icon icon-document mr-2"></i>
-                        Show {{ $title }} | {{ $data->nm_wajib_pajak }}
+                    <h4>
+                        <i class="icon icon-document-list mr-2"></i>
+                        Menampilkan {{ $title }} | {{ $data->nm_wajib_pajak }}
                     </h4>
                 </div>
             </div>
@@ -18,7 +18,7 @@
                         <a class="nav-link" href="{{ route($route.'index') }}"><i class="icon icon-arrow_back"></i>Semua Data</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active show" id="tab1" data-toggle="tab" href="#semua-data" role="tab"><i class="icon icon-document"></i>SKRD</a>
+                        <a class="nav-link active show" id="tab1" data-toggle="tab" href="#semua-data" role="tab"><i class="icon icon-document-list"></i>SKRD</a>
                     </li>
                 </ul>
             </div>
@@ -59,14 +59,22 @@
                                             </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>Nama TTD :</strong></label>
+                                                @if ($data->nm_ttd != null)
                                                 <label class="col-md-8 s-12">{{ $data->nm_ttd }}</label>
+                                                @else
+                                                <label class="col-md-8 s-12">{{ $data->opd->nm_ttd }}</label>
+                                                @endif
                                             </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>NIP TTD :</strong></label>
+                                                @if ($data->nip_ttd != null)
                                                 <label class="col-md-8 s-12">{{ $data->nip_ttd }}</label>
+                                                @else
+                                                <label class="col-md-8 s-12">{{ $data->opd->nip_ttd }}</label>
+                                                @endif
                                             </div>
                                             <div class="row">
-                                                <label class="col-md-4 text-right s-12"><strong>Tgl TTD :</strong></label>
+                                                <label class="col-md-4 text-right s-12"><strong>Tanggal TTD :</strong></label>
                                                 <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_ttd)->format('d M Y') }}</label>
                                             </div>
                                         </div>
@@ -99,16 +107,12 @@
                                                 <label class="col-md-8 s-12">{{ $data->lokasi }}</label>
                                             </div>
                                             <div class="row">
-                                                <label class="col-md-4 text-right s-12"><strong>Jumlah Cetak :</strong></label>
-                                                <label class="col-md-8 s-12">{{ $data->jumlah_cetak }}</label>
+                                                <label class="col-md-4 text-right s-12"><strong>Tanggal SKRD:</strong></label>
+                                                <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_awal)->format('d M Y') }}</label>
                                             </div>
                                             <div class="row">
-                                                <label class="col-md-4 text-right s-12"><strong>Terakhir Cetak Pada :</strong></label>
-                                                @if ($data->tgl_cetak_trkhr != null)
-                                                <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $data->tgl_cetak_trkhr)->format('d M Y | H:i:s') }}</label>
-                                                @else
-                                                <label class="col-md-8 s-12">-</label>
-                                                @endif
+                                                <label class="col-md-4 text-right s-12"><strong>Jatuh Tempo :</strong></label>
+                                                <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_akhir)->format('d M Y') }}</label>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -117,12 +121,8 @@
                                                 <label class="col-md-8 s-12">{{ $data->no_skrd }}</label>
                                             </div>
                                             <div class="row">
-                                                <label class="col-md-4 text-right s-12"><strong>Tanggal SKRD:</strong></label>
-                                                <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_awal)->format('d M Y') }}</label>
-                                            </div>
-                                            <div class="row">
-                                                <label class="col-md-4 text-right s-12"><strong>Jatuh Tempo :</strong></label>
-                                                <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_akhir)->format('d M Y') }}</label>
+                                                <label class="col-md-4 text-right s-12"><strong>Nomor Bayar :</strong></label>
+                                                <label class="col-md-8 s-12">{{ $data->no_bayar }}</label>
                                             </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>Ketetapan :</strong></label>
@@ -139,7 +139,7 @@
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>Diskon :</strong></label>
                                                 @if ($data->diskon != null)
-                                                <label class="col-md-8 s-12">@currency($data->diskon)</label>
+                                                <label class="col-md-8 s-12">({{ $data->diskon }}%) &nbsp;@currency(((int) $data->diskon / 100) * $data->total_bayar)</label>
                                                 @else
                                                 <label class="col-md-8 s-12">-</label>
                                                 @endif
@@ -156,13 +156,36 @@
                                                 <label class="col-md-8 s-12">-</label>
                                                 @endif
                                             </div> 
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-md-6">
                                             <div class="row">
-                                                <label class="col-md-4 text-right s-12"><strong>Nomor Bayar :</strong></label>
-                                                <label class="col-md-8 s-12">{{ $data->no_bayar }}</label>
+                                                <label class="col-md-4 text-right s-12"><strong>Jumlah Cetak :</strong></label>
+                                                <label class="col-md-8 s-12">{{ $data->jumlah_cetak }}</label>
+                                            </div>
+                                            <div class="row">
+                                                <label class="col-md-4 text-right s-12"><strong>Terakhir Cetak Pada :</strong></label>
+                                                @if ($data->tgl_cetak_trkhr != null)
+                                                <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $data->tgl_cetak_trkhr)->format('d M Y | H:i:s') }}</label>
+                                                @else
+                                                <label class="col-md-8 s-12">-</label>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="row">
+                                                <label class="col-md-4 text-right s-12"><strong>Dibuat Oleh :</strong></label>
+                                                <label class="col-md-8 s-12">{{ $data->created_by }}</label>
+                                            </div>
+                                            <div class="row">
+                                                <label class="col-md-4 text-right s-12"><strong>Diupdate Oleh :</strong></label>
+                                                <label class="col-md-8 s-12">{{ $data->updated_by }}</label>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
+                                    <div class="row mt-2">
                                         <label class="col-md-2 text-right s-12"></label>
                                         <label class="col-md-3 s-12">
                                             <a target="blank" href="{{ route('skrd.report',\Crypt::encrypt($data->id)) }}" class="btn btn-sm btn-primary"><i class="icon-print mr-2"></i>Print Data</a>

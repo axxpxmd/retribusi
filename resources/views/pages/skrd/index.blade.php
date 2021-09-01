@@ -6,9 +6,9 @@
         <div class="container-fluid text-white">
             <div class="row p-t-b-10 ">
                 <div class="col">
-                    <h4 class="ml-1">
-                        <i class="icon icon-document mr-1"></i>
-                        {{ $title }}
+                    <h4>
+                        <i class="icon icon-document-list mr-2"></i>
+                        {{ $title }} (Surat Ketetapan Retribusi Daerah)
                     </h4>
                 </div>
             </div>
@@ -57,7 +57,7 @@
                         </div> 
                         @endif
                         <div class="form-group row" style="margin-top: -8px !important">
-                            <label for="no_skrd" class="col-form-label s-12 col-md-4 text-right font-weight-bolder">No SKRD : </label>
+                            <label for="no_skrd" class="col-form-label s-12 col-md-4 text-right font-weight-bolder">NO SKRD : </label>
                             <div class="col-sm-4">
                                 <input type="text" name="no_skrd" id="no_skrd" class="form-control r-0 s-12 col-md-12" autocomplete="off" required/>
                             </div>
