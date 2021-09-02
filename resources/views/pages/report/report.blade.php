@@ -64,7 +64,7 @@
                 </tr>
             @empty
             <tr class="d">
-                <td class="d text-center" colspan="7">Tidak ada disini.</td>
+                <td class="d text-center" colspan="12">Tidak ada disini.</td>
             </tr>
             @endforelse
         </tbody>
