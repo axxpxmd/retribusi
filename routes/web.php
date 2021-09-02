@@ -83,7 +83,6 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('sts/report/{id}', 'STSController@printData')->name('sts.report');
     });
 
-
     /**
      * Role super-admin|admin-opd
      */

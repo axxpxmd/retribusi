@@ -10,11 +10,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Libraries\Html\Html_number;
 use App\Http\Controllers\Controller;
-use App\Models\DataWP;
 use Illuminate\Support\Facades\Crypt;
 
 // Models
 use App\Models\OPD;
+use App\Models\DataWP;
 use App\Models\Kecamatan;
 use App\Models\Kelurahan;
 use App\Models\TransaksiOPD;
@@ -306,13 +306,6 @@ class SKRDController extends Controller
         TransaksiOPD::create($data);
 
         // Tahap 2
-        $where = [
-            'id_opd' => $request->id_opd,
-            'nm_wajib_pajak' => $request->nm_wajib_pajak,
-            'id_jenis_pendapatan' => $request->id_jenis_pendapatan,
-            'id_rincian_jenis_pendapatan' => \Crypt::decrypt($request->id_rincian_jenis_pendapatan)
-        ];
-
         $data = [
             'id_opd'  => $request->id_opd,
             'id_jenis_pendapatan'         => $request->id_jenis_pendapatan,
@@ -322,6 +315,13 @@ class SKRDController extends Controller
             'lokasi'           => $request->lokasi,
             'kelurahan_id'     => $request->kelurahan_id,
             'kecamatan_id'     => $request->kecamatan_id
+        ];
+
+        $where = [
+            'id_opd' => $request->id_opd,
+            'nm_wajib_pajak' => $request->nm_wajib_pajak,
+            'id_jenis_pendapatan' => $request->id_jenis_pendapatan,
+            'id_rincian_jenis_pendapatan' => \Crypt::decrypt($request->id_rincian_jenis_pendapatan)
         ];
 
         $check = DataWP::where($where)->count();
