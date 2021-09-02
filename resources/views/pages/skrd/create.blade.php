@@ -90,7 +90,7 @@
                                                     </div>
                                                     <div class="form-group m-0">
                                                         <label for="alamat_wp" class="col-form-label s-12 col-md-4">Alamat Wajib Pajak<span class="text-danger ml-1">*</span></label>
-                                                        <input type="text" name="alamat_wp" id="alamat_wp" value="{{ $data_wp != null ? $data_wp->alamat_wp : '' }}" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
+                                                        <textarea type="text" rows="3" name="alamat_wp" id="alamat_wp" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required>{{ $data_wp != null ? $data_wp->alamat_wp : '' }}</textarea>
                                                     </div>
                                                     <div class="form-group m-0">
                                                         <label class="col-form-label s-12 col-md-4">Kecamatan<span class="text-danger ml-1">*</span></label>
@@ -116,7 +116,7 @@
                                                     </div>
                                                     <div class="form-group mt-1">
                                                         <label for="lokasi" class="col-form-label s-12 col-md-4">Lokasi<span class="text-danger ml-1">*</span></label>
-                                                        <textarea type="text" name="lokasi" id="lokasi" placeholder="Contoh: Ruko Sektor 1.2 BSD" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required>{{ $data_wp != null ? $data_wp->lokasi : '' }}</textarea>
+                                                        <textarea type="text" rows="2" name="lokasi" id="lokasi" placeholder="Contoh: Ruko Sektor 1.2 BSD" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required>{{ $data_wp != null ? $data_wp->lokasi : '' }}</textarea>
                                                     </div>
                                                     <div class="form-group m-0">
                                                         <label class="col-form-label s-12 col-md-4">No Bayar<span class="text-danger ml-1">*</span></label>
