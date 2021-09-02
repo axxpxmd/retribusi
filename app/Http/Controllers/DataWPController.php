@@ -7,6 +7,7 @@ use DataTables;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Crypt;
 
 // Models
 use App\Models\OPD;
@@ -58,8 +59,10 @@ class DataWPController extends Controller
             ->addColumn('action', function ($p) {
                 return "
                 <a href='#' onclick='remove(" . $p->id . ")' class='text-danger mr-2' title='Hapus Data'><i class='icon-remove'></i></a>
-                <a href='#' onclick='show(" . $p->id . ")' title='Tampilkan Data' class='text-success'><i class='icon-document-list2 mr-1'></i></a>
-                <a href='#' title='Buat SKRD' class=''><i class='icon-add_box mr-1'></i></a>";
+                <a href='" . route('skrd.create', array('data_wp_id' =>  Crypt::encrypt($p->id))) . "' title='Buat SKRD' class=''><i class='icon-add_box mr-1'></i></a>";
+            })
+            ->editColumn('nm_wajib_pajak', function ($p) {
+                return "<a href='" . route($this->route . 'show', Crypt::encrypt($p->id)) . "' class='text-primary' title='Show Data'>" . $p->nm_wajib_pajak . "</a>";
             })
             ->editColumn('id_opd', function ($p) {
                 return $p->opd->n_opd;
@@ -68,8 +71,24 @@ class DataWPController extends Controller
                 return $p->jenis_pendapatan->jenis_pendapatan;
             })
             ->addIndexColumn()
-            ->rawColumns(['action'])
+            ->rawColumns(['action', 'nm_wajib_pajak'])
             ->toJson();
+    }
+
+    public function show($id)
+    {
+        $route = $this->route;
+        $title = $this->title;
+
+        $id = \Crypt::decrypt($id);
+
+        $data = DataWP::find($id);
+
+        return view($this->view . 'show', compact(
+            'route',
+            'title',
+            'data'
+        ));
     }
 
     public function destroy($id)

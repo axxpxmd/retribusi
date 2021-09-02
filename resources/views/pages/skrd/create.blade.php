@@ -56,10 +56,10 @@
                                                     <div class="form-group m-0">
                                                         <label class="col-form-label s-12 col-md-4">Rincian Jenis Pendapatan<span class="text-danger ml-1">*</span></label>
                                                         <div class="col-md-8 p-0 bg-light">
-                                                            <select class="select2 form-control r-0 light s-12" id="id_rincian_jenis_pendapatan" name="id_rincian_jenis_pendapatan" autocomplete="off">
+                                                            <select class="select2 form-control r-0 light s-12" {{ $data_wp != null ? 'disabled' : '' }} id="id_rincian_jenis_pendapatan" name="id_rincian_jenis_pendapatan" autocomplete="off">
                                                                 <option value="{{ \Crypt::encrypt(0) }}">Pilih</option>
                                                                 @foreach ($rincian_jenis_pendapatans as $i)
-                                                                    <option value="{{ \Crypt::encrypt($i->id) }}">{{ $i->rincian_pendapatan }}</option>
+                                                                    <option {{ $data_wp != null ? $data_wp->id_rincian_jenis_pendapatan == $i->id ? 'selected' : '-' : '' }} value="{{ \Crypt::encrypt($i->id) }}">{{ $i->rincian_pendapatan }}</option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
@@ -68,7 +68,7 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group m-0">
                                                         <label for="kode_rekening" class="col-form-label s-12 col-md-4">Kode Rekening<span class="text-danger ml-1">*</span></label>
-                                                        <input type="text" name="kode_rekening" id="kode_rekening" class="form-control r-0 light s-12 col-md-8" autocomplete="off" readonly required/>
+                                                        <input type="text" name="kode_rekening" id="kode_rekening" value="{{ $data_wp != null ? $data_wp->rincian_jenis->nmr_rekening : '' }}" class="form-control r-0 light s-12 col-md-8" autocomplete="off" readonly required/>
                                                     </div>
                                                     <div class="form-group m-0">
                                                         <label for="uraian_retribusi" class="col-form-label s-12 col-md-4">Uraian Retribusi<span class="text-danger ml-1">*</span></label>
@@ -86,19 +86,19 @@
                                                     </div>
                                                     <div class="form-group m-0">
                                                         <label for="nm_wajib_pajak" class="col-form-label s-12 col-md-4">Nama Wajib Pajak<span class="text-danger ml-1">*</span></label>
-                                                        <input type="text" name="nm_wajib_pajak" id="nm_wajib_pajak" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
+                                                        <input type="text" name="nm_wajib_pajak" id="nm_wajib_pajak" {{ $data_wp != null ? 'readonly' : '' }} value="{{ $data_wp != null ? $data_wp->nm_wajib_pajak : '' }}" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
                                                     </div>
                                                     <div class="form-group m-0">
                                                         <label for="alamat_wp" class="col-form-label s-12 col-md-4">Alamat Wajib Pajak<span class="text-danger ml-1">*</span></label>
-                                                        <input type="text" name="alamat_wp" id="alamat_wp" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
+                                                        <input type="text" name="alamat_wp" id="alamat_wp" {{ $data_wp != null ? 'readonly' : '' }} value="{{ $data_wp != null ? $data_wp->alamat_wp : '' }}" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
                                                     </div>
                                                     <div class="form-group m-0">
                                                         <label class="col-form-label s-12 col-md-4">Kecamatan<span class="text-danger ml-1">*</span></label>
                                                         <div class="col-md-8 p-0 bg-light">
-                                                            <select class="select2 form-control r-0 light s-12" id="kecamatan_id" name="kecamatan_id" autocomplete="off">
+                                                            <select class="select2 form-control r-0 light s-12" id="kecamatan_id" {{ $data_wp != null ? 'disabled' : '' }} name="kecamatan_id" autocomplete="off">
                                                                 <option value="">Pilih</option>
                                                                 @foreach ($kecamatans as $i)
-                                                                    <option value="{{ $i->id }}">{{ $i->n_kecamatan }}</option>
+                                                                    <option {{ $data_wp != null ? $data_wp->kecamatan_id == $i->id ? 'selected' : '-' : '' }} value="{{ $i->id }}">{{ $i->n_kecamatan }}</option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
@@ -106,14 +106,17 @@
                                                     <div class="form-group mt-1">
                                                         <label class="col-form-label s-12 col-md-4">Kelurahan<span class="text-danger ml-1">*</span></label>
                                                         <div class="col-md-8 p-0 bg-light">
-                                                            <select class="select2 form-control r-0 light s-12" id="kelurahan_id" name="kelurahan_id" autocomplete="off">
+                                                            <select class="select2 form-control r-0 light s-12" {{ $data_wp != null ? 'disabled' : '' }} id="kelurahan_id" name="kelurahan_id" autocomplete="off">
+                                                                @if ($data_wp != null)
+                                                                    <option value="{{ $data_wp->kelurahan_id }}">{{ $data_wp->kelurahan->n_kelurahan }}</option>
+                                                                @endif
                                                                 <option value="">Pilih</option>
                                                             </select>
                                                         </div>
                                                     </div>
                                                     <div class="form-group mt-1">
                                                         <label for="lokasi" class="col-form-label s-12 col-md-4">Lokasi<span class="text-danger ml-1">*</span></label>
-                                                        <textarea type="text" name="lokasi" id="lokasi" placeholder="Contoh: Ruko Sektor 1.2 BSD" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required></textarea>
+                                                        <textarea type="text" name="lokasi" id="lokasi" {{ $data_wp != null ? 'readonly' : '' }} placeholder="Contoh: Ruko Sektor 1.2 BSD" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required>{{ $data_wp != null ? $data_wp->lokasi : '' }}</textarea>
                                                     </div>
                                                     <div class="form-group m-0">
                                                         <label class="col-form-label s-12 col-md-4">No Bayar<span class="text-danger ml-1">*</span></label>
@@ -204,6 +207,9 @@
         }
         else{
             $('#alert').html('');
+            $("#kecamatan_id").prop("disabled", false);
+            $("#kelurahan_id").prop("disabled", false);
+            $("#id_rincian_jenis_pendapatan").prop("disabled", false);
             url = "{{ route($route.'store') }}",
             $.ajax({
                 url : url,

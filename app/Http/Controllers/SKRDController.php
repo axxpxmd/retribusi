@@ -156,18 +156,32 @@ class SKRDController extends Controller
 
         // Get params
         $opd_id = $request->opd_id;
+        $data_wp_id = $request->data_wp_id;
         $jenis_pendapatan_id = $request->jenis_pendapatan_id;
 
-        // Validation
-        if ($opd_id == '' || $jenis_pendapatan_id == '') {
-            return redirect()
-                ->route($this->route . 'index')
-                ->withErrors('Semua form wajid diisi.');
+        // Check data wajib pajak
+        if (isset($data_wp_id)) {
+            // Decrypt params
+            $data_wp_id = \Crypt::decrypt($data_wp_id);
+        } else {
+            // Validation
+            if ($opd_id == '' || $jenis_pendapatan_id == '') {
+                return redirect()
+                    ->route($this->route . 'index')
+                    ->withErrors('Semua form wajid diisi.');
+            }
+
+            // Decrypt params
+            $opd_id = \Crypt::decrypt($opd_id);
+            $jenis_pendapatan_id = \Crypt::decrypt($jenis_pendapatan_id);
         }
 
-        // Decrypt params
-        $opd_id = \Crypt::decrypt($opd_id);
-        $jenis_pendapatan_id = \Crypt::decrypt($jenis_pendapatan_id);
+        // Data wajib pajak
+        $data_wp = DataWP::where('id', $data_wp_id)->first();
+        if ($data_wp != null) {
+            $opd_id = $data_wp->id_opd;
+            $jenis_pendapatan_id = $data_wp->id_jenis_pendapatan;
+        }
 
         $opd = OPD::find($opd_id);
         $jenis_pendapatan = JenisPendapatan::find($jenis_pendapatan_id);
@@ -252,7 +266,8 @@ class SKRDController extends Controller
             'no_skrd',
             'kecamatans',
             'no_bayar',
-            'rincian_jenis_pendapatans'
+            'rincian_jenis_pendapatans',
+            'data_wp'
         ));
     }
 
