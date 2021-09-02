@@ -61,17 +61,17 @@ class RoleController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|unique:roles,name',
-            'guard_name' => 'required'
-        ]);
+        // $request->validate([
+        //     'name' => 'required|unique:roles,name',
+        //     'guard_name' => 'required'
+        // ]);
 
-        $input = $request->all();
-        Role::create($input);
+        // $input = $request->all();
+        // Role::create($input);
 
-        return response()->json([
-            'message' => 'Data ' . $this->title . ' berhasil tersimpan.'
-        ]);
+        // return response()->json([
+        //     'message' => 'Data ' . $this->title . ' berhasil tersimpan.'
+        // ]);
 
         return response()->json([
             'message' => 'Maaf tidak bisa menambah data'
@@ -85,18 +85,18 @@ class RoleController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'name' => 'required|unique:roles,name,' . $id,
-            'guard_name' => 'required'
-        ]);
+        // $request->validate([
+        //     'name' => 'required|unique:roles,name,' . $id,
+        //     'guard_name' => 'required'
+        // ]);
 
-        $input = $request->all();
-        $role  = Role::findOrFail($id);
-        $role->update($input);
+        // $input = $request->all();
+        // $role  = Role::findOrFail($id);
+        // $role->update($input);
 
-        return response()->json([
-            'message' => 'Data ' . $this->title . ' berhasil diperbaharui.'
-        ]);
+        // return response()->json([
+        //     'message' => 'Data ' . $this->title . ' berhasil diperbaharui.'
+        // ]);
 
         return response()->json([
             'message' => 'Maaf tidak bisa memperbaharui data.'

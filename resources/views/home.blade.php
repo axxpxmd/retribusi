@@ -25,13 +25,13 @@
     <div class="container-fluid relative animatedParent animateOnce">
         <div class="tab-content pb-3" id="v-pills-tabContent">
             <div class="tab-pane animated fadeInUpShort show active" id="v-pills-1">
-                @if ($opd_id == 0 || $opd_id == 99999)
+                @role('super-admin|admin-bjb')
                     @include('pages.dashboard.card1')
-                @endif
-                @if ($opd_id != 0 && $opd_id != 99999)
+                @endrole
+                @role('admin-opd|bendahara-opd|operator-opd')
                     @include('pages.dashboard.card2')
-                @endif
-                @if ($opd_id == 0 || $opd_id == 99999)
+                @endrole
+                @role('super-admin|admin-bjb')
                 <div class="row p-0 col-md-12">
                     <div class="col-md-8">
                         @include('pages.dashboard.chartDiagram')
@@ -81,7 +81,7 @@
                         </div>
                     </div>
                 </div>
-                @endif
+                @endrole
             </div>
         </div>
     </div>

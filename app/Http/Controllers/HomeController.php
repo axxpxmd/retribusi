@@ -25,13 +25,13 @@ class HomeController extends Controller
         $time  = Carbon::now();
         $date  = $time->toDateString();
         $month = $time->month;
-        $day = Carbon::today();
+        $day   = Carbon::today();
 
         $opd_id = Auth::user()->pengguna->opd_id;
 
         // Card 1
-        $jenisOpdIn = OPDJenisPendapatan::select('id_opd')->get()->toArray();
-        $transaksiOPD = OPD::whereIn('id', $jenisOpdIn)->withCount('transaksi_opd')->get();
+        $jenisOpdIn     = OPDJenisPendapatan::select('id_opd')->get()->toArray();
+        $transaksiOPD   = OPD::whereIn('id', $jenisOpdIn)->withCount('transaksi_opd')->get();
         $transaksiTotal = TransaksiOPD::count();
 
         // Card 2 
@@ -51,13 +51,13 @@ class HomeController extends Controller
         $jenisPendapatanTotal = TransaksiOPD::select(DB::raw("SUM(total_bayar) as total_bayar"), DB::raw("COUNT(id_jenis_pendapatan) as jumlah"))->where('id_opd', $opd_id)->first();
         $jenisPendapatanTotalSudahBayar = TransaksiOPD::select(DB::raw("SUM(total_bayar) as total_bayar"), DB::raw("COUNT(id_jenis_pendapatan) as jumlah"))->where('id_opd', $opd_id)->where('status_bayar', 1)->first();
 
-        $todays = TransaksiOPD::where('id_opd', $opd_id)->whereDate('created_at', $day)->orderBy('id', 'DESC')->get();
+        $todays     = TransaksiOPD::where('id_opd', $opd_id)->whereDate('created_at', $day)->orderBy('id', 'DESC')->get();
         $todaysskrd = TransaksiOPD::where('id_opd', $opd_id)->where('status_bayar', 0)->whereDate('created_at', $day)->count();
-        $todayssts = TransaksiOPD::where('id_opd', $opd_id)->where('status_bayar', 1)->whereDate('created_at', $day)->count();
+        $todayssts  = TransaksiOPD::where('id_opd', $opd_id)->where('status_bayar', 1)->whereDate('created_at', $day)->count();
 
-        $months = TransaksiOPD::where('id_opd', $opd_id)->whereRaw('extract(month from created_at) = ?', [$month])->orderBy('id', 'DESC')->get();
+        $months     = TransaksiOPD::where('id_opd', $opd_id)->whereRaw('extract(month from created_at) = ?', [$month])->orderBy('id', 'DESC')->get();
         $monthsskrd = TransaksiOPD::where('id_opd', $opd_id)->where('status_bayar', 0)->whereRaw('extract(month from created_at) = ?', [$month])->count();
-        $monthssts = TransaksiOPD::where('id_opd', $opd_id)->where('status_bayar', 1)->whereRaw('extract(month from created_at) = ?', [$month])->count();
+        $monthssts  = TransaksiOPD::where('id_opd', $opd_id)->where('status_bayar', 1)->whereRaw('extract(month from created_at) = ?', [$month])->count();
 
         $higherIncome = TransaksiOPD::select(DB::raw("SUM(total_bayar) as y"), 'tmopds.n_opd as name', 'tmopds.n_opd as drilldown', 'id_opd')
             ->join('tmopds', 'tmopds.id', '=', 'tmtransaksi_opd.id_opd')
@@ -85,7 +85,7 @@ class HomeController extends Controller
             foreach ($higherIncomeRetribution as $key1 => $value1) {
                 $dataChills[$key1] = [
                     'name' => $value1->jenis_pendapatan->jenis_pendapatan,
-                    'y' => $value1->y
+                    'y'    => $value1->y
                 ];
             }
 
@@ -97,10 +97,10 @@ class HomeController extends Controller
             ];
         }
         $parentJson = json_encode($parents);
-        $childJson = json_encode($childs);
+        $childJson  = json_encode($childs);
 
         $totalSKRD = TransaksiOPD::where('status_bayar', 0)->count();
-        $totalSTS = TransaksiOPD::where('status_bayar', 1)->count();
+        $totalSTS  = TransaksiOPD::where('status_bayar', 1)->count();
 
         $todayDatas = TransaksiOPD::orderBy('id', 'DESC')->whereDate('created_at', $day)->get();
 
