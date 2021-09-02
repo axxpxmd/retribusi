@@ -180,6 +180,6 @@ class ReportController extends Controller
             'jenis'
         ))->setPaper('a3', 'landscape');
 
-        return $pdf->download('Report Data ' . $title . ".pdf");
+        return $pdf->download('Laporan ' . $title . ".pdf");
     }
 }

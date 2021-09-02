@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Report Data {{ $title }}</title>
+    <title>Laporan {{ $title }}</title>
 
     <style type="text/css">
 		table.d {
@@ -50,8 +50,8 @@
             @forelse  ($data as $index => $i)
                 <tr class="d">
                     <td width="3%" class="d text-center">{{ $index+1 }}</td>
-                    <td width="8%" class="d p-l-5">{{ $i->no_bayar }}</td>
-                    <td width="6%" class="d p-l-5">{{ $i->no_skrd }}</td>
+                    <td width="10%" class="d p-l-5">{{ $i->no_bayar }}</td>
+                    <td width="10%" class="d p-l-5">{{ $i->no_skrd }}</td>
                     <td width="10%" class="d p-l-5">{{ $i->nm_wajib_pajak }}</td>
                     <td width="30%" class="d p-l-5">{{ $i->jenis_pendapatan->jenis_pendapatan }}</td>
                     <td width="10%" class="d p-l-5"> {{ Carbon\Carbon::createFromFormat('Y-m-d', $i->tgl_skrd_awal)->format('d M Y') }}</td>
@@ -59,7 +59,7 @@
                     <td width="13%" class="d p-l-5">{{ $i->ntb }}</td>
                     <td width="10%" class="d p-l-5">@currency(((int) $i->diskon / 100) * $i->total_bayar)</td>
                     <td width="10%" class="d p-l-5">@currency($i->denda)</td>
-                    <td width="10%" class="d p-l-5" >@currency($i->total_bayar)</td>
+                    <td width="12%" class="d p-l-5" >@currency($i->total_bayar)</td>
                     <td width="10%" class="d p-l-5">{{ $i->status_bayar == 1 ? 'Sudah' : 'Belum' }}</td>
                 </tr>
             @empty
