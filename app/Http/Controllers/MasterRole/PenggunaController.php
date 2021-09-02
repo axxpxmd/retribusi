@@ -12,7 +12,7 @@
  * Github : axxpxmd
  */
 
-namespace App\Http\Controllers\Pengguna;
+namespace App\Http\Controllers\MasterRole;
 
 use Auth;
 use DataTables;
@@ -25,15 +25,22 @@ use App\Http\Controllers\Controller;
 use App\User;
 use App\Models\OPD;
 use App\Models\Pengguna;
+use App\Models\ModelHasRoles;
 use App\Models\OPDJenisPendapatan;
 use Spatie\Permission\Models\Role;
 
 class PenggunaController extends Controller
 {
-    protected $route = 'pengguna.';
-    protected $view  = 'pages.pengguna.';
-    protected $path  = 'images/ava/';
+    protected $route = 'master-role.pengguna.';
+    protected $view  = 'pages.masterRole.pengguna.';
+    protected $path  = '../images/ava/';
     protected $title = 'Pengguna';
+
+    // Check Permission
+    public function __construct()
+    {
+        $this->middleware(['permission:Pengguna']);
+    }
 
     public function index()
     {
@@ -166,7 +173,7 @@ class PenggunaController extends Controller
     {
         $route = $this->route;
         $title = $this->title;
-        $path  = $this->path;
+        $path  = 'images/ava/';
 
         $pengguna = Pengguna::find($id);
 
@@ -243,7 +250,7 @@ class PenggunaController extends Controller
         if ($pengguna->photo != 'default.png') {
             // Proses Delete Foto
             $exist = $pengguna->photo;
-            $path  = "images/ava/" . $exist;
+            $path  = $this->path . $exist;
             \File::delete(public_path($path));
         }
         $pengguna->delete();

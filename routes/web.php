@@ -26,86 +26,73 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     /**
-     * Role super-admin
+     * MASTER ROLES
      */
-    Route::group(['middleware' => ['role:super-admin']], function () {
-        Route::prefix('master-roles')->namespace('MasterRole')->name('master-role.')->group(function () {
-            // Role
-            Route::resource('role', 'RoleController');
-            Route::prefix('role')->name('role.')->group(function () {
-                Route::post('api', 'RoleController@api')->name('api');
-                Route::get('{id}/addPermissions', 'RoleController@permission')->name('addPermissions');
-                Route::post('storePermissions', 'RoleController@storePermission')->name('storePermissions');
-                Route::get('{id}/getPermissions', 'RoleController@getPermissions')->name('getPermissions');
-                Route::delete('{name}/destroyPermission', 'RoleController@destroyPermission')->name('destroyPermission');
-            });
-            // Permission
-            Route::resource('permission', 'PermissionController');
-            Route::post('permission/api', 'PermissionController@api')->name('permission.api');
+    Route::prefix('master-roles')->namespace('MasterRole')->name('master-role.')->group(function () {
+        // Role
+        Route::resource('role', 'RoleController');
+        Route::prefix('role')->name('role.')->group(function () {
+            Route::post('api', 'RoleController@api')->name('api');
+            Route::get('{id}/addPermissions', 'RoleController@permission')->name('addPermissions');
+            Route::post('storePermissions', 'RoleController@storePermission')->name('storePermissions');
+            Route::get('{id}/getPermissions', 'RoleController@getPermissions')->name('getPermissions');
+            Route::delete('{name}/destroyPermission', 'RoleController@destroyPermission')->name('destroyPermission');
         });
+        // Permission
+        Route::resource('permission', 'PermissionController');
+        Route::post('permission/api', 'PermissionController@api')->name('permission.api');
         // Pengguna
-        Route::namespace('Pengguna')->group(function () {
-            Route::resource('pengguna', 'PenggunaController');
-            Route::post('pengguna/api', 'PenggunaController@api')->name('pengguna.api');
-        });
-        // OPD
-        Route::resource('opd', 'OPDController');
-        Route::post('opd/api', 'OPDController@api')->name('opd.api');
-        Route::get('opd/edit-jenis-pendapatan/{id}', 'OPDController@jenisPendapatan')->name('opd.editJenisPendapatan');
-        Route::post('opd/store-jenis-pendapatan', 'OPDController@storeJenisPendapatan')->name('opd.storeJenisPendapatan');
-        Route::get('opd/get-jenis-pendapatan/{id}', 'OPDController@getJenisPendapatan')->name('opd.getJenisPendapatan');
-        Route::delete('opd/delete-jenis-pendapatan/{id}', 'OPDController@destroyJenisPendapatan')->name('opd.destoryJenisPendapatan');
-        // Jenis Pendapatan
-        Route::resource('jenis-pendapatan', 'JenisPendapatanController');
-        Route::post('jenis-pendapatan/api', 'JenisPendapatanController@api')->name('jenis-pendapatan.api');
-        // Rincian Jenis Pendapatan
-        Route::resource('rincian-jenis', 'RincianJenisController');
-        Route::post('rincian-jenis/api', 'RincianJenisController@api')->name('rincian-jenis.api');
+        Route::resource('pengguna', 'PenggunaController');
+        Route::post('pengguna/api', 'PenggunaController@api')->name('pengguna.api');
     });
 
-    /**
-     * Role super-admin|admin-opd|bendahara-opd
-     */
-    Route::group(['middleware' => ['role:super-admin|admin-opd|bendahara-opd']], function () {
-        // Data WP
-        Route::resource('datawp', 'DataWPController');
-        Route::post('datawp/api', 'DataWPController@api')->name('datawp.api');
-        // SKRD
-        Route::resource('skrd', 'SKRDController');
-        Route::post('skrd/api', 'SKRDController@api')->name('skrd.api');
-        Route::get('skrd/get-jenis-pendapatan/{opd_id}', 'SKRDController@getJenisPendapatanByOpd')->name('skrd.getJenisPendapatan');
-        Route::get('skrd/get-kode-rekening/{id_rincian_jenis_pendapatan}', 'SKRDController@getKodeRekening')->name('skrd.getKodeRekening');
-        Route::get('skrd/get-kelurahan/{id}', 'SKRDController@kelurahanByKecamatan')->name('skrd.kelurahanByKecamatan');
-        Route::get('skrd/report/{id}', 'SKRDController@printData')->name('skrd.report');
-        // STS
-        Route::resource('sts', 'STSController');
-        Route::post('sts/api', 'STSController@api')->name('sts.api');
-        Route::get('sts/report/{id}', 'STSController@printData')->name('sts.report');
-    });
+    // OPD
+    Route::resource('opd', 'OPDController');
+    Route::post('opd/api', 'OPDController@api')->name('opd.api');
+    Route::get('opd/edit-jenis-pendapatan/{id}', 'OPDController@jenisPendapatan')->name('opd.editJenisPendapatan');
+    Route::post('opd/store-jenis-pendapatan', 'OPDController@storeJenisPendapatan')->name('opd.storeJenisPendapatan');
+    Route::get('opd/get-jenis-pendapatan/{id}', 'OPDController@getJenisPendapatan')->name('opd.getJenisPendapatan');
+    Route::delete('opd/delete-jenis-pendapatan/{id}', 'OPDController@destroyJenisPendapatan')->name('opd.destoryJenisPendapatan');
 
-    /**
-     * Role super-admin|admin-opd
-     */
-    Route::group(['middleware' => ['role:super-admin|admin-opd']], function () {
-        // Diskon
-        Route::get('diskon', 'DiskonController@index')->name('diskon.index');
-        Route::post('diskon/api', 'DiskonController@api')->name('diskon.api');
-        Route::get('diskon/update-diskon', 'DiskonController@updateDiskon')->name('diskon.updateDiskon');
-        // Denda
-        Route::get('denda', 'DendaController@index')->name('denda.index');
-        Route::post('denda/api', 'DendaController@api')->name('denda.api');
-        Route::get('denda/update-denda', 'DendaController@updateDenda')->name('denda.updateDenda');
-    });
+    // Jenis Pendapatan
+    Route::resource('jenis-pendapatan', 'JenisPendapatanController');
+    Route::post('jenis-pendapatan/api', 'JenisPendapatanController@api')->name('jenis-pendapatan.api');
 
-    /**
-     * Role super-admin|admin-opd|admin-bjb|bendahara-opd|operator-opd
-     */
-    Route::group(['middleware' => ['role:super-admin|admin-opd|admin-bjb|bendahara-opd|operator-opd']], function () {
-        // Report
-        Route::get('report', 'ReportController@index')->name('report.index');
-        Route::get('repost/{id}', 'ReportController@show')->name('report.show');
-        Route::post('report/api-skrd', 'ReportController@api')->name('report.api');
-        Route::get('report/cetak-skrd', 'ReportController@cetakSKRD')->name('report.cetakSKRD');
-        Route::get('report/get-jenis-pendapatan/{opd_id}', 'ReportController@getJenisPendapatanByOpd')->name('report.getJenisPendapatan');
-    });
+    // Rincian Jenis Pendapatan
+    Route::resource('rincian-jenis', 'RincianJenisController');
+    Route::post('rincian-jenis/api', 'RincianJenisController@api')->name('rincian-jenis.api');
+
+    // Data WP
+    Route::resource('datawp', 'DataWPController');
+    Route::post('datawp/api', 'DataWPController@api')->name('datawp.api');
+
+    // SKRD
+    Route::resource('skrd', 'SKRDController');
+    Route::post('skrd/api', 'SKRDController@api')->name('skrd.api');
+    Route::get('skrd/get-jenis-pendapatan/{opd_id}', 'SKRDController@getJenisPendapatanByOpd')->name('skrd.getJenisPendapatan');
+    Route::get('skrd/get-kode-rekening/{id_rincian_jenis_pendapatan}', 'SKRDController@getKodeRekening')->name('skrd.getKodeRekening');
+    Route::get('skrd/get-kelurahan/{id}', 'SKRDController@kelurahanByKecamatan')->name('skrd.kelurahanByKecamatan');
+    Route::get('skrd/report/{id}', 'SKRDController@printData')->name('skrd.report');
+
+    // STS
+    Route::resource('sts', 'STSController');
+    Route::post('sts/api', 'STSController@api')->name('sts.api');
+    Route::get('sts/report/{id}', 'STSController@printData')->name('sts.report');
+
+    // Diskon
+    Route::get('diskon', 'DiskonController@index')->name('diskon.index');
+    Route::post('diskon/api', 'DiskonController@api')->name('diskon.api');
+    Route::get('diskon/update-diskon', 'DiskonController@updateDiskon')->name('diskon.updateDiskon');
+
+    // Denda
+    Route::get('denda', 'DendaController@index')->name('denda.index');
+    Route::post('denda/api', 'DendaController@api')->name('denda.api');
+    Route::get('denda/update-denda', 'DendaController@updateDenda')->name('denda.updateDenda');
+
+    // Report
+    Route::get('report', 'ReportController@index')->name('report.index');
+    Route::get('repost/{id}', 'ReportController@show')->name('report.show');
+    Route::post('report/api-skrd', 'ReportController@api')->name('report.api');
+    Route::get('report/cetak-skrd', 'ReportController@cetakSKRD')->name('report.cetakSKRD');
+    Route::get('report/get-jenis-pendapatan/{opd_id}', 'ReportController@getJenisPendapatanByOpd')->name('report.getJenisPendapatan');
 });

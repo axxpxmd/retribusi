@@ -28,6 +28,12 @@ class PermissionController extends Controller
     protected $view  = 'pages.masterRole.permission.';
     protected $title = 'Config Permission';
 
+    // Check Permission
+    public function __construct()
+    {
+        $this->middleware(['permission:Permission']);
+    }
+
     public function index()
     {
         $route = $this->route;

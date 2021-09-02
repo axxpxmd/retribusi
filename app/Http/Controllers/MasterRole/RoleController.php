@@ -20,8 +20,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 // Models
-use Spatie\Permission\Models\Role;
 use App\Models\RoleHasPermissions;
+use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
 class RoleController extends Controller
@@ -29,6 +29,12 @@ class RoleController extends Controller
     protected $route = 'master-role.role.';
     protected $view  = 'pages.masterRole.role.';
     protected $title = 'Config Role';
+
+    // Check Permission
+    public function __construct()
+    {
+        $this->middleware(['permission:Role']);
+    }
 
     public function index()
     {
