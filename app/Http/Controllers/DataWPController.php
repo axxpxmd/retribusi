@@ -57,9 +57,9 @@ class DataWPController extends Controller
         return DataTables::of($data)
             ->addColumn('action', function ($p) {
                 return "
-                <a href='#' onclick='remove(" . $p->id . ")' class='text-danger mr-2 fs-18' title='Hapus Data'><i class='icon icon-remove'></i></a>
-                <a href='#' onclick='show(" . $p->id . ")' title='Tampilkan Data' class='fs-20 text-success'><i class='icon icon-eye3 mr-1'></i></a>
-                <a href='#' title='Buat SKRD' class='fs-20'><i class='icon-add_box mr-1'></i></a>";
+                <a href='#' onclick='remove(" . $p->id . ")' class='text-danger mr-2' title='Hapus Data'><i class='icon-remove'></i></a>
+                <a href='#' onclick='show(" . $p->id . ")' title='Tampilkan Data' class='text-success'><i class='icon-document-list2 mr-1'></i></a>
+                <a href='#' title='Buat SKRD' class=''><i class='icon-add_box mr-1'></i></a>";
             })
             ->editColumn('id_opd', function ($p) {
                 return $p->opd->n_opd;
