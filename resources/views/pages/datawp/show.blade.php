@@ -69,7 +69,7 @@
                                     <div class="row">
                                         <label class="col-md-2 text-right s-12"></label>
                                         <label class="col-md-3 s-12">
-                                            <a target="blank" href="{{ route('skrd.create', array('data_wp_id' =>  Crypt::encrypt($data->id))) }}" class="btn btn-sm btn-primary"><i class="icon-arrow_forward mr-2"></i>Buat SKRD</a>
+                                            <a href="{{ route('skrd.create', array('data_wp_id' =>  Crypt::encrypt($data->id))) }}" class="btn btn-sm btn-primary"><i class="icon-arrow_forward mr-2"></i>Buat SKRD</a>
                                         </label>
                                     </div> 
                                 </div>

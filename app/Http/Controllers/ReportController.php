@@ -147,12 +147,6 @@ class ReportController extends Controller
 
     public function cetakSKRD(Request $request)
     {
-        $jenis_pendapatan_id = $request->jenis_pendapatan_id;
-        $status_bayar = $request->status_bayar;
-        $from = $request->tgl_skrd;
-        $to = $request->tgl_skrd1;
-        $jenis = $request->jenis;
-
         $checkOPD = Auth::user()->pengguna->opd_id;
         if ($checkOPD == 0 || $checkOPD == 99999) {
             $opd_id = $request->opd_id;
@@ -160,12 +154,22 @@ class ReportController extends Controller
             $opd_id = $checkOPD;
         }
 
+        // Get time now
+        $time = Carbon::now();
+        $today = $time->format('Y-m-d');
+
+        $jenis_pendapatan_id = $request->jenis_pendapatan_id;
+        $status_bayar = $request->status_bayar;
+        $from = $request->tgl_skrd != null ? $request->tgl_skrd : $today;
+        $to = $request->tgl_skrd1 != null ? $request->tgl_skrd1 : $today;
+        $jenis = $request->jenis;
+
         $data = TransaksiOPD::queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis);
 
         if ($jenis == 1 || $jenis == 0) {
-            $title = 'SKRD';
+            $title = 'SKRD (Surat Ketetapan Retribusi Daerah)';
         } else {
-            $title = 'STS';
+            $title = 'STS (Surat Tanda Setoran)';
         }
 
         $pdf = app('dompdf.wrapper');
@@ -174,7 +178,7 @@ class ReportController extends Controller
             'data',
             'title',
             'jenis'
-        ))->setPaper('a4', 'landscape');
+        ))->setPaper('a3', 'landscape');
 
         return $pdf->download('Report Data ' . $title . ".pdf");
     }
