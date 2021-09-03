@@ -20,17 +20,14 @@
             border: 1px solid black;
             font-size: 12px;
         }
-
         table.a tr.a,th.a,td.a{
             table-layout: fixed;
             border: 1px solid black;
             font-size: 12px;
         }
-
         table.c{
             font-size: 15px 
         }
-
         .t-bold {
             font-weight: bold
         }
@@ -38,7 +35,6 @@
         .m-b-0{
             margin-bottom: 0px;
         }
-
         .m-t-0{
             margin-top: 0px;
         }
@@ -67,11 +63,12 @@
         .m-l-14{
             margin-left: 14px
         }
-
         .m-r-20{
             margin-right: 20px
         }
-
+        .m-t-1{
+            margin-top: 1px
+        }
         .f-w-n{
             font-weight: normal
         }
@@ -79,18 +76,15 @@
         .m-l-10{
             margin-left: 10px;
         }
-
         .m-r-10{
             margin-right: 10px;
         }
         .m-b-5{
             margin-bottom: 5px
         }
-
         .m-l-50{
             margin-left: 50px;
         }
-
         .m-t-15{
             margin-top: 15px
         }

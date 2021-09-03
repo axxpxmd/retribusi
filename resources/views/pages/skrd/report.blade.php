@@ -75,6 +75,9 @@
         .f-w-n{
             font-weight: normal
         }
+        .m-t-1{
+            margin-top: 1px
+        }
 
         .m-l-50{
             margin-left: 50px;
