@@ -188,7 +188,10 @@
                     <p class="m-l-5 m-b-0 m-t-0">{{ $data->rincian_jenis != null ? $data->rincian_jenis->rincian_pendapatan : '-' }}</p>
                     <p class="m-l-5 m-t-0">{{ $data->uraian_retribusi }}</p>
                 </td>
-                <td class="a"><p class="m-l-5 text-right">@currency($data->jumlah_bayar),-</p></td>
+                <td class="a">
+                    <p class="m-l-5 text-right m-r-10">@currency($data->jumlah_bayar),-</p>
+                    <p class="m-l-5 text-right m-r-10">(Diskon {{ $data->diskon }}%)&nbsp;&nbsp; @currency(((int) $data->diskon / 100) * $data->total_bayar),-</p>
+                </td>
             </tr>
             <tr class="a">
                 <td rowspan="2" class="a text-center">2</td>
