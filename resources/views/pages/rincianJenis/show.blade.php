@@ -6,9 +6,9 @@
         <div class="container-fluid text-white">
             <div class="row">
                 <div class="col">
-                    <h4 class="ml-1">
-                        <i class="icon icon-document mr-2"></i>
-                        Show {{ $title }}
+                    <h4>
+                        <i class="icon icon-document-list mr-2"></i>
+                        Menampilkan {{ $title }}
                     </h4>
                 </div>
             </div>
