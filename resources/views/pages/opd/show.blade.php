@@ -18,7 +18,7 @@
                         <a class="nav-link" href="{{ route($route.'index') }}"><i class="icon icon-arrow_back"></i>Semua Data</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active show" id="tab1" data-toggle="tab" href="#semua-data" role="tab"><i class="icon icon-document"></i>OPD</a>
+                        <a class="nav-link active show" id="tab1" data-toggle="tab" href="#semua-data" role="tab"><i class="icon icon-document-list"></i>OPD</a>
                     </li>
                 </ul>
             </div>
