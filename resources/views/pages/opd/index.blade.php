@@ -6,8 +6,8 @@
         <div class="container-fluid text-white">
             <div class="row p-t-b-10 ">
                 <div class="col">
-                    <h4 class="ml-1">
-                        <i class="icon icon-document mr-1"></i>
+                    <h4>
+                        <i class="icon icon-document-list mr-2"></i>
                         {{ $title }}
                     </h4>
                 </div>

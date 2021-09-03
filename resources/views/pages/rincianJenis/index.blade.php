@@ -7,7 +7,7 @@
             <div class="row p-t-b-10 ">
                 <div class="col">
                     <h4>
-                        <i class="icon icon-document mr-2"></i>
+                        <i class="icon icon-document-list mr-2"></i>
                         {{ $title }}
                     </h4>
                 </div>
@@ -78,7 +78,7 @@
                                                 <label for="id_jenis_pendapatan" class="col-form-label s-12 col-md-2">Jenis Pendapatan<span class="text-danger ml-1">*</span></label>
                                                 <div class="col-md-6 p-0 bg-light">
                                                     <select class="select2 form-control r-0 light s-12" name="id_jenis_pendapatan" id="id_jenis_pendapatan" autocomplete="off">
-                                                        <option value="0">Pilih</option>
+                                                        <option value="">Pilih</option>
                                                         @foreach ($jenis_pendapatans as $i)
                                                             <option value="{{ $i->id }}">{{ $i->jenis_pendapatan }}</option>
                                                         @endforeach

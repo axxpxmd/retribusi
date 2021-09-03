@@ -4,7 +4,7 @@
         <a href="{{ route('home') }}">
             <i class="icon icon-dashboard2 blue-text s-18"></i> 
             <span>Dashboard</span>
-        </a>
+        </a>    
     </li>
 
     <!-- Permission : Role|Permission|Pengguna -->

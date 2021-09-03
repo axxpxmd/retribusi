@@ -7,7 +7,7 @@
             <div class="row">
                 <div class="col">
                     <h4>
-                        <i class="icon icon-document mr-2"></i>Jenis Pendapatan | {{ $opd->n_opd }}
+                        <i class="icon icon-document-list mr-2"></i>Jenis Pendapatan | {{ $opd->n_opd }}
                     </h4>
                 </div>
             </div>
