@@ -52,7 +52,7 @@ class STSController extends Controller
     {
         $from = $request->tgl_bayar;
         $to   = $request->tgl_bayar1;
-        $status_bayar = $request->status_bayar;
+        $status_bayar  = $request->status_bayar;
         $jenis_tanggal = $request->jenis_tanggal;
         $no_bayar = $request->no_bayar;
 

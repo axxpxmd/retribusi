@@ -6,9 +6,9 @@
         <div class="container-fluid text-white">
             <div class="row p-t-b-10 ">
                 <div class="col">
-                    <h4 class="ml-1">
-                        <i class="icon icon-document mr-1"></i>
-                        {{ $title }}
+                    <h4>
+                        <i class="icon icon-document-list mr-2"></i>
+                        {{ $title }} (Surat Tanda Setoran)
                     </h4>
                 </div>
             </div>
@@ -64,7 +64,7 @@
                             </div>
                         </div> 
                         <div class="form-group row" style="margin-top: -8px !important">
-                            <label for="no_bayar" class="col-form-label s-12 col-md-4 text-right font-weight-bolder">No Bayar : </label>
+                            <label for="no_bayar" class="col-form-label s-12 col-md-4 text-right font-weight-bolder">NO Bayar : </label>
                             <div class="col-sm-4">
                                 <input type="text" name="no_bayar" id="no_bayar" class="form-control r-0 s-12 col-md-12" autocomplete="off" required/>
                             </div>
@@ -96,7 +96,7 @@
                         <div class="card no-b">
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table id="dataTable" class="table table-striped table-bordered" style="width:100%">
+                                    <table id="dataTable" class="table display nowrap table-striped table-bordered" style="width:100%">
                                         <thead>
                                             <th width="5%">No</th>
                                             <th width="8%">Nomor Bayar </th>
@@ -131,6 +131,7 @@
     });
 
     var table = $('#dataTable').dataTable({
+        scrollX: true,
         processing: true,
         serverSide: true,
         order: [ 0, 'asc' ],
