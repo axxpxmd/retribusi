@@ -129,6 +129,8 @@ class DiskonController extends Controller
                 ->withErrors('Silahkan pilih diskon.');
         }
 
+        // dd($diskon / 100);
+
         for ($i = 0; $i < $dataLength; $i++) {
             if ($status_diskon1 == 1) {
                 $diskonHarga = ($diskon / 100) * $datas[$i]->total_bayar;
