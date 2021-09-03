@@ -17,7 +17,7 @@ use App\Models\OPDJenisPendapatan;
 class DataWPController extends Controller
 {
     protected $route = 'datawp.';
-    protected $title = 'Data Wajib Pajak';
+    protected $title = 'Data Wajib Retribusi';
     protected $view  = 'pages.datawp.';
 
     public function index()

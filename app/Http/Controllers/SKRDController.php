@@ -159,7 +159,7 @@ class SKRDController extends Controller
         $data_wp_id = $request->data_wp_id;
         $jenis_pendapatan_id = $request->jenis_pendapatan_id;
 
-        // Check data wajib pajak
+        // Check data wajib Retribusi
         if (isset($data_wp_id)) {
             // Decrypt params
             $data_wp_id = \Crypt::decrypt($data_wp_id);
@@ -176,7 +176,7 @@ class SKRDController extends Controller
             $jenis_pendapatan_id = \Crypt::decrypt($jenis_pendapatan_id);
         }
 
-        // Data wajib pajak
+        // Data wajib Retribusi
         $data_wp = DataWP::where('id', $data_wp_id)->first();
         if ($data_wp != null) {
             $opd_id = $data_wp->id_opd;

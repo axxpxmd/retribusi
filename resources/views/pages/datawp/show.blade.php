@@ -30,7 +30,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card mt-2">
-                            <h6 class="card-header"><strong>Data Wajib Pajak</strong></h6>
+                            <h6 class="card-header"><strong>Data Wajib Retribusi</strong></h6>
                             <div class="card-body">
                                 <div class="col-md-12">
                                     <div class="row">

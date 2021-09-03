@@ -85,11 +85,11 @@
                                                         <input type="text" name="nmr_daftar" id="nmr_daftar" value="{{ $data->nmr_daftar }}" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
                                                     </div>
                                                     <div class="form-group m-0">
-                                                        <label for="nm_wajib_pajak" class="col-form-label s-12 col-md-4">Nama Wajib Pajak<span class="text-danger ml-1">*</span></label>
+                                                        <label for="nm_wajib_pajak" class="col-form-label s-12 col-md-4">Nama Wajib Retribusi<span class="text-danger ml-1">*</span></label>
                                                         <input type="text" name="nm_wajib_pajak" id="nm_wajib_pajak" value="{{ $data->nm_wajib_pajak }}" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
                                                     </div>
                                                     <div class="form-group m-0">
-                                                        <label for="alamat_wp" class="col-form-label s-12 col-md-4">Alamat Wajib Pajak<span class="text-danger ml-1">*</span></label>
+                                                        <label for="alamat_wp" class="col-form-label s-12 col-md-4">Alamat Wajib Retribusi<span class="text-danger ml-1">*</span></label>
                                                         <input type="text" name="alamat_wp" id="alamat_wp" value="{{ $data->alamat_wp }}" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
                                                     </div>
                                                     <div class="form-group m-0">
