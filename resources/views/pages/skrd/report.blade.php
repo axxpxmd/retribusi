@@ -177,8 +177,8 @@
             <tr class="a">
                 <th width="5%" class="a">NO</th>
                 <th width="20%" class="a">NOMOR REKENING</th>
-                <th width="55%" class="a">URAIAN RETRIBUSI</th>
-                <th width="20%" class="a">JUMLAH (Rp)</th>
+                <th width="50%" class="a">URAIAN RETRIBUSI</th>
+                <th width="25%" class="a">JUMLAH (Rp)</th>
             </tr>
             <tr class="a">
                 <td class="a text-center">1</td>
