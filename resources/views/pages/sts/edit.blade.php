@@ -134,7 +134,9 @@
                                                             <select class="select2 form-control r-0 light s-12" id="status_bayar" name="status_bayar" autocomplete="off">
                                                                 <option value="">Pilih</option>
                                                                 <option value="0">Belum Dibayar</option>
+                                                                @if ($data->ntb != null && $data->total_bayar_bjb != null)
                                                                 <option value="1">Sudah Dibayar</option>
+                                                                @endif
                                                             </select>
                                                         </div>
                                                     </div>
