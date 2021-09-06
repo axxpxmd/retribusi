@@ -111,7 +111,7 @@
     @endcan
     @can('Tanda Tangan')
     <li class="no-b">
-        <a href="{{ route('diskon.index') }}">
+        <a href="#">
             <i class="icon icon-document-list amber-text s-18"></i> 
             <span>Tanda Tangan</span>
         </a>
