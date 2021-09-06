@@ -231,6 +231,12 @@ class PenggunaController extends Controller
             'opd_id'  => $opd_id
         ]);
 
+        // Tahap 3
+        $model_has_role = ModelHasRoles::where('model_id', $user_id);
+        $model_has_role->update([
+            'role_id' => $role_id
+        ]);
+
         return response()->json([
             'message' => 'Data ' . $this->title . ' berhasil diperbaharui.'
         ]);

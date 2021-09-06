@@ -40,28 +40,28 @@
                             <div class="card-body">
                                 <div class="col-md-12">
                                     <div class="row">
+                                        <label class="col-md-2 text-right s-12"><strong>Role :</strong></label>
+                                        <label class="col-md-10 s-12">{{ $pengguna->modelHasRole->role->name }}</label>
+                                    </div>
+                                    <div class="row">
                                         <label class="col-md-2 text-right s-12"><strong>Username :</strong></label>
-                                        <label class="col-md-3 s-12">{{ $pengguna->user->username }}</label>
+                                        <label class="col-md-10 s-12">{{ $pengguna->user->username }}</label>
                                     </div>
                                     <div class="row">
                                         <label class="col-md-2 text-right s-12"><strong>Nama Lengkap:</strong></label>
-                                        <label class="col-md-3 s-12">{{ $pengguna->full_name }}</label>
-                                    </div>
-                                    <div class="row">
-                                        <label class="col-md-2 text-right s-12"><strong>Role :</strong></label>
-                                        <label class="col-md-3 s-12">{{ $pengguna->role->name }}</label>
+                                        <label class="col-md-10 s-12">{{ $pengguna->full_name }}</label>
                                     </div>
                                     <div class="row">
                                         <label class="col-md-2 text-right s-12"><strong>OPD :</strong></label>
-                                        <label class="col-md-3 s-12">{{ $pengguna->opd->n_opd }}</label>
+                                        <label class="col-md-10 s-12">{{ $pengguna->opd->n_opd }}</label>
                                     </div>
                                     <div class="row">
                                         <label class="col-md-2 text-right s-12"><strong>Email :</strong></label>
-                                        <label class="col-md-3 s-12">{{ $pengguna->email }}</label>
+                                        <label class="col-md-10 s-12">{{ $pengguna->email }}</label>
                                     </div>
                                     <div class="row">
                                         <label class="col-md-2 text-right s-12"><strong>No. Telp :</strong></label>
-                                        <label class="col-md-3 s-12">{{ $pengguna->phone }}</label>
+                                        <label class="col-md-10 s-12">{{ $pengguna->phone }}</label>
                                     </div>
                                     <div class="row">
                                         <label class="col-md-2 text-right s-12"><strong>Foto :</strong></label>
@@ -144,7 +144,7 @@
 <script type="text/javascript">
     $('#opd_id').val("{{ $pengguna->opd_id }}");
     $('#opd_id').trigger('change.select2');
-    $('#role_id').val("{{ $pengguna->role_id }}");
+    $('#role_id').val("{{ $pengguna->modelHasRole->role->id }}");
     $('#role_id').trigger('change.select2');
 
     $('#form').on('submit', function (e) {

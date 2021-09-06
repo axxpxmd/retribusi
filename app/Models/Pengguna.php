@@ -28,6 +28,11 @@ class Pengguna extends Model
         return $this->belongsTo(Role::class, 'role_id');
     }
 
+    public function modelHasRole()
+    {
+        return $this->belongsTo(ModelHasRoles::class, 'user_id', 'model_id');
+    }
+
     /**
      * QUERY
      */
