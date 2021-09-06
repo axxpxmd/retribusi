@@ -26,7 +26,7 @@ class DendaController extends Controller
 
         $opd_id = Auth::user()->pengguna->opd_id;
 
-        if ($opd_id == 0 || $opd_id == 99999) {
+        if ($opd_id == 0) {
             $opds = OPD::select('id', 'n_opd')->get();
         } else {
             $opds = OPD::where('id', $opd_id)->get();

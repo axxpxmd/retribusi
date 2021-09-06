@@ -43,7 +43,7 @@
             <div class="tab-pane animated fadeInUpShort show active" id="semua-data" role="tabpanel">
                 <div class="card no-b mb-2">
                     <div class="card-body">
-                        @if ($opd_id == 0 || $opd_id == 99999)
+                        @if ($opd_id == 0)
                         <div class="form-group row" style="margin-top: -8px !important">
                             <label for="opd" class="col-form-label s-12 col-md-4 text-right font-weight-bolder">OPD : </label>
                             <div class="col-sm-4">
