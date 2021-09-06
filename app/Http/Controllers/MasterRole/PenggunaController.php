@@ -150,7 +150,6 @@ class PenggunaController extends Controller
         $pengguna = new Pengguna();
         $pengguna->user_id = $user->id;
         $pengguna->opd_id  = $opd_id;
-        $pengguna->role_id = $role_id;
         $pengguna->full_name = $full_name;
         $pengguna->email = $email;
         $pengguna->phone = $phone;
