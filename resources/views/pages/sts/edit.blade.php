@@ -171,7 +171,7 @@
                                                     </div>
                                                     <div class="form-group m-0">
                                                         <label for="denda" class="col-form-label s-12 col-md-4">Denda</label>
-                                                        <input type="text" name="denda" value="{{ $data->denda }}" {{ $readonly }} id="rupiah1" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
+                                                        <input type="text" name="denda" value="{{ $data->denda }}" {{ $readonly }} id="rupiah1" onkeyup="totalBayarBJB()" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
                                                     </div>
                                                     <div class="form-group m-0">
                                                         <label for="diskon" class="col-form-label s-12 col-md-4">Diskon (%) : </label>
@@ -209,6 +209,16 @@
 <script type="text/javascript">
     $('#status_bayar').val("{{ $data->status_bayar }}");
     $('#status_bayar').trigger('change.select2');
+
+    function totalBayarBJB() {
+        total_bayar = "{{ $data->total_bayar }}";
+        denda = document.getElementById("rupiah1").value;
+        dendaReplace = denda.replace(/\./g, '').replace('Rp', '').replace(' ', '');
+
+        totalBJB = parseInt(total_bayar) + parseInt(dendaReplace);
+
+        $('#rupiah2').val(totalBJB)
+    }
 
     $('#form').on('submit', function (e) {
         if ($(this)[0].checkValidity() === false) {
