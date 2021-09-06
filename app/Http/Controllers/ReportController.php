@@ -114,8 +114,16 @@ class ReportController extends Controller
                     return 'Belum Dibayar';
                 }
             })
+            ->addColumn('cetak_skrd', function ($p) {
+                $skrd_route = 'skrd.';
+                return "<a href='" . route($skrd_route . 'report', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
+            })
+            ->addColumn('cetak_sts', function ($p) {
+                $skrd_route = 'sts.';
+                return "<a href='" . route($skrd_route . 'report', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
+            })
             ->addIndexColumn()
-            ->rawColumns(['no_bayar', 'opd_id', 'id_jenis_pendapatan', 'tgl_skrd', 'masa_berlaku', 'status_bayar', 'diskon'])
+            ->rawColumns(['no_bayar', 'opd_id', 'id_jenis_pendapatan', 'tgl_skrd', 'masa_berlaku', 'status_bayar', 'diskon', 'cetak_skrd', 'cetak_sts'])
             ->toJson();
     }
 

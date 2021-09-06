@@ -72,15 +72,17 @@
                         <div class="form-group row" style="margin-top: -8px !important">
                             <label class="col-form-label s-12 col-md-4 text-right font-weight-bolder">
                                 Tanggal &nbsp;
-                                <select class="r-0 light s-12 b-0 bg-transparent" name="jenis_tanggal" id="jenis_tanggal">
-                                    <option value="1">SKRD</option>
-                                    <option value="2">Bayar</option>
-                                </select>
                             </label>
-                            <div class="col-sm-5 row">
-                                <input type="date" name="tgl_bayar" id="tgl_bayar" value="{{ $today }}" placeholder="" class="form-control r-0 light s-12 col-md-4 ml-3" autocomplete="off"/>
-                                <span class="mt-1 ml-2 mr-2">-</span>
-                                <input type="date" name="tgl_bayar1" id="tgl_bayar1" value="{{ $today }}" placeholder="" class="form-control r-0 light s-12 col-md-4" autocomplete="off"/>
+                            <div class="col-md-5 row">
+                                <div class="col-md-3 ml-0 pr-1">
+                                    <select name="jenis_tanggal" id="jenis_tanggal" class="select2 form-control r-0 light s-12">
+                                        <option value="1">SKRD</option>
+                                        <option value="2">Bayar</option>
+                                    </select>
+                                </div>
+                                <input type="date" name="tgl_bayar" id="tgl_bayar" value="{{ $today }}" placeholder="" class="form-control r-0 light s-12 col-md-3 ml-3" autocomplete="off"/>
+                                <span class="mt-1 ml-2 mr-2">--</span>
+                                <input type="date" name="tgl_bayar1" id="tgl_bayar1" value="{{ $today }}" placeholder="" class="form-control r-0 light s-12 col-md-3" autocomplete="off"/>
                             </div>
                         </div>
                         <div class="form-group row" style="margin-top: -8px !important">

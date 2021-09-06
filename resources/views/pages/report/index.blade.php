@@ -6,8 +6,8 @@
         <div class="container-fluid text-white">
             <div class="row p-t-b-10 ">
                 <div class="col">
-                    <h4 class="ml-1">
-                        <i class="icon icon-document mr-1"></i>
+                    <h4>
+                        <i class="icon icon-documents mr-2"></i>
                         {{ $title }}
                     </h4>
                 </div>
@@ -101,6 +101,8 @@
                                             <th>Denda </th>
                                             <th>Total Bayar </th>
                                             <th>Status Bayar</th>
+                                            <th>SKRD</th>
+                                            <th>STS</th>
                                         </thead>
                                         <tbody></tbody>
                                     </table>
@@ -163,6 +165,8 @@
             {data: 'denda', name: 'denda'},
             {data: 'total_bayar', name: 'total_bayar'},
             {data: 'status_bayar', name: 'status_bayar'},
+            {data: 'cetak_skrd', name: 'cetak_skrd', align: 'center', className: 'text-center'},
+            {data: 'cetak_sts', name: 'cetak_sts', align: 'center', className: 'text-center'},
             // {data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center'}
         ]
     });
