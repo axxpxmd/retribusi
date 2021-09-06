@@ -184,10 +184,10 @@ class STSController extends Controller
                 'no_bku'       => '',
                 // 'tgl_bku'   => $request->tgl_bku,
                 'chanel_bayar' => '',
-                'ntb'       => '',
-                // 'denda'  => $request->denda,
-                // 'diskon' => $request->diskon,
-                // 'total_bayar_bjb' => $request->total_bayar_bjb
+                'ntb'    => '',
+                'denda'  => '',
+                'diskon' => '',
+                'total_bayar_bjb' => ''
             ]);
         }
 
