@@ -216,8 +216,13 @@
         dendaReplace = denda.replace(/\./g, '').replace('Rp', '').replace(' ', '');
 
         totalBJB = parseInt(total_bayar) + parseInt(dendaReplace);
+        console.log(totalBJB);
 
-        $('#rupiah2').val(totalBJB)
+        if (isNaN(totalBJB)) {
+            $('#rupiah2').val('')
+        }else{
+            $('#rupiah2').val(totalBJB)     
+        }
     }
 
     $('#form').on('submit', function (e) {
