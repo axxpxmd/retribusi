@@ -134,7 +134,6 @@ class STSController extends Controller
 
         $id = \Crypt::decrypt($id);
         $role = Auth::user()->pengguna->role->name;
-        dd($role);
 
         // Check role
         if ($role == 'super-admin' || $role == 'admin-opd') {
