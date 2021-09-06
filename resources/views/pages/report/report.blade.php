@@ -58,8 +58,8 @@
                     <td width="15%" class="d p-l-5"> {{ $i->tgl_bayar != null ? Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $i->tgl_bayar)->format('d M Y | H:i:s') : '' }}</td>
                     <td width="13%" class="d p-l-5">{{ $i->ntb }}</td>
                     <td width="10%" class="d p-l-5">@currency(((int) $i->diskon / 100) * $i->total_bayar)</td>
-                    <td width="10%" class="d p-l-5">@currency($i->denda)</td>
-                    <td width="12%" class="d p-l-5" >@currency($i->total_bayar)</td>
+                    <td width="10%" class="d p-l-5">@currency((int)$i->denda)</td>
+                    <td width="12%" class="d p-l-5" >@currency((int)$i->total_bayar)</td>
                     <td width="10%" class="d p-l-5">{{ $i->status_bayar == 1 ? 'Sudah' : 'Belum' }}</td>
                 </tr>
             @empty
