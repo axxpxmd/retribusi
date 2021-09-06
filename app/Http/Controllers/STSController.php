@@ -167,7 +167,7 @@ class STSController extends Controller
         // Check 
         if ($status_bayar == 1) {
             $data->update([
-                'status_bayar' => $request->status,
+                'status_bayar' => 1,
                 'tgl_bayar'    => $request->tgl_bayar,
                 'no_bku'       => $request->no_bku,
                 // 'tgl_bku'   => $request->tgl_bku,
@@ -179,7 +179,7 @@ class STSController extends Controller
             ]);
         } else {
             $data->update([
-                'status_bayar' => $request->status,
+                'status_bayar' => 0,
                 'tgl_bayar'    => '',
                 'no_bku'       => '',
                 // 'tgl_bku'   => $request->tgl_bku,
