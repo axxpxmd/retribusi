@@ -134,9 +134,16 @@
                                                             <select class="select2 form-control r-0 light s-12" id="status_bayar" name="status_bayar" autocomplete="off">
                                                                 <option value="">Pilih</option>
                                                                 <option value="0">Belum Dibayar</option>
+                                                                <!-- check untuk bendahara OPD -->
                                                                 @if ($data->ntb != null && $data->total_bayar_bjb != null)
                                                                 <option value="1">Sudah Dibayar</option>
                                                                 @endif
+                                                                <!-- check untuk admin OPD -->
+                                                                @role('admin-opd|super-admin')
+                                                                    @if ($data->ntb == null && $data->total_bayar_bjb == null)
+                                                                    <option value="1">Sudah Dibayar</option>
+                                                                    @endif
+                                                                @endrole
                                                             </select>
                                                         </div>
                                                     </div>
