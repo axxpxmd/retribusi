@@ -66,7 +66,7 @@
     @endcan
 
     <!-- Permission : Data WP|SKRD|STS|Diskon|Denda|Laporan -->
-    @canany(['Data WP','SKRD','STS','Diskon','Denda','Laporan'])
+    @canany(['Data WP','SKRD','STS','Diskon','Denda','Laporan','Tanda Tangan'])
     <li class="header light"><strong>MASTER MENU</strong></li>
     @endcanany
     @can('Data WP')
@@ -106,6 +106,14 @@
         <a href="{{ route('denda.index') }}">
             <i class="icon icon-document-list red-text s-18"></i> 
             <span>Denda</span>
+        </a>
+    </li>
+    @endcan
+    @can('Tanda Tangan')
+    <li class="no-b">
+        <a href="{{ route('diskon.index') }}">
+            <i class="icon icon-document-list amber-text s-18"></i> 
+            <span>Tanda Tangan</span>
         </a>
     </li>
     @endcan
