@@ -84,15 +84,15 @@ class DiskonController extends Controller
                 return 'Rp. ' . number_format($p->total_bayar);
             })
             ->editColumn('diskon', function ($p) {
-                $total_bayar = $p->jumlah_bayar;
-                $diskon_percent = $p->diskon / 100;
+                $total_bayar = (int) $p->jumlah_bayar;
+                $diskon_percent = (int) $p->diskon / 100;
 
                 $diskon_harga = $diskon_percent * $total_bayar;
 
                 if ($p->status_diskon == 0) {
                     return "-";
                 } else {
-                    return '( ' . $p->diskon . '% )' . ' Rp. ' . number_format($diskon_harga);
+                    return '( ' . $p->diskon . '% )' . ' Rp. ' . number_format((int) $diskon_harga);
                 }
             })
             ->addIndexColumn()
