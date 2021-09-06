@@ -216,6 +216,7 @@ class PenggunaController extends Controller
         /* Tahapan : 
          * 1. tmusers
          * 2. tmpenggunas
+         * 3. model_has_roles
          */
 
         // Tahap 1
@@ -228,8 +229,7 @@ class PenggunaController extends Controller
             'full_name' => $full_name,
             'email'   => $email,
             'phone'   => $phone,
-            'opd_id'  => $opd_id,
-            'role_id' => $role_id
+            'opd_id'  => $opd_id
         ]);
 
         return response()->json([
