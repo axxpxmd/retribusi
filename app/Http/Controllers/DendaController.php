@@ -78,16 +78,16 @@ class DendaController extends Controller
                 return Carbon::createFromFormat('Y-m-d', $p->tgl_skrd_akhir)->format('d M Y');
             })
             ->editColumn('jumlah_bayar', function ($p) {
-                return 'Rp. ' . number_format($p->jumlah_bayar);
+                return 'Rp. ' . number_format((int) $p->jumlah_bayar);
             })
             ->editColumn('total_bayar', function ($p) {
-                return 'Rp. ' . number_format($p->total_bayar);
+                return 'Rp. ' . number_format((int) $p->total_bayar);
             })
             ->editColumn('denda', function ($p) {
                 if ($p->status_denda == 0) {
                     return '-';
                 } else {
-                    return ' Rp. ' . number_format($p->denda);
+                    return ' Rp. ' . number_format((int) $p->denda);
                 }
             })
             ->addIndexColumn()
