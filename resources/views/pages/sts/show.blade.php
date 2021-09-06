@@ -18,7 +18,7 @@
                         <a class="nav-link" href="{{ route($route.'index') }}"><i class="icon icon-arrow_back"></i>Semua Data</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active show" id="tab1" data-toggle="tab" href="#semua-data" role="tab"><i class="icon icon-document"></i>STS</a>
+                        <a class="nav-link active show" id="tab1" data-toggle="tab" href="#semua-data" role="tab"><i class="icon icon-document-list"></i>STS</a>
                     </li>
                 </ul>
             </div>
@@ -139,7 +139,7 @@
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>Diskon :</strong></label>
                                                 @if ($data->diskon != null)
-                                                <label class="col-md-8 s-12">({{ $data->diskon }}%) &nbsp;@currency(((int) $data->diskon / 100) * $data->total_bayar)</label>
+                                                <label class="col-md-8 s-12">({{ $data->diskon }}%) &nbsp;@currency(((int) $data->diskon / 100) * $data->jumlah_bayar)</label>
                                                 @else
                                                 <label class="col-md-8 s-12">-</label>
                                                 @endif
@@ -147,14 +147,6 @@
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>Total Bayar :</strong></label>
                                                 <label class="col-md-8 s-12">@currency($data->total_bayar)</label>
-                                            </div> 
-                                            <div class="row">
-                                                <label class="col-md-4 text-right s-12"><strong>Total Bayar BJB:</strong></label>
-                                                @if ($data->total_bayar_bjb != null)
-                                                <label class="col-md-8 s-12">@currency($data->total_bayar_bjb)</label>
-                                                @else
-                                                <label class="col-md-8 s-12">-</label>
-                                                @endif
                                             </div> 
                                         </div>
                                     </div>
@@ -174,17 +166,28 @@
                                                 @endif
                                             </div>
                                             <div class="row">
-                                                <label class="col-md-4 text-right s-12"><strong>Channel Bayar :</strong></label>
-                                                <label class="col-md-8 s-12">{{ $data->channel_bayar != null ? $data->channel_bayar : '-'}}</label>
-                                            </div> 
-                                            <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>NO BKU :</strong></label>
                                                 <label class="col-md-8 s-12">{{ $data->no_bku != null ? $data->no_bku : '-'}}</label>
+                                            </div> 
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="row">
+                                                <label class="col-md-4 text-right s-12"><strong>Channel Bayar :</strong></label>
+                                                <label class="col-md-8 s-12">{{ $data->channel_bayar != null ? $data->channel_bayar : '-'}}</label>
                                             </div> 
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>NTB :</strong></label>
                                                 <label class="col-md-8 s-12">{{ $data->ntb != null ? $data->ntb : '-'}}</label>
                                             </div> 
+                                            <div class="row">
+                                                <label class="col-md-4 text-right s-12"><strong>Total Bayar BJB :</strong></label>
+                                                <label class="col-md-8 s-12">{{ $data->total_bayar_bjb}}</label>
+                                            </div> 
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-md-6">
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>Jumlah Cetak :</strong></label>
                                                 <label class="col-md-8 s-12">{{ $data->jumlah_cetak }}</label>
@@ -199,10 +202,17 @@
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            {{--  --}}
+                                            <div class="row">
+                                                <label class="col-md-4 text-right s-12"><strong>Dibuat Oleh :</strong></label>
+                                                <label class="col-md-8 s-12">{{ $data->created_by }}</label>
+                                            </div>
+                                            <div class="row">
+                                                <label class="col-md-4 text-right s-12"><strong>Diupdate Oleh :</strong></label>
+                                                <label class="col-md-8 s-12">{{ $data->updated_by }}</label>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="row">
+                                    <div class="row mt-2">
                                         <label class="col-md-2 text-right s-12"></label>
                                         <label class="col-md-3 s-12">
                                             <a target="blank" href="{{ route('sts.report', \Crypt::encrypt($data->id)) }}" class="btn btn-sm btn-primary"><i class="icon-print mr-2"></i>Print Data</a>

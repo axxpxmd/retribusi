@@ -6,9 +6,9 @@
         <div class="container-fluid text-white">
             <div class="row">
                 <div class="col">
-                    <h4 class="ml-1">
-                        <i class="icon icon-document mr-2"></i>
-                        Show {{ $title }} | {{ $data->nm_wajib_pajak }}
+                    <h4>
+                        <i class="icon icon-document-list mr-2"></i>
+                        Menampilkan {{ $title }} | {{ $data->nm_wajib_pajak }}
                     </h4>
                 </div>
             </div>
@@ -131,7 +131,8 @@
                                                     <div class="form-group m-0">
                                                         <label class="col-form-label s-12 col-md-4">Status</label>
                                                         <div class="col-md-8 p-0 bg-light">
-                                                            <select class="select2 form-control r-0 light s-12" id="status" name="status" autocomplete="off">
+                                                            <select class="select2 form-control r-0 light s-12" id="status_bayar" name="status_bayar" autocomplete="off">
+                                                                <option value="">Pilih</option>
                                                                 <option value="0">Belum Dibayar</option>
                                                                 <option value="1">Sudah Dibayar</option>
                                                             </select>
@@ -139,30 +140,29 @@
                                                     </div>
                                                     <div class="form-group mt-1">
                                                         <label for="tgl_bayar" class="col-form-label s-12 col-md-4">Tanggal Bayar</label>
-                                                        <input type="datetime-local" name="tgl_bayar" value="{{ date('Y-m-d\TH:i', strtotime($data->tgl_bayar)) }}" id="tgl_bayar" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
+                                                        <input type="datetime-local" name="tgl_bayar" {{ $readonly }} value="{{ date('Y-m-d\TH:i', strtotime($data->tgl_bayar)) }}" id="tgl_bayar" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
                                                     </div>
                                                     <div class="form-group m-0">
                                                         <label for="no_bku" class="col-form-label s-12 col-md-4">Nomor BKU</label>
-                                                        <input type="text" name="no_bku" value="{{ $data->no_bku }}" id="no_bku" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
+                                                        <input type="text" name="no_bku" value="{{ $data->no_bku }}" {{ $readonly }} id="no_bku" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
                                                     </div>
                                                     <div class="form-group m-0">
                                                         <label for="chanel_bayar" class="col-form-label s-12 col-md-4">Chanel Bayar</label>
-                                                        <input type="text" name="chanel_bayar" value="{{ $data->chanel_bayar }}" readonly id="chanel_bayar" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
+                                                        <input type="text" name="chanel_bayar" value="{{ $data->chanel_bayar }}" {{ $readonly }} id="chanel_bayar" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
                                                     </div>
                                                     <!-- <div class="form-group m-0">
                                                         <label for="tgl_bku" class="col-form-label s-12 col-md-4">Tanggal BKU</label>
                                                         <input type="date" name="tgl_bku" value="{{ substr($data->tgl_bku,0,10) }}" id="tgl_bku" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
                                                     </div> -->
-                                                    <div class="form-group m-0">
-                                                        <label for="ntb" class="col-form-label s-12 col-md-4">NTB</label>
-                                                        <input type="text" name="ntb" value="{{ $data->ntb }}" readonly id="ntb" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
-                                                    </div>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    
+                                                    <div class="form-group m-0">
+                                                        <label for="ntb" class="col-form-label s-12 col-md-4">NTB</label>
+                                                        <input type="text" name="ntb" value="{{ $data->ntb }}" {{ $readonly }} id="ntb" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
+                                                    </div>
                                                     <div class="form-group m-0">
                                                         <label for="denda" class="col-form-label s-12 col-md-4">Denda</label>
-                                                        <input type="text" name="denda" value="{{ $data->denda }}" readonly id="denda" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
+                                                        <input type="text" name="denda" value="{{ $data->denda }}" {{ $readonly }} id="denda" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
                                                     </div>
                                                     <div class="form-group m-0">
                                                         <label for="diskon" class="col-form-label s-12 col-md-4">Diskon</label>
@@ -170,7 +170,7 @@
                                                     </div>
                                                     <div class="form-group m-0">
                                                         <label for="total_bayar_bjb" class="col-form-label s-12 col-md-4">Total Bayar Bank</label>
-                                                        <input type="text" name="total_bayar_bjb" value="{{ $data->total_bayar_bjb }}" readonly id="total_bayar_bjb" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
+                                                        <input type="text" name="total_bayar_bjb" value="{{ $data->total_bayar_bjb }}" {{ $readonly }} id="total_bayar_bjb" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
                                                     </div>
                                                 </div>
                                             </div>
@@ -198,8 +198,8 @@
 @endsection
 @section('script')
 <script type="text/javascript">
-    $('#status').val("{{ $data->status_bayar }}");
-    $('#status').trigger('change.select2');
+    $('#status_bayar').val("{{ $data->status_bayar }}");
+    $('#status_bayar').trigger('change.select2');
 
     $('#form').on('submit', function (e) {
         if ($(this)[0].checkValidity() === false) {

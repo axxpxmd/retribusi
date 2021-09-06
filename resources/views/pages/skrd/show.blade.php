@@ -139,7 +139,7 @@
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>Diskon :</strong></label>
                                                 @if ($data->diskon != null)
-                                                <label class="col-md-8 s-12">({{ $data->diskon }}%) &nbsp;@currency(((int) $data->diskon / 100) * $data->total_bayar)</label>
+                                                <label class="col-md-8 s-12">({{ $data->diskon }}%) &nbsp;@currency(((int) $data->diskon / 100) * $data->jumlah_bayar)</label>
                                                 @else
                                                 <label class="col-md-8 s-12">-</label>
                                                 @endif

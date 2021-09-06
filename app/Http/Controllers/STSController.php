@@ -133,31 +133,64 @@ class STSController extends Controller
         $title = $this->title;
 
         $id = \Crypt::decrypt($id);
+        $role = Auth::user()->pengguna->role->name;
+        dd($role);
+
+        // Check role
+        if ($role == 'super-admin' || $role == 'admin-opd') {
+            $readonly = '';
+        } else {
+            $readonly = 'readonly';
+        }
 
         $data = TransaksiOPD::find($id);
 
         return view($this->view . 'edit', compact(
             'route',
             'title',
-            'data'
+            'data',
+            'role',
+            'readonly'
         ));
     }
 
     public function update(Request $request, $id)
     {
-        $id = \Crypt::decrypt($id);
+        $request->validate([
+            'status_bayar' => 'required'
+        ]);
 
+        $id = \Crypt::decrypt($id);
         $data = TransaksiOPD::find($id);
 
-        $data->update([
-            'status_bayar' => $request->status,
-            'tgl_bayar' => $request->tgl_bayar,
-            'no_bku' => $request->no_bku,
-            // 'tgl_bku' => $request->tgl_bku,
-            'denda' => $request->denda,
-            'diskon' => $request->diskon,
-            'total_bayar_bjb' => $request->total_bayar_bjb
-        ]);
+        $status_bayar = $request->status_bayar;
+
+        // Check 
+        if ($status_bayar == 1) {
+            $data->update([
+                'status_bayar' => $request->status,
+                'tgl_bayar'    => $request->tgl_bayar,
+                'no_bku'       => $request->no_bku,
+                // 'tgl_bku'   => $request->tgl_bku,
+                'chanel_bayar' => $request->chanel_bayar,
+                'ntb'    => $request->ntb,
+                'denda'  => $request->denda,
+                'diskon' => $request->diskon,
+                'total_bayar_bjb' => $request->total_bayar_bjb
+            ]);
+        } else {
+            $data->update([
+                'status_bayar' => $request->status,
+                'tgl_bayar'    => '',
+                'no_bku'       => '',
+                // 'tgl_bku'   => $request->tgl_bku,
+                'chanel_bayar' => '',
+                'ntb'       => '',
+                // 'denda'  => $request->denda,
+                // 'diskon' => $request->diskon,
+                // 'total_bayar_bjb' => $request->total_bayar_bjb
+            ]);
+        }
 
         return response()->json([
             'message' => 'Data ' . $this->title . ' berhasil diperbaharui.'
