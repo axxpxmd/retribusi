@@ -55,10 +55,10 @@ class DiskonController extends Controller
         $jenis_pendapatan_id = $request->jenis_pendapatan_id;
         $from  = $request->tgl_skrd;
         $to    = $request->tgl_skrd1;
-        $status_diskon = $request->status_diskon;
+        $status_diskon_filter = $request->status_diskon_filter;
         $no_skrd = $request->no_skrd;
 
-        $data = TransaksiOPD::queryDiskon($opd_id, $jenis_pendapatan_id, $from, $to, $status_diskon, $no_skrd);
+        $data = TransaksiOPD::queryDiskon($opd_id, $jenis_pendapatan_id, $from, $to, $status_diskon_filter, $no_skrd);
 
         return DataTables::of($data)
             ->editColumn('no_skrd', function ($p) {
@@ -84,11 +84,15 @@ class DiskonController extends Controller
                 return 'Rp. ' . number_format($p->total_bayar);
             })
             ->editColumn('diskon', function ($p) {
-                $diskonHarga = ((int) $p->diskon / 100) * $p->total_bayar;
+                $total_bayar = $p->jumlah_bayar;
+                $diskon_percent = $p->diskon / 100;
+
+                $diskon_harga = $diskon_percent * $total_bayar;
+
                 if ($p->status_diskon == 0) {
                     return "-";
                 } else {
-                    return '( ' . $p->diskon . '% )' . ' Rp. ' . number_format($diskonHarga);
+                    return '( ' . $p->diskon . '% )' . ' Rp. ' . number_format($diskon_harga);
                 }
             })
             ->addIndexColumn()
@@ -105,52 +109,57 @@ class DiskonController extends Controller
             $opd_id = $checkOPD;
         }
 
+        // For Filter
         $jenis_pendapatan_id = $request->jenis_pendapatan_id;
         $from  = $request->tgl_skrd;
         $to    = $request->tgl_skrd1;
-        $status_diskon = $request->status_diskon;
+        $status_diskon_filter = $request->status_diskon_filter;
         $no_skrd = $request->no_skrd;
 
         // Data
-        $status_diskon1 = $request->status_diskon1;
-        if ($status_diskon1 == 1) {
+        $status_diskon = $request->status_diskon;
+        if ($status_diskon == 1) {
             $diskon = $request->diskon;
         } else {
             $diskon = 0;
         }
 
-        $datas = TransaksiOPD::queryDiskon($opd_id, $jenis_pendapatan_id, $from, $to, $status_diskon, $no_skrd);
+        $datas = TransaksiOPD::queryDiskon($opd_id, $jenis_pendapatan_id, $from, $to, $status_diskon_filter, $no_skrd);
         $dataLength = count($datas);
 
         // Check status diskon
-        if ($status_diskon1 == null) {
+        if ($status_diskon == null) {
             return redirect()
                 ->route($this->route . 'index')
                 ->withErrors('Silahkan pilih diskon.');
         }
 
-        // dd($diskon / 100);
-
+        /**
+         * 0 = Tidak Diskon
+         * 1 = Diskon
+         */
         for ($i = 0; $i < $dataLength; $i++) {
-            if ($status_diskon1 == 1) {
-                $diskonHarga = ($diskon / 100) * $datas[$i]->total_bayar;
-                $total_bayar_update = $datas[$i]->total_bayar - $diskonHarga;
+            if ($status_diskon == 1) {
+                $total_bayar = $datas[$i]->jumlah_bayar;
+                $diskon_percent = $diskon / 100;
+
+                $diskon_harga = $diskon_percent * $total_bayar;
+                $total_bayar_update = $total_bayar - $diskon_harga;
 
                 $datas[$i]->update([
-                    'total_bayar' => $total_bayar_update
+                    'total_bayar'   => $total_bayar_update,
+                    'status_diskon' => $status_diskon,
+                    'diskon' => $diskon
                 ]);
             } else {
                 $total_bayar_update = $datas[$i]->jumlah_bayar;
 
                 $datas[$i]->update([
-                    'total_bayar' => $total_bayar_update
+                    'total_bayar'   => $total_bayar_update,
+                    'status_diskon' => $status_diskon,
+                    'diskon' => $diskon
                 ]);
             }
-
-            $datas[$i]->update([
-                'status_diskon' => $status_diskon1,
-                'diskon' => $diskon
-            ]);
         }
 
         return redirect()

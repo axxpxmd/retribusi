@@ -201,7 +201,9 @@
                 </td>
                 <td class="a">
                     <p class="m-l-5 text-right m-r-10">@currency($data->jumlah_bayar),-</p>
-                    <p class="m-l-5 text-right m-r-10">(Diskon {{ $data->diskon }}%)&nbsp;&nbsp; @currency(((int) $data->diskon / 100) * $data->jumlah_bayar),-</p>
+                    @if ($data->status_diskon == 1)
+                    <p class="m-l-5 text-right m-r-10">(Diskon {{ $data->diskon }}%)&nbsp;&nbsp; @currency(($data->diskon / 100) * $data->jumlah_bayar),-</p>
+                    @endif
                 </td>
             </tr>
             <tr class="a">

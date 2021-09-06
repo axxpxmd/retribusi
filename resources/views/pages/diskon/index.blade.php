@@ -49,9 +49,9 @@
                                     </div>
                                 </div> 
                                 <div class="form-group row" style="margin-top: -8px !important">
-                                    <label for="status_diskon" class="col-form-label s-12 col-md-3 text-right font-weight-bolder">Status Diskon : </label>
+                                    <label for="status_diskon_filter" class="col-form-label s-12 col-md-3 text-right font-weight-bolder">Status Diskon : </label>
                                     <div class="col-sm-8">
-                                        <select name="status_diskon" id="status_diskon" class="select2 form-control r-0 light s-12">
+                                        <select name="status_diskon_filter" id="status_diskon_filter" class="select2 form-control r-0 light s-12">
                                             <option value="">Pilih</option>
                                             <option value="0">Tidak Diskon</option>
                                             <option value="1">Diskon</option>
@@ -85,9 +85,9 @@
                         <div class="card no-b mb-2">
                             <div class="card-body">
                                 <div class="form-group row" style="margin-top: -8px !important">
-                                    <label for="status_diskon1" class="col-form-label s-12 col-md-3 text-right font-weight-bolder">Diskon<span class="text-danger ml-1">*</span> : </label>
+                                    <label for="status_diskon" class="col-form-label s-12 col-md-3 text-right font-weight-bolder">Diskon<span class="text-danger ml-1">*</span> : </label>
                                     <div class="col-sm-8">
-                                        <select name="status_diskon1" id="status_diskon1" class="select2 form-control r-0 light s-12">
+                                        <select name="status_diskon" id="status_diskon" class="select2 form-control r-0 light s-12">
                                             <option value="">Pilih</option>
                                             <option value="0">Tidak Diskon</option>
                                             <option value="1">Diskon</option>
@@ -156,8 +156,8 @@
 <script type="text/javascript">
     $(function() {
         $('#diskon_display').hide(); 
-        $('#status_diskon1').change(function(){
-            if($('#status_diskon1').val() === "0") {
+        $('#status_diskon').change(function(){
+            if($('#status_diskon').val() === "0") {
                 $('#diskon_display').hide(); 
             } else {
                 $('#diskon_display').show(); 
@@ -180,7 +180,7 @@
                 data.tgl_skrd1 = $('#tgl_skrd1').val();
                 data.opd_id = $('#opd_id').val();
                 data.jenis_pendapatan_id = $('#jenis_pendapatan_id').val();
-                data.status_diskon = $('#status_diskon').val();
+                data.status_diskon_filter = $('#status_diskon_filter').val();
                 data.no_skrd = $('#no_skrd').val();
             }
         },
@@ -225,13 +225,13 @@
         var jenis_pendapatan_id = $('#jenis_pendapatan_id').val();
         var tgl_skrd = $('#tgl_skrd').val();
         var tgl_skrd1 = $('#tgl_skrd1').val();
-        var status_diskon = $('#status_diskon').val();
+        var status_diskon_filter = $('#status_diskon_filter').val();
         var no_skrd = $('#no_skrd').val();
 
-        var status_diskon1 = $('#status_diskon1').val();
+        var status_diskon = $('#status_diskon').val();
         var diskon = $('#diskon').val();
 
-        $('#exportpdf').attr('href', "{{ route('diskon.updateDiskon') }}?tgl_skrd=" + tgl_skrd + "&tgl_skrd1=" + tgl_skrd1 + "&opd_id=" + opd_id + "&jenis_pendapatan_id=" + jenis_pendapatan_id + "&status_diskon=" + status_diskon + "&status_diskon1=" + status_diskon1 + "&diskon=" + diskon + "&no_skrd=" + no_skrd)
+        $('#exportpdf').attr('href', "{{ route('diskon.updateDiskon') }}?tgl_skrd=" + tgl_skrd + "&tgl_skrd1=" + tgl_skrd1 + "&opd_id=" + opd_id + "&jenis_pendapatan_id=" + jenis_pendapatan_id + "&status_diskon_filter=" + status_diskon_filter + "&status_diskon=" + status_diskon + "&diskon=" + diskon + "&no_skrd=" + no_skrd)
     }
 
     function pressOnChange(){
