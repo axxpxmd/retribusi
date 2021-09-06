@@ -119,8 +119,8 @@
                                                         <input type="date" name="tgl_ttd" id="tgl_ttd" value="{{ $data->tgl_ttd }}" readonly class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
                                                     </div>
                                                     <div class="form-group m-0">
-                                                        <label for="jumlah_bayar" class="col-form-label s-12 col-md-4">Jumlah Bayar<span class="text-danger ml-1">*</span></label>
-                                                        <input type="text" name="jumlah_bayar" id="rupiah1" value="{{ $data->jumlah_bayar }}" readonly class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
+                                                        <label for="jumlah_bayar" class="col-form-label s-12 col-md-4">Total Bayar<span class="text-danger ml-1">*</span></label>
+                                                        <input type="text" name="jumlah_bayar" value="{{ $data->total_bayar }}" readonly class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
                                                     </div>
                                                 </div>
                                             </div> 
@@ -157,7 +157,7 @@
                                                     </div>
                                                     <div class="form-group m-0">
                                                         <label for="chanel_bayar" class="col-form-label s-12 col-md-4">Chanel Bayar</label>
-                                                        <input type="text" name="chanel_bayar" value="{{ $data->chanel_bayar }}" {{ $readonly }} id="chanel_bayar" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
+                                                        <input type="text" name="chanel_bayar" value="{{ $data->chanel_bayar != null ? $data->chanel_bayar : 'Bendahara OPD'  }}" {{ $readonly }} id="chanel_bayar" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
                                                     </div>
                                                     <!-- <div class="form-group m-0">
                                                         <label for="tgl_bku" class="col-form-label s-12 col-md-4">Tanggal BKU</label>
@@ -171,15 +171,15 @@
                                                     </div>
                                                     <div class="form-group m-0">
                                                         <label for="denda" class="col-form-label s-12 col-md-4">Denda</label>
-                                                        <input type="text" name="denda" value="{{ $data->denda }}" {{ $readonly }} id="denda" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
+                                                        <input type="text" name="denda" value="{{ $data->denda }}" {{ $readonly }} id="rupiah1" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
                                                     </div>
                                                     <div class="form-group m-0">
-                                                        <label for="diskon" class="col-form-label s-12 col-md-4">Diskon</label>
+                                                        <label for="diskon" class="col-form-label s-12 col-md-4">Diskon (%) : </label>
                                                         <input type="text" name="diskon" value="{{ $data->diskon }}" readonly id="diskon" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
                                                     </div>
                                                     <div class="form-group m-0">
                                                         <label for="total_bayar_bjb" class="col-form-label s-12 col-md-4">Total Bayar Bank</label>
-                                                        <input type="text" name="total_bayar_bjb" value="{{ $data->total_bayar_bjb }}" {{ $readonly }} id="total_bayar_bjb" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
+                                                        <input type="text" name="total_bayar_bjb" value="{{ $data->total_bayar_bjb }}" {{ $readonly }} id="rupiah2" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
                                                     </div>
                                                 </div>
                                             </div>
@@ -264,5 +264,31 @@
         }
         $(this).addClass('was-validated');
     });
+
+    var rupiah = [];
+    for (let index = 1; index <= 2; index++) {
+        console.log('rupiah'+index);
+        rupiah[index] = document.getElementById('rupiah'+index);
+        rupiah[index].addEventListener('keyup', function(e){
+            // tambahkan 'Rp.' pada saat form di ketik
+            // gunakan fungsi formatRupiah() untuk mengubah angka yang di ketik menjadi format angka
+            rupiah[index].value = formatRupiah(this.value, 'Rp. ');
+        });
+        /* Fungsi formatRupiah */
+        function formatRupiah(angka, prefix){
+            var number_string = angka.replace(/[^,\d]/g, '').toString(),
+            split   		= number_string.split(','),
+            sisa     		= split[0].length % 3,
+            rupiah     		= split[0].substr(0, sisa),
+            ribuan     		= split[0].substr(sisa).match(/\d{3}/gi);
+            // tambahkan titik jika yang di input sudah menjadi angka ribuan
+            if(ribuan){
+                separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+            return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+        }
+    }
 </script>
 @endsection

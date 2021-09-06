@@ -92,7 +92,7 @@ class STSController extends Controller
             })
             ->editColumn('total_bayar', function ($p) {
                 if ($p->total_bayar_bjb != null) {
-                    return 'Rp. ' . number_format($p->total_bayar_bjb);
+                    return 'Rp. ' . number_format((int) $p->total_bayar_bjb);
                 } else {
                     return '-';
                 }
@@ -173,21 +173,22 @@ class STSController extends Controller
                 // 'tgl_bku'   => $request->tgl_bku,
                 'chanel_bayar' => $request->chanel_bayar,
                 'ntb'    => $request->ntb,
-                'denda'  => $request->denda,
+                'denda'  => (int) str_replace(['.', 'Rp', ' '], '', $request->denda),
                 'diskon' => $request->diskon,
-                'total_bayar_bjb' => $request->total_bayar_bjb
+                'total_bayar_bjb' => (int) str_replace(['.', 'Rp', ' '], '', $request->total_bayar_bjb)
             ]);
         } else {
             $data->update([
                 'status_bayar' => 0,
-                'tgl_bayar'    => '',
-                'no_bku'       => '',
+                'tgl_bayar'    => null,
+                'no_bku'       => null,
                 // 'tgl_bku'   => $request->tgl_bku,
-                'chanel_bayar' => '',
-                'ntb'    => '',
-                'denda'  => '',
-                'diskon' => '',
-                'total_bayar_bjb' => ''
+                'chanel_bayar' => null,
+                'ntb'    => null,
+                'denda'  => 0,
+                'diskon' => null,
+                'total_bayar_bjb' => null,
+                'total_bayar' => $data->jumlah_bayar
             ]);
         }
 
@@ -202,13 +203,21 @@ class STSController extends Controller
 
         $data = TransaksiOPD::find($id);
 
-        $terbilang = Html_number::terbilang($data->total_bayar_bjb) . 'rupiah';
+        if ($data->total_bayar_bjb != null) {
+            $total_bayar_final = $data->total_bayar_bjb;
+        } else {
+            $total_bayar_final = $data->total_bayar;
+        }
+
+
+        $terbilang = Html_number::terbilang($total_bayar_final) . 'rupiah';
 
         $pdf = app('dompdf.wrapper');
         $pdf->getDomPDF()->set_option("enable_php", true);
         $pdf->loadView($this->view . 'report', compact(
             'data',
-            'terbilang'
+            'terbilang',
+            'total_bayar_final'
         ));
 
         $time    = Carbon::now();
