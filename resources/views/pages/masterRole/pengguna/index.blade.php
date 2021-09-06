@@ -30,9 +30,9 @@
                 <div class="card no-b mb-2">
                     <div class="card-body">
                         <div class="form-group row">
-                            <label for="opdId" class="col-form-label s-12 col-md-4 text-right font-weight-bold">OPD : </label>
+                            <label for="opd_filter" class="col-form-label s-12 col-md-4 text-right font-weight-bold">OPD : </label>
                             <div class="col-sm-4">
-                                <select name="opdId" id="opdId" class="select2 form-control r-0 light s-12" onchange="selectOnChange()">
+                                <select name="opd_filter" id="opd_filter" class="select2 form-control r-0 light s-12" onchange="selectOnChange()">
                                     <option value="0">Semua</option>
                                     @foreach ($opds as $i)
                                         <option value="{{ $i->id }}">{{ $i->n_opd }}</option>
@@ -102,7 +102,7 @@
                                                 <label for="full_name" class="col-form-label s-12 col-md-2">Nama Lengkap<span class="text-danger ml-1">*</span></label>
                                                 <input type="text" name="full_name" id="full_name" class="form-control r-0 light s-12 col-md-6" autocomplete="off" required/>
                                             </div>
-                                            <div class="form-group m-0">
+                                            <div class="form-group m-0" id="opd_display">
                                                 <label for="opd_id" class="col-form-label s-12 col-md-2">OPD<span class="text-danger ml-1">*</span></label>
                                                 <div class="col-md-6 p-0 bg-light">
                                                     <select class="select2 form-control r-0 light s-12" name="opd_id" id="opd_id" autocomplete="off">
@@ -141,6 +141,20 @@
 @endsection
 @section('script')
 <script type="text/javascript">
+    $(function() {
+        $('#opd_display').hide(); 
+
+        $('#role_id').change(function(){
+            console.log($('#role_id').val())
+            var role_id = $('#role_id').val();
+            if(role_id === "5" || role_id === 7 || role_id === 0) {
+                $('#opd_display').hide(); 
+            } else {
+                $('#opd_display').show(); 
+            } 
+        });
+    });
+
     var table = $('#dataTable').dataTable({
         processing: true,
         serverSide: true,
@@ -149,7 +163,7 @@
             url: "{{ route($route.'api') }}",
             method: 'POST',
             data: function (data) {
-                data.opdId = $('#opdId').val();
+                data.opd_id = $('#opd_filter').val();
             }
         },
         columns: [

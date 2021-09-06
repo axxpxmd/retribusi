@@ -53,7 +53,7 @@
                                     </div>
                                     <div class="row">
                                         <label class="col-md-2 text-right s-12"><strong>OPD :</strong></label>
-                                        <label class="col-md-10 s-12">{{ $pengguna->opd->n_opd }}</label>
+                                        <label class="col-md-10 s-12">{{ $pengguna->opd != null ? $pengguna->opd->n_opd : '' }}</label>
                                     </div>
                                     <div class="row">
                                         <label class="col-md-2 text-right s-12"><strong>Email :</strong></label>
@@ -105,7 +105,7 @@
                                                 <label for="full_name" class="col-form-label s-12 col-md-2">Nama Lengkap<span class="text-danger ml-1">*</span></label>
                                                 <input type="text" name="full_name" id="full_name" class="form-control r-0 light s-12 col-md-6" value="{{ $pengguna->full_name }}" autocomplete="off" required/>
                                             </div> 
-                                            <div class="form-group m-0">
+                                            <div class="form-group m-0" id="opd_display">
                                                 <label for="opd_id" class="col-form-label s-12 col-md-2">OPD<span class="text-danger ml-1">*</span></label>
                                                 <div class="col-md-6 p-0 bg-light">
                                                     <select class="select2 form-control r-0 light s-12" name="opd_id" id="opd_id" autocomplete="off">
@@ -146,6 +146,20 @@
     $('#opd_id').trigger('change.select2');
     $('#role_id').val("{{ $pengguna->modelHasRole->role->id }}");
     $('#role_id').trigger('change.select2');
+
+    $(function() {
+        $('#opd_display').hide(); 
+
+        $('#role_id').change(function(){
+            console.log($('#role_id').val())
+            var role_id = $('#role_id').val();
+            if(role_id === "5" || role_id === 7 || role_id === 0) {
+                $('#opd_display').hide(); 
+            } else {
+                $('#opd_display').show(); 
+            } 
+        });
+    });
 
     $('#form').on('submit', function (e) {
         if ($(this)[0].checkValidity() === false) {

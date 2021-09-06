@@ -133,7 +133,7 @@ class STSController extends Controller
         $title = $this->title;
 
         $id = \Crypt::decrypt($id);
-        $role = Auth::user()->pengguna->role->name;
+        $role = Auth::user()->pengguna->modelHasRole->role->name;
 
         // Check role
         if ($role == 'super-admin' || $role == 'admin-opd') {
@@ -201,7 +201,8 @@ class STSController extends Controller
         $id = \Crypt::decrypt($id);
 
         $data = TransaksiOPD::find($id);
-        $terbilang = Html_number::terbilang($data->total_bayar) . 'rupiah';
+
+        $terbilang = Html_number::terbilang($data->total_bayar_bjb) . 'rupiah';
 
         $pdf = app('dompdf.wrapper');
         $pdf->getDomPDF()->set_option("enable_php", true);

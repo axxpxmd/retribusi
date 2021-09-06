@@ -91,7 +91,7 @@ class ReportController extends Controller
                 return 'Rp. ' . number_format($p->total_bayar);
             })
             ->editColumn('diskon', function ($p) {
-                $diskonHarga = ((int) $p->diskon / 100) * $p->total_bayar;
+                $diskonHarga = ((int) $p->diskon / 100) * $p->jumlah_bayar;
                 if ($p->status_diskon == 0) {
                     return "-";
                 } else {
@@ -102,7 +102,7 @@ class ReportController extends Controller
                 if ($p->status_denda == 0) {
                     return '-';
                 } else {
-                    return ' Rp. ' . number_format($p->denda);
+                    return ' Rp. ' . number_format((int) $p->denda);
                 }
             })
             ->editColumn('status_bayar', function ($p) {

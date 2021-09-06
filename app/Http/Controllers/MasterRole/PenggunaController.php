@@ -63,13 +63,15 @@ class PenggunaController extends Controller
 
     public function api(Request $request)
     {
-        $opd_id = $request->opdId;
+        $opd_id = $request->opd_id;
 
-        $pengguna = Pengguna::whereNotIn('id', [7])->orderBy('id', 'DESC')->get();
+        $pengguna = Pengguna::whereNotIn('id', [7])->orderBy('id', 'DESC');
 
         if ($opd_id != 0) {
-            $pengguna = Pengguna::where('opd_id', $opd_id)->whereNotIn('id', [7])->orderBy('id', 'DESC')->get();
+            $pengguna->where('opd_id', $opd_id)->whereNotIn('id', [7]);
         }
+
+        $pengguna->get();
 
         return DataTables::of($pengguna)
             ->addColumn('action', function ($p) {
@@ -88,10 +90,10 @@ class PenggunaController extends Controller
                 }
             })
             ->editColumn('role', function ($p) {
-                if ($p->role == null) {
+                if ($p->modelHasRole == null) {
                     return '-';
                 } else {
-                    return $p->role->name;
+                    return $p->modelHasRole->role->name;
                 }
             })
             ->editColumn('user_id', function ($p) {
@@ -148,8 +150,8 @@ class PenggunaController extends Controller
 
         // Tahap 2
         $pengguna = new Pengguna();
-        $pengguna->user_id = $user->id;
-        $pengguna->opd_id  = $opd_id;
+        $pengguna->user_id   = $user->id;
+        $pengguna->opd_id    = $opd_id;
         $pengguna->full_name = $full_name;
         $pengguna->email = $email;
         $pengguna->phone = $phone;
@@ -177,7 +179,7 @@ class PenggunaController extends Controller
         $pengguna = Pengguna::find($id);
 
         $roles = Role::select('id', 'name')->get();
-        $opds = OPD::select('id', 'n_opd')->get();
+        $opds  = OPD::select('id', 'n_opd')->get();
 
         return view($this->view . 'edit', compact(
             'roles',
@@ -226,9 +228,9 @@ class PenggunaController extends Controller
         // Tahap 2
         $pengguna->update([
             'full_name' => $full_name,
-            'email'   => $email,
-            'phone'   => $phone,
-            'opd_id'  => $opd_id
+            'email'  => $email,
+            'phone'  => $phone,
+            'opd_id' => $opd_id
         ]);
 
         // Tahap 3
