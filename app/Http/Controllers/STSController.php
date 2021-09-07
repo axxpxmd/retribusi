@@ -161,6 +161,14 @@ class STSController extends Controller
 
         $id = \Crypt::decrypt($id);
         $data = TransaksiOPD::find($id);
+        $role = Auth::user()->pengguna->modelHasRole->role->name;
+
+        // Check role
+        if ($role == 'super-admin' || $role == 'admin-opd') {
+            $readonly = '';
+        } else {
+            $readonly = 'readonly';
+        }
 
         $status_bayar = $request->status_bayar;
 
@@ -178,18 +186,32 @@ class STSController extends Controller
                 'total_bayar_bjb' => (int) str_replace(['.', 'Rp', ' '], '', $request->total_bayar_bjb)
             ]);
         } else {
-            $data->update([
-                'status_bayar' => 0,
-                'tgl_bayar'    => null,
-                'no_bku'       => null,
-                // 'tgl_bku'   => $request->tgl_bku,
-                'chanel_bayar' => null,
-                'ntb'    => null,
-                'denda'  => 0,
-                'diskon' => null,
-                'total_bayar_bjb' => null,
-                'total_bayar' => $data->jumlah_bayar
-            ]);
+            if ($role == 'bendahara-opd') {
+                $data->update([
+                    'status_bayar' => $status_bayar,
+                    'tgl_bayar'    => null,
+                    'no_bku'       => null,
+                    // 'tgl_bku'   => $request->tgl_bku,
+                    'chanel_bayar' => null,
+                    'ntb'    => null,
+                    'denda'  => 0,
+                    'diskon' => null,
+                    'total_bayar_bjb' => null,
+                    'total_bayar' => $data->jumlah_bayar
+                ]);
+            } else {
+                $data->update([
+                    'status_bayar' => $status_bayar,
+                    'tgl_bayar'    => $request->tgl_bayar,
+                    'no_bku'       => $request->no_bku,
+                    // 'tgl_bku'   => $request->tgl_bku,
+                    'chanel_bayar' => $request->chanel_bayar,
+                    'ntb'    => $request->ntb,
+                    'denda'  => (int) str_replace(['.', 'Rp', ' '], '', $request->denda),
+                    'diskon' => $request->diskon,
+                    'total_bayar_bjb' => (int) str_replace(['.', 'Rp', ' '], '', $request->total_bayar_bjb)
+                ]);
+            }
         }
 
         return response()->json([
