@@ -58,14 +58,14 @@
                         <div class="card no-b">
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table id="dataTable" class="table table-striped table-bordered" style="width:100%">
+                                    <table id="dataTable" class="table display nowrap table-striped table-bordered" style="width:100%">
                                         <thead>
-                                            <th width="5%">No</th>
-                                            <th width="10%">Nama WP</th>
-                                            <th width="24%">Nama Dinas</th>
-                                            <th width="30%">Jenis Retribusi</th>
-                                            <th width="20%">Alamat WP</th>
-                                            <th width="6%"></th>
+                                            <th>No</th>
+                                            <th>Nama WP</th>
+                                            <th>Nama Dinas</th>
+                                            <th>Jenis Retribusi</th>
+                                            <th>Alamat WP</th>
+                                            <th></th>
                                         </thead>
                                         <tbody></tbody>
                                     </table>
@@ -88,7 +88,7 @@
     });
 
     var table = $('#dataTable').dataTable({
-        // scrollX: true,
+        scrollX: true,
         processing: true,
         serverSide: true,
         order: [ 0, 'asc' ],
