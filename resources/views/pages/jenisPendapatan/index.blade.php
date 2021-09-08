@@ -8,7 +8,7 @@
                 <div class="col">
                     <h4>
                         <i class="icon icon-document-list mr-2"></i>
-                        List {{ $title }}
+                        {{ $title }}
                     </h4>
                 </div>
             </div>

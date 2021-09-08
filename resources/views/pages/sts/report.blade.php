@@ -168,7 +168,7 @@
             </tr>
             <tr class="c">
                 <td><p class="m-t-0 m-b-0">NPWPRD </p></td>
-                <td><p class="m-t-0 m-b-0">: - </p></td>
+                <td><p class="m-t-0 m-b-0">: {{ $data->opd->npwd }}</p></td>
                 <td>&nbsp;</td>
             </tr>
             <tr class="c">

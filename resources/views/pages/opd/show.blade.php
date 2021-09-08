@@ -58,16 +58,8 @@
                                         <label class="col-md-10 s-12">{{ $data->nm_ttd }}</label>
                                     </div>
                                     <div class="row">
-                                        <label class="col-md-2 text-right s-12"><strong>NIP TTd:</strong></label>
+                                        <label class="col-md-2 text-right s-12"><strong>NIP TTD:</strong></label>
                                         <label class="col-md-10 s-12">{{ $data->nip_ttd }}</label>
-                                    </div>
-                                    <div class="row">
-                                        <label class="col-md-2 text-right s-12"><strong>No Rek:</strong></label>
-                                        <label class="col-md-10 s-12">{{ $data->no_rek }}</label>
-                                    </div>
-                                    <div class="row">
-                                        <label class="col-md-2 text-right s-12"><strong>Kode Rekening:</strong></label>
-                                        <label class="col-md-10 s-12">{{ $data->kd_rek }}</label>
                                     </div>
                                 </div>
                             </div>
