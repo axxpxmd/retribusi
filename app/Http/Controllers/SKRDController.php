@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use File;
 use DataTables;
 
 use Carbon\Carbon;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use App\Libraries\Html\Html_number;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Storage;
 
 // Models
 use App\Models\OPD;
@@ -287,6 +289,7 @@ class SKRDController extends Controller
         /* Tahapan : 
          * 1. tmtransaksi_opd
          * 2. tmdata_wp
+         * 3. save to storage
          */
 
         // Tahap 1
@@ -318,7 +321,7 @@ class SKRDController extends Controller
             'created_by'       => Auth::user()->pengguna->full_name
         ];
 
-        TransaksiOPD::create($data);
+        $dataSKRD = TransaksiOPD::create($data);
 
         // Tahap 2
         $data = [
@@ -343,6 +346,25 @@ class SKRDController extends Controller
         if ($check == 0) {
             DataWP::create($data);
         }
+
+        // Tahap 3
+        $data = TransaksiOPD::find($dataSKRD->id);
+        $terbilang = Html_number::terbilang($data->total_bayar) . 'rupiah';
+
+        $pdf = app('dompdf.wrapper');
+        $pdf->getDomPDF()->set_option("enable_php", true);
+        $pdf->loadView($this->view . 'report', compact(
+            'data',
+            'terbilang'
+        ));
+
+        // get content PDF
+        $fileName =  $data->nm_wajib_pajak . '-' . $data->no_skrd . ".pdf";
+        $content = $pdf->download()->getOriginalContent();
+
+        // save PDF to sftp storage
+        $path_sftp = 'file_ttd_skrd/';
+        Storage::disk('sftp')->put($path_sftp . $fileName, $content);
 
         return response()->json([
             'message' => "Data " . $this->title . " berhasil tersimpan."

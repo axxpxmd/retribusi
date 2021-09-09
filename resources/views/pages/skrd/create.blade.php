@@ -8,7 +8,7 @@
                 <div class="col">
                     <h4>
                         <i class="icon icon-document-list mr-2"></i>
-                        Tambah | {{ $title }}
+                        Tambah {{ $title }}
                     </h4>
                 </div>
             </div>
@@ -163,7 +163,7 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group mt-2">
                                                         <div class="col-md-4"></div>
-                                                        <button type="submit" class="btn btn-primary btn-sm"><i class="icon-save mr-2"></i>Simpan</button>
+                                                        <button type="submit" id="action" class="btn btn-primary btn-sm"><i class="icon-save mr-2"></i>Simpan</button>
                                                     </div>  
                                                 </div>
                                                 <div class="col-md-6">
@@ -210,6 +210,7 @@
             $("#kecamatan_id").prop("disabled", false);
             $("#kelurahan_id").prop("disabled", false);
             $("#id_rincian_jenis_pendapatan").prop("disabled", false);
+            $('#action').attr('disabled', true);
             url = "{{ route($route.'store') }}",
             $.ajax({
                 url : url,
