@@ -150,16 +150,16 @@
             <tr class="c">
                 <td><p class="m-t-0 m-b-0">&nbsp; </p></td>
                 <td>
-                    <p class="m-t-0 m-b-0">&nbsp; Kecamatan</p>
+                    <p class="m-t-0 m-b-0">&nbsp; Kecamatan &nbsp;&nbsp;: {{ $data->kecamatan->n_kecamatan }}</p>
                 </td>
-                <td>: {{ $data->kecamatan->n_kecamatan }}</td>
+                <td>&nbsp;</td>
             </tr>
             <tr class="c">
-                <td><p class="m-t-0 m-b-0">&nbsp; </p></td>
+                <td><p class="m-t-0 m-b-0">&nbsp;</p></td>
                 <td>
-                    <p class="m-t-0 m-b-0">&nbsp; Kelurahan</p>
+                    <p class="m-t-0 m-b-0">&nbsp; Kelurahan &nbsp;&nbsp;&nbsp;: {{ $data->kelurahan->n_kelurahan }}</p>
                 </td>
-                <td>: {{ $data->kelurahan->n_kelurahan }}</td>
+                <td>&nbsp;</td>
             </tr>
             <tr class="c">
                 <td><p class="m-t-0 m-b-0">NPWPRD </p></td>
@@ -233,7 +233,10 @@
                 </td>
             </tr>
             <tr class="a">
-                <td colspan="4" class="a">
+                <td colspan="1" class="a" style="border-right: none !important; margin-left: 10px !important">
+                    {!! $img !!}
+                </td>
+                <td colspan="3" class="a" style="border-left: none !important">
                     <div style="text-align:center; margin-right: -500px !important">
                         @if ($data->tgl_ttd != null)
                         <p>Serpong, {{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_ttd)->format('d M Y') }}</p>

@@ -19,7 +19,8 @@
         "laravel/ui": "2.4",
         "league/flysystem-sftp": "~1.0",
         "spatie/laravel-permission": "^4.4",
-        "yajra/laravel-datatables": "1.5"
+        "yajra/laravel-datatables": "1.5",
+        "simplesoftwareio/simple-qrcode": "~2"
     },
     "require-dev": {
         "facade/ignition": "^2.0",

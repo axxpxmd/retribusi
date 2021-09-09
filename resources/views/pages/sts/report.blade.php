@@ -155,16 +155,16 @@
             <tr class="c">
                 <td><p class="m-t-0 m-b-0">&nbsp; </p></td>
                 <td>
-                    <p class="m-t-0 m-b-0">&nbsp; Kecamatan</p>
+                    <p class="m-t-0 m-b-0">&nbsp; Kecamatan &nbsp;&nbsp;: {{ $data->kecamatan->n_kecamatan }}</p>
                 </td>
-                <td>: {{ $data->kecamatan->n_kecamatan }}</td>
+                <td>&nbsp;</td>
             </tr>
             <tr class="c">
                 <td><p class="m-t-0 m-b-0">&nbsp;</p></td>
                 <td>
-                    <p class="m-t-0 m-b-0">&nbsp; Kelurahan</p>
+                    <p class="m-t-0 m-b-0">&nbsp; Kelurahan &nbsp;&nbsp;&nbsp;: {{ $data->kelurahan->n_kelurahan }}</p>
                 </td>
-                <td>: {{ $data->kelurahan->n_kelurahan }}</td>
+                <td>&nbsp;</td>
             </tr>
             <tr class="c">
                 <td><p class="m-t-0 m-b-0">NPWPRD </p></td>
@@ -238,7 +238,10 @@
                 </td>
             </tr>
             <tr class="a">
-                <td colspan="4" class="a">
+                <td colspan="1" class="a" style="border-right: none !important; margin-left: 10px !important">
+                    {!! $img !!}
+                </td>
+                <td colspan="3" class="a" style="border-left: none !important">
                     <div style="text-align:center; margin-right: -500px !important">
                         @if ($data->tgl_ttd != null)
                         <p>Serpong, {{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_ttd)->format('d M Y') }}</p>
@@ -262,12 +265,23 @@
                 </td>
             </tr>
         </table>
-        <p class="fs-12 m-b-5">NO NTB : {{ $data->ntb != null ? $data->ntb : '-' }}</p>
-        @if ($data->tgl_bayar != null)
-        <p class="fs-12 m-t-0">TANGGAL BAYAR : {{ Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $data->tgl_bayar)->format('d M Y | H:i:s') }}</p>
-        @else
-        <p class="fs-12 m-t-0">TANGGAL BAYAR : -</p>
-        @endif
+    </div>
+
+    <div class="">
+        <table class="c">
+            <tr class="c">
+                <td><p class="m-b-0 fs-12">NTB</p></td>
+                <td><p class="m-b-0 fs-12">: {{ $data->ntb != null ? $data->ntb : ''}}</p></td>
+            </tr>
+            <tr class="c">
+                <td><p class="m-t-0 m-b-0 fs-12">TANGGAL BAYAR</p></td>
+                @if ($data->tgl_bayar != null)
+                <td><p class="m-t-0 m-b-0 fs-12">: {{ Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $data->tgl_bayar)->format('d M Y | H:i:s') }}</p></td>
+                @else
+                <td><p class="m-t-0 m-b-0 fs-12">: </p></td>
+                @endif
+            </tr>
+        </table>
     </div>
 </body>
 </html>

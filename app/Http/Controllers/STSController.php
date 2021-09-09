@@ -217,35 +217,43 @@ class STSController extends Controller
         $id = \Crypt::decrypt($id);
 
         $data = TransaksiOPD::find($id);
-
         if ($data->total_bayar_bjb != null) {
             $total_bayar_final = $data->total_bayar_bjb;
         } else {
             $total_bayar_final = $data->total_bayar;
         }
+        $terbilang  = Html_number::terbilang($total_bayar_final) . 'rupiah';
 
+        // Update Jumlah Cetak
+        $this->updateJumlahCetak($id, $data->jumlah_cetak);
 
-        $terbilang = Html_number::terbilang($total_bayar_final) . 'rupiah';
+        // generate QR Code
+        $currentURL = url()->current();
+        $b   = base64_encode(\SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')->merge(public_path('images/logo-png.png'), 0.2, true)->size(900)->errorCorrection('H')->margin(0)->generate($currentURL));
+        $img = '<img width="100" height="100" src="data:image/png;base64, ' . $b . '" alt="" />';
 
         $pdf = app('dompdf.wrapper');
         $pdf->getDomPDF()->set_option("enable_php", true);
         $pdf->loadView($this->view . 'report', compact(
             'data',
             'terbilang',
-            'total_bayar_final'
+            'total_bayar_final',
+            'img'
         ));
 
+        return $pdf->download($data->nm_wajib_pajak . '-' . $data->no_skrd . ".pdf");
+    }
+
+    public function updateJumlahCetak($id, $jumlah_cetak)
+    {
         $time    = Carbon::now();
         $tanggal = $time->toDateString();
         $jam     = $time->toTimeString();
-        $now = $tanggal . ' ' . $jam;
+        $now     = $tanggal . ' ' . $jam;
 
-        // Update Jumlah Cetak
-        $data->update([
-            'jumlah_cetak' => $data->jumlah_cetak + 1,
+        TransaksiOPD::where('id', $id)->update([
+            'jumlah_cetak' => $jumlah_cetak + 1,
             'tgl_cetak_trkhr' => $now
         ]);
-
-        return $pdf->download($data->nm_wajib_pajak . '-' . $data->no_skrd . ".pdf");
     }
 }
