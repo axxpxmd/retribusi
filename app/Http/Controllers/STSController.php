@@ -163,13 +163,6 @@ class STSController extends Controller
         $data = TransaksiOPD::find($id);
         $role = Auth::user()->pengguna->modelHasRole->role->name;
 
-        // Check role
-        if ($role == 'super-admin' || $role == 'admin-opd') {
-            $readonly = '';
-        } else {
-            $readonly = 'readonly';
-        }
-
         $status_bayar = $request->status_bayar;
 
         // Check 
