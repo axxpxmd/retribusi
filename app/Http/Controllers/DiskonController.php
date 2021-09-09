@@ -119,6 +119,10 @@ class DiskonController extends Controller
         // Data
         $status_diskon = $request->status_diskon;
         if ($status_diskon == 1) {
+            $request->validate([
+                'diskon' => 'required|numeric|max:100'
+            ]);
+
             $diskon = $request->diskon;
         } else {
             $diskon = 0;
@@ -135,6 +139,7 @@ class DiskonController extends Controller
         }
 
         /**
+         * * Check
          * 0 = Tidak Diskon
          * 1 = Diskon
          */

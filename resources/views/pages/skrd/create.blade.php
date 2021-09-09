@@ -240,6 +240,7 @@
                     });
                 },
                 error : function(data){
+                    $('#action').attr('disabled', false);
                     err = '';
                     respon = data.responseJSON;
                     if(respon.errors){
