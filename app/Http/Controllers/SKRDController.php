@@ -447,7 +447,7 @@ class SKRDController extends Controller
             'img'
         ));
 
-        return $pdf->download($data->nm_wajib_pajak . '-' . $data->no_skrd . ".pdf");
+        return $pdf->stream($data->nm_wajib_pajak . '-' . $data->no_skrd . ".pdf");
     }
 
     public function updateJumlahCetak($id, $jumlah_cetak)
