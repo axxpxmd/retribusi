@@ -19,6 +19,7 @@
             table-layout: fixed;
             border: 1px solid black;
             font-size: 12px;
+            height: 100;
         }
         table.a tr.a,th.a,td.a{
             table-layout: fixed;
@@ -61,7 +62,7 @@
         }
 
         .m-l-14{
-            margin-left: 14px
+            margin-left: 25px
         }
         .m-r-20{
             margin-right: 20px
@@ -97,6 +98,9 @@
         .mt-n40{
             margin-top: -30px !important
         }
+        .mt-n15{
+            margin-top: -15px !important
+        }
 	</style>
 </head>
 <body >
@@ -111,7 +115,7 @@
                 </div>
             </th>
             <th width="40%" class="d">
-                <div class="mt-n40">
+                <div class="{{ $data->opd->alamat != null ? 'mt-n40' : 'mt-n15' }}">
                     <p class="m-b-0">SURAT KETETAPAN RETRIBUSI DAERAH</p>
                     <p class="m-t-1">(SKRD)</p>
                     <p>&nbsp;</p>
@@ -123,7 +127,7 @@
                 </div>
             </th>
             <th width="20%" class="d">
-                <div class="mt-n40">
+                <div class="{{ $data->opd->alamat != null ? 'mt-n40' : 'mt-n15' }}">
                     <p class="text-center t-bold m-b-0">NO SKRD</p>
                     <p class="text-center m-t-1 f-normal">{{ $data->no_skrd }}</p>
                     <p class="text-left f-normal m-l-5 m-b-0">No BKU : {{ $data->no_bku != null ? $data->no_bku : '-' }}</p>

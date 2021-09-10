@@ -19,6 +19,7 @@
             table-layout: fixed;
             border: 1px solid black;
             font-size: 12px;
+            height: 100;
         }
 
         table.a tr.a,th.a,td.a{
@@ -65,7 +66,7 @@
         }
 
         .m-l-14{
-            margin-left: 14px
+            margin-left: 25px
         }
 
         .m-r-20{
