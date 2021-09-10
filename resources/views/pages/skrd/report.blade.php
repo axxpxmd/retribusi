@@ -53,9 +53,6 @@
         .text-right{
             text-align: right
         }
-        .text-left{
-            text-align: left
-        }
         .text-center{
             text-align: center
         }
@@ -91,37 +88,48 @@
         .m-b-5{
             margin-bottom: 5px
         }
+        .f-normal{
+            font-weight: normal
+        }
+        .mt-n40{
+            margin-top: -30px !important
+        }
 	</style>
 </head>
 <body >
     <table class="d">
         <tr class="d">
             <th width="40%" class="d">
-                <p>PEMERINTAH KOTA TANGERANG SELATAN</p>
-                <p>{{ $data->opd->n_opd }}</p>
-                <p class="m-l-5 f-w-n">{{ $data->opd->alamat }} &nbsp;</p>
-                <p>&nbsp;</p>
+                <div>
+                    <p class="m-b-0">PEMERINTAH KOTA TANGERANG SELATAN</p>
+                    <p class="m-t-1">{{ $data->opd->n_opd }}</p>
+                    <p class="m-l-5 f-w-n">{{ $data->opd->alamat }} &nbsp;</p>
+                    <p>&nbsp;</p>
+                </div>
             </th>
             <th width="40%" class="d">
-                <p class="m-t-0">SURAT KETETAPAN RETRIBUSI DAERAH</p>
-                <p>(SKRD)</p>
-                <p class="text-left m-l-14">&nbsp;</p>
-                @if ($data->tgl_skrd_awal != null)
-                <p class="text-left m-l-14 m-t-0 f-w-n">Tanggal SKRD : {{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_awal)->format('d M Y') }}</p>
-                @else
-                <p class="text-left m-l-14 m-t-0 f-w-n">Tanggal SKRD : - </p>
-                @endif
+                <div class="mt-n40">
+                    <p class="m-b-0">SURAT KETETAPAN RETRIBUSI DAERAH</p>
+                    <p class="m-t-1">(SKRD)</p>
+                    <p>&nbsp;</p>
+                    @if ($data->tgl_skrd_awal != null)
+                    <p class="text-left m-l-14 m-t-0 f-w-n">Tanggal SKRD : {{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_awal)->format('d M Y') }}</p>
+                    @else
+                    <p class="text-left m-l-14 m-t-0 f-w-n">Tanggal SKRD : - </p>
+                    @endif
+                </div>
             </th>
             <th width="20%" class="d">
-                <div>
-                    <p class="text-left m-l-5 m-t-0">No. SKRD : {{ $data->no_skrd }}</p>
-                    <p class="text-left m-l-5">No. BKU : {{ $data->no_bku }}</p>
+                <div class="mt-n40">
+                    <p class="text-center t-bold m-b-0">NO SKRD</p>
+                    <p class="text-center m-t-1 f-normal">{{ $data->no_skrd }}</p>
+                    <p class="text-left f-normal m-l-5 m-b-0">No BKU : {{ $data->no_bku != null ? $data->no_bku : '-' }}</p>
                     @if ($data->tgl_bku != null)
-                    <p class="text-left m-l-5">Tanggal : {{ Carbon\Carbon::createFromFormat('Y-m-d', substr($data->tgl_bku,0,10))->format('d M Y') }}</p>
-                    @else
-                    <p class="text-left m-l-5">Tanggal : - </p>
+                    <p class="text-left f-normal m-l-5 m-b-0 m-t-1">Tanggal : {{ Carbon\Carbon::createFromFormat('Y-m-d', substr($data->tgl_bku,0,10))->format('d M Y') }}</p>
+                    @else 
+                    <p class="text-left f-normal m-l-5 m-b-0 m-t-1">Tanggal : -</p>
                     @endif
-                    <p class="text-left m-l-5">Rek: </p>
+                    <p class="text-left f-normal m-l-5 m-t-1">Rek : </p>
                 </div>
             </th>
         </tr>
