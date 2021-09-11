@@ -230,7 +230,7 @@ class STSController extends Controller
         // generate QR Code
         $currentURL = url()->current();
         $b   = base64_encode(\SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')->merge(public_path('images/logo-png.png'), 0.2, true)->size(900)->errorCorrection('H')->margin(0)->generate($currentURL));
-        $img = '<img width="100" height="100" src="data:image/png;base64, ' . $b . '" alt="" />';
+        $img = '<img width="60" height="61" src="data:image/png;base64, ' . $b . '" alt="qr code" />';
 
         $pdf = app('dompdf.wrapper');
         $pdf->getDomPDF()->set_option("enable_php", true);

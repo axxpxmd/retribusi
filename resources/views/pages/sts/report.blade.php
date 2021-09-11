@@ -21,6 +21,7 @@
             font-size: 12px;
             height: 100;
         }
+
         table.a tr.a,th.a,td.a{
             table-layout: fixed;
             border: 1px solid black;
@@ -101,6 +102,11 @@
         .mt-n15{
             margin-top: -15px !important
         }
+        .fs-10{
+            font-size: 10px
+        }.t-blue{
+            color: blue
+        }
 	</style>
 </head>
 <body >
@@ -132,11 +138,11 @@
                     <p class="text-center m-t-1 f-normal">{{ $data->no_skrd }}</p>
                     <p class="text-left f-normal m-l-5 m-b-0">No BKU : {{ $data->no_bku != null ? $data->no_bku : '-' }}</p>
                     @if ($data->tgl_bku != null)
-                    <p class="text-left f-normal m-l-5 m-b-0 m-t-1">Tanggal : {{ Carbon\Carbon::createFromFormat('Y-m-d', substr($data->tgl_bku,0,10))->format('d M Y') }}</p>
+                    <p class="text-left f-normal m-l-5 m-b-0 m-t-1">Tanggal &nbsp;: {{ Carbon\Carbon::createFromFormat('Y-m-d', substr($data->tgl_bku,0,10))->format('d M Y') }}</p>
                     @else 
-                    <p class="text-left f-normal m-l-5 m-b-0 m-t-1">Tanggal : -</p>
+                    <p class="text-left f-normal m-l-5 m-b-0 m-t-1">Tanggal &nbsp;: -</p>
                     @endif
-                    <p class="text-left f-normal m-l-5 m-t-1">Rek : </p>
+                    <p class="text-left f-normal m-l-5 m-t-1">Rek &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </p>
                 </div>
             </th>
         </tr>
@@ -250,23 +256,30 @@
                 </td>
             </tr>
             <tr class="a">
-                <td colspan="1" class="a" style="border-right: none !important; margin-left: 10px !important">
-                    {!! $img !!}
-                </td>
+                <td colspan="1" class="a" style="border-right: none !important; margin-left: 10px !important"></td>
                 <td colspan="3" class="a" style="border-left: none !important">
-                    <div style="text-align:center; margin-right: -500px !important">
+                    <div style="text-align:center; margin-right: -400px !important">
                         @if ($data->tgl_ttd != null)
                         <p>Serpong, {{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_ttd)->format('d M Y') }}</p>
                         @else
                         <p>Serpong, </p>
                         @endif
-                        <br>
-                        <br>
-                        <br>
+                        <table style="margin-left: 380px !important; margin-top: -8px; margin-bottom: -8px">
+                            <tr class="a">
+                                <td style="padding: 1px" width="8%" class="a"> {!! $img !!}</td>
+                                <td style="padding: 3px" width="92%" class="a">
+                                    <p class="m-b-0 m-t-0 fs-10" style="font-style: italic">Telah ditandatangani secara elektronik oleh :</p>
+                                    <p class="m-t-0 m-b-0 fs-10 t-blue">Asip Hamdi</p>
+                                    <p class="m-t-0 m-b-0 fs-10">Menggunakan Sertifikat Elektronik iOTENTIK - BPPT.</p>
+                                    <p class="m-t-0 m-b-0 fs-10">Verifikasi dokumen bisa dilakukan melalui :</p>
+                                    <p class="m-t-0 m-b-0 fs-10 t-blue" style="font-style: italic">https://tte.kominfo.go.id/verifyPDF</p>
+                                </td>
+                            </tr>
+                        </table>
                         @if ($data->nm_ttd != null)
-                            <p class="m-b-5"><u>{{ $data->nm_ttd }}</u></p>
+                            <p class="m-b-5 m-b-0"><u>{{ $data->nm_ttd }}</u></p>
                         @else 
-                            <p class="m-b-5"><u>{{ $data->opd->nm_ttd }}</u></p>
+                            <p class="m-b-5 m-b-0"><u>{{ $data->opd->nm_ttd }}</u></p>
                         @endif
                         @if ($data->nip_ttd != null)
                             <p class="m-t-0">{{ $data->nip_ttd }}</p>
