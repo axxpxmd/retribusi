@@ -89,6 +89,12 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('denda/api', 'DendaController@api')->name('denda.api');
     Route::get('denda/update-denda', 'DendaController@updateDenda')->name('denda.updateDenda');
 
+    // Tanda Tangan
+    Route::resource('tanda-tangan', 'TandaTanganController');
+    Route::post('tanda-tangan/api', 'TandaTanganController@api')->name('tanda-tangan.api');
+    Route::get('tanda-tangan/report', 'TandaTanganController@report')->name('tanda-tangan.report');
+    // Route::get('tanda-tangan/report-sts', 'TandaTanganController@reportSTS')->name('tanda-tangan.reportSTS');
+
     // Report
     Route::get('report', 'ReportController@index')->name('report.index');
     Route::get('repost/{id}', 'ReportController@show')->name('report.show');
