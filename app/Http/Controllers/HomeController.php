@@ -4,8 +4,12 @@ namespace App\Http\Controllers;
 
 use Auth;
 use Carbon\Carbon;
+use Firebase\JWT\JWT;
+use GuzzleHttp\Client;
+
 use Illuminate\Support\Facades\DB;
 use App\Libraries\Html\Html_number;
+use Illuminate\Support\Facades\Http;
 
 // Models
 use App\Models\OPD;
@@ -18,6 +22,29 @@ class HomeController extends Controller
     {
         $this->middleware('auth');
     }
+
+    // public function index()
+    // {
+    //     $timestamp_now = Carbon::now()->timestamp;
+    //     $timestamp_1hour = Carbon::now()->addHour()->timestamp;
+    //     $url = 'http://10.31.224.34:23808/oauth/client/token';
+
+    //     $key = "pUyzZIK_YUlX3VqFC5WQJYeqM5A9ceokMFwtOCcb2R0";
+    //     $payload = array(
+    //         "sub" => "va-online",
+    //         "aud" => "access-token",
+    //         "iat" => $timestamp_now,
+    //         "exp" => $timestamp_1hour
+    //     );
+
+    //     $jwt = JWT::encode($payload, $key);
+
+    //     $response = Http::contentType("text/plain")->send('POST', $url, [
+    //         'body' => $jwt
+    //     ])->json();
+
+    //     dd($response);
+    // }
 
     public function index()
     {
