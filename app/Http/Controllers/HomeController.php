@@ -30,6 +30,7 @@ class HomeController extends Controller
     //     $url = 'http://10.31.224.34:23808/oauth/client/token';
 
     //     $key = "pUyzZIK_YUlX3VqFC5WQJYeqM5A9ceokMFwtOCcb2R0";
+    //     $signature = "path=/billing&method=POST&token=hLkZHONXVhnpRE4ai-wZG-igTIZ9Bzz6H1QhutG6TAg&timestamp=1580375822&body={'client_id': 'XXR4SKMQ'}";
     //     $payload = array(
     //         "sub" => "va-online",
     //         "aud" => "access-token",
@@ -37,8 +38,13 @@ class HomeController extends Controller
     //         "exp" => $timestamp_1hour
     //     );
 
-    //     $jwt = JWT::encode($payload, $key);
+    //     // signature get va
+    //     $sha256 = hash_hmac('sha256', $signature, $key);
+    //     $base64 = base64_encode($sha256);
+    //     dd($base64);
 
+    //     // signature get token
+    //     $jwt = JWT::encode($payload, $key);
     //     $response = Http::contentType("text/plain")->send('POST', $url, [
     //         'body' => $jwt
     //     ])->json();

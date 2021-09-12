@@ -138,11 +138,11 @@
                                                     </div>
                                                     <div class="form-group m-0">
                                                         <label for="nm_ttd" class="col-form-label s-12 col-md-4">Nama Penandatangan<span class="text-danger ml-1">*</span></label>
-                                                        <input type="text" name="nm_ttd" id="nm_ttd" value="{{ $opd->nm_ttd }}" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
+                                                        <input type="text" name="nm_ttd" id="nm_ttd" readonly value="{{ $opd->nm_ttd }}" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
                                                     </div>
                                                     <div class="form-group m-0">
-                                                        <label for="nip_ttd" class="col-form-label s-12 col-md-4">NIP Penandatangan</label>
-                                                        <input type="text" name="nip_ttd" id="nip_ttd" value="{{ $opd->nip_ttd }}" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
+                                                        <label for="nip_ttd" class="col-form-label s-12 col-md-4">NIP Penandatangan<span class="text-danger ml-1">*</span></label>
+                                                        <input type="text" name="nip_ttd" id="nip_ttd" readonly value="{{ $opd->nip_ttd }}" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
                                                     </div>
                                                     <div class="form-group m-0">
                                                         <label for="tgl_ttd" class="col-form-label s-12 col-md-4">Tanggal TTD<span class="text-danger ml-1">*</span></label>
