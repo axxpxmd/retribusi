@@ -95,6 +95,12 @@
         .mt-n40{
             margin-top: -30px !important
         }
+        .mt-n40{
+            margin-top: -30px !important
+        }
+        .mt-n15{
+            margin-top: -15px !important
+        }
 	</style>
 </head>
 <body >
@@ -109,7 +115,7 @@
                 </div>
             </th>
             <th width="40%" class="d">
-                <div class="mt-n40">
+                <div class="{{ $data->opd->alamat != null ? 'mt-n40' : 'mt-n15' }}">
                     <p class="m-b-0">SURAT KETETAPAN RETRIBUSI DAERAH</p>
                     <p class="m-t-1">(SKRD)</p>
                     <p>&nbsp;</p>
@@ -121,16 +127,16 @@
                 </div>
             </th>
             <th width="20%" class="d">
-                <div class="mt-n40">
+                <div class="{{ $data->opd->alamat != null ? 'mt-n40' : 'mt-n15' }}">
                     <p class="text-center t-bold m-b-0">NO SKRD</p>
                     <p class="text-center m-t-1 f-normal">{{ $data->no_skrd }}</p>
                     <p class="text-left f-normal m-l-5 m-b-0">No BKU : {{ $data->no_bku != null ? $data->no_bku : '-' }}</p>
                     @if ($data->tgl_bku != null)
-                    <p class="text-left f-normal m-l-5 m-b-0 m-t-1">Tanggal : {{ Carbon\Carbon::createFromFormat('Y-m-d', substr($data->tgl_bku,0,10))->format('d M Y') }}</p>
+                    <p class="text-left f-normal m-l-5 m-b-0 m-t-1">Tanggal &nbsp;: {{ Carbon\Carbon::createFromFormat('Y-m-d', substr($data->tgl_bku,0,10))->format('d M Y') }}</p>
                     @else 
-                    <p class="text-left f-normal m-l-5 m-b-0 m-t-1">Tanggal : -</p>
+                    <p class="text-left f-normal m-l-5 m-b-0 m-t-1">Tanggal &nbsp;: -</p>
                     @endif
-                    <p class="text-left f-normal m-l-5 m-t-1">Rek : </p>
+                    <p class="text-left f-normal m-l-5 m-t-1">Rek &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </p>
                 </div>
             </th>
         </tr>
