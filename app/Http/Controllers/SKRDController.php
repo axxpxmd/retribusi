@@ -282,13 +282,14 @@ class SKRDController extends Controller
             'kelurahan_id' => 'required',
             'id_jenis_pendapatan'         => 'required',
             'id_rincian_jenis_pendapatan' => 'required',
-            'tgl_ttd' => 'required'
+            'tgl_ttd' => 'required',
+            'nm_ttd'  => 'required',
+            'nip_ttd' => 'required'
         ]);
 
         /* Tahapan : 
          * 1. tmtransaksi_opd
          * 2. tmdata_wp
-         * 3. save to storage
          */
 
         // Tahap 1
@@ -320,7 +321,7 @@ class SKRDController extends Controller
             'created_by'       => Auth::user()->pengguna->full_name
         ];
 
-        $dataSKRD = TransaksiOPD::create($data);
+        TransaksiOPD::create($data);
 
         // Tahap 2
         $data = [
@@ -345,25 +346,6 @@ class SKRDController extends Controller
         if ($check == 0) {
             DataWP::create($data);
         }
-
-        // Tahap 3
-        $data = TransaksiOPD::find($dataSKRD->id);
-        $terbilang = Html_number::terbilang($data->total_bayar) . 'rupiah';
-
-        $pdf = app('dompdf.wrapper');
-        $pdf->getDomPDF()->set_option("enable_php", true);
-        $pdf->loadView($this->view . 'report', compact(
-            'data',
-            'terbilang'
-        ));
-
-        // get content PDF
-        $fileName =  $data->nm_wajib_pajak . '-' . $data->no_skrd . ".pdf";
-        $content = $pdf->download()->getOriginalContent();
-
-        // save PDF to sftp storage
-        $path_sftp = 'file_ttd_skrd/';
-        Storage::disk('sftp')->put($path_sftp . $fileName, $content);
 
         return response()->json([
             'message' => "Data " . $this->title . " berhasil tersimpan."

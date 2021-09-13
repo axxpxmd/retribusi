@@ -145,53 +145,50 @@
     <div class="m-t-15 m-l-50">
         <table class="c">
             <tr class="c">
-                <td><p class="m-b-0 m-t-0">No Bayar </p></td>
-                <td><span>:</span></td>
-                <td><p class="m-b-0 m-t-0">{{ $data->no_bayar }}</p></td>
+                <td><p class="m-b-0">No Bayar </p></td>
+                <td><p class="m-b-0">: {{ $data->no_bayar }}</p></td>
             </tr>
             <tr class="c">
                 <td><p class="m-t-0 m-b-0">No Pendaftaran </p></td>
-                <td><span>:</span></td>
-                <td><p class="m-t-0 m-b-0">{{ $data->nmr_daftar }}</p></td>
+                <td><p class="m-t-0 m-b-0">: {{ $data->nmr_daftar }}</p></td>
             </tr>
             <tr class="c">
                 <td><p class="m-t-0 m-b-0">Nama </p></td>
-                <td><span>:</span></td>
-                <td><p class="m-t-0 m-b-0">{{ $data->nm_wajib_pajak }}</p></td>
+                <td><p class="m-t-0 m-b-0">: {{ $data->nm_wajib_pajak }}</p></td>
             </tr>
             <tr class="c">
                 <td><p class="m-t-0 m-b-0">Alamat </p></td>
-                <td><span>:</span></td>
-                <td><p class="m-t-0 m-b-0">{{ $data->alamat_wp }}</p></td>
+                <td><p class="m-t-0 m-b-0">: {{ $data->alamat_wp }}</p></td>
             </tr>
             <tr class="c">
                 <td><p class="m-t-0 m-b-0">Lokasi </p></td>
-                <td><span>:</span></td>
-                <td><p class="m-t-0 m-b-0">{{ $data->lokasi }}</p></td>
+                <td><p class="m-t-0 m-b-0">: {{ $data->lokasi }}</p></td>
             </tr>
             <tr class="c">
                 <td><p class="m-t-0 m-b-0">&nbsp; </p></td>
+                <td>
+                    <p class="m-t-0 m-b-0">&nbsp; Kecamatan &nbsp;&nbsp;: {{ $data->kecamatan->n_kecamatan }}</p>
+                </td>
                 <td>&nbsp;</td>
-                <td><p class="m-t-0 m-b-0">Kecamatan &nbsp;&nbsp;: {{ $data->kecamatan->n_kecamatan }}</p></td>
             </tr>
             <tr class="c">
                 <td><p class="m-t-0 m-b-0">&nbsp;</p></td>
+                <td>
+                    <p class="m-t-0 m-b-0">&nbsp; Kelurahan &nbsp;&nbsp;&nbsp;: {{ $data->kelurahan->n_kelurahan }}</p>
+                </td>
                 <td>&nbsp;</td>
-                <td><p class="m-t-0 m-b-0">Kelurahan &nbsp;&nbsp;&nbsp;: {{ $data->kelurahan->n_kelurahan }}</p></td>
             </tr>
             <tr class="c">
                 <td><p class="m-t-0 m-b-0">NPWPRD </p></td>
-                <td><span>:</span></td>
-                <td><p class="m-t-0 m-b-0">{{ $data->opd->npwd }}</p></td>
+                <td><p class="m-t-0 m-b-0">: {{ $data->opd->npwd }}</p></td>
                 <td>&nbsp;</td>
             </tr>
             <tr class="c">
                 <td><p class="m-t-0 m-b-0">Jatuh Tempo </p></td>
-                <td><span>:</span></td>
                 @if ($data->tgl_skrd_akhir != null)
-                <td><p class="m-t-0 m-b-0">{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_akhir)->format('d M Y') }}</p></td>
+                <td><p class="m-t-0 m-b-0">: {{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_akhir)->format('d M Y') }}</p></td>
                 @else
-                <td><p class="m-t-0 m-b-0">- </p></td>
+                <td><p class="m-t-0 m-b-0">: - </p></td>
                 @endif
                 <td>&nbsp;</td>
             </tr>
@@ -254,7 +251,7 @@
             </tr>
             <tr class="a">
                 <td colspan="1" class="a" style="border-right: none !important; margin-left: 10px !important">
-                    {{-- {!! $img !!} --}}
+                    {!! $img !!}
                 </td>
                 <td colspan="3" class="a" style="border-left: none !important">
                     <div style="text-align:center; margin-right: -500px !important">
