@@ -259,30 +259,23 @@
                 </td>
             </tr>
             <tr class="a">
-                <td colspan="1" class="a" style="border-right: none !important; margin-left: 10px !important"></td>
+                <td colspan="1" class="a" style="border-right: none !important; margin-left: 10px !important">
+                   {{--  --}}
+                </td>
                 <td colspan="3" class="a" style="border-left: none !important">
-                    <div style="text-align:center; margin-right: -400px !important">
+                    <div style="text-align:center; margin-right: -500px !important">
                         @if ($data->tgl_ttd != null)
                         <p>Serpong, {{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_ttd)->format('d M Y') }}</p>
                         @else
                         <p>Serpong, </p>
                         @endif
-                        <table style="margin-left: 380px !important; margin-top: -8px; margin-bottom: -8px">
-                            <tr class="a">
-                                <td style="padding: 1px" width="8%" class="a"> {!! $img !!}</td>
-                                <td style="padding: 3px" width="92%" class="a">
-                                    <p class="m-b-0 m-t-0 fs-10" style="font-style: italic">Telah ditandatangani secara elektronik oleh :</p>
-                                    <p class="m-t-0 m-b-0 fs-10 t-blue">Asip Hamdi</p>
-                                    <p class="m-t-0 m-b-0 fs-10">Menggunakan Sertifikat Elektronik iOTENTIK - BPPT.</p>
-                                    <p class="m-t-0 m-b-0 fs-10">Verifikasi dokumen bisa dilakukan melalui :</p>
-                                    <p class="m-t-0 m-b-0 fs-10 t-blue" style="font-style: italic">https://tte.kominfo.go.id/verifyPDF</p>
-                                </td>
-                            </tr>
-                        </table>
+                        <br>
+                        <br>
+                        <br>
                         @if ($data->nm_ttd != null)
-                            <p class="m-b-5 m-b-0"><u>{{ $data->nm_ttd }}</u></p>
+                            <p class="m-b-5"><u>{{ $data->nm_ttd }}</u></p>
                         @else 
-                            <p class="m-b-5 m-b-0"><u>{{ $data->opd->nm_ttd }}</u></p>
+                            <p class="m-b-5"><u>{{ $data->opd->nm_ttd }}</u></p>
                         @endif
                         @if ($data->nip_ttd != null)
                             <p class="m-t-0">{{ $data->nip_ttd }}</p>

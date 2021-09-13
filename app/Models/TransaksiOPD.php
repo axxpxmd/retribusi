@@ -199,4 +199,30 @@ class TransaksiOPD extends Model
 
         return $data->get();
     }
+
+    // 
+    public static function queryTandaTangan($from, $to, $opd_id, $no_skrd)
+    {
+        $data = TransaksiOPD::where('status_bayar', 0)
+            ->where('status_ttd', 0)
+            ->orderBy('id', 'DESC');
+
+        if ($opd_id != 0) {
+            $data->where('id_opd', $opd_id);
+        }
+
+        if ($no_skrd != null) {
+            $data->where('no_skrd', 'like', '%' . $no_skrd . '%');
+        }
+
+        if ($from != null ||  $to != null) {
+            if ($from != null && $to == null) {
+                $data->whereDate('tgl_skrd_awal', $from);
+            } else {
+                $data->whereBetween('tgl_skrd_awal', [$from, $to]);
+            }
+        }
+
+        return $data->get();
+    }
 }

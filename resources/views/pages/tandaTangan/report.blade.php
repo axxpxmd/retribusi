@@ -101,6 +101,11 @@
         .mt-n15{
             margin-top: -15px !important
         }
+        .fs-10{
+            font-size: 10px
+        }.t-blue{
+            color: blue
+        }
 	</style>
 </head>
 <body >
@@ -145,50 +150,53 @@
     <div class="m-t-15 m-l-50">
         <table class="c">
             <tr class="c">
-                <td><p class="m-b-0">No Bayar </p></td>
-                <td><p class="m-b-0">: {{ $data->no_bayar }}</p></td>
+                <td><p class="m-b-0 m-t-0">No Bayar </p></td>
+                <td><span>:</span></td>
+                <td><p class="m-b-0 m-t-0">{{ $data->no_bayar }}</p></td>
             </tr>
             <tr class="c">
                 <td><p class="m-t-0 m-b-0">No Pendaftaran </p></td>
-                <td><p class="m-t-0 m-b-0">: {{ $data->nmr_daftar }}</p></td>
+                <td><span>:</span></td>
+                <td><p class="m-t-0 m-b-0">{{ $data->nmr_daftar }}</p></td>
             </tr>
             <tr class="c">
                 <td><p class="m-t-0 m-b-0">Nama </p></td>
-                <td><p class="m-t-0 m-b-0">: {{ $data->nm_wajib_pajak }}</p></td>
+                <td><span>:</span></td>
+                <td><p class="m-t-0 m-b-0">{{ $data->nm_wajib_pajak }}</p></td>
             </tr>
             <tr class="c">
                 <td><p class="m-t-0 m-b-0">Alamat </p></td>
-                <td><p class="m-t-0 m-b-0">: {{ $data->alamat_wp }}</p></td>
+                <td><span>:</span></td>
+                <td><p class="m-t-0 m-b-0">{{ $data->alamat_wp }}</p></td>
             </tr>
             <tr class="c">
                 <td><p class="m-t-0 m-b-0">Lokasi </p></td>
-                <td><p class="m-t-0 m-b-0">: {{ $data->lokasi }}</p></td>
+                <td><span>:</span></td>
+                <td><p class="m-t-0 m-b-0">{{ $data->lokasi }}</p></td>
             </tr>
             <tr class="c">
                 <td><p class="m-t-0 m-b-0">&nbsp; </p></td>
-                <td>
-                    <p class="m-t-0 m-b-0">&nbsp; Kecamatan &nbsp;&nbsp;: {{ $data->kecamatan->n_kecamatan }}</p>
-                </td>
                 <td>&nbsp;</td>
+                <td><p class="m-t-0 m-b-0">Kecamatan &nbsp;&nbsp;: {{ $data->kecamatan->n_kecamatan }}</p></td>
             </tr>
             <tr class="c">
                 <td><p class="m-t-0 m-b-0">&nbsp;</p></td>
-                <td>
-                    <p class="m-t-0 m-b-0">&nbsp; Kelurahan &nbsp;&nbsp;&nbsp;: {{ $data->kelurahan->n_kelurahan }}</p>
-                </td>
                 <td>&nbsp;</td>
+                <td><p class="m-t-0 m-b-0">Kelurahan &nbsp;&nbsp;&nbsp;: {{ $data->kelurahan->n_kelurahan }}</p></td>
             </tr>
             <tr class="c">
                 <td><p class="m-t-0 m-b-0">NPWPRD </p></td>
-                <td><p class="m-t-0 m-b-0">: {{ $data->opd->npwd }}</p></td>
+                <td><span>:</span></td>
+                <td><p class="m-t-0 m-b-0">{{ $data->opd->npwd }}</p></td>
                 <td>&nbsp;</td>
             </tr>
             <tr class="c">
                 <td><p class="m-t-0 m-b-0">Jatuh Tempo </p></td>
+                <td><span>:</span></td>
                 @if ($data->tgl_skrd_akhir != null)
-                <td><p class="m-t-0 m-b-0">: {{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_akhir)->format('d M Y') }}</p></td>
+                <td><p class="m-t-0 m-b-0">{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_akhir)->format('d M Y') }}</p></td>
                 @else
-                <td><p class="m-t-0 m-b-0">: - </p></td>
+                <td><p class="m-t-0 m-b-0">- </p></td>
                 @endif
                 <td>&nbsp;</td>
             </tr>
@@ -250,23 +258,30 @@
                 </td>
             </tr>
             <tr class="a">
-                <td colspan="1" class="a" style="border-right: none !important; margin-left: 10px !important">
-                    {!! $img !!}
-                </td>
+                <td colspan="1" class="a" style="border-right: none !important; margin-left: 10px !important"></td>
                 <td colspan="3" class="a" style="border-left: none !important">
-                    <div style="text-align:center; margin-right: -500px !important">
+                    <div style="text-align:center; margin-right: -400px !important">
                         @if ($data->tgl_ttd != null)
                         <p>Serpong, {{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_ttd)->format('d M Y') }}</p>
                         @else
                         <p>Serpong, </p>
                         @endif
-                        <br>
-                        <br>
-                        <br>
+                        <table style="margin-left: 380px !important; margin-top: -8px; margin-bottom: -8px">
+                            <tr class="a">
+                                <td style="padding: 1px" width="8%" class="a"> {!! $img !!}</td>
+                                <td style="padding: 3px" width="92%" class="a">
+                                    <p class="m-b-0 m-t-0 fs-10" style="font-style: italic">Telah ditandatangani secara elektronik oleh :</p>
+                                    <p class="m-t-0 m-b-0 fs-10 t-blue">Asip Hamdi</p>
+                                    <p class="m-t-0 m-b-0 fs-10">Menggunakan Sertifikat Elektronik iOTENTIK - BPPT.</p>
+                                    <p class="m-t-0 m-b-0 fs-10">Verifikasi dokumen bisa dilakukan melalui :</p>
+                                    <p class="m-t-0 m-b-0 fs-10 t-blue" style="font-style: italic">https://tte.kominfo.go.id/verifyPDF</p>
+                                </td>
+                            </tr>
+                        </table>
                         @if ($data->nm_ttd != null)
-                            <p class="m-b-5"><u>{{ $data->nm_ttd }}</u></p>
+                            <p class="m-b-5 m-b-0"><u>{{ $data->nm_ttd }}</u></p>
                         @else 
-                            <p class="m-b-5"><u>{{ $data->opd->nm_ttd }}</u></p>
+                            <p class="m-b-5 m-b-0"><u>{{ $data->opd->nm_ttd }}</u></p>
                         @endif
                         @if ($data->nip_ttd != null)
                             <p class="m-t-0">{{ $data->nip_ttd }}</p>

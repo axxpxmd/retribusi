@@ -146,14 +146,22 @@
     $('#opd_id').trigger('change.select2');
     $('#role_id').val("{{ $pengguna->modelHasRole->role->id }}");
     $('#role_id').trigger('change.select2');
-
+    
     $(function() {
         $('#opd_display').hide(); 
+
+        console.log($('#role_id').val())
+        var role_id = $('#role_id').val();
+        if(role_id === "5" || role_id === "7") {
+            $('#opd_display').hide(); 
+        } else {
+            $('#opd_display').show(); 
+        } 
 
         $('#role_id').change(function(){
             console.log($('#role_id').val())
             var role_id = $('#role_id').val();
-            if(role_id === "5" || role_id === 7 || role_id === 0) {
+            if(role_id === "5" || role_id === "7") {
                 $('#opd_display').hide(); 
             } else {
                 $('#opd_display').show(); 

@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\DB;
 use App\Libraries\Html\Html_number;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\Storage;
 
 // Models
 use App\Models\OPD;
@@ -314,6 +313,7 @@ class SKRDController extends Controller
             'status_bayar'     => 0,
             'status_denda'     => 0,
             'status_diskon'    => 0,
+            'status_ttd'       => 0,
             'no_skrd'          => $request->no_skrd,
             'tgl_skrd_awal'    => $request->tgl_skrd_awal,
             'tgl_skrd_akhir'   => $request->tgl_skrd_akhir,
@@ -415,17 +415,11 @@ class SKRDController extends Controller
         // Update Jumlah Cetak
         $this->updateJumlahCetak($id, $data->jumlah_cetak);
 
-        // generate QR Code
-        $currentURL = url()->current();
-        $b   = base64_encode(\SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')->merge(public_path('images/logo-png.png'), 0.2, true)->size(900)->errorCorrection('H')->margin(0)->generate($currentURL));
-        $img = '<img width="100" height="100" src="data:image/png;base64, ' . $b . '" alt="" />';
-
         $pdf = app('dompdf.wrapper');
         $pdf->getDomPDF()->set_option("enable_php", true);
         $pdf->loadView($this->view . 'report', compact(
             'data',
-            'terbilang',
-            'img'
+            'terbilang'
         ));
 
         return $pdf->stream($data->nm_wajib_pajak . '-' . $data->no_skrd . ".pdf");

@@ -92,8 +92,7 @@ Route::group(['middleware' => ['auth']], function () {
     // Tanda Tangan
     Route::resource('tanda-tangan', 'TandaTanganController');
     Route::post('tanda-tangan/api', 'TandaTanganController@api')->name('tanda-tangan.api');
-    Route::get('tanda-tangan/report', 'TandaTanganController@report')->name('tanda-tangan.report');
-    // Route::get('tanda-tangan/report-sts', 'TandaTanganController@reportSTS')->name('tanda-tangan.reportSTS');
+    Route::post('tanda-tangan/tte', 'TandaTanganController@tte')->name('tanda-tangan.tte');
 
     // Report
     Route::get('report', 'ReportController@index')->name('report.index');

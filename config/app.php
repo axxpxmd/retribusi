@@ -124,8 +124,14 @@ return [
 
     'cipher' => 'AES-256-CBC',
 
+    // SFTP
     'sftp_root' => env('SFTP_ROOT'),
     'sftp_src' => env('SFTP_SRC'),
+
+    // TTE
+    'signapi' => env('SIGNAPI'),
+    'signapi_ipserver' => env('SIGNAPI_IPSERVER'),
+    'signapi_bearer' => env('SIGNAPI_BEARER'),
 
     /*
     |--------------------------------------------------------------------------

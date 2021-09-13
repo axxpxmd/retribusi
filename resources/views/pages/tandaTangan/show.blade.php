@@ -26,6 +26,20 @@
     </header>
     <div class="container-fluid relative animatedParent animateOnce">
         <div class="tab-content my-3" id="pills-tabContent">
+            @if (count($errors) > 0)
+            <div class="alert alert-danger mb-0" id="errorAlert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <strong>Whoops Error!</strong>&nbsp;
+                <span>You have {{ $errors->count() }} error</span>
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif 
             <div class="tab-pane animated fadeInUpShort show active" id="semua-data" role="tabpanel">
                 <div class="row">
                     <div class="col-md-12">
@@ -188,7 +202,11 @@
                                     <div class="row mt-2">
                                         <label class="col-md-2 text-right s-12"></label>
                                         <label class="col-md-3 s-12">
-                                            <a target="blank" href="{{ route('skrd.report',\Crypt::encrypt($data->id)) }}" class="btn btn-sm btn-primary"><i class="icon-pencil mr-2"></i>Tanda Tangani</a>
+                                            @if (count($errors) > 0)
+                                            <button class="btn btn-sm btn-primary" onclick="alertSend()"><i class="icon-pencil mr-2"></i>TandaTangani</button>
+                                            @else
+                                            <button class="btn btn-sm btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg"><i class="icon-pencil mr-2"></i>TandaTangani</button>
+                                            @endif
                                         </label>
                                     </div> 
                                 </div>
@@ -199,10 +217,67 @@
             </div>
         </div>
     </div>
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <form class="needs-validation" method="POST" action="{{ route('tanda-tangan.tte') }}" enctype="multipart/form-data" novalidate>
+                    {{ method_field('POST') }}
+                    {{ csrf_field() }} 
+                    <div class="card">
+                        <h6 class="card-header font-weight-bold">Konfirmasi <b>Passphrase</b> Tandatangan Digital</h6>
+                        <div class="card-body">
+                            <input type="hidden" name="id" value="{{ $id }}">
+                            <input type="hidden" name="token_godem" value="{{ $token_godem }}">
+                            <input type="hidden" name="id_cert" value="{{ $id_cert }}">
+                            <input type="hidden" name="nip_ttd" value="{{ $data->nip_ttd }}">
+                            <img src="{{ asset('images/iotentik.jpg') }}" class="mx-auto d-block" alt="">
+                            <div class="form-row form-inline">
+                                <div class="col-md-12">
+                                    <div class="form-group m-0">
+                                        <label class="col-form-label s-12 col-md-2">Di TTD Oleh</label>
+                                        <input type="text" class="form-control r-0 light s-12 col-md-9" value="{{ $data->nm_ttd }}" autocomplete="off" readonly required/>
+                                    </div>
+                                    <div class="form-group m-0">
+                                        <label for="passphrase" class="col-form-label s-12 col-md-2">Passphrase</label>
+                                        <input type="text" name="passphrase" id="passphrase" placeholder="Masukan Passphrase" class="form-control r-0 light s-12 col-md-9" autocomplete="off" required/>
+                                    </div>
+                                    <div class="form-group m-0">
+                                        <label for="passphrase" class="col-form-label s-12 col-md-2"></label>
+                                        <div class="mt-2">
+                                            <button class="btn btn-sm btn-primary mr-2"><i class="icon-send mr-2"></i>Tandatangani</button>
+                                            <button class="btn btn-sm btn-secondary" data-dismiss="modal">Batalkan</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>    
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 @endsection
 @section('script')
 <script type="text/javascript">
-
+    function alertSend(){
+        $.confirm({
+            title: 'INFO',
+            content: 'Terdapat Error, cek error atau hubungi administrator.',
+            icon: 'icon icon-info',
+            theme: 'modern',
+            closeIcon: true,
+            animation: 'scale',
+            autoClose: 'ok|5000',
+            type: 'red',
+            buttons: {
+                ok: {
+                    text: "ok!",
+                    btnClass: 'btn-primary',
+                    keys: ['enter']
+                }
+            }
+        });
+    }
 </script>
 @endsection

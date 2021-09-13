@@ -254,7 +254,7 @@
             </tr>
             <tr class="a">
                 <td colspan="1" class="a" style="border-right: none !important; margin-left: 10px !important">
-                    {{-- {!! $img !!} --}}
+                    {{--  --}}
                 </td>
                 <td colspan="3" class="a" style="border-left: none !important">
                     <div style="text-align:center; margin-right: -500px !important">
