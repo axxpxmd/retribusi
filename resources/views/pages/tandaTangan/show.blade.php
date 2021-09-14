@@ -18,7 +18,7 @@
                         <a class="nav-link" href="{{ route($route.'index') }}"><i class="icon icon-arrow_back"></i>Semua Data</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active show" id="tab1" data-toggle="tab" href="#semua-data" role="tab"><i class="icon icon-document-list"></i>SKRD</a>
+                        <a class="nav-link active show" id="tab1" data-toggle="tab" href="#semua-data" role="tab"><i class="icon icon-pencil"></i>Tanda Tangan</a>
                     </li>
                 </ul>
             </div>
@@ -26,8 +26,16 @@
     </header>
     <div class="container-fluid relative animatedParent animateOnce">
         <div class="tab-content my-3" id="pills-tabContent">
+            @if (session()->has('success'))
+            <div class="alert alert-success alert-dismissible fade show text-center bdr-5 col-md-12 container mb-0 mt-0" id="successAlert" role="alert">
+                {{ session('success') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            @endif
             @if (count($errors) > 0)
-            <div class="alert alert-danger mb-0" id="errorAlert">
+            <div class="alert alert-danger mb-0 mt-0" id="errorAlert">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -44,7 +52,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card mt-2">
-                            <h6 class="card-header"><strong>Data SKRD</strong></h6>
+                            <h6 class="card-header"><strong>Data {{ $title }}</strong>@if ($data->status_ttd == 1) | <span class="badge badge-success font-weight-bold">Sudah Ditandatangani</span>@endif</h6>
                             <div class="card-body">
                                 <div class="col-md-12">
                                     <div class="row">
@@ -202,10 +210,12 @@
                                     <div class="row mt-2">
                                         <label class="col-md-2 text-right s-12"></label>
                                         <label class="col-md-3 s-12">
-                                            @if (count($errors) > 0)
-                                            <button class="btn btn-sm btn-primary" onclick="alertSend()"><i class="icon-pencil mr-2"></i>TandaTangani</button>
-                                            @else
-                                            <button class="btn btn-sm btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg"><i class="icon-pencil mr-2"></i>TandaTangani</button>
+                                            @if ($data->status_ttd == 0)
+                                                @if (count($errors) > 0)
+                                                <button class="btn btn-sm btn-primary" onclick="alertSend()"><i class="icon-pencil mr-2"></i>TandaTangani</button>
+                                                @else
+                                                <button class="btn btn-sm btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg"><i class="icon-pencil mr-2"></i>TandaTangani</button>
+                                                @endif
                                             @endif
                                         </label>
                                     </div> 
@@ -220,12 +230,12 @@
     <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <form class="needs-validation" method="POST" action="{{ route('tanda-tangan.tte') }}" enctype="multipart/form-data" novalidate>
-                    {{ method_field('POST') }}
-                    {{ csrf_field() }} 
-                    <div class="card">
-                        <h6 class="card-header font-weight-bold">Konfirmasi <b>Passphrase</b> Tandatangan Digital</h6>
-                        <div class="card-body">
+                <div class="card">
+                    <h6 class="card-header font-weight-bold">Konfirmasi <b>Passphrase</b> Tandatangan Digital</h6>
+                    <div class="card-body">
+                        <form class="needs-validation" method="POST" action="{{ route('tanda-tangan.tte') }}" enctype="multipart/form-data" novalidate>
+                            {{ method_field('POST') }}
+                            {{ csrf_field() }} 
                             <input type="hidden" name="id" value="{{ $id }}">
                             <input type="hidden" name="token_godem" value="{{ $token_godem }}">
                             <input type="hidden" name="id_cert" value="{{ $id_cert }}">
@@ -239,7 +249,11 @@
                                     </div>
                                     <div class="form-group m-0">
                                         <label for="passphrase" class="col-form-label s-12 col-md-2">Passphrase</label>
-                                        <input type="text" name="passphrase" id="passphrase" placeholder="Masukan Passphrase" class="form-control r-0 light s-12 col-md-9" autocomplete="off" required/>
+                                        <input type="password" name="passphrase" id="passphrase" placeholder="Masukan Passphrase" class="form-control r-0 light s-12 col-md-9" autocomplete="off" required/>
+                                        <label class="col-form-label s-12 col-md-2"></label>
+                                        <div class="invalid-feedback p-0 col-md-9">
+                                            Passphrase tidak boleh kosong.
+                                        </div>
                                     </div>
                                     <div class="form-group m-0">
                                         <label for="passphrase" class="col-form-label s-12 col-md-2"></label>
@@ -249,10 +263,10 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>    
-                        </div>
+                            </div>  
+                        </form>  
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
@@ -260,6 +274,26 @@
 @endsection
 @section('script')
 <script type="text/javascript">
+    (function () {
+        'use strict'
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.querySelectorAll('.needs-validation')
+
+        // Loop over them and prevent submission
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                    }
+
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
+
     function alertSend(){
         $.confirm({
             title: 'INFO',
@@ -274,7 +308,10 @@
                 ok: {
                     text: "ok!",
                     btnClass: 'btn-primary',
-                    keys: ['enter']
+                    keys: ['enter'],
+                    action: function () {
+                        location.reload();
+                    }
                 }
             }
         });

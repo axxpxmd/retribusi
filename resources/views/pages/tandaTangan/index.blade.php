@@ -17,9 +17,6 @@
                     <li class="nav-item">
                         <a class="nav-link active show" id="tab1" data-toggle="tab" href="#semua-data" role="tab"><i class="icon icon-home2"></i>Semua Data</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="tab2" data-toggle="tab" href="#tambah-data" role="tab"><i class="icon icon-plus"></i>Tambah Data</a>
-                    </li>
                 </ul>
             </div>
         </div>
@@ -86,49 +83,6 @@
                                         <tbody></tbody>
                                     </table>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="tab-pane animated fadeInUpShort" id="tambah-data" role="tabpanel">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div id="alert"></div>
-                        <div class="card">
-                            <h6 class="card-header"><strong>Tambah Data</strong></h6>
-                            <div class="card-body">
-                                <form class="needs-validation" method="GET" action="{{ route('skrd.create') }}" enctype="multipart/form-data" novalidate>
-                                    {{ method_field('GET') }}
-                                    <div class="form-row form-inline">
-                                        <div class="col-md-12">
-                                            <div class="form-group m-0">
-                                                <label class="col-form-label s-12 col-md-2">OPD<span class="text-danger ml-1">*</span></label>
-                                                <div class="col-md-4 p-0 bg-light">
-                                                    <select class="select2 form-control r-0 light s-12" id="opd_id" name="opd_id" autocomplete="off">
-                                                        <option value="0">Pilih</option>
-                                                        @foreach ($opds as $i)
-                                                            <option value="{{ \Crypt::encrypt($i->id) }}">{{ $i->n_opd }}</option>
-                                                            {{-- <option value="{{ $i->id }}">{{ $i->n_opd }}</option> --}}
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="form-group mt-1">
-                                                <label class="col-form-label s-12 col-md-2">Jenis Pendapatan<span class="text-danger ml-1">*</span></label>
-                                                <div class="col-md-4 p-0 bg-light">
-                                                    <select class="select2 form-control r-0 light s-12" id="jenis_pendapatan_id" name="jenis_pendapatan_id" autocomplete="off">
-                                                        <option value="">Pilih</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="form-group mt-2">
-                                                <div class="col-md-2"></div>
-                                                <button type="submit" class="btn btn-primary btn-sm"><i class="icon-arrow_forward mr-2"></i>Selanjutnya</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
                             </div>
                         </div>
                     </div>
