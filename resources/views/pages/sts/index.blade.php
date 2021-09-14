@@ -97,7 +97,8 @@
                                             <th width="10%">NTB </th>
                                             <th width="9%">Total Bayar Bank </th>
                                             <th width="8%">Status Bayar</th>
-                                            <th width="5%"></th>
+                                            <th width="5%">Aksi</th>
+                                            <th width="5%">File TTD</th>
                                         </thead>
                                         <tbody></tbody>
                                     </table>
@@ -148,7 +149,8 @@
             {data: 'ntb', name: 'ntb'},
             {data: 'total_bayar', name: 'total_bayar'},
             {data: 'status_bayar', name: 'status_bayar'},
-            {data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center'}
+            {data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center'},
+            {data: 'file_ttd', name: 'file_ttd', orderable: false, searchable: false, className: 'text-center'}
         ]
     });
 

@@ -73,9 +73,14 @@ class STSController extends Controller
 
         return DataTables::of($data)
             ->addColumn('action', function ($p) {
-                return "
-                <a href='" . route($this->route . 'edit', Crypt::encrypt($p->id)) . "' class='text-primary mr-2' title='Hapus Data'><i class='icon icon-edit'></i></a>
-                <a href='" . route($this->route . 'report', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
+                if ($p->status_ttd == 0) {
+                    return "
+                        <a href='" . route($this->route . 'edit', Crypt::encrypt($p->id)) . "' class='text-primary mr-2' title='Edit Data'><i class='icon icon-edit'></i></a>
+                        <a href='" . route($this->route . 'report', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
+                } else {
+                    return "
+                        <a href='#' onclick='remove(" . $p->id . ")' class='text-danger mr-2' title='Hapus Data'><i class='icon icon-remove'></i></a>";
+                }
             })
             ->editColumn('no_bayar', function ($p) {
                 return "<a href='" . route($this->route . 'show', Crypt::encrypt($p->id)) . "' class='text-primary' title='Show Data'>" . $p->no_bayar . "</a>";
@@ -112,8 +117,18 @@ class STSController extends Controller
                     return 'Belum Dibayar';
                 }
             })
+            ->addColumn('file_ttd', function ($p) {
+                $path_sftp = 'file_ttd_skrd/';
+                $fileName  =  $p->nm_wajib_pajak . ' - ' . $p->no_skrd . ".pdf";
+
+                if ($p->status_ttd == 0) {
+                    return '-';
+                } else {
+                    return "<a href='" . config('app.sftp_src') . $path_sftp . $fileName . "' target='_blank' class='text-success'><i class='icon-document-file-pdf'></i></a>";
+                }
+            })
             ->addIndexColumn()
-            ->rawColumns(['action', 'no_bayar', 'opd_id', 'id_jenis_pendapatan', 'tgl_skrd', 'masa_berlaku', 'status_bayar'])
+            ->rawColumns(['action', 'no_bayar', 'opd_id', 'id_jenis_pendapatan', 'tgl_skrd', 'masa_berlaku', 'status_bayar', 'file_ttd'])
             ->toJson();
     }
 
