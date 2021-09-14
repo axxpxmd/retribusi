@@ -77,7 +77,9 @@ class TransaksiOPD extends Model
     // 
     public static function queryDiskon($opd_id, $jenis_pendapatan_id, $from, $to, $status_diskon, $no_skrd)
     {
-        $data = TransaksiOPD::orderBy('id', 'DESC')->where('status_bayar', 0);
+        $data = TransaksiOPD::where('status_bayar', 0)
+            ->where('status_ttd', 0)
+            ->orderBy('id', 'DESC');
 
         if ($opd_id != 0) {
             $data->where('id_opd', $opd_id);
@@ -109,7 +111,9 @@ class TransaksiOPD extends Model
     // 
     public static function queryDenda($opd_id, $jenis_pendapatan_id, $from, $to, $status_denda_filter, $no_skrd)
     {
-        $data = TransaksiOPD::orderBy('id', 'DESC')->where('status_bayar', 0);
+        $data = TransaksiOPD::where('status_bayar', 0)
+            ->where('status_ttd', 0)
+            ->orderBy('id', 'DESC');
 
         if ($opd_id != 0) {
             $data->where('id_opd', $opd_id);

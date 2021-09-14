@@ -19,6 +19,12 @@ class DendaController extends Controller
     protected $title = 'Denda';
     protected $view  = 'pages.denda.';
 
+    // Check Permission
+    public function __construct()
+    {
+        $this->middleware(['permission:Denda']);
+    }
+
     public function index()
     {
         $route = $this->route;

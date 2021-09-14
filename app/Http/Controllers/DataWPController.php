@@ -20,6 +20,12 @@ class DataWPController extends Controller
     protected $title = 'Data Wajib Retribusi';
     protected $view  = 'pages.datawp.';
 
+    // Check Permission
+    public function __construct()
+    {
+        $this->middleware(['permission:Data WP']);
+    }
+
     public function index()
     {
         $route = $this->route;

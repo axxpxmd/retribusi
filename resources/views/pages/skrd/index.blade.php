@@ -81,7 +81,8 @@
                                             <th width="10%">Tanggal SKRD</th>
                                             <th width="10%">Masa Berlaku SKRD</th>
                                             <th width="10%">Ketetapan</th>
-                                            <th width="5%"></th>
+                                            <th width="5%">Aksi</th>
+                                            <th width="5%">File TTD</th>
                                         </thead>
                                         <tbody></tbody>
                                     </table>
@@ -172,7 +173,8 @@
             {data: 'tgl_skrd', name: 'tgl_skrd'},
             {data: 'masa_berlaku', name: 'masa_berlaku'},
             {data: 'jumlah_bayar', name: 'jumlah_bayar'},
-            {data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center'}
+            {data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center'},
+            {data: 'file_ttd', name: 'file_ttd', orderable: false, searchable: false, className: 'text-center'}
         ]
     });
 

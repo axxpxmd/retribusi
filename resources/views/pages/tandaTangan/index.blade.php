@@ -22,7 +22,6 @@
         </div>
     </header>
     <div class="container-fluid my-3 relative animatedParent animateOnce">
-        @include('layouts.alerts')
         <div class="tab-content " id="pills-tabContent">
             <div class="tab-pane animated fadeInUpShort show active" id="semua-data" role="tabpanel">
                 <div class="card no-b mb-2">

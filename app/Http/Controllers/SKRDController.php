@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use App\Libraries\Html\Html_number;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Storage;
 
 // Models
 use App\Models\OPD;
@@ -27,6 +28,12 @@ class SKRDController extends Controller
     protected $route = 'skrd.';
     protected $title = 'SKRD';
     protected $view  = 'pages.skrd.';
+
+    // Check Permission
+    public function __construct()
+    {
+        $this->middleware(['permission:SKRD']);
+    }
 
     public function index()
     {
@@ -71,14 +78,23 @@ class SKRDController extends Controller
 
         return DataTables::of($data)
             ->addColumn('action', function ($p) {
+                $report = "<a href='" . route($this->route . 'report', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
+
                 if ($p->status_bayar == 0) {
-                    return "
+                    if ($p->status_ttd == 0) {
+                        return "
                         <a href='#' onclick='remove(" . $p->id . ")' class='text-danger mr-2' title='Hapus Data'><i class='icon icon-remove'></i></a>
                         <a href='" . route($this->route . 'edit', Crypt::encrypt($p->id)) . "' class='text-primary mr-2' title='Edit Data'><i class='icon icon-edit'></i></a>
                         <a href='" . route($this->route . 'report', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
+                    } else {
+                        return "
+                        <a href='#' onclick='remove(" . $p->id . ")' class='text-danger mr-2' title='Hapus Data'><i class='icon icon-remove'></i></a>
+                        <a href='" . route($this->route . 'edit', Crypt::encrypt($p->id)) . "' class='text-primary' title='Edit Data'><i class='icon icon-edit'></i></a>";
+                    }
                 } else {
-                    return "
-                        <a href='" . route($this->route . 'report', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
+                    if ($p->status_ttd == 0) {
+                        return $report;
+                    }
                 }
             })
             ->editColumn('no_skrd', function ($p) {
@@ -99,8 +115,18 @@ class SKRDController extends Controller
             ->editColumn('jumlah_bayar', function ($p) {
                 return 'Rp. ' . number_format($p->jumlah_bayar);
             })
+            ->addColumn('file_ttd', function ($p) {
+                $path_sftp = 'file_ttd_skrd/';
+                $fileName  =  $p->nm_wajib_pajak . ' - ' . $p->no_skrd . ".pdf";
+
+                if ($p->status_ttd == 0) {
+                    return '-';
+                } else {
+                    return "<a href='" . config('app.sftp_src') . $path_sftp . $fileName . "' target='_blank' class='text-success'><i class='icon-document-file-pdf'></i></a>";
+                }
+            })
             ->addIndexColumn()
-            ->rawColumns(['action', 'no_skrd', 'id_opd', 'id_jenis_pendapatan', 'tgl_skrd', 'masa_berlaku'])
+            ->rawColumns(['action', 'no_skrd', 'id_opd', 'id_jenis_pendapatan', 'tgl_skrd', 'masa_berlaku', 'file_ttd'])
             ->toJson();
     }
 
@@ -289,6 +315,7 @@ class SKRDController extends Controller
         /* Tahapan : 
          * 1. tmtransaksi_opd
          * 2. tmdata_wp
+         * 3. Save pdf to SFTP Storage
          */
 
         // Tahap 1
@@ -321,7 +348,7 @@ class SKRDController extends Controller
             'created_by'       => Auth::user()->pengguna->full_name
         ];
 
-        TransaksiOPD::create($data);
+        $dataSKRD = TransaksiOPD::create($data);
 
         // Tahap 2
         $data = [
@@ -346,6 +373,25 @@ class SKRDController extends Controller
         if ($check == 0) {
             DataWP::create($data);
         }
+
+        // Tahap 3
+        $data = TransaksiOPD::find($dataSKRD->id);
+        $terbilang = Html_number::terbilang($data->total_bayar) . 'rupiah';
+
+        $pdf = app('dompdf.wrapper');
+        $pdf->getDomPDF()->set_option("enable_php", true);
+        $pdf->loadView($this->view . 'report', compact(
+            'data',
+            'terbilang'
+        ));
+
+        // get content PDF
+        $fileName =  $data->nm_wajib_pajak . ' - ' . $data->no_skrd . ".pdf";
+        $content = $pdf->download()->getOriginalContent();
+
+        // save PDF to sftp storage
+        $path_sftp = 'file_ttd_skrd/';
+        Storage::disk('sftp')->put($path_sftp . $fileName, $content);
 
         return response()->json([
             'message' => "Data " . $this->title . " berhasil tersimpan."

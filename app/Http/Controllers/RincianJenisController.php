@@ -19,6 +19,12 @@ class RincianJenisController extends Controller
     protected $title = 'Rincian Jenis Pendapatan';
     protected $view  = 'pages.rincianJenis.';
 
+    // Check Permission
+    public function __construct()
+    {
+        $this->middleware(['permission:Rincian Pendapatan']);
+    }
+
     public function index()
     {
         $route = $this->route;

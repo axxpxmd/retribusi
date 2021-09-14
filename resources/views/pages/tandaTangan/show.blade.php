@@ -52,7 +52,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card mt-2">
-                            <h6 class="card-header"><strong>Data {{ $title }}</strong>@if ($data->status_ttd == 1) | <span class="badge badge-success font-weight-bold">Sudah Ditandatangani</span>@endif</h6>
+                            <h6 class="card-header"><strong>Data {{ $title }}</strong>@if ($data->status_ttd == 1) | <span class="text-success font-weight-bold">Sudah Ditandatangani</span>@endif</h6>
                             <div class="card-body">
                                 <div class="col-md-12">
                                     <div class="row">
@@ -216,6 +216,8 @@
                                                 @else
                                                 <button class="btn btn-sm btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg"><i class="icon-pencil mr-2"></i>TandaTangani</button>
                                                 @endif
+                                            @else
+                                            <a href="{{ config('app.sftp_src').$path_sftp.$fileName }}" target="_blank" class="btn btn-sm btn-primary"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</a>    
                                             @endif
                                         </label>
                                     </div> 

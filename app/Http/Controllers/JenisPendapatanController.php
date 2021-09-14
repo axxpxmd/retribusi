@@ -18,6 +18,12 @@ class JenisPendapatanController extends Controller
     protected $title = 'Jenis Pendapatan';
     protected $view  = 'pages.jenisPendapatan.';
 
+    // Check Permission
+    public function __construct()
+    {
+        $this->middleware(['permission:Jenis Pendapatan']);
+    }
+
     public function index()
     {
         $route = $this->route;

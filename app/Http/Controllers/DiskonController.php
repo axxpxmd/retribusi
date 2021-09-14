@@ -19,6 +19,12 @@ class DiskonController extends Controller
     protected $title = 'Diskon';
     protected $view  = 'pages.diskon.';
 
+    // Check Permission
+    public function __construct()
+    {
+        $this->middleware(['permission:Diskon']);
+    }
+
     public function index()
     {
         $route = $this->route;

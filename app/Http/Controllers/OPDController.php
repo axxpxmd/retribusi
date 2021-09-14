@@ -18,6 +18,12 @@ class OPDController extends Controller
     protected $title = 'OPD';
     protected $view  = 'pages.opd.';
 
+    // Check Permission
+    public function __construct()
+    {
+        $this->middleware(['permission:OPD']);
+    }
+
     public function index()
     {
         $route = $this->route;

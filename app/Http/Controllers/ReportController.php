@@ -18,8 +18,14 @@ use App\Models\OPDJenisPendapatan;
 class ReportController extends Controller
 {
     protected $route = 'report.';
-    protected $title = 'Report';
+    protected $title = 'Laporan';
     protected $view = 'pages.report.';
+
+    // Check Permission
+    public function __construct()
+    {
+        $this->middleware(['permission:Laporan']);
+    }
 
     public function index()
     {

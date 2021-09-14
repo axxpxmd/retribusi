@@ -109,7 +109,6 @@ class TandaTanganController extends Controller
 
             // Check
             if ($res->successful()) {
-
                 if ($res['code'] == 200) {
                     $arr = json_decode($res, true);
                     $idCert = end($arr);
@@ -176,21 +175,32 @@ class TandaTanganController extends Controller
         $data = TransaksiOPD::find($id);
         $nip_ttd = $data->nip_ttd;
 
-        /**
-         * * Check Status TTD
+        $token_godem = '';
+        $id_cert     = '';
+        $fileName    =  $data->nm_wajib_pajak . ' - ' . $data->no_skrd . ".pdf";
+        $path_sftp   = 'file_ttd_skrd/';
+        $path_local  = 'public/file_skrd/';
+
+        /* Check Status TTD
          * 0 = Belum
          * 1 = Sudah 
          */
-        $token_godem = '';
-        $id_cert = '';
+
+        // Token Godem
+        $token_godem = $this->getTokenGodam($id, $nip_ttd);
+
+        // Sertifikat
+        $id_cert = $this->getListCert($id, $nip_ttd);
+
         if ($data->status_ttd == 0) {
             $terbilang = Html_number::terbilang($data->total_bayar) . 'rupiah';
 
             // generate QR Code
-            $currentURL = '12345';
-            $b   = base64_encode(\SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')->merge(public_path('images/logo-png.png'), 0.2, true)->size(900)->errorCorrection('H')->margin(0)->generate($currentURL));
+            $file_url = config('app.sftp_src') . 'file_ttd_skrd/' . $fileName;
+            $b   = base64_encode(\SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')->merge(public_path('images/logo-png.png'), 0.2, true)->size(900)->errorCorrection('H')->margin(0)->generate($file_url));
             $img = '<img width="60" height="61" src="data:image/png;base64, ' . $b . '" alt="qr code" />';
 
+            // generate PDF
             $pdf = app('dompdf.wrapper');
             $pdf->getDomPDF()->set_option("enable_php", true);
             $pdf->loadView($this->view . 'report', compact(
@@ -200,22 +210,13 @@ class TandaTanganController extends Controller
             ));
 
             // get content PDF
-            $fileName =  $data->nm_wajib_pajak . ' - ' . $data->no_skrd . ".pdf";
             $content  = $pdf->download()->getOriginalContent();
 
             // save PDF to sftp storage
-            $path_sftp = 'file_ttd_skrd/';
             Storage::disk('sftp')->put($path_sftp . $fileName, $content);
 
             // Save PDF to local storage
-            $path_local = 'public/file_skrd/';
             Storage::put($path_local . $fileName, $content);
-
-            // Token Godem
-            $token_godem = $this->getTokenGodam($id, $nip_ttd);
-
-            // Sertifikat
-            $id_cert = $this->getListCert($id, $nip_ttd);
         }
 
         return view($this->view . 'show', compact(
@@ -224,7 +225,9 @@ class TandaTanganController extends Controller
             'title',
             'data',
             'token_godem',
-            'id_cert'
+            'id_cert',
+            'fileName',
+            'path_sftp'
         ));
     }
 
@@ -237,10 +240,13 @@ class TandaTanganController extends Controller
         $path_local = 'app/public/file_skrd/';
         $path_sftp  = 'file_ttd_skrd/';
 
-        // TTE
+        /**
+         * Process TTE
+         */
         $pdf = storage_path($path_local . $fileName);
         $qrimage_path = storage_path('app/public/transparan.png');
 
+        // Data / Payload
         $data = [
             'username'   => $request->nip_ttd,
             'passphrase' => $request->passphrase,
@@ -273,7 +279,7 @@ class TandaTanganController extends Controller
                         'status_ttd' => 1
                     ]);
 
-                    // Save to local storage
+                    // Save to local storage (file already TTE)
                     file_put_contents($pdf, base64_decode($r['data'], true));
                     $local_pdf = Storage::disk('local')->get('public/file_skrd/' . $fileName); // get content pdf from local
 
@@ -294,6 +300,8 @@ class TandaTanganController extends Controller
                     ->route($this->route . 'show', \Crypt::encrypt($id))
                     ->withErrors('Gagal melakukan tandatangan digital, Silahkan refresh halaman ini. Error Code: ' .  $r['status'] . ' Message: ' . $r['message']);
         }
-        return response()->json(['message' => "Terjadi kegagalan dalam memuat tandatangan digital. Error Code " . $res->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator"], 422);
+        return redirect()
+            ->route($this->route . 'show', \Crypt::encrypt($id))
+            ->withErrors("Terjadi kegagalan dalam memuat tandatangan digital. Error Code " . $res->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator");
     }
 }
