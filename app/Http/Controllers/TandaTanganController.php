@@ -189,7 +189,7 @@ class TandaTanganController extends Controller
         // Token Godem
         $token_godem = $this->getTokenGodam($id, $nip_ttd);
 
-        // Sertifikat
+        // Sertifikat 
         $id_cert = $this->getListCert($id, $nip_ttd);
 
         if ($data->status_ttd == 0) {
