@@ -169,8 +169,8 @@
         columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false, align: 'center', className: 'text-center'},
             {data: 'full_name', name: 'full_name'},
-            {data: 'opd', name: 'opd'},
-            {data: 'role', name: 'role'},
+            {data: 'opd', name: 'opd', orderable: false, searchable: false},
+            {data: 'role', name: 'role',  orderable: false, searchable: false},
             {data: 'phone', name: 'phone'},
             {data: 'user_id', name: 'user_id'},
             {data: 'photo', name: 'photo'},
