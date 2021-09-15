@@ -52,7 +52,9 @@ class RincianJenisController extends Controller
 
         return DataTables::of($datas)
             ->addColumn('action', function ($p) {
+                // Check
                 $check = TransaksiOPD::where('id_rincian_jenis_pendapatan', $p->id)->count();
+
                 if ($check == 0) {
                     return "<a href='" . route($this->route . 'edit', $p->id) . "' title='Edit Permission'><i class='icon-edit mr-1'></i></a>
                             <a href='#' onclick='remove(" . $p->id . ")' class='text-danger' title='Hapus Role'><i class='icon-remove'></i></a>";
@@ -75,13 +77,14 @@ class RincianJenisController extends Controller
     {
         $request->validate([
             'id_jenis_pendapatan' => 'required',
-            'rincian_pendapatan' => 'required',
+            'rincian_pendapatan'  => 'required',
             'nmr_rekening' => 'required'
         ]);
 
         $id_jenis_pendapatan = $request->id_jenis_pendapatan;
-        $rincian_pendapatan = $request->rincian_pendapatan;
+        $rincian_pendapatan  = $request->rincian_pendapatan;
 
+        // Check duplicat data
         $check = RincianJenisPendapatan::where('id_jenis_pendapatan', $id_jenis_pendapatan)->where('rincian_pendapatan', $rincian_pendapatan)->count();
         if ($check != 0) {
             return response()->json([
@@ -118,8 +121,8 @@ class RincianJenisController extends Controller
 
         $data = RincianJenisPendapatan::find($id);
 
-        $jenis_pendapatan_array = OPDJenisPendapatan::select('id_jenis_pendapatan')->get()->toArray();
-        $jenis_pendapatans = JenisPendapatan::select('id', 'jenis_pendapatan')->whereIn('id', $jenis_pendapatan_array)->get();
+        $jenis_pendapatan_exist = OPDJenisPendapatan::select('id_jenis_pendapatan')->get()->toArray();
+        $jenis_pendapatans = JenisPendapatan::select('id', 'jenis_pendapatan')->whereIn('id', $jenis_pendapatan_exist)->get();
 
         return view($this->view . 'edit', compact(
             'route',
@@ -133,13 +136,33 @@ class RincianJenisController extends Controller
     {
         $request->validate([
             'id_jenis_pendapatan' => 'required',
-            'rincian_pendapatan' => 'required',
+            'rincian_pendapatan'  => 'required',
             'nmr_rekening' => 'required'
         ]);
 
+        // get params
         $input = $request->all();
+        $id_jenis_pendapatan = $request->id_jenis_pendapatan;
+        $rincian_pendapatan  = $request->rincian_pendapatan;
+
+        // get data
         $data = RincianJenisPendapatan::find($id);
-        $data->update($input);
+        $idJenisPendapatan = $data->id_jenis_pendapatan;
+        $rincianPendapatan = $data->rincian_pendapatan;
+
+        // Check duplicate data
+        if ($id_jenis_pendapatan == $idJenisPendapatan && $rincian_pendapatan == $rincianPendapatan) {
+            $data->update($input);
+        } else {
+            $check = RincianJenisPendapatan::where('id_jenis_pendapatan', $id_jenis_pendapatan)->where('rincian_pendapatan', $rincian_pendapatan)->count();
+            if ($check != 0) {
+                return response()->json([
+                    'message' => "Data ini sudah pernah tersimpan."
+                ], 422);
+            } else {
+                $data->update($input);
+            }
+        }
 
         return response()->json([
             'message' => 'Data ' . $this->title . ' berhasil diperbaharui.'
