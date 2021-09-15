@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use Validator;
 use DataTables;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 // Modles
+use App\Models\TransaksiOPD;
 use App\Models\JenisPendapatan;
 use App\Models\OPDJenisPendapatan;
-use App\Models\TransaksiOPD;
+use App\Models\RincianJenisPendapatan;
 
 class JenisPendapatanController extends Controller
 {
@@ -35,15 +37,18 @@ class JenisPendapatanController extends Controller
         ));
     }
 
-    public function api(Request $request)
+    public function api()
     {
         $jenisPendapatans = JenisPendapatan::orderBy('id', 'DESC')->get();
 
         return DataTables::of($jenisPendapatans)
             ->addColumn('action', function ($p) {
-                $check = OPDJenisPendapatan::where('id_jenis_pendapatan', $p->id)->count();
+                // Check
+                $check  = OPDJenisPendapatan::where('id_jenis_pendapatan', $p->id)->count();
                 $check1 = TransaksiOPD::where('id_jenis_pendapatan', $p->id)->count();
-                if ($check != 0 || $check1 != 0) {
+                $check2 = RincianJenisPendapatan::where('id_jenis_pendapatan', $p->id)->count();
+
+                if ($check != 0 || $check1 != 0 || $check2 != 0) {
                     return "<a href='#' onclick='edit(" . $p->id . ")' title='Edit Permission'><i class='icon-edit mr-1'></i></a>";
                 } else {
                     return "<a href='#' onclick='edit(" . $p->id . ")' title='Edit Permission'><i class='icon-edit mr-1'></i></a>
@@ -64,14 +69,15 @@ class JenisPendapatanController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'jenis_pendapatan' => 'required|unique:tmjenis_pendapatan,jenis_pendapatan',
-        ]);
-
         $input = [
             'jenis_pendapatan'  => $request->jenis_pendapatan,
             'target_pendapatan' => (int) str_replace(['.', 'Rp', ' '], '', $request->target_pendapatan)
         ];
+
+        Validator::make($input, [
+            'jenis_pendapatan'  => 'required|unique:tmjenis_pendapatan,jenis_pendapatan',
+            'target_pendapatan' => 'required|digits_between:0,15',
+        ])->validate();
 
         JenisPendapatan::create($input);
 
@@ -88,14 +94,15 @@ class JenisPendapatanController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'jenis_pendapatan' => 'required|unique:tmjenis_pendapatan,jenis_pendapatan,' . $id,
-        ]);
-
         $input = [
             'jenis_pendapatan'  => $request->jenis_pendapatan,
             'target_pendapatan' => (int) str_replace(['.', 'Rp', ' '], '', $request->target_pendapatan)
         ];
+
+        Validator::make($input, [
+            'jenis_pendapatan' => 'required|unique:tmjenis_pendapatan,jenis_pendapatan,' . $id,
+            'target_pendapatan' => 'required|digits_between:0,15',
+        ])->validate();
 
         $jenis_pendapatan = JenisPendapatan::where('id', $id)->first();
         $jenis_pendapatan->update($input);
