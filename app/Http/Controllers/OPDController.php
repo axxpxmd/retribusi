@@ -90,10 +90,10 @@ class OPDController extends Controller
     {
         $request->validate([
             'n_opd' => 'required|unique:tmopds,n_opd,' . $id,
-            'kode' => 'required|unique:tmopds,n_opd,' . $id,
+            'kode'  => 'required|unique:tmopds,n_opd,' . $id,
             'initial' => 'required',
             'nm_ttd'  => 'required',
-            'nip_ttd' => 'required'
+            'nip_ttd' => 'required|numeric|digits:18'
         ]);
 
         $data = OPD::find($id);

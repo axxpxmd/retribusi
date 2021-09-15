@@ -23,7 +23,7 @@ class HomeController extends Controller
         $this->middleware('auth');
     }
 
-    // public function index()
+    // public function index1()
     // {
     //     $timestamp_now = Carbon::now()->timestamp;
     //     $timestamp_1hour = Carbon::now()->addHour()->timestamp;
@@ -45,15 +45,16 @@ class HomeController extends Controller
     //     // $response = Http::contentType("text/plain")->send('POST', $url, [
     //     //     'body' => $jwt
     //     // ])->json();
+    //     // dd($response);
 
     //     /**
     //      * Create VA
     //      */
-    //     $signature = 'path=/billing&method=POST&token=LXVHIjdMnKvlsxPa73Z-ek3tOmcvI8R4iFpwOF1slpY&timestamp=' . $timestamp_now . '&body={"client_id": "XXR4SKMQ"}';
+    //     $data = 'path=/billing&method=POST&token=nR6jsoXQKNlywPkS-k-NX4vIVcYOkUknLq1i4q8J07U&timestamp=' . $timestamp_now . '&body={"client_id":"XXR4SKMQ"}';
 
-    //     $sha256 = hash_hmac('sha256', $signature, $key, true);
+    //     $sha256 = hash_hmac('sha256', $data, $key, false);
     //     $base64 = base64_encode($sha256);
-    //     return $base64 . " - " . $timestamp_now;
+    //     dd($base64 . ' - ' . $timestamp_now . ' - ' . $data);
     // }
 
     public function index()
