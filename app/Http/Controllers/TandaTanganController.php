@@ -73,10 +73,13 @@ class TandaTanganController extends Controller
 
         return DataTables::of($data)
             ->addColumn('action', function ($p) {
-                if ($p->status_ttd == 1) {
-                    return "<a href='" . route($this->route . 'report', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
+                $path_sftp = 'file_ttd_skrd/';
+                $fileName  =  $p->nm_wajib_pajak . ' - ' . $p->no_skrd . ".pdf";
+
+                if ($p->status_ttd == 0) {
+                    return '-';
                 } else {
-                    return "";
+                    return "<a href='" . config('app.sftp_src') . $path_sftp . $fileName . "' target='_blank' class='text-success'><i class='icon-document-file-pdf'></i></a>";
                 }
             })
             ->editColumn('no_skrd', function ($p) {
@@ -186,12 +189,6 @@ class TandaTanganController extends Controller
          * 1 = Sudah 
          */
 
-        // Token Godem
-        $token_godem = $this->getTokenGodam($id, $nip_ttd);
-
-        // Sertifikat 
-        $id_cert = $this->getListCert($id, $nip_ttd);
-
         if ($data->status_ttd == 0) {
             $terbilang = Html_number::terbilang($data->total_bayar) . 'rupiah';
 
@@ -217,6 +214,12 @@ class TandaTanganController extends Controller
 
             // Save PDF to local storage
             Storage::put($path_local . $fileName, $content);
+
+            // Token Godem
+            $token_godem = $this->getTokenGodam($id, $nip_ttd);
+
+            // Sertifikat 
+            $id_cert = $this->getListCert($id, $nip_ttd);
         }
 
         return view($this->view . 'show', compact(
@@ -237,14 +240,14 @@ class TandaTanganController extends Controller
         $dataSKRD = TransaksiOPD::find($id);
 
         $fileName   =  $dataSKRD->nm_wajib_pajak . ' - ' . $dataSKRD->no_skrd . ".pdf";
-        $path_local = 'app/public/file_skrd/';
+        $path_local = 'app/public/';
         $path_sftp  = 'file_ttd_skrd/';
 
         /**
          * Process TTE
          */
-        $pdf = storage_path($path_local . $fileName);
-        $qrimage_path = storage_path('app/public/transparan.png');
+        $pdf = storage_path($path_local . 'file_skrd/' . $fileName);
+        $qrimage_path = storage_path($path_local . 'transparan.png');
 
         // Data / Payload
         $data = [

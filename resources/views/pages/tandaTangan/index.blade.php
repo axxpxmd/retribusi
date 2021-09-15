@@ -77,7 +77,7 @@
                                             <th width="10%">Tanggal SKRD</th>
                                             <th width="10%">Masa Berlaku SKRD</th>
                                             <th width="10%">Ketetapan</th>
-                                            <th width="5%"></th>
+                                            <th width="5%">File TTD</th>
                                         </thead>
                                         <tbody></tbody>
                                     </table>

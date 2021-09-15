@@ -28,7 +28,7 @@
                 @role('super-admin|admin-bjb')
                     @include('pages.dashboard.card1')
                 @endrole
-                @role('admin-opd|bendahara-opd|operator-opd')
+                @role('admin-opd|bendahara-opd|operator-opd|penandatangan')
                     @include('pages.dashboard.card2')
                 @endrole
                 @role('super-admin|admin-bjb')
