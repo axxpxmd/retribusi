@@ -120,7 +120,7 @@ class TandaTanganController extends Controller
                 } else {
                     return redirect()
                         ->route($this->route . 'show', \Crypt::encrypt($id))
-                        ->withErrors('Tidak memiliki sertifikat terdaftar.');
+                        ->withErrors('TTE Gagal, Tidak memiliki sertifikat terdaftar.');
                 }
             } else {
                 $msg = '';
@@ -133,7 +133,7 @@ class TandaTanganController extends Controller
         } else {
             return redirect()
                 ->route($this->route . 'show', \Crypt::encrypt($id))
-                ->withErrors('NIP kosong, Silahkan isi pada menu OPD.');
+                ->withErrors('TTE Gagal. NIP kosong, Silahkan isi pada menu OPD.');
         }
     }
 
@@ -153,7 +153,7 @@ class TandaTanganController extends Controller
                 }
                 return redirect()
                     ->route($this->route . 'show', \Crypt::encrypt($id))
-                    ->withErrors('Gagal membuat token godam. refresh halaman atau silahkan hubungi administrator');
+                    ->withErrors('TTE Gagal, Gagal membuat token godam. refresh halaman atau silahkan hubungi administrator');
             } else {
                 $msg = '';
                 if (isset($res['error']))
@@ -165,7 +165,7 @@ class TandaTanganController extends Controller
         } else {
             return redirect()
                 ->route($this->route . 'show', \Crypt::encrypt($id))
-                ->withErrors('NIP kosong, Silahkan isi pada menu OPD.');
+                ->withErrors('TTE Gagal. NIP kosong, Silahkan isi pada menu OPD.');
         }
     }
 
@@ -188,7 +188,6 @@ class TandaTanganController extends Controller
          * 0 = Belum
          * 1 = Sudah 
          */
-
         if ($data->status_ttd == 0) {
             $terbilang = Html_number::terbilang($data->total_bayar) . 'rupiah';
 
@@ -260,7 +259,7 @@ class TandaTanganController extends Controller
             'lly'  => 795,
             'page' => 1,
             'idkeystore' => $request->id_cert,
-            'reason'     => 'Tanda Tangan Digital Retribusi',
+            'reason'     => 'Tanda Tangan DigitallmnRetribusi',
             'location'   => 'Tangerang Selatan',
             'updated_at' => ''
         ];
@@ -306,5 +305,22 @@ class TandaTanganController extends Controller
         return redirect()
             ->route($this->route . 'show', \Crypt::encrypt($id))
             ->withErrors("Terjadi kegagalan dalam memuat tandatangan digital. Error Code " . $res->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator");
+    }
+
+    public function printData(Request $request, $id)
+    {
+        $id = \Crypt::decrypt($id);
+
+        $data = TransaksiOPD::find($id);
+        $terbilang = Html_number::terbilang($data->total_bayar) . 'rupiah';
+
+        $pdf = app('dompdf.wrapper');
+        $pdf->getDomPDF()->set_option("enable_php", true);
+        $pdf->loadView('pages.skrd.report', compact(
+            'data',
+            'terbilang'
+        ));
+
+        return $pdf->stream($data->nm_wajib_pajak . '-' . $data->no_skrd . ".pdf");
     }
 }

@@ -217,15 +217,14 @@
                                         <label class="col-md-2 text-right s-12"></label>
                                         <label class="col-md-3 s-12">
                                             @if ($data->status_ttd == 0)
-                                                <button class="btn btn-sm btn-success" data-toggle="modal" data-target="#preview-file"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</button>
+                                                <button class="btn btn-sm btn-success" data-toggle="modal" data-target="#preview-file"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</button> 
                                                 @if (count($errors) > 0)
                                                 <button class="btn btn-sm btn-primary" onclick="alertSend()"><i class="icon-pencil mr-2"></i>TandaTangani</button>
                                                 @else
-                                                <button class="btn btn-sm btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg"><i class="icon-pencil mr-2"></i>TandaTangani</button>
+                                                <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#tte"><i class="icon-pencil mr-2"></i>TandaTangani</button>
                                                 @endif
                                             @else
-                                            <button class="btn btn-sm btn-success" data-toggle="modal" data-target="#preview-file"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</button>
-                                            <a href="{{ config('app.sftp_src').$path_sftp.$fileName }}" target="_blank" class="btn btn-sm btn-primary"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</a>    
+                                            <button class="btn btn-sm btn-success" data-toggle="modal" data-target="#preview-file"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</button> 
                                             @endif
                                         </label>
                                     </div> 
@@ -241,12 +240,16 @@
     <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="preview-file" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
+                @if ($data->status_ttd == 0)
+                <iframe src="{{ route('tanda-tangan.printData', \Crypt::encrypt($data->id)) }}" width="850px" height="850px"></iframe>
+                @else
                 <iframe src="{{ config('app.sftp_src').$path_sftp.$fileName }}" width="850px" height="850px"></iframe>
+                @endif
             </div>
         </div>
     </div>
     <!-- Form TTE -->
-    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal fade bd-example-modal-lg" id="tte" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="card">
