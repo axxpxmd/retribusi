@@ -173,7 +173,7 @@ class STSController extends Controller
             'status_bayar' => 'required'
         ]);
 
-        $id = \Crypt::decrypt($id);
+        $id   = \Crypt::decrypt($id);
         $data = TransaksiOPD::find($id);
         $role = Auth::user()->pengguna->modelHasRole->role->name;
 
@@ -199,7 +199,7 @@ class STSController extends Controller
                     'tgl_bayar'    => null,
                     'no_bku'       => null,
                     // 'tgl_bku'   => $request->tgl_bku,
-                    'chanel_bayar' => null,
+                    'chanel_bayar' => $request->chanel_bayar,
                     'ntb'    => null,
                     'denda'  => 0,
                     'diskon' => null,
@@ -236,7 +236,7 @@ class STSController extends Controller
         } else {
             $total_bayar_final = $data->total_bayar;
         }
-        $terbilang  = Html_number::terbilang($total_bayar_final) . 'rupiah';
+        $terbilang = Html_number::terbilang($total_bayar_final) . 'rupiah';
 
         // Update Jumlah Cetak
         $this->updateJumlahCetak($id, $data->jumlah_cetak);
@@ -246,7 +246,7 @@ class STSController extends Controller
         $pdf->loadView($this->view . 'report', compact(
             'data',
             'terbilang',
-            'total_bayar_final',
+            'total_bayar_final'
         ));
 
         return $pdf->stream($data->nm_wajib_pajak . ' - ' . $data->no_skrd . ".pdf");
