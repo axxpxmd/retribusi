@@ -65,7 +65,8 @@ class SKRDController extends Controller
     {
         $from  = $request->tgl_skrd;
         $to    = $request->tgl_skrd1;
-        $no_skrd = $request->no_skrd;
+        $no_skrd    = $request->no_skrd;
+        $status_ttd = $request->status_ttd;
 
         $checkOPD = Auth::user()->pengguna->opd_id;
         if ($checkOPD == 0 || $checkOPD == 99999) {
@@ -74,7 +75,7 @@ class SKRDController extends Controller
             $opd_id = $checkOPD;
         }
 
-        $data = TransaksiOPD::querySKRD($from, $to, $opd_id, $no_skrd);
+        $data = TransaksiOPD::querySKRD($from, $to, $opd_id, $no_skrd, $status_ttd);
 
         return DataTables::of($data)
             ->addColumn('action', function ($p) {
@@ -87,9 +88,7 @@ class SKRDController extends Controller
                         <a href='" . route($this->route . 'edit', Crypt::encrypt($p->id)) . "' class='text-primary mr-2' title='Edit Data'><i class='icon icon-edit'></i></a>
                         <a href='" . route($this->route . 'report', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
                     } else {
-                        return "
-                        <a href='#' onclick='remove(" . $p->id . ")' class='text-danger mr-2' title='Hapus Data'><i class='icon icon-remove'></i></a>
-                        <a href='" . route($this->route . 'edit', Crypt::encrypt($p->id)) . "' class='text-primary' title='Edit Data'><i class='icon icon-edit'></i></a>";
+                        return "-";
                     }
                 } else {
                     if ($p->status_ttd == 0) {
@@ -120,9 +119,9 @@ class SKRDController extends Controller
                 $fileName  =  $p->nm_wajib_pajak . ' - ' . $p->no_skrd . ".pdf";
 
                 if ($p->status_ttd == 0) {
-                    return '-';
+                    return 'Belum TTD';
                 } else {
-                    return "<a href='" . config('app.sftp_src') . $path_sftp . $fileName . "' target='_blank' class='text-success'><i class='icon-document-file-pdf'></i></a>";
+                    return "Sudah TTD " . " ( <a href='" . config('app.sftp_src') . $path_sftp . $fileName . "' target='_blank' class='text-success' title='File TTD'><i class='icon-document-file-pdf'></i></a> ) ";
                 }
             })
             ->addIndexColumn()
@@ -491,5 +490,34 @@ class SKRDController extends Controller
         return response()->json([
             'message' => 'Data ' . $this->title . ' berhasil dihapus.'
         ]);
+    }
+
+    public function updateStatusKirimTTD(Request $request)
+    {
+        $checkOPD = Auth::user()->pengguna->opd_id;
+        if ($checkOPD == 0 || $checkOPD == 99999) {
+            $opd_id = $request->opd_id;
+        } else {
+            $opd_id = $checkOPD;
+        }
+
+        $from  = $request->tgl_skrd;
+        $to    = $request->tgl_skrd1;
+        $no_skrd    = $request->no_skrd;
+        $status_ttd = $request->status_ttd;
+
+        $datas = TransaksiOPD::querySKRD($from, $to, $opd_id, $no_skrd, $status_ttd);
+        $dataLength = count($datas);
+
+        // process kirim TTD
+        for ($i = 0; $i < $dataLength; $i++) {
+            $datas[$i]->update([
+                'status_kirim_ttd' => 1
+            ]);
+        }
+
+        return redirect()
+            ->route($this->route . 'index')
+            ->withSuccess('Selamat! ' . $dataLength . ' Data berhasil dikirim untuk ditandatangan.');
     }
 }

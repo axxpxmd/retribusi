@@ -60,7 +60,8 @@ class TandaTanganController extends Controller
     {
         $from  = $request->tgl_skrd;
         $to    = $request->tgl_skrd1;
-        $no_skrd = $request->no_skrd;
+        $no_skrd    = $request->no_skrd;
+        $status_ttd = $request->status_ttd;
 
         $checkOPD = Auth::user()->pengguna->opd_id;
         if ($checkOPD == 0 || $checkOPD == 99999) {
@@ -69,10 +70,10 @@ class TandaTanganController extends Controller
             $opd_id = $checkOPD;
         }
 
-        $data = TransaksiOPD::queryTandaTangan($from, $to, $opd_id, $no_skrd);
+        $data = TransaksiOPD::queryTandaTangan($from, $to, $opd_id, $no_skrd, $status_ttd);
 
         return DataTables::of($data)
-            ->addColumn('action', function ($p) {
+            ->addColumn('file_ttd', function ($p) {
                 $path_sftp = 'file_ttd_skrd/';
                 $fileName  =  $p->nm_wajib_pajak . ' - ' . $p->no_skrd . ".pdf";
 
@@ -100,8 +101,18 @@ class TandaTanganController extends Controller
             ->editColumn('jumlah_bayar', function ($p) {
                 return 'Rp. ' . number_format($p->jumlah_bayar);
             })
+            ->addColumn('status_ttd', function ($p) {
+                $path_sftp = 'file_ttd_skrd/';
+                $fileName  =  $p->nm_wajib_pajak . ' - ' . $p->no_skrd . ".pdf";
+
+                if ($p->status_ttd == 0) {
+                    return 'Belum TTD';
+                } else {
+                    return "Sudah TTD";
+                }
+            })
             ->addIndexColumn()
-            ->rawColumns(['action', 'no_skrd', 'id_opd', 'id_jenis_pendapatan', 'tgl_skrd', 'masa_berlaku'])
+            ->rawColumns(['file_ttd', 'no_skrd', 'id_opd', 'id_jenis_pendapatan', 'tgl_skrd', 'masa_berlaku', 'status_ttd'])
             ->toJson();
     }
 

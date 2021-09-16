@@ -50,6 +50,16 @@
                             </div>
                         </div> 
                         <div class="form-group row" style="margin-top: -8px !important">
+                            <label for="status_ttd" class="col-form-label s-12 col-md-4 text-right font-weight-bolder">Status TTD : </label>
+                            <div class="col-sm-4">
+                                <select name="status_ttd" id="status_ttd" class="select2 form-control r-0 light s-12">
+                                    <option value=""></option>
+                                    <option value="0">Belum diTTD</option>
+                                    <option value="1">Sudah diTTD</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row" style="margin-top: -8px !important">
                             <label class="col-form-label s-12 col-md-4 text-right font-weight-bolder">Tanggal SKRD:</label>
                             <div class="col-sm-5 row">
                                 <input type="date" placeholder="MM/DD/YYYY" value="{{ $today }}" name="tgl_skrd" id="tgl_skrd" class="form-control r-0 light s-12 col-md-4 ml-3" autocomplete="off"/>
@@ -61,6 +71,7 @@
                             <label class="col-form-label s-12 col-md-4 text-right font-weight-bolder"></label>
                             <div class="col-sm-5 row">
                                 <button class="btn btn-success btn-sm ml-3" onclick="pressOnChange()"><i class="icon-filter mr-2"></i>Filter</button>
+                                <a href="#" data-toggle="modal" onclick="createRoute()" data-target="#exampleModalCenter" class="btn btn-sm btn-primary ml-2"><i class="icon-pencil mr-2"></i>Kirim untuk TTD</a>
                             </div>
                         </div>
                     </div>
@@ -72,17 +83,17 @@
                                 <div class="table-responsive">
                                     <table id="dataTable" class="table display nowrap table-striped table-bordered" style="width:100%">
                                         <thead>
-                                            <th width="5%">No</th>
-                                            <th width="8%">Nomor SKRD</th>
-                                            <th width="8%">Nomor Bayar</th>
-                                            <th width="2%">Nama WP</th>
-                                            <th width="21%">Nama Dinas</th>
-                                            <th width="21%">Jenis Retribusi</th>
-                                            <th width="10%">Tanggal SKRD</th>
-                                            <th width="10%">Masa Berlaku SKRD</th>
-                                            <th width="10%">Ketetapan</th>
-                                            <th width="5%">Aksi</th>
-                                            <th width="5%">File TTD</th>
+                                            <th>No</th>
+                                            <th>Nomor SKRD</th>
+                                            <th>Nomor Bayar</th>
+                                            <th>Nama WP</th>
+                                            {{-- <th width="21%">Nama Dinas</th> --}}
+                                            <th>Jenis Retribusi</th>
+                                            <th>Tanggal SKRD</th>
+                                            <th>Masa Berlaku SKRD</th>
+                                            <th>Ketetapan</th>
+                                            <th>Aksi</th>
+                                            <th>Status TTD</th>
                                         </thead>
                                         <tbody></tbody>
                                     </table>
@@ -138,6 +149,19 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p class="font-weight-bold">Apakah sudah yakin mengirim data ini untuk ditandatangi ?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="icon-times mr-2"></i>Close</button>
+                 <a href="{{ route('skrd.updateStatusKirimTTD') }}" class="btn btn-sm btn-primary ml-2" id="kirimTTD"><i class="icon-pencil mr-2"></i>Kirim untuk TTD</a>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 @section('script')
 <script type="text/javascript">
@@ -157,10 +181,11 @@
             url: "{{ route($route.'api') }}",
             method: 'POST',
             data: function (data) {
-                data.tgl_skrd = $('#tgl_skrd').val();
-                data.tgl_skrd1 = $('#tgl_skrd1').val();
-                data.opd_id = $('#opd').val();
-                data.no_skrd = $('#no_skrd').val();
+                data.tgl_skrd   = $('#tgl_skrd').val();
+                data.tgl_skrd1  = $('#tgl_skrd1').val();
+                data.opd_id     = $('#opd').val();
+                data.no_skrd    = $('#no_skrd').val();
+                data.status_ttd = $('#status_ttd').val();
             }
         },
         columns: [
@@ -168,7 +193,7 @@
             {data: 'no_skrd', name: 'no_skrd'},
             {data: 'no_bayar', name: 'no_bayar'},
             {data: 'nm_wajib_pajak', name: 'nm_wajib_pajak'},
-            {data: 'id_opd', name: 'id_opd'},
+            // {data: 'id_opd', name: 'id_opd'},
             {data: 'id_jenis_pendapatan', name: 'id_jenis_pendapatan'},
             {data: 'tgl_skrd', name: 'tgl_skrd'},
             {data: 'masa_berlaku', name: 'masa_berlaku'},
@@ -248,6 +273,16 @@
                 cancel: function(){}
             }
         });
+    }
+
+    function createRoute(){
+        var tgl_skrd   = $('#tgl_skrd').val();
+        var tgl_skrd1  = $('#tgl_skrd1').val();
+        var opd_id     = $('#opd').val();
+        var no_skrd    = $('#no_skrd').val();
+        var status_ttd = $('#status_ttd').val();
+
+        $('#kirimTTD').attr('href', "{{ route('skrd.updateStatusKirimTTD') }}?tgl_skrd=" + tgl_skrd + "&tgl_skrd1=" + tgl_skrd1 + "&opd_id=" + opd_id + "&status_ttd=" + status_ttd + "&no_skrd=" + no_skrd);
     }
 </script>
 @endsection

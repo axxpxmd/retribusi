@@ -146,7 +146,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="icon-times mr-2"></i>Close</button>
-                <a href="{{ route('diskon.updateDiskon') }}" class="btn btn-sm btn-primary" id="exportpdf"><i class="icon-system_update_alt mr-2"></i>Update Data</a>
+                <a href="{{ route('diskon.updateDiskon') }}" class="btn btn-sm btn-primary" id="updateDiskon"><i class="icon-system_update_alt mr-2"></i>Update Data</a>
             </div>
         </div>
     </div>
@@ -231,7 +231,7 @@
         var status_diskon = $('#status_diskon').val();
         var diskon = $('#diskon').val();
 
-        $('#exportpdf').attr('href', "{{ route('diskon.updateDiskon') }}?tgl_skrd=" + tgl_skrd + "&tgl_skrd1=" + tgl_skrd1 + "&opd_id=" + opd_id + "&jenis_pendapatan_id=" + jenis_pendapatan_id + "&status_diskon_filter=" + status_diskon_filter + "&status_diskon=" + status_diskon + "&diskon=" + diskon + "&no_skrd=" + no_skrd)
+        $('#updateDiskon').attr('href', "{{ route('diskon.updateDiskon') }}?tgl_skrd=" + tgl_skrd + "&tgl_skrd1=" + tgl_skrd1 + "&opd_id=" + opd_id + "&jenis_pendapatan_id=" + jenis_pendapatan_id + "&status_diskon_filter=" + status_diskon_filter + "&status_diskon=" + status_diskon + "&diskon=" + diskon + "&no_skrd=" + no_skrd)
     }
 
     function pressOnChange(){

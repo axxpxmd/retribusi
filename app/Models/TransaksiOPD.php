@@ -143,7 +143,7 @@ class TransaksiOPD extends Model
     }
 
     // 
-    public static function querySKRD($from, $to, $opd_id, $no_skrd)
+    public static function querySKRD($from, $to, $opd_id, $no_skrd, $status_ttd)
     {
         $data = TransaksiOPD::where('status_bayar', 0)->orderBy('id', 'DESC');
 
@@ -153,6 +153,10 @@ class TransaksiOPD extends Model
 
         if ($no_skrd != null) {
             $data->where('no_skrd', 'like', '%' . $no_skrd . '%');
+        }
+
+        if ($status_ttd != null) {
+            $data->where('status_ttd', $status_ttd);
         }
 
         if ($from != null ||  $to != null) {
@@ -205,9 +209,11 @@ class TransaksiOPD extends Model
     }
 
     // 
-    public static function queryTandaTangan($from, $to, $opd_id, $no_skrd)
+    public static function queryTandaTangan($from, $to, $opd_id, $no_skrd, $status_ttd)
     {
-        $data = TransaksiOPD::where('status_bayar', 0)->orderBy('id', 'DESC');
+        $data = TransaksiOPD::where('status_bayar', 0)
+            ->where('status_kirim_ttd', 1)
+            ->orderBy('id', 'DESC');
 
         if ($opd_id != 0) {
             $data->where('id_opd', $opd_id);
@@ -215,6 +221,10 @@ class TransaksiOPD extends Model
 
         if ($no_skrd != null) {
             $data->where('no_skrd', 'like', '%' . $no_skrd . '%');
+        }
+
+        if ($status_ttd != null) {
+            $data->where('status_ttd', $status_ttd);
         }
 
         if ($from != null ||  $to != null) {
