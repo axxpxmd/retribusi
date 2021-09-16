@@ -23,39 +23,37 @@ class HomeController extends Controller
         $this->middleware('auth');
     }
 
-    // public function index1()
-    // {
-    //     $timestamp_now = Carbon::now()->timestamp;
-    //     $timestamp_1hour = Carbon::now()->addHour()->timestamp;
-    //     $url = 'http://10.31.224.34:23808/oauth/client/token';
+    public function index1()
+    {
+        $timestamp_now = Carbon::now()->timestamp;
+        $timestamp_1hour = Carbon::now()->addHour()->timestamp;
+        $url = 'http://10.31.224.34:23808/';
 
-    //     $key = "pUyzZIK_YUlX3VqFC5WQJYeqM5A9ceokMFwtOCcb2R0";
-    //     $client_id = "XXR4SKMQ";
-    //     $payload = array(
-    //         "sub" => "va-online",
-    //         "aud" => "access-token",
-    //         "iat" => $timestamp_now,
-    //         "exp" => $timestamp_1hour
-    //     );
+        $key = "pUyzZIK_YUlX3VqFC5WQJYeqM5A9ceokMFwtOCcb2R0";
+        $client_id = "XXR4SKMQ";
+        $payload   = array(
+            "sub" => "va-online",
+            "aud" => "access-token",
+            "iat" => $timestamp_now,
+            "exp" => $timestamp_1hour
+        );
 
-    //     /**
-    //      * Get Token
-    //      */
-    //     // $jwt = JWT::encode($payload, $key); // JWT Header, JWT Claims, Signature
-    //     // $response = Http::contentType("text/plain")->send('POST', $url, [
-    //     //     'body' => $jwt
-    //     // ])->json();
-    //     // dd($response);
+        /**
+         * Get Token
+         */
+        $jwt = JWT::encode($payload, $key); // JWT Header, JWT Claims, Signature
+        $response = Http::contentType("text/plain")->send('POST', $url . 'oauth/client/token', [
+            'body' => $jwt
+        ])->json();
 
-    //     /**
-    //      * Create VA
-    //      */
-    //     $data = 'path=/billing&method=POST&token=nR6jsoXQKNlywPkS-k-NX4vIVcYOkUknLq1i4q8J07U&timestamp=' . $timestamp_now . '&body={"client_id":"XXR4SKMQ"}';
+        /**
+         * Create VA
+         */
+        $data = 'path=/billing&method=POST&token=' . $response['data'] . '&timestamp=' . $timestamp_now . '&body={"cin":"065","client_type":"1","product_code":"01","billing_type":"f","va_type":"a","client_refnum":"0909211900005","amount":"800000","currency":"360","expired_date":"2021-09-30 14:00:00","customer_name":"Asip Hamdi","customer_email":"asiphamdi13@gmail.com","customer_phone":"083897229273","description":"test"}';
 
-    //     $sha256 = hash_hmac('sha256', $data, $key, false);
-    //     $base64 = base64_encode($sha256);
-    //     dd($base64 . ' - ' . $timestamp_now . ' - ' . $data);
-    // }
+        $sha256 = hash_hmac('sha256', $data, $key);
+        dd($sha256 . ' - ' . $response['data'] . ' - ' . $timestamp_now . ' - ' . $data);
+    }
 
     public function index()
     {
