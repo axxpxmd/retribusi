@@ -145,7 +145,7 @@
                 <p class="font-weight-bold">Apakah anda yakin ingin mengupdate data ini?</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="icon-times mr-2"></i>Close</button>
+                <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="icon-times mr-2"></i>Batalkan</button>
                 <a href="{{ route('diskon.updateDiskon') }}" class="btn btn-sm btn-primary" id="updateDiskon"><i class="icon-system_update_alt mr-2"></i>Update Data</a>
             </div>
         </div>
