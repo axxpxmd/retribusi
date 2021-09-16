@@ -71,7 +71,7 @@
                             <label class="col-form-label s-12 col-md-4 text-right font-weight-bolder"></label>
                             <div class="col-sm-5 row">
                                 <button class="btn btn-success btn-sm ml-3" onclick="pressOnChange()"><i class="icon-filter mr-2"></i>Filter</button>
-                                <a href="#" data-toggle="modal" onclick="createRoute()" data-target="#exampleModalCenter" class="btn btn-sm btn-primary ml-2"><i class="icon-pencil mr-2"></i>Kirim untuk TTD</a>
+                                {{-- <a href="#" data-toggle="modal" onclick="createRoute()" data-target="#exampleModalCenter" class="btn btn-sm btn-primary ml-2"><i class="icon-pencil mr-2"></i>Kirim untuk TTD</a> --}}
                             </div>
                         </div>
                     </div>
@@ -157,7 +157,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="icon-times mr-2"></i>Close</button>
-                 <a href="{{ route('skrd.updateStatusKirimTTD') }}" class="btn btn-sm btn-primary ml-2" id="kirimTTD"><i class="icon-pencil mr-2"></i>Kirim untuk TTD</a>
+                 <a href="{{ route('skrd.updateStatusKirimTTDs') }}" class="btn btn-sm btn-primary ml-2" id="kirimTTD"><i class="icon-pencil mr-2"></i>Kirim untuk TTD</a>
             </div>
         </div>
     </div>
@@ -282,7 +282,7 @@
         var no_skrd    = $('#no_skrd').val();
         var status_ttd = $('#status_ttd').val();
 
-        $('#kirimTTD').attr('href', "{{ route('skrd.updateStatusKirimTTD') }}?tgl_skrd=" + tgl_skrd + "&tgl_skrd1=" + tgl_skrd1 + "&opd_id=" + opd_id + "&status_ttd=" + status_ttd + "&no_skrd=" + no_skrd);
+        $('#kirimTTD').attr('href', "{{ route('skrd.updateStatusKirimTTDs') }}?tgl_skrd=" + tgl_skrd + "&tgl_skrd1=" + tgl_skrd1 + "&opd_id=" + opd_id + "&status_ttd=" + status_ttd + "&no_skrd=" + no_skrd);
     }
 </script>
 @endsection

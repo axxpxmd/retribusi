@@ -73,7 +73,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('skrd/get-kode-rekening/{id_rincian_jenis_pendapatan}', 'SKRDController@getKodeRekening')->name('skrd.getKodeRekening');
     Route::get('skrd/get-kelurahan/{id}', 'SKRDController@kelurahanByKecamatan')->name('skrd.kelurahanByKecamatan');
     Route::get('skrd/report/{id}', 'SKRDController@printData')->name('skrd.report');
-    Route::get('update-status-kirim-ttd', 'SKRDController@updateStatusKirimTTD')->name('skrd.updateStatusKirimTTD');
+    Route::get('update-status-kirim-ttd/{id}', 'SKRDController@updateStatusKirimTTD')->name('skrd.updateStatusKirimTTD');
+    Route::get('update-status-kirim-ttds', 'SKRDController@updateStatusKirimTTDs')->name('skrd.updateStatusKirimTTDs');
 
     // STS
     Route::resource('sts', 'STSController');

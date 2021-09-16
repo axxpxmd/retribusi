@@ -88,7 +88,7 @@
                                             <th>Masa Berlaku SKRD</th>
                                             <th>Ketetapan</th>
                                             <th>File TTD</th>
-                                            <th>
+                                            <th>Status</th>
                                         </thead>
                                         <tbody></tbody>
                                     </table>

@@ -77,10 +77,10 @@ class TandaTanganController extends Controller
                 $path_sftp = 'file_ttd_skrd/';
                 $fileName  =  $p->nm_wajib_pajak . ' - ' . $p->no_skrd . ".pdf";
 
-                if ($p->status_ttd == 0) {
+                if ($p->status_ttd == 0 || $p->status_ttd == 2) {
                     return '-';
                 } else {
-                    return "<a href='" . config('app.sftp_src') . $path_sftp . $fileName . "' target='_blank' class='text-success'><i class='icon-document-file-pdf'></i></a>";
+                    return "<a href='" . config('app.sftp_src') . $path_sftp . $fileName . "' target='_blank' class='cyan-text'><i class='icon-document-file-pdf2'></i></a>";
                 }
             })
             ->editColumn('no_skrd', function ($p) {
@@ -102,10 +102,7 @@ class TandaTanganController extends Controller
                 return 'Rp. ' . number_format($p->jumlah_bayar);
             })
             ->addColumn('status_ttd', function ($p) {
-                $path_sftp = 'file_ttd_skrd/';
-                $fileName  =  $p->nm_wajib_pajak . ' - ' . $p->no_skrd . ".pdf";
-
-                if ($p->status_ttd == 0) {
+                if ($p->status_ttd == 0 || $p->status_ttd == 2) {
                     return 'Belum TTD';
                 } else {
                     return "Sudah TTD";
@@ -289,7 +286,7 @@ class TandaTanganController extends Controller
                 if ($res['data']) {
                     // Update status TTD
                     $dataSKRD->update([
-                        'status_ttd' => 1
+                        'status_ttd' => 1,
                     ]);
 
                     // Save to local storage (file already TTE)

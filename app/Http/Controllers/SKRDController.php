@@ -94,6 +94,7 @@ class SKRDController extends Controller
                     if ($p->status_ttd == 0) {
                         return $report;
                     }
+                    return '-';
                 }
             })
             ->editColumn('no_skrd', function ($p) {
@@ -119,9 +120,11 @@ class SKRDController extends Controller
                 $fileName  =  $p->nm_wajib_pajak . ' - ' . $p->no_skrd . ".pdf";
 
                 if ($p->status_ttd == 0) {
-                    return 'Belum TTD';
-                } else {
-                    return "Sudah TTD " . " ( <a href='" . config('app.sftp_src') . $path_sftp . $fileName . "' target='_blank' class='text-success' title='File TTD'><i class='icon-document-file-pdf'></i></a> ) ";
+                    return "Belum TTD" . " ( <a href='" . route($this->route . 'updateStatusKirimTTD', Crypt::encrypt($p->id)) . "' class='amber-text' title='Kirim Untuk TTD'><i class='icon icon-send'></i></a> ) ";
+                } elseif ($p->status_ttd == 1) {
+                    return "Sudah TTD " . " ( <a href='" . config('app.sftp_src') . $path_sftp . $fileName . "' target='_blank' class='cyan-text' title='File TTD'><i class='icon-document-file-pdf2'></i></a> ) ";
+                } elseif ($p->status_ttd == 2) {
+                    return "Sedang Proses TTD";
                 }
             })
             ->addIndexColumn()
@@ -492,7 +495,21 @@ class SKRDController extends Controller
         ]);
     }
 
-    public function updateStatusKirimTTD(Request $request)
+    public function updateStatusKirimTTD($id)
+    {
+        $id = \Crypt::decrypt($id);
+
+        $data = TransaksiOPD::find($id);
+        $data->update([
+            'status_ttd' => 2
+        ]);
+
+        return redirect()
+            ->route($this->route . 'index')
+            ->withSuccess('Selamat! Data berhasil dikirim untuk ditandatangan.');
+    }
+
+    public function updateStatusKirimTTDs(Request $request)
     {
         $checkOPD = Auth::user()->pengguna->opd_id;
         if ($checkOPD == 0 || $checkOPD == 99999) {
@@ -519,7 +536,7 @@ class SKRDController extends Controller
         // process kirim TTD
         for ($i = 0; $i < $dataLength; $i++) {
             $datas[$i]->update([
-                'status_kirim_ttd' => 1
+                'status_ttd' => 2
             ]);
         }
 
