@@ -144,6 +144,12 @@ class DiskonController extends Controller
                 ->withErrors('Silahkan pilih diskon.');
         }
 
+        // check data if empty
+        if ($dataLength == 0)
+            return redirect()
+                ->route($this->route . 'index')
+                ->withErrors('Tidak ada data yang diupdate, pastikan filter data sudah sesuai.');
+
         /**
          * * Check
          * 0 = Tidak Diskon

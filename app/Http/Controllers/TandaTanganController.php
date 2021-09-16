@@ -144,7 +144,7 @@ class TandaTanganController extends Controller
         } else {
             return redirect()
                 ->route($this->route . 'show', \Crypt::encrypt($id))
-                ->withErrors('TTE Gagal. NIP kosong, Silahkan isi pada menu OPD.');
+                ->withErrors('TTE Gagal. NIP kosong, Silahkan edit data SKRD.');
         }
     }
 
@@ -176,7 +176,7 @@ class TandaTanganController extends Controller
         } else {
             return redirect()
                 ->route($this->route . 'show', \Crypt::encrypt($id))
-                ->withErrors('TTE Gagal. NIP kosong, Silahkan isi pada menu OPD.');
+                ->withErrors('TTE Gagal. NIP kosong, Silahkan edit data SKRD.');
         }
     }
 

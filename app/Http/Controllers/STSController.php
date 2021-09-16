@@ -73,14 +73,6 @@ class STSController extends Controller
 
         return DataTables::of($data)
             ->addColumn('action', function ($p) {
-                // if ($p->status_ttd == 0) {
-                //     return "
-                //         <a href='" . route($this->route . 'edit', Crypt::encrypt($p->id)) . "' class='text-primary mr-2' title='Edit Data'><i class='icon icon-edit'></i></a>
-                //         <a href='" . route($this->route . 'report', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
-                // } else {
-                //     return "
-                //         <a href='#' onclick='remove(" . $p->id . ")' class='text-danger mr-2' title='Hapus Data'><i class='icon icon-remove'></i></a>";
-                // }
                 return "
                     <a href='" . route($this->route . 'edit', Crypt::encrypt($p->id)) . "' class='text-primary mr-2' title='Edit Data'><i class='icon icon-edit'></i></a>
                     <a href='" . route($this->route . 'report', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
@@ -113,10 +105,8 @@ class STSController extends Controller
             })
             ->editColumn('status_bayar', function ($p) {
                 if ($p->status_bayar == 1) {
-                    // return "Sudah Dibayar <i class='icon icon-check-circle text-primary'></i>";
                     return 'Sudah Dibayar';
                 } else {
-                    // return "Belum Dibayar <i class='icon icon-times-circle text-danger'></i>";
                     return 'Belum Dibayar';
                 }
             })

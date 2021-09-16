@@ -501,6 +501,7 @@ class SKRDController extends Controller
             $opd_id = $checkOPD;
         }
 
+        // For Filter
         $from  = $request->tgl_skrd;
         $to    = $request->tgl_skrd1;
         $no_skrd    = $request->no_skrd;
@@ -508,6 +509,12 @@ class SKRDController extends Controller
 
         $datas = TransaksiOPD::querySKRD($from, $to, $opd_id, $no_skrd, $status_ttd);
         $dataLength = count($datas);
+
+        // check data if empty
+        if ($dataLength == 0)
+            return redirect()
+                ->route($this->route . 'index')
+                ->withErrors('Tidak ada data yang dikirim, pastikan filter data sudah sesuai.');
 
         // process kirim TTD
         for ($i = 0; $i < $dataLength; $i++) {
