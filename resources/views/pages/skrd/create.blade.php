@@ -41,6 +41,7 @@
                                     <input type="hidden" name="no_skrd" value="{{ $no_skrd }}">
                                     {{-- <input type="hidden" name="nip_ttd" value="{{ $opd->nip_ttd }}"> --}}
                                     <input type="hidden" name="no_bayar" value="{{ $no_bayar }}">
+                                    <input type="hidden" name="token_bjb" value="{{ $tokenBJB }}">
                                     <div class="form-row form-inline">
                                         <div class="col-md-12">
                                             <div class="row">

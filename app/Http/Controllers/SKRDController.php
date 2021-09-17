@@ -24,12 +24,16 @@ use App\Models\TransaksiOPD;
 use App\Models\JenisPendapatan;
 use App\Models\OPDJenisPendapatan;
 use App\Models\RincianJenisPendapatan;
+use Maatwebsite\Excel\Concerns\ToArray;
 
 class SKRDController extends Controller
 {
-    protected $route = 'skrd.';
-    protected $title = 'SKRD';
-    protected $view  = 'pages.skrd.';
+    protected $route  = 'skrd.';
+    protected $title  = 'SKRD';
+    protected $view   = 'pages.skrd.';
+    protected $urlBJB = 'http://10.31.224.34:23808/';
+    protected $keyBJB = "pUyzZIK_YUlX3VqFC5WQJYeqM5A9ceokMFwtOCcb2R0";
+    protected $clientIdBJB = "XXR4SKMQ";
 
     // Check Permission
     public function __construct()
@@ -181,15 +185,16 @@ class SKRDController extends Controller
 
     public function getTokenBJB()
     {
-        /* Get Token From BJB
+        /* Get Token From Bank BJB
          * TOKEN REQUEST (POST /oauth/client/token)
          */
         $timestamp_now   = Carbon::now()->timestamp;
         $timestamp_1hour = Carbon::now()->addHour()->timestamp;
-        $url = 'http://10.31.224.34:23808/';
 
-        $key = "pUyzZIK_YUlX3VqFC5WQJYeqM5A9ceokMFwtOCcb2R0";
-        $client_id = "XXR4SKMQ";
+        $url = $this->urlBJB;
+        $client_id = $this->clientIdBJB;
+        $key = $this->keyBJB;
+
         $payload   = array(
             "sub" => "va-online",
             "aud" => "access-token",
@@ -209,7 +214,6 @@ class SKRDController extends Controller
     {
         // Get Token BJB
         $resGetTokenBJB = $this->getTokenBJB();
-
         if ($resGetTokenBJB->successful()) {
             $resJson = $resGetTokenBJB->json();
             if ($resJson['rc'] != 0000)
@@ -344,6 +348,52 @@ class SKRDController extends Controller
         ));
     }
 
+    public function getVaBJB($tokenBJB, $clientRefnum, $amount, $expiredDate, $customerName)
+    {
+        /* Create Virtual Account from Bank BJB
+         * CREATE BILLING REQUEST (POST /billing)
+         */
+
+        $timestamp_now = Carbon::now()->timestamp;
+
+        $cin         = "065";
+        $clientType  = "1";
+        $productCode = "01";
+        $billingType = "f";
+        $vaType      = "a";
+        $currency    = "360";
+        $description = "Pembayaran Retribusi";
+
+        // Base Signature
+        $body      = '{"cin":"' . $cin . '","client_type":"' . $clientType . '","product_code":"' . $productCode . '","billing_type":"' . $billingType . '","va_type":"' . $vaType . '","client_refnum":"' . $clientRefnum . '","amount":"' . $amount . '","currency":"' . $currency . '","expired_date":"' . $expiredDate . '","customer_name":"' . $customerName . '","description":"' . $description . '"}';
+        $signature = 'path=/billing&method=POST&token=' . $tokenBJB . '&timestamp=' . $timestamp_now . '&body=' . $body . '';
+        $sha256    = hash_hmac('sha256', $signature, $this->keyBJB);
+
+        // Body / Payload
+        $reqBody = [
+            "cin"           => $cin,
+            "client_type"   => $clientType,
+            "product_code"  => $productCode,
+            "billing_type"  => $billingType,
+            "va_type"       => $vaType,
+            "client_refnum" => $clientRefnum,
+            "amount"   => $amount,
+            "currency" => $currency,
+            "expired_date"  => $expiredDate,
+            "customer_name" => $customerName,
+            "description"   => $description
+        ];
+
+        $res = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $tokenBJB,
+            'BJB-Timestamp' => $timestamp_now,
+            'BJB-Signature' => $sha256,
+            'Content-Type'  => 'application/json'
+        ])->post($this->urlBJB . 'billing', $reqBody);
+
+        return $res;
+    }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -360,12 +410,34 @@ class SKRDController extends Controller
         ]);
 
         /* Tahapan : 
-         * 1. tmtransaksi_opd
-         * 2. tmdata_wp
-         * 3. Save pdf to SFTP Storage
+         * 1. Create VA
+         * 2. tmtransaksi_opd
+         * 3. tmdata_wp
+         * 4. Save pdf to SFTP Storage
          */
 
         // Tahap 1
+        $tokenBJB     = $request->token_bjb;
+        $clientRefnum = $request->no_bayar;
+        $amount       = \strval((int) str_replace(['.', 'Rp', ' '], '', $request->jumlah_bayar));
+        $expiredDate  = $request->tgl_skrd_akhir . ' 23:59:59';
+        $customerName = $request->nm_wajib_pajak;
+
+        $resGetVABJB = $this->getVaBJB($tokenBJB, $clientRefnum, $amount, $expiredDate, $customerName);
+        if ($resGetVABJB->successful()) {
+            $resJson = $resGetVABJB->json();
+            if (isset($resJson['rc']) != 0000)
+                return redirect()
+                    ->route($this->route . 'index')
+                    ->withErrors('Terjadi kegagalan saat membuat Virtual Account. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . '');
+            $VABJB = $resJson['va_number'];
+        } else {
+            return redirect()
+                ->route($this->route . 'index')
+                ->withErrors("Terjadi kegagalan saat membuat Virtual Account. Error Code " . $resGetVABJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator");
+        }
+
+        // Tahap 2
         $data = [
             'id_opd'  => $request->id_opd,
             'tgl_ttd' => $request->tgl_ttd,
@@ -384,6 +456,7 @@ class SKRDController extends Controller
             'jumlah_bayar'     => (int) str_replace(['.', 'Rp', ' '], '', $request->jumlah_bayar),
             'denda'            => 0,
             'total_bayar'      => (int) str_replace(['.', 'Rp', ' '], '', $request->jumlah_bayar),
+            'nomor_va_bjb'     => $VABJB,
             'status_bayar'     => 0,
             'status_denda'     => 0,
             'status_diskon'    => 0,
@@ -397,7 +470,7 @@ class SKRDController extends Controller
 
         $dataSKRD = TransaksiOPD::create($data);
 
-        // Tahap 2
+        // Tahap 3
         $data = [
             'id_opd'  => $request->id_opd,
             'id_jenis_pendapatan'         => $request->id_jenis_pendapatan,
@@ -421,7 +494,7 @@ class SKRDController extends Controller
             DataWP::create($data);
         }
 
-        // Tahap 3
+        // Tahap 4
         $data = TransaksiOPD::find($dataSKRD->id);
         $terbilang = Html_number::terbilang($data->total_bayar) . 'rupiah';
 
