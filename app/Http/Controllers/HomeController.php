@@ -46,13 +46,51 @@ class HomeController extends Controller
             'body' => $jwt
         ])->json();
 
-        /**
-         * Create VA
+        /* Create VA
+         * 1. Create base signature
+         * 2. Req data
          */
-        $data = 'path=/billing&method=POST&token=' . $response['data'] . '&timestamp=' . $timestamp_now . '&body={"cin":"065","client_type":"1","product_code":"01","billing_type":"f","va_type":"a","client_refnum":"0909211900005","amount":"800000","currency":"360","expired_date":"2021-09-30 14:00:00","customer_name":"Asip Hamdi","customer_email":"asiphamdi13@gmail.com","customer_phone":"083897229273","description":"test"}';
+        // Base Signature
+        $body = '{"cin":"065","client_type":"1","product_code":"01","billing_type":"f","va_type":"a","client_refnum":"0909211900005","amount":"800000","currency":"360","expired_date":"2021-09-30 14:00:00","customer_name":"Asip Hamdi","customer_email":"asiphamdi13@gmail.com","customer_phone":"083897229273","description":"test"}';
+        $signature = 'path=/billing&method=POST&token=' . $response['data'] . '&timestamp=' . $timestamp_now . '&body=' . $body . '';
+        $sha256 = hash_hmac('sha256', $signature, $key);
 
-        $sha256 = hash_hmac('sha256', $data, $key);
-        dd($sha256 . ' - ' . $response['data'] . ' - ' . $timestamp_now . ' - ' . $data);
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'http://10.31.224.34:23808/billing',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => '{
+                "cin": "065",
+                "client_type": "1",
+                "product_code": "01",
+                "billing_type": "f",
+                "va_type": "a",
+                "client_refnum": "0909211900005",
+                "amount": "800000",
+                "currency": "360",
+                "expired_date": "2021-09-30 14:00:00",
+                "customer_name": "Asip Hamdi",
+                "customer_email": "asiphamdi13@gmail.com",
+                "customer_phone": "083897229273",
+                "description": "test"
+            }',
+            CURLOPT_HTTPHEADER => array(
+                'BJB-Timestamp: ' . $timestamp_now . '',
+                'BJB-Signature: ' . $sha256 . '',
+                'Authorization: Bearer ' . $response['data'] . '',
+                'Content-Type: application/json'
+            ),
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
     }
 
     public function index()

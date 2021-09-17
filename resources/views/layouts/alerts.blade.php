@@ -25,13 +25,13 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 <script>
     $(document).ready(function() {
-        $("#successAlert").fadeTo(5000, 1000).slideUp(1000, function() {
+        $("#successAlert").fadeTo(10000, 1000).slideUp(1000, function() {
             $("#successAlert").slideUp(1000);
         });
     });
 
     $(document).ready(function() {
-        $("#errorAlert").fadeTo(5000, 1000).slideUp(1000, function() {
+        $("#errorAlert").fadeTo(10000, 1000).slideUp(1000, function() {
             $("#errorAlert").slideUp(1000);
         });
     });

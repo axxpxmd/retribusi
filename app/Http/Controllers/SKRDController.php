@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use Auth;
 use DataTables;
-
 use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Firebase\JWT\JWT;
 use App\Libraries\Html\Html_number;
 use App\Http\Controllers\Controller;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Storage;
 
@@ -177,8 +179,50 @@ class SKRDController extends Controller
         return $data;
     }
 
+    public function getTokenBJB()
+    {
+        /* Get Token From BJB
+         * TOKEN REQUEST (POST /oauth/client/token)
+         */
+        $timestamp_now   = Carbon::now()->timestamp;
+        $timestamp_1hour = Carbon::now()->addHour()->timestamp;
+        $url = 'http://10.31.224.34:23808/';
+
+        $key = "pUyzZIK_YUlX3VqFC5WQJYeqM5A9ceokMFwtOCcb2R0";
+        $client_id = "XXR4SKMQ";
+        $payload   = array(
+            "sub" => "va-online",
+            "aud" => "access-token",
+            "iat" => $timestamp_now,
+            "exp" => $timestamp_1hour
+        );
+
+        $jwt = JWT::encode($payload, $key, 'HS256', $client_id); // Create JWT Signature (HMACSHA256)
+        $res = Http::contentType("text/plain")->send('POST', $url . 'oauth/client/token', [
+            'body' => $jwt
+        ]);
+
+        return $res;
+    }
+
     public function create(Request $request)
     {
+        // Get Token BJB
+        $resGetTokenBJB = $this->getTokenBJB();
+
+        if ($resGetTokenBJB->successful()) {
+            $resJson = $resGetTokenBJB->json();
+            if ($resJson['rc'] != 0000)
+                return redirect()
+                    ->route($this->route . 'index')
+                    ->withErrors('Terjadi kegagalan saat mengambil token. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . '');
+            $tokenBJB = $resJson['data'];
+        } else {
+            return redirect()
+                ->route($this->route . 'index')
+                ->withErrors("Terjadi kegagalan saat mengambil token. Error Code " . $resGetTokenBJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator");
+        }
+
         $route = $this->route;
         $title = $this->title;
 
@@ -217,10 +261,10 @@ class SKRDController extends Controller
         $rincian_jenis_pendapatans = RincianJenisPendapatan::where('id_jenis_pendapatan', $jenis_pendapatan_id)->get();
 
         // Get Time
-        $date = carbon::now();
-        $day = $date->day;
+        $date  = carbon::now();
+        $day   = $date->day;
         $month = $date->month;
-        $year = substr($date->year, 2);
+        $year  = substr($date->year, 2);
 
         // Check amount OPD by year
         $check = TransaksiOPD::where('id_opd', $opd_id)->where(DB::raw('YEAR(created_at)'), '=', $date->year)->count();
@@ -295,7 +339,8 @@ class SKRDController extends Controller
             'kecamatans',
             'no_bayar',
             'rincian_jenis_pendapatans',
-            'data_wp'
+            'data_wp',
+            'tokenBJB'
         ));
     }
 
@@ -407,7 +452,7 @@ class SKRDController extends Controller
 
         $id = \Crypt::decrypt($id);
 
-        $data     = TransaksiOPD::find($id);
+        $data = TransaksiOPD::find($id);
         $rincian_jenis_pendapatans = RincianJenisPendapatan::where('id_jenis_pendapatan', $data->id_jenis_pendapatan)->get();
 
         return view($this->view . 'edit', compact(
