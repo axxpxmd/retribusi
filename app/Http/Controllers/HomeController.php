@@ -4,12 +4,8 @@ namespace App\Http\Controllers;
 
 use Auth;
 use Carbon\Carbon;
-use Firebase\JWT\JWT;
-use GuzzleHttp\Client;
 
 use Illuminate\Support\Facades\DB;
-use App\Libraries\Html\Html_number;
-use Illuminate\Support\Facades\Http;
 
 // Models
 use App\Models\OPD;
@@ -21,76 +17,6 @@ class HomeController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-    }
-
-    public function index1()
-    {
-        $timestamp_now = Carbon::now()->timestamp;
-        $timestamp_1hour = Carbon::now()->addHour()->timestamp;
-        $url = 'http://10.31.224.34:23808/';
-
-        $key = "pUyzZIK_YUlX3VqFC5WQJYeqM5A9ceokMFwtOCcb2R0";
-        $client_id = "XXR4SKMQ";
-        $payload   = array(
-            "sub" => "va-online",
-            "aud" => "access-token",
-            "iat" => $timestamp_now,
-            "exp" => $timestamp_1hour
-        );
-
-        /**
-         * Get Token
-         */
-        $jwt = JWT::encode($payload, $key); // JWT Header, JWT Claims, Signature
-        $response = Http::contentType("text/plain")->send('POST', $url . 'oauth/client/token', [
-            'body' => $jwt
-        ])->json();
-
-        /* Create VA
-         * 1. Create base signature
-         * 2. Req data
-         */
-        // Base Signature
-        $body = '{"cin":"065","client_type":"1","product_code":"01","billing_type":"f","va_type":"a","client_refnum":"0909211900005","amount":"800000","currency":"360","expired_date":"2021-09-30 14:00:00","customer_name":"Asip Hamdi","customer_email":"asiphamdi13@gmail.com","customer_phone":"083897229273","description":"test"}';
-        $signature = 'path=/billing&method=POST&token=' . $response['data'] . '&timestamp=' . $timestamp_now . '&body=' . $body . '';
-        $sha256 = hash_hmac('sha256', $signature, $key);
-
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => 'http://10.31.224.34:23808/billing',
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => '{
-                "cin": "065",
-                "client_type": "1",
-                "product_code": "01",
-                "billing_type": "f",
-                "va_type": "a",
-                "client_refnum": "0909211900005",
-                "amount": "800000",
-                "currency": "360",
-                "expired_date": "2021-09-30 14:00:00",
-                "customer_name": "Asip Hamdi",
-                "customer_email": "asiphamdi13@gmail.com",
-                "customer_phone": "083897229273",
-                "description": "test"
-            }',
-            CURLOPT_HTTPHEADER => array(
-                'BJB-Timestamp: ' . $timestamp_now . '',
-                'BJB-Signature: ' . $sha256 . '',
-                'Authorization: Bearer ' . $response['data'] . '',
-                'Content-Type: application/json'
-            ),
-        ));
-
-        $response = curl_exec($curl);
-
-        curl_close($curl);
     }
 
     public function index()

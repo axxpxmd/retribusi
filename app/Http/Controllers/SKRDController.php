@@ -354,6 +354,7 @@ class SKRDController extends Controller
          * CREATE BILLING REQUEST (POST /billing)
          */
 
+        $url = $this->urlBJB;
         $timestamp_now = Carbon::now()->timestamp;
 
         $cin         = "065";
@@ -389,7 +390,7 @@ class SKRDController extends Controller
             'BJB-Timestamp' => $timestamp_now,
             'BJB-Signature' => $sha256,
             'Content-Type'  => 'application/json'
-        ])->post($this->urlBJB . 'billing', $reqBody);
+        ])->post($url . 'billing', $reqBody);
 
         return $res;
     }
