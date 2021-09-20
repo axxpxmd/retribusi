@@ -50,7 +50,7 @@
                             <div class="col-sm-4">
                                 <select name="status_ttd" id="status_ttd" class="select2 form-control r-0 light s-12">
                                     <option value=""></option>
-                                    <option value="0">Belum diTTD</option>
+                                    <option value="2">Belum diTTD</option>
                                     <option value="1">Sudah diTTD</option>
                                 </select>
                             </div>
