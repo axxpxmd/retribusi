@@ -18,7 +18,7 @@
                         <a class="nav-link" href="{{ route($route.'index') }}"><i class="icon icon-arrow_back"></i>Semua Data</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active show" id="tab1" data-toggle="tab" href="#semua-data" role="tab"><i class="icon icon-document"></i>Rincian Jenis</a>
+                        <a class="nav-link active show" id="tab1" data-toggle="tab" href="#semua-data" role="tab"><i class="icon icon-document-list"></i>Rincian Jenis</a>
                     </li>
                 </ul>
             </div>
@@ -40,6 +40,10 @@
                                     <div class="row">
                                         <label class="col-md-2 text-right s-12"><strong>Rincian Jenis Pendapatan : </strong></label>
                                         <label class="col-md-10 s-12">{{ $data->rincian_pendapatan }}</label>
+                                    </div>
+                                    <div class="row">
+                                        <label class="col-md-2 text-right s-12"><strong>Kode Jenis :</strong></label>
+                                        <label class="col-md-10 s-12">{{ $data->kd_jenis }}</label>
                                     </div>
                                     <div class="row">
                                         <label class="col-md-2 text-right s-12"><strong>Nomor Rekening :</strong></label>

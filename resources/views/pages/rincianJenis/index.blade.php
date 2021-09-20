@@ -50,8 +50,9 @@
                                     <table id="dataTable" class="table table-striped table-bordered" style="width:100%">
                                         <thead>
                                             <th width="5%">No</th>
-                                            <th width="45%">Rincian Jenis Pendapatan</th>
-                                            <th width="35%">Jenis Pendapatan</th>
+                                            <th width="40%">Rincian Jenis Pendapatan</th>
+                                            <th width="33%">Jenis Pendapatan</th>
+                                            <th width="7%">Kode Jenis</th>
                                             <th width="10%">Nomor Rekening</th>
                                             <th width="5%"></th>
                                         </thead>
@@ -88,6 +89,10 @@
                                             <div class="form-group mt-1">
                                                 <label for="rincian_pendapatan" class="col-form-label s-12 col-md-2">Rincian Jenis Pendapatan<span class="text-danger ml-1">*</span></label>
                                                 <textarea rows="4" name="rincian_pendapatan" id="rincian_pendapatan" class="form-control r-0 light s-12 col-md-6" autocomplete="off" required></textarea>
+                                            </div>
+                                            <div class="row m-0">
+                                                <label for="kd_jenis" class="s-12 col-md-2" style="text-align: left !important">Kode Jenis<span class="text-danger ml-1">*</span></label>
+                                                <input type="text" name="kd_jenis" id="kd_jenis" class="form-control r-0 light s-12 col-md-6" autocomplete="off" required/>
                                             </div>
                                             <div class="row m-0">
                                                 <label for="nmr_rekening" class="s-12 col-md-2" style="text-align: left !important">Nomor Rekening<span class="text-danger ml-1">*</span></label>
@@ -127,6 +132,7 @@
             {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false, align: 'center', className: 'text-center'},
             {data: 'rincian_pendapatan', name: 'rincian_pendapatan'},
             {data: 'id_jenis_pendapatan', name: 'id_jenis_pendapatan'},
+            {data: 'kd_jenis', name: 'kd_jenis'},
             {data: 'nmr_rekening', name: 'nmr_rekening'},
             {data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center'}
         ]
