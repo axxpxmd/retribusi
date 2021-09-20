@@ -196,7 +196,7 @@ class TandaTanganController extends Controller
          * 0 = Belum
          * 1 = Sudah 
          */
-        if ($data->status_ttd == 0) {
+        if ($data->status_ttd == 0 || $data->status_ttd == 2) {
             $terbilang = Html_number::terbilang($data->total_bayar) . 'rupiah';
 
             // generate QR Code
