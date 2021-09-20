@@ -497,23 +497,23 @@ class SKRDController extends Controller
         }
 
         // Tahap 4
-        // $data = TransaksiOPD::find($dataSKRD->id);
-        // $terbilang = Html_number::terbilang($data->total_bayar) . 'rupiah';
+        $data = TransaksiOPD::find($dataSKRD->id);
+        $terbilang = Html_number::terbilang($data->total_bayar) . 'rupiah';
 
-        // $pdf = app('dompdf.wrapper');
-        // $pdf->getDomPDF()->set_option("enable_php", true);
-        // $pdf->loadView($this->view . 'report', compact(
-        //     'data',
-        //     'terbilang'
-        // ));
+        $pdf = app('dompdf.wrapper');
+        $pdf->getDomPDF()->set_option("enable_php", true);
+        $pdf->loadView($this->view . 'report', compact(
+            'data',
+            'terbilang'
+        ));
 
-        // // get content PDF
-        // $fileName = str_replace(' ', '', $data->nm_wajib_pajak) . '-'  . $data->no_skrd . ".pdf";
-        // $content = $pdf->download()->getOriginalContent();
+        // get content PDF
+        $fileName = str_replace(' ', '', $data->nm_wajib_pajak) . '-'  . $data->no_skrd . ".pdf";
+        $content = $pdf->download()->getOriginalContent();
 
-        // // save PDF to sftp storage
-        // $path_sftp = 'file_ttd_skrd/';
-        // Storage::disk('sftp')->put($path_sftp . $fileName, $content);
+        // save PDF to sftp storage
+        $path_sftp = 'file_ttd_skrd/';
+        Storage::disk('sftp')->put($path_sftp . $fileName, $content);
 
         return response()->json([
             'message' => "Data " . $this->title . " berhasil tersimpan."
