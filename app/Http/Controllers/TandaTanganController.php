@@ -75,7 +75,7 @@ class TandaTanganController extends Controller
         return DataTables::of($data)
             ->addColumn('file_ttd', function ($p) {
                 $path_sftp = 'file_ttd_skrd/';
-                $fileName  =  $p->nm_wajib_pajak . ' - ' . $p->no_skrd . ".pdf";
+                $fileName  = str_replace(' ', '', $p->nm_wajib_pajak) . '-' . $p->no_skrd . ".pdf";
 
                 if ($p->status_ttd == 0 || $p->status_ttd == 2) {
                     return '-';
@@ -188,7 +188,7 @@ class TandaTanganController extends Controller
 
         $token_godem = '';
         $id_cert     = '';
-        $fileName    =  $data->nm_wajib_pajak . ' - ' . $data->no_skrd . ".pdf";
+        $fileName    = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
         $path_sftp   = 'file_ttd_skrd/';
         $path_local  = 'public/file_skrd/';
 
@@ -247,7 +247,7 @@ class TandaTanganController extends Controller
         $id = $request->id;
         $dataSKRD = TransaksiOPD::find($id);
 
-        $fileName   =  $dataSKRD->nm_wajib_pajak . ' - ' . $dataSKRD->no_skrd . ".pdf";
+        $fileName   =  str_replace(' ', '', $dataSKRD->nm_wajib_pajak) . '-' . $dataSKRD->no_skrd . ".pdf";
         $path_local = 'app/public/';
         $path_sftp  = 'file_ttd_skrd/';
 

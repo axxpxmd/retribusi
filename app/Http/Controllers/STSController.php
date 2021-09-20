@@ -112,7 +112,7 @@ class STSController extends Controller
             })
             ->addColumn('file_ttd', function ($p) {
                 $path_sftp = 'file_ttd_skrd/';
-                $fileName  =  $p->nm_wajib_pajak . ' - ' . $p->no_skrd . ".pdf";
+                $fileName  = str_replace(' ', '', $p->nm_wajib_pajak) . '-' . $p->no_skrd . ".pdf";
 
                 if ($p->status_ttd == 0) {
                     return '-';

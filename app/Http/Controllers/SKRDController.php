@@ -123,7 +123,7 @@ class SKRDController extends Controller
             })
             ->addColumn('file_ttd', function ($p) {
                 $path_sftp = 'file_ttd_skrd/';
-                $fileName  =  $p->nm_wajib_pajak . ' - ' . $p->no_skrd . ".pdf";
+                $fileName  = str_replace(' ', '', $p->nm_wajib_pajak) . '-' . $p->no_skrd . ".pdf";
 
                 if ($p->status_ttd == 0) {
                     return "Belum TTD" . " ( <a href='#' onclick='updateStatusTTD(" . $p->id . ")' class='amber-text' title='Kirim Untuk TTD'><i class='icon icon-send'></i></a> ) ";
@@ -164,10 +164,11 @@ class SKRDController extends Controller
         $id_rincian_jenis_pendapatan = \Crypt::decrypt($id_rincian_jenis_pendapatan);
 
         if ($id_rincian_jenis_pendapatan != 0) {
-            $data = RincianJenisPendapatan::select('nmr_rekening')->where('id', $id_rincian_jenis_pendapatan)->first();
+            $data = RincianJenisPendapatan::select('nmr_rekening', 'kd_jenis')->where('id', $id_rincian_jenis_pendapatan)->first();
         } else {
             $data = [
-                'nmr_rekening' => ""
+                'nmr_rekening' => "",
+                'kd_jenis' => ""
             ];
 
             $data = json_encode($data);
@@ -348,7 +349,7 @@ class SKRDController extends Controller
         ));
     }
 
-    public function getVaBJB($tokenBJB, $clientRefnum, $amount, $expiredDate, $customerName)
+    public function getVaBJB($tokenBJB, $clientRefnum, $amount, $expiredDate, $customerName, $productCode)
     {
         /* Create Virtual Account from Bank BJB
          * CREATE BILLING REQUEST (POST /billing)
@@ -359,7 +360,6 @@ class SKRDController extends Controller
 
         $cin         = "065";
         $clientType  = "1";
-        $productCode = "01";
         $billingType = "f";
         $vaType      = "a";
         $currency    = "360";
@@ -423,8 +423,9 @@ class SKRDController extends Controller
         $amount       = \strval((int) str_replace(['.', 'Rp', ' '], '', $request->jumlah_bayar));
         $expiredDate  = $request->tgl_skrd_akhir . ' 23:59:59';
         $customerName = $request->nm_wajib_pajak;
+        $productCode  = $request->kd_jenis;
 
-        $resGetVABJB = $this->getVaBJB($tokenBJB, $clientRefnum, $amount, $expiredDate, $customerName);
+        $resGetVABJB = $this->getVaBJB($tokenBJB, $clientRefnum, $amount, $expiredDate, $customerName, $productCode);
         if ($resGetVABJB->successful()) {
             $resJson = $resGetVABJB->json();
             if (isset($resJson['rc']) != 0000)
@@ -496,23 +497,23 @@ class SKRDController extends Controller
         }
 
         // Tahap 4
-        $data = TransaksiOPD::find($dataSKRD->id);
-        $terbilang = Html_number::terbilang($data->total_bayar) . 'rupiah';
+        // $data = TransaksiOPD::find($dataSKRD->id);
+        // $terbilang = Html_number::terbilang($data->total_bayar) . 'rupiah';
 
-        $pdf = app('dompdf.wrapper');
-        $pdf->getDomPDF()->set_option("enable_php", true);
-        $pdf->loadView($this->view . 'report', compact(
-            'data',
-            'terbilang'
-        ));
+        // $pdf = app('dompdf.wrapper');
+        // $pdf->getDomPDF()->set_option("enable_php", true);
+        // $pdf->loadView($this->view . 'report', compact(
+        //     'data',
+        //     'terbilang'
+        // ));
 
-        // get content PDF
-        $fileName =  $data->nm_wajib_pajak . ' - ' . $data->no_skrd . ".pdf";
-        $content = $pdf->download()->getOriginalContent();
+        // // get content PDF
+        // $fileName = str_replace(' ', '', $data->nm_wajib_pajak) . '-'  . $data->no_skrd . ".pdf";
+        // $content = $pdf->download()->getOriginalContent();
 
-        // save PDF to sftp storage
-        $path_sftp = 'file_ttd_skrd/';
-        Storage::disk('sftp')->put($path_sftp . $fileName, $content);
+        // // save PDF to sftp storage
+        // $path_sftp = 'file_ttd_skrd/';
+        // Storage::disk('sftp')->put($path_sftp . $fileName, $content);
 
         return response()->json([
             'message' => "Data " . $this->title . " berhasil tersimpan."

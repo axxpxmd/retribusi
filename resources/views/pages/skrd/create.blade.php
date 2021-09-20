@@ -42,6 +42,7 @@
                                     {{-- <input type="hidden" name="nip_ttd" value="{{ $opd->nip_ttd }}"> --}}
                                     <input type="hidden" name="no_bayar" value="{{ $no_bayar }}">
                                     <input type="hidden" name="token_bjb" value="{{ $tokenBJB }}">
+                                    <input type="hidden" name="kd_jenis" id="kd_jenis" value="{{ $data_wp != null ? $data_wp->rincian_jenis->kd_jenis : '' }}">
                                     <div class="form-row form-inline">
                                         <div class="col-md-12">
                                             <div class="row">
@@ -197,6 +198,7 @@
         url = "{{ route('skrd.getKodeRekening', ':id') }}".replace(':id', val);
         $.get(url, function(data){
             $('#kode_rekening').val(data.nmr_rekening);
+            $('#kd_jenis').val(data.kd_jenis);
             console.log(data.nmr_rekening);
         }, 'JSON');
     });
