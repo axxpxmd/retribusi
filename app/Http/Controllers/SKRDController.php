@@ -24,7 +24,6 @@ use App\Models\TransaksiOPD;
 use App\Models\JenisPendapatan;
 use App\Models\OPDJenisPendapatan;
 use App\Models\RincianJenisPendapatan;
-use Maatwebsite\Excel\Concerns\ToArray;
 
 class SKRDController extends Controller
 {
@@ -370,6 +369,8 @@ class SKRDController extends Controller
         $signature = 'path=/billing&method=POST&token=' . $tokenBJB . '&timestamp=' . $timestamp_now . '&body=' . $body . '';
         $sha256    = hash_hmac('sha256', $signature, $this->keyBJB);
 
+        // dd($tokenBJB . ' - ' . $timestamp_now . ' - ' . $sha256);
+
         // Body / Payload
         $reqBody = [
             "cin"           => $cin,
@@ -429,14 +430,14 @@ class SKRDController extends Controller
         if ($resGetVABJB->successful()) {
             $resJson = $resGetVABJB->json();
             if (isset($resJson['rc']) != 0000)
-                return redirect()
-                    ->route($this->route . 'index')
-                    ->withErrors('Terjadi kegagalan saat membuat Virtual Account. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . '');
+                return response()->json([
+                    'message' => 'Terjadi kegagalan saat membuat Virtual Account. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . ''
+                ], 422);
             $VABJB = $resJson['va_number'];
         } else {
-            return redirect()
-                ->route($this->route . 'index')
-                ->withErrors("Terjadi kegagalan saat membuat Virtual Account. Error Code " . $resGetVABJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator");
+            return response()->json([
+                'message' => "Terjadi kegagalan saat membuat Virtual Account. Error Code " . $resGetVABJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator"
+            ], 422);
         }
 
         // Tahap 2
