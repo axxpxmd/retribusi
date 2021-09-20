@@ -195,6 +195,7 @@ class TandaTanganController extends Controller
         /* Check Status TTD
          * 0 = Belum
          * 1 = Sudah 
+         * 2 = Proses
          */
         if ($data->status_ttd == 0 || $data->status_ttd == 2) {
             $terbilang = Html_number::terbilang($data->total_bayar) . 'rupiah';
