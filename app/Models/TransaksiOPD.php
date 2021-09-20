@@ -225,6 +225,8 @@ class TransaksiOPD extends Model
 
         if ($status_ttd != null) {
             $data->where('status_ttd', $status_ttd);
+        } else {
+            $data->whereIn('status_ttd', [0, 2]);
         }
 
         if ($from != null ||  $to != null) {
