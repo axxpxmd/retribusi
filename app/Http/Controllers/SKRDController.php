@@ -359,6 +359,7 @@ class SKRDController extends Controller
 
         $cin         = "065";
         $clientType  = "1";
+        $productCode = "01";
         $billingType = "f";
         $vaType      = "a";
         $currency    = "360";
@@ -368,8 +369,6 @@ class SKRDController extends Controller
         $body      = '{"cin":"' . $cin . '","client_type":"' . $clientType . '","product_code":"' . $productCode . '","billing_type":"' . $billingType . '","va_type":"' . $vaType . '","client_refnum":"' . $clientRefnum . '","amount":"' . $amount . '","currency":"' . $currency . '","expired_date":"' . $expiredDate . '","customer_name":"' . $customerName . '","description":"' . $description . '"}';
         $signature = 'path=/billing&method=POST&token=' . $tokenBJB . '&timestamp=' . $timestamp_now . '&body=' . $body . '';
         $sha256    = hash_hmac('sha256', $signature, $this->keyBJB);
-
-        // dd($tokenBJB . ' - ' . $timestamp_now . ' - ' . $sha256);
 
         // Body / Payload
         $reqBody = [
@@ -383,7 +382,7 @@ class SKRDController extends Controller
             "currency" => $currency,
             "expired_date"  => $expiredDate,
             "customer_name" => $customerName,
-            "description"   => $description
+            "description"   => $description,
         ];
 
         $res = Http::withHeaders([
