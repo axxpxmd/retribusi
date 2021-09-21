@@ -426,6 +426,7 @@ class SKRDController extends Controller
         $productCode  = $request->kd_jenis;
 
         $resGetVABJB = $this->getVaBJB($tokenBJB, $clientRefnum, $amount, $expiredDate, $customerName, $productCode);
+
         if ($resGetVABJB->successful()) {
             $resJson = $resGetVABJB->json();
             if (isset($resJson['rc']) != 0000)
