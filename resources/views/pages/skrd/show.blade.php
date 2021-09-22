@@ -195,7 +195,7 @@
                                             @if ($data->status_ttd == 0 || $data->status_ttd == 2)
                                                 <button class="btn btn-sm btn-success" data-toggle="modal" data-target="#preview-file"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</button> 
                                             @else
-                                            <button class="btn btn-sm btn-success" data-toggle="modal" data-target="#preview-file"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</button> 
+                                                <button class="btn btn-sm btn-success" data-toggle="modal" data-target="#preview-file"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</button> 
                                             @endif
                                         </label>
                                     </div> 
@@ -207,16 +207,16 @@
             </div>
         </div>
     </div>
-    <!-- Preview File -->
-    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="preview-file" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                @if ($data->status_ttd == 0 || $data->status_ttd == 2)
-                <iframe src="{{ route('skrd.report', \Crypt::encrypt($data->id)) }}" width="850px" height="850px"></iframe>
-                @else
-                <iframe src="{{ config('app.sftp_src').$path_sftp.$fileName }}" width="850px" height="850px"></iframe>
-                @endif
-            </div>
+</div>
+<!-- Preview File -->
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="preview-file" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            @if ($data->status_ttd == 0 || $data->status_ttd == 2)
+            <iframe src="{{ route('skrd.report', \Crypt::encrypt($data->id)) }}" width="850px" height="850px"></iframe>
+            @else
+            <iframe src="{{ config('app.sftp_src').$path_sftp.$fileName }}" style="margin-left: -160px !important" width="850px" height="850px"></iframe>
+            @endif
         </div>
     </div>
 </div>

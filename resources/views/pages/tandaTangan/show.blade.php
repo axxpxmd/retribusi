@@ -236,18 +236,6 @@
             </div>
         </div>
     </div>
-    <!-- Preview File -->
-    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="preview-file" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                @if ($data->status_ttd == 0 || $data->status_ttd == 2)
-                <iframe src="{{ route('tanda-tangan.printData', \Crypt::encrypt($data->id)) }}" width="850px" height="850px"></iframe>
-                @else
-                <iframe src="{{ config('app.sftp_src').$path_sftp.$fileName }}" width="850px" height="850px"></iframe>
-                @endif
-            </div>
-        </div>
-    </div>
     <!-- Form TTE -->
     <div class="modal fade bd-example-modal-lg" id="tte" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -290,6 +278,18 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+<!-- Preview File -->
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="preview-file" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            @if ($data->status_ttd == 0 || $data->status_ttd == 2)
+            <iframe src="{{ route('skrd.report', \Crypt::encrypt($data->id)) }}" width="850px" height="850px"></iframe>
+            @else
+            <iframe src="{{ config('app.sftp_src').$path_sftp.$fileName }}" style="margin-left: -160px !important" width="850px" height="850px"></iframe>
+            @endif
         </div>
     </div>
 </div>
