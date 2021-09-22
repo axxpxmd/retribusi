@@ -30,7 +30,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card mt-2">
-                            <h6 class="card-header"><strong>Data SKRD</strong></h6>
+                            <h6 class="card-header"><strong>Data SKRD</strong>@if ($data->status_ttd == 1) | <span class="text-success font-weight-bold">Sudah Ditandatangani</span>@endif</h6>
                             <div class="card-body">
                                 <div class="col-md-12">
                                     <div class="row">
@@ -192,7 +192,11 @@
                                     <div class="row mt-2">
                                         <label class="col-md-2 text-right s-12"></label>
                                         <label class="col-md-3 s-12">
-                                            <a target="blank" href="{{ route('skrd.report',\Crypt::encrypt($data->id)) }}" class="btn btn-sm btn-primary"><i class="icon-print mr-2"></i>Print Data</a>
+                                            @if ($data->status_ttd == 0 || $data->status_ttd == 2)
+                                                <button class="btn btn-sm btn-success" data-toggle="modal" data-target="#preview-file"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</button> 
+                                            @else
+                                            <button class="btn btn-sm btn-success" data-toggle="modal" data-target="#preview-file"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</button> 
+                                            @endif
                                         </label>
                                     </div> 
                                 </div>
@@ -200,6 +204,18 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    <!-- Preview File -->
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="preview-file" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                @if ($data->status_ttd == 0 || $data->status_ttd == 2)
+                <iframe src="{{ route('skrd.report', \Crypt::encrypt($data->id)) }}" width="850px" height="850px"></iframe>
+                @else
+                <iframe src="{{ config('app.sftp_src').$path_sftp.$fileName }}" width="850px" height="850px"></iframe>
+                @endif
             </div>
         </div>
     </div>

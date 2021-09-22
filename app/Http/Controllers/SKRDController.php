@@ -366,8 +366,8 @@ class SKRDController extends Controller
         $description = "Pembayaran Retribusi";
 
         // Base Signature
-        $body      = '{"cin":"' . $cin . '","client_type":"' . $clientType . '","product_code":"' . $productCode . '","billing_type":"' . $billingType . '","va_type":"' . $vaType . '","client_refnum":"' . $clientRefnum . '","amount":"' . $amount . '","currency":"' . $currency . '","expired_date":"' . $expiredDate . '","customer_name":"' . $customerName . '","description":"' . $description . '"}';
-        $signature = 'path=/billing&method=POST&token=' . $tokenBJB . '&timestamp=' . $timestamp_now . '&body=' . $body . '';
+        $bodySignature = '{"cin":"' . $cin . '","client_type":"' . $clientType . '","product_code":"' . $productCode . '","billing_type":"' . $billingType . '","va_type":"' . $vaType . '","client_refnum":"' . $clientRefnum . '","amount":"' . $amount . '","currency":"' . $currency . '","expired_date":"' . $expiredDate . '","customer_name":"' . $customerName . '","description":"' . $description . '"}';
+        $signature = 'path=/billing&method=POST&token=' . $tokenBJB . '&timestamp=' . $timestamp_now . '&body=' . $bodySignature . '';
         $sha256    = hash_hmac('sha256', $signature, $this->keyBJB);
 
         // Body / Payload
@@ -548,10 +548,15 @@ class SKRDController extends Controller
 
         $data = TransaksiOPD::find($id);
 
+        $fileName  = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
+        $path_sftp = 'file_ttd_skrd/';
+
         return view($this->view . 'show', compact(
             'route',
             'title',
-            'data'
+            'data',
+            'path_sftp',
+            'fileName'
         ));
     }
 
