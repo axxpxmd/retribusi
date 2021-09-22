@@ -286,7 +286,7 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             @if ($data->status_ttd == 0 || $data->status_ttd == 2)
-            <iframe src="{{ route('skrd.report', \Crypt::encrypt($data->id)) }}" style="margin-left: -160px !important" width="850px" height="940px"></iframe>
+            <iframe src="{{ route('tanda-tangan.report', \Crypt::encrypt($data->id)) }}" style="margin-left: -160px !important" width="850px" height="940px"></iframe>
             @else
             <iframe src="{{ config('app.sftp_src').$path_sftp.$fileName }}" style="margin-left: -160px !important" width="850px" height="940px"></iframe>
             @endif
