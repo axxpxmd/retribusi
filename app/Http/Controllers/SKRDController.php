@@ -84,23 +84,41 @@ class SKRDController extends Controller
 
         return DataTables::of($data)
             ->addColumn('action', function ($p) {
-                $report = "<a href='" . route($this->route . 'report', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
+                $path_sftp = 'file_ttd_skrd/';
+                $fileName  = str_replace(' ', '', $p->nm_wajib_pajak) . '-' . $p->no_skrd . ".pdf";
 
-                if ($p->status_bayar == 0) {
-                    if ($p->status_ttd == 0) {
-                        return "
-                        <a href='#' onclick='remove(" . $p->id . ")' class='text-danger mr-2' title='Hapus Data'><i class='icon icon-remove'></i></a>
-                        <a href='" . route($this->route . 'edit', Crypt::encrypt($p->id)) . "' class='text-primary mr-2' title='Edit Data'><i class='icon icon-edit'></i></a>
-                        <a href='" . route($this->route . 'report', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
-                    } else {
-                        return "-";
-                    }
+                $report  = "<a href='" . route($this->route . 'report', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
+                $filettd = "<a href='" . config('app.sftp_src') . $path_sftp . $fileName . "' target='_blank' class='cyan-text' title='File TTD'><i class='icon-document-file-pdf2'></i></a>";
+                $sendttd = "<a href='#' onclick='updateStatusTTD(" . $p->id . ")' class='amber-text' title='Kirim Untuk TTD'><i class='icon icon-send'></i></a>";
+                $edit    = " <a href='" . route($this->route . 'edit', Crypt::encrypt($p->id)) . "' class='text-primary mr-2' title='Edit Data'><i class='icon icon-edit'></i></a>";
+                $delete  = " <a href='#' onclick='remove(" . $p->id . ")' class='text-danger mr-2' title='Hapus Data'><i class='icon icon-remove'></i></a>";
+
+                if ($p->status_ttd == 1) {
+                    return $filettd;
                 } else {
-                    if ($p->status_ttd == 0) {
-                        return $report;
+                    if ($p->status_ttd != 2) {
+                        return $edit . $delete . $report . $sendttd;
                     }
-                    return '-';
+                    return $report;
                 }
+
+
+
+                // if ($p->status_bayar == 0) {
+                //     if ($p->status_ttd == 0) {
+                //         return "
+                //         <a href='#' onclick='remove(" . $p->id . ")' class='text-danger mr-2' title='Hapus Data'><i class='icon icon-remove'></i></a>
+                //         <a href='" . route($this->route . 'edit', Crypt::encrypt($p->id)) . "' class='text-primary mr-2' title='Edit Data'><i class='icon icon-edit'></i></a>
+                //         <a href='" . route($this->route . 'report', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
+                //     } else {
+                //         return "-";
+                //     }
+                // } else {
+                //     if ($p->status_ttd == 0) {
+                //         return $report;
+                //     }
+                //     return '-';
+                // }
             })
             ->editColumn('no_skrd', function ($p) {
                 return "<a href='" . route($this->route . 'show', Crypt::encrypt($p->id)) . "' class='text-primary' title='Show Data'>" . $p->no_skrd . "</a>";
@@ -121,15 +139,12 @@ class SKRDController extends Controller
                 return 'Rp. ' . number_format($p->jumlah_bayar);
             })
             ->addColumn('file_ttd', function ($p) {
-                $path_sftp = 'file_ttd_skrd/';
-                $fileName  = str_replace(' ', '', $p->nm_wajib_pajak) . '-' . $p->no_skrd . ".pdf";
-
                 if ($p->status_ttd == 0) {
-                    return "Belum TTD" . " ( <a href='#' onclick='updateStatusTTD(" . $p->id . ")' class='amber-text' title='Kirim Untuk TTD'><i class='icon icon-send'></i></a> ) ";
+                    return "<span class='badge badge-danger'>Belum</span>";
                 } elseif ($p->status_ttd == 1) {
-                    return "Sudah TTD " . " ( <a href='" . config('app.sftp_src') . $path_sftp . $fileName . "' target='_blank' class='cyan-text' title='File TTD'><i class='icon-document-file-pdf2'></i></a> ) ";
+                    return "<span class='badge badge-success'>Sudah</span>";
                 } elseif ($p->status_ttd == 2) {
-                    return "Sedang Proses TTD";
+                    return "<span class='badge badge-warning'>Proses</span>";
                 }
             })
             ->addIndexColumn()

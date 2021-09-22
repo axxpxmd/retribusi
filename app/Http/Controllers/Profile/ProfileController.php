@@ -22,12 +22,28 @@ use App\Http\Controllers\Controller;
 
 // Model
 use App\User;
+use App\Models\Pengguna;
 
 class ProfileController extends Controller
 {
     protected $view  = 'pages.profile.';
-    protected $title = 'Ganti Password';
+    protected $title = 'Profile';
     protected $route = 'profile.';
+
+    public function index()
+    {
+        $route = $this->route;
+        $title = $this->title;
+
+        $user_id = Auth::user()->id;
+        $data    = Pengguna::where('user_id', $user_id)->first();
+
+        return view($this->view . 'index', compact(
+            'route',
+            'title',
+            'data'
+        ));
+    }
 
     public function editPassword($id)
     {

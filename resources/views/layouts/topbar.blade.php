@@ -40,7 +40,7 @@
                                 <div class="col">
                                     <a href="{{ route('profile.index') }}">
                                         <i class="icon-user amber-text lighten-2 avatar r-5"></i>
-                                        <div class="pt-1">Profil</div>
+                                        <div class="pt-1">Profile</div>
                                     </a>
                                 </div>
                                 <div class="col">

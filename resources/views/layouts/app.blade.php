@@ -49,14 +49,14 @@ $template = App\Models\Template::select('id', 'logo', 'logo_title', 'logo_auth')
                     <div class="clearfix"></div>
                     <div class="collapse multi-collapse" id="userSettingsCollapse">
                         <div class="list-group mt-3 shadow">
-                            {{-- <a href="{{ route('profile.index') }}" class="list-group-item list-group-item-action ">
+                            <a href="{{ route('profile.index') }}" class="list-group-item list-group-item-action ">
                                 <i class="mr-2 icon-user text-blue"></i>Profile
                             </a>
-                            <a href="#" class="list-group-item list-group-item-action">
+                            {{-- <a href="#" class="list-group-item list-group-item-action">
                                 <i class="mr-2 icon-cogs"></i>Settings
                             </a> --}}
                             <a href="{{ route('profile.editPassword', Auth::user()->id) }}" class="list-group-item list-group-item-action">
-                                <i class="mr-2 icon-key4 orange-text"></i>Change Password
+                                <i class="mr-2 icon-key4 orange-text"></i>Ganti Password
                             </a>
                         </div>
                     </div>

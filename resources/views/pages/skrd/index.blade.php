@@ -149,28 +149,29 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="updateStatusTTD" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="updateStatusTTD" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-body">
-                <p class="font-weight-bold">Apakah sudah yakin mengirim data ini untuk ditandatangi ?</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="icon-times mr-2"></i>Batalkan</button>
-                 <a href="" class="btn btn-sm btn-primary ml-2" id="kirimTTD"><i class="icon-pencil mr-2"></i>Kirim untuk TTD</a>
+                <p class="font-weight-bold text-black-50">Apakah sudah yakin mengirim data ini untuk ditandatangi ?</p>
+                <hr>
+                <div class="text-right">
+                    <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="icon-times mr-2"></i>Batalkan</button>
+                    <a href="" class="btn btn-sm btn-primary ml-2" id="kirimTTD"><i class="icon-pencil mr-2"></i>Kirim untuk TTD</a>
+                </div>
             </div>
         </div>
     </div>
 </div>
-<div class="modal fade" id="updateStatusTTDs" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="updateStatusTTDs" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-body">
                 <p class="font-weight-bold">Apakah sudah yakin mengirim data ini untuk ditandatangi ?</p>
             </div>
-            <div class="modal-footer">
+            <div class="text-right">
                 <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="icon-times mr-2"></i>Batalkan</button>
-                 <a href="{{ route('skrd.updateStatusKirimTTDs') }}" class="btn btn-sm btn-primary ml-2" id="kirimTTDs"><i class="icon-pencil mr-2"></i>Kirim untuk TTD</a>
+                <a href="{{ route('skrd.updateStatusKirimTTDs') }}" class="btn btn-sm btn-primary ml-2" id="kirimTTDs"><i class="icon-pencil mr-2"></i>Kirim untuk TTD</a>
             </div>
         </div>
     </div>
@@ -289,7 +290,8 @@
     }
 
     function updateStatusTTD(id){
-        $('#updateStatusTTD').modal('show')
+        $('#updateStatusTTD').modal('show');
+        $('#updateStatusTTD').modal({keyboard: false});
 
         $('#kirimTTD').attr('href', "{{ route('skrd.updateStatusKirimTTD', ':id') }}".replace(':id', id));
     }
