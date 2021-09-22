@@ -148,9 +148,8 @@
             {data: 'tgl_bayar', name: 'tgl_bayar'},
             {data: 'ntb', name: 'ntb'},
             {data: 'total_bayar', name: 'total_bayar'},
-            {data: 'status_bayar', name: 'status_bayar'},
+            {data: 'status_bayar', name: 'status_bayar', orderable: false, searchable: false, className: 'text-center'},
             {data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center'}
-            // {data: 'file_ttd', name: 'file_ttd', orderable: false, searchable: false, className: 'text-center'}
         ]
     });
 

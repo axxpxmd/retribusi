@@ -73,12 +73,24 @@ class STSController extends Controller
 
         return DataTables::of($data)
             ->addColumn('action', function ($p) {
-                if ($p->status_ttd == 1) {
-                    return "<a href='" . route($this->route . 'report', Crypt::encrypt($p->id)) . "' target='blank' class='cyan-text' title='File TTD'><i class='icon-document-file-pdf2'></i></a>";
+                $edit      = "<a href='" . route($this->route . 'edit', Crypt::encrypt($p->id)) . "' class='text-primary mr-2' title='Edit Data'><i class='icon icon-edit'></i></a>";
+                $report    = "<a href='" . route($this->route . 'report', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
+                $reportTTD = "<a href='" . route($this->route . 'report', Crypt::encrypt($p->id)) . "' target='blank' class='cyan-text' title='File TTD'><i class='icon-document-file-pdf2'></i></a>";
+
+                if ($p->status_bayar == 1) {
+                    if ($p->status_ttd == 1) {
+                        return $reportTTD;
+                    } else {
+                        return $report;
+                    }
                 } else {
-                    return "
-                    <a href='" . route($this->route . 'edit', Crypt::encrypt($p->id)) . "' class='text-primary mr-2' title='Edit Data'><i class='icon icon-edit'></i></a>
-                    <a href='" . route($this->route . 'report', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
+                    if ($p->status_ttd == 1) {
+                        return $reportTTD;
+                    } elseif ($p->status_ttd == 2) {
+                        return $report;
+                    } elseif ($p->status_ttd = 0) {
+                        return $edit . $report;
+                    }
                 }
             })
             ->editColumn('no_bayar', function ($p) {
@@ -109,23 +121,13 @@ class STSController extends Controller
             })
             ->editColumn('status_bayar', function ($p) {
                 if ($p->status_bayar == 1) {
-                    return 'Sudah Dibayar';
+                    return "<span class='badge badge-success'>Sudah bayar</span>";
                 } else {
-                    return 'Belum Dibayar';
-                }
-            })
-            ->addColumn('file_ttd', function ($p) {
-                $path_sftp = 'file_ttd_skrd/';
-                $fileName  = str_replace(' ', '', $p->nm_wajib_pajak) . '-' . $p->no_skrd . ".pdf";
-
-                if ($p->status_ttd == 0) {
-                    return '-';
-                } else {
-                    return "<a href='" . config('app.sftp_src') . $path_sftp . $fileName . "' target='_blank' class='text-success'><i class='icon-document-file-pdf'></i></a>";
+                    return  "<span class='badge badge-danger'>Belum bayar</span>";
                 }
             })
             ->addIndexColumn()
-            ->rawColumns(['action', 'no_bayar', 'opd_id', 'id_jenis_pendapatan', 'tgl_skrd', 'masa_berlaku', 'status_bayar', 'file_ttd'])
+            ->rawColumns(['action', 'no_bayar', 'opd_id', 'id_jenis_pendapatan', 'tgl_skrd', 'masa_berlaku', 'status_bayar'])
             ->toJson();
     }
 

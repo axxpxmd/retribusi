@@ -213,7 +213,7 @@
             {data: 'masa_berlaku', name: 'masa_berlaku'},
             {data: 'jumlah_bayar', name: 'jumlah_bayar'},
             {data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center'},
-            {data: 'file_ttd', name: 'file_ttd', orderable: false, searchable: false, className: 'text-center'}
+            {data: 'status_ttd', name: 'status_ttd', orderable: false, searchable: false, className: 'text-center'}
         ]
     });
 

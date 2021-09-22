@@ -101,24 +101,6 @@ class SKRDController extends Controller
                     }
                     return $report;
                 }
-
-
-
-                // if ($p->status_bayar == 0) {
-                //     if ($p->status_ttd == 0) {
-                //         return "
-                //         <a href='#' onclick='remove(" . $p->id . ")' class='text-danger mr-2' title='Hapus Data'><i class='icon icon-remove'></i></a>
-                //         <a href='" . route($this->route . 'edit', Crypt::encrypt($p->id)) . "' class='text-primary mr-2' title='Edit Data'><i class='icon icon-edit'></i></a>
-                //         <a href='" . route($this->route . 'report', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
-                //     } else {
-                //         return "-";
-                //     }
-                // } else {
-                //     if ($p->status_ttd == 0) {
-                //         return $report;
-                //     }
-                //     return '-';
-                // }
             })
             ->editColumn('no_skrd', function ($p) {
                 return "<a href='" . route($this->route . 'show', Crypt::encrypt($p->id)) . "' class='text-primary' title='Show Data'>" . $p->no_skrd . "</a>";
@@ -138,7 +120,7 @@ class SKRDController extends Controller
             ->editColumn('jumlah_bayar', function ($p) {
                 return 'Rp. ' . number_format($p->jumlah_bayar);
             })
-            ->addColumn('file_ttd', function ($p) {
+            ->addColumn('status_ttd', function ($p) {
                 if ($p->status_ttd == 0) {
                     return "<span class='badge badge-danger'>Belum</span>";
                 } elseif ($p->status_ttd == 1) {
@@ -148,7 +130,7 @@ class SKRDController extends Controller
                 }
             })
             ->addIndexColumn()
-            ->rawColumns(['action', 'no_skrd', 'id_opd', 'id_jenis_pendapatan', 'tgl_skrd', 'masa_berlaku', 'file_ttd'])
+            ->rawColumns(['action', 'no_skrd', 'id_opd', 'id_jenis_pendapatan', 'tgl_skrd', 'masa_berlaku', 'status_ttd'])
             ->toJson();
     }
 
