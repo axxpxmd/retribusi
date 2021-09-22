@@ -88,7 +88,7 @@ class STSController extends Controller
                         return $reportTTD;
                     } elseif ($p->status_ttd == 2) {
                         return $report;
-                    } elseif ($p->status_ttd = 0) {
+                    } elseif ($p->status_ttd == 0) {
                         return $edit . $report;
                     }
                 }
