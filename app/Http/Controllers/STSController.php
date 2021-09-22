@@ -73,9 +73,13 @@ class STSController extends Controller
 
         return DataTables::of($data)
             ->addColumn('action', function ($p) {
-                return "
+                if ($p->status_ttd == 1) {
+                    return "<a href='" . route($this->route . 'report', Crypt::encrypt($p->id)) . "' target='blank' class='cyan-text' title='File TTD'><i class='icon-document-file-pdf2'></i></a>";
+                } else {
+                    return "
                     <a href='" . route($this->route . 'edit', Crypt::encrypt($p->id)) . "' class='text-primary mr-2' title='Edit Data'><i class='icon icon-edit'></i></a>
                     <a href='" . route($this->route . 'report', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
+                }
             })
             ->editColumn('no_bayar', function ($p) {
                 return "<a href='" . route($this->route . 'show', Crypt::encrypt($p->id)) . "' class='text-primary' title='Show Data'>" . $p->no_bayar . "</a>";
@@ -134,10 +138,15 @@ class STSController extends Controller
 
         $data = TransaksiOPD::find($id);
 
+        $fileName  = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
+        $path_sftp = 'file_ttd_skrd/';
+
         return view($this->view . 'show', compact(
             'route',
             'title',
-            'data'
+            'data',
+            'path_sftp',
+            'fileName'
         ));
     }
 
@@ -238,12 +247,27 @@ class STSController extends Controller
         }
         $terbilang = Html_number::terbilang($total_bayar_final) . 'rupiah';
 
+        // generate QR Code
+        $fileName = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
+        $file_url = config('app.sftp_src') . 'file_ttd_skrd/' . $fileName;
+        $b   = base64_encode(\SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')->merge(public_path('images/logo-png.png'), 0.2, true)->size(900)->errorCorrection('H')->margin(0)->generate($file_url));
+        $img = '<img width="60" height="61" src="data:image/png;base64, ' . $b . '" alt="qr code" />';
+
         // Update Jumlah Cetak
         $this->updateJumlahCetak($id, $data->jumlah_cetak);
 
         $pdf = app('dompdf.wrapper');
         $pdf->getDomPDF()->set_option("enable_php", true);
-        $pdf->loadView($this->view . 'report', compact(
+
+        // Check status TTD
+        if ($data->status_ttd == 1) {
+            $file = 'reportTTE';
+        } else {
+            $file = 'report';
+        }
+
+        $pdf->loadView($this->view . $file, compact(
+            'img',
             'data',
             'terbilang',
             'total_bayar_final'

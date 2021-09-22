@@ -30,7 +30,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card mt-2">
-                            <h6 class="card-header"><strong>Data SKRD</strong></h6>
+                            <h6 class="card-header"><strong>Data STS</strong>@if ($data->status_ttd == 1) | <span class="text-success font-weight-bold">Sudah Ditandatangani</span>@endif</h6>
                             <div class="card-body">
                                 <div class="col-md-12">
                                     <div class="row">
@@ -215,7 +215,7 @@
                                     <div class="row mt-2">
                                         <label class="col-md-2 text-right s-12"></label>
                                         <label class="col-md-3 s-12">
-                                            <a target="blank" href="{{ route('sts.report', \Crypt::encrypt($data->id)) }}" class="btn btn-sm btn-primary"><i class="icon-print mr-2"></i>Print Data</a>
+                                            <button class="btn btn-sm btn-success" data-toggle="modal" data-target="#preview-file"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</button> 
                                         </label>
                                     </div> 
                                 </div>
@@ -224,6 +224,14 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+<!-- Preview File -->
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="preview-file" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <iframe src="{{ route('sts.report', \Crypt::encrypt($data->id)) }}" style="margin-left: -160px !important" width="850px" height="940px"></iframe>
         </div>
     </div>
 </div>

@@ -30,7 +30,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card mt-2">
-                            <h6 class="card-header"><strong>Data SKRD</strong></h6>
+                            <h6 class="card-header"><strong>Data Laporan</strong></h6>
                             <div class="card-body">
                                 <div class="col-md-12">
                                     <div class="row">
@@ -212,12 +212,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row mt-2">
-                                        <label class="col-md-2 text-right s-12"></label>
-                                        <label class="col-md-3 s-12">
-                                            <a target="blank" href="{{ route('sts.report', \Crypt::encrypt($data->id)) }}" class="btn btn-sm btn-primary"><i class="icon-print mr-2"></i>Print Data</a>
-                                        </label>
-                                    </div> 
                                 </div>
                             </div>
                         </div>
