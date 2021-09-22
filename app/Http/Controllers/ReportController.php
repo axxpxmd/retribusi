@@ -122,6 +122,12 @@ class ReportController extends Controller
             })
             ->addColumn('cetak_skrd', function ($p) {
                 $skrd_route = 'skrd.';
+                $path_sftp  = 'file_ttd_skrd/';
+                $fileName   = str_replace(' ', '', $p->nm_wajib_pajak) . '-' . $p->no_skrd . ".pdf";
+
+                if ($p->status_ttd == 1)
+                    return "<a href='" . config('app.sftp_src') . $path_sftp . $fileName . "' target='_blank' class='cyan-text' title='File TTD'><i class='icon-document-file-pdf2'></i></a>";
+
                 return "<a href='" . route($skrd_route . 'report', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
             })
             ->addColumn('cetak_sts', function ($p) {
