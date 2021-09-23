@@ -79,6 +79,12 @@ class JenisPendapatanController extends Controller
             'target_pendapatan' => 'required|digits_between:0,15',
         ])->validate();
 
+        $count = JenisPendapatan::count();
+        if ($count >= 99)
+            return response()->json([
+                'message' => 'Data Jenis Pendapatan sudah penuh. Limit:99'
+            ], 422);
+
         JenisPendapatan::create($input);
 
         return response()->json([
