@@ -186,8 +186,8 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content" style="background: transparent !important; border: none !important">
             <div class="modal-body">
-                <img src="{{ asset('images/loader.svg') }}" class="mx-auto d-block" width="200" height="200" alt="">  
-                {{-- <img src="{{ asset('images/loaderTime.gif') }}" class="mx-auto d-block" width="200" height="200" alt="">                --}}
+                {{-- <img src="{{ asset('images/loader.svg') }}" class="mx-auto d-block" width="200" height="200" alt="">   --}}
+                <img src="{{ asset('images/hourglass.png') }}" class="mx-auto d-block" width="100" height="100" alt="">               
             </div>
         </div>
     </div>

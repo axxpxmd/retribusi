@@ -209,20 +209,6 @@ class SKRDController extends Controller
 
     public function create(Request $request)
     {
-        // Get Token BJB
-        $resGetTokenBJB = $this->getTokenBJB();
-        if ($resGetTokenBJB->successful()) {
-            $resJson = $resGetTokenBJB->json();
-            if ($resJson['rc'] != 0000)
-                return redirect()
-                    ->route($this->route . 'index')
-                    ->withErrors('Terjadi kegagalan saat mengambil token. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . '');
-            $tokenBJB = $resJson['data'];
-        } else {
-            return redirect()
-                ->route($this->route . 'index')
-                ->withErrors("Terjadi kegagalan saat mengambil token. Error Code " . $resGetTokenBJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator");
-        }
 
         $route = $this->route;
         $title = $this->title;
@@ -247,6 +233,21 @@ class SKRDController extends Controller
             // Decrypt params
             $opd_id = \Crypt::decrypt($opd_id);
             $jenis_pendapatan_id = \Crypt::decrypt($jenis_pendapatan_id);
+        }
+
+        // Get Token BJB
+        $resGetTokenBJB = $this->getTokenBJB();
+        if ($resGetTokenBJB->successful()) {
+            $resJson = $resGetTokenBJB->json();
+            if ($resJson['rc'] != 0000)
+                return redirect()
+                    ->route($this->route . 'index')
+                    ->withErrors('Terjadi kegagalan saat mengambil token. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . '');
+            $tokenBJB = $resJson['data'];
+        } else {
+            return redirect()
+                ->route($this->route . 'index')
+                ->withErrors("Terjadi kegagalan saat mengambil token. Error Code " . $resGetTokenBJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator");
         }
 
         // Data wajib Retribusi
