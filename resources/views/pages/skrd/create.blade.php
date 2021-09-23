@@ -182,6 +182,16 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="loading" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content" style="background: transparent !important; border: none !important">
+            <div class="modal-body">
+                <img src="{{ asset('images/loader.svg') }}" class="mx-auto d-block" width="200" height="200" alt="">  
+                {{-- <img src="{{ asset('images/loaderTime.gif') }}" class="mx-auto d-block" width="200" height="200" alt="">                --}}
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 @section('script')
 <script type="text/javascript">
@@ -203,7 +213,15 @@
         }, 'JSON');
     });
 
+    $('#loading').modal('hide');
     $('#form').on('submit', function (e) {
+        $(document)
+            .ajaxStart(function () {
+                $('#loading').modal('show');
+            })
+            .ajaxStop(function () {
+                $('#loading').modal('hide');
+            });
         if ($(this)[0].checkValidity() === false) {
             event.preventDefault();
             event.stopPropagation();
