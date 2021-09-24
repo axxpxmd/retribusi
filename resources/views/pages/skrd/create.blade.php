@@ -215,18 +215,19 @@
 
     $('#loading').modal('hide');
     $('#form').on('submit', function (e) {
-        $(document)
-            .ajaxStart(function () {
-                $('#loading').modal('show');
-            })
-            .ajaxStop(function () {
-                $('#loading').modal('hide');
-            });
         if ($(this)[0].checkValidity() === false) {
             event.preventDefault();
             event.stopPropagation();
         }
         else{
+            $(document)
+                .ajaxStart(function () {
+                    $('#loading').modal('show');
+                })
+                .ajaxStop(function () {
+                    $('#loading').modal('hide');
+                });
+
             $('#alert').html('');
             $("#kecamatan_id").prop("disabled", false);
             $("#kelurahan_id").prop("disabled", false);
