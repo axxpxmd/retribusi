@@ -65,6 +65,9 @@ class HomeController extends Controller
             ->orderBy('y', 'DESC')
             ->get();
 
+        $parents = [];
+        $childs = [];
+
         foreach ($higherIncome as $key => $value) {
             $color = ['#26a69a', '#26c6da', '#42a5f5', '#ef5350', '#ff7043', '#5c6bc0', '#ffee58', '#bdbdbd', '#66bb6a ', '#ec407a'];
 
