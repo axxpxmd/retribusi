@@ -64,7 +64,7 @@ class TandaTanganController extends Controller
         $status_ttd = $request->status_ttd;
 
         $checkOPD = Auth::user()->pengguna->opd_id;
-        if ($checkOPD == 0 || $checkOPD == 99999) {
+        if ($checkOPD == 0) {
             $opd_id = $request->opd_id;
         } else {
             $opd_id = $checkOPD;

@@ -54,7 +54,7 @@ class ReportController extends Controller
     public function api(Request $request)
     {
         $checkOPD = Auth::user()->pengguna->opd_id;
-        if ($checkOPD == 0 || $checkOPD == 99999) {
+        if ($checkOPD == 0) {
             $opd_id = $request->opd_id;
         } else {
             $opd_id = $checkOPD;
@@ -168,7 +168,7 @@ class ReportController extends Controller
     public function cetakSKRD(Request $request)
     {
         $checkOPD = Auth::user()->pengguna->opd_id;
-        if ($checkOPD == 0 || $checkOPD == 99999) {
+        if ($checkOPD == 0) {
             $opd_id = $request->opd_id;
         } else {
             $opd_id = $checkOPD;
