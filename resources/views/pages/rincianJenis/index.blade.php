@@ -47,14 +47,15 @@
                         <div class="card no-b">
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table id="dataTable" class="table table-striped table-bordered" style="width:100%">
+                                    <table id="dataTable" class="table display nowrap table-striped table-bordered" style="width:100%">
                                         <thead>
-                                            <th width="5%">No</th>
-                                            <th width="40%">Rincian Jenis Pendapatan</th>
-                                            <th width="33%">Jenis Pendapatan</th>
-                                            <th width="7%">Kode Jenis</th>
-                                            <th width="10%">Nomor Rekening</th>
-                                            <th width="5%"></th>
+                                            <th>No</th>
+                                            <th>Rincian Jenis Pendapatan</th>
+                                            <th>Jenis Pendapatan</th>
+                                            <th>Kode Jenis</th>
+                                            <th>Nomor Rekening</th>
+                                            <th>Nomor Rekening Denda</th>
+                                            <th></th>
                                         </thead>
                                         <tbody></tbody>
                                     </table>
@@ -98,6 +99,10 @@
                                                 <label for="nmr_rekening" class="s-12 col-md-2" style="text-align: left !important">Nomor Rekening<span class="text-danger ml-1">*</span></label>
                                                 <input type="text" name="nmr_rekening" id="nmr_rekening" class="form-control r-0 light s-12 col-md-6" autocomplete="off" required/>
                                             </div>
+                                            <div class="row m-0">
+                                                <label for="nmr_rekening_denda" class="s-12 col-md-2" style="text-align: left !important">Nomor Rekening Denda<span class="text-danger ml-1">*</span></label>
+                                                <input type="text" name="nmr_rekening_denda" id="nmr_rekening_denda" class="form-control r-0 light s-12 col-md-6" autocomplete="off"/>
+                                            </div>
                                             <div class="form-group mt-2">
                                                 <div class="col-md-2"></div>
                                                 <button type="submit" class="btn btn-primary btn-sm"><i class="icon-save mr-2"></i>Simpan</button>
@@ -118,6 +123,7 @@
 @section('script')
 <script type="text/javascript">
     var table = $('#dataTable').dataTable({
+        scrollX: true,
         processing: true,
         serverSide: true,
         order: [ 0, 'asc' ],
@@ -134,6 +140,7 @@
             {data: 'id_jenis_pendapatan', name: 'id_jenis_pendapatan'},
             {data: 'kd_jenis', name: 'kd_jenis'},
             {data: 'nmr_rekening', name: 'nmr_rekening'},
+            {data: 'nmr_rekening_denda', name: 'nmr_rekening_denda'},
             {data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center'}
         ]
     });
