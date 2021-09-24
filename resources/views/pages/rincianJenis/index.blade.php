@@ -92,15 +92,15 @@
                                                 <textarea rows="4" name="rincian_pendapatan" id="rincian_pendapatan" class="form-control r-0 light s-12 col-md-6" autocomplete="off" required></textarea>
                                             </div>
                                             <div class="row m-0">
-                                                <label for="kd_jenis" class="s-12 col-md-2" style="text-align: left !important">Kode Jenis<span class="text-danger ml-1">*</span></label>
+                                                <label for="kd_jenis" class="s-12 col-md-2">Kode Jenis<span class="text-danger ml-1">*</span></label>
                                                 <input type="text" name="kd_jenis" id="kd_jenis" class="form-control r-0 light s-12 col-md-6" autocomplete="off" required/>
                                             </div>
                                             <div class="row m-0">
-                                                <label for="nmr_rekening" class="s-12 col-md-2" style="text-align: left !important">Nomor Rekening<span class="text-danger ml-1">*</span></label>
+                                                <label for="nmr_rekening" class="s-12 col-md-2">Nomor Rekening<span class="text-danger ml-1">*</span></label>
                                                 <input type="text" name="nmr_rekening" id="nmr_rekening" class="form-control r-0 light s-12 col-md-6" autocomplete="off" required/>
                                             </div>
                                             <div class="row m-0">
-                                                <label for="nmr_rekening_denda" class="s-12 col-md-2" style="text-align: left !important">Nomor Rekening Denda<span class="text-danger ml-1">*</span></label>
+                                                <label for="nmr_rekening_denda" class="s-12 col-md-2">Nomor Rekening Denda</label>
                                                 <input type="text" name="nmr_rekening_denda" id="nmr_rekening_denda" class="form-control r-0 light s-12 col-md-6" autocomplete="off"/>
                                             </div>
                                             <div class="form-group mt-2">

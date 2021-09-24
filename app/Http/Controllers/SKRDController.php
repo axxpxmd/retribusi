@@ -97,9 +97,9 @@ class SKRDController extends Controller
                     return $filettd;
                 } else {
                     if ($p->status_ttd != 2) {
-                        return $edit . $delete . $report . $sendttd;
+                        return $edit . $delete . $sendttd;
                     }
-                    return $report;
+                    return '-';
                 }
             })
             ->editColumn('no_skrd', function ($p) {
