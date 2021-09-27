@@ -92,7 +92,7 @@
         processing: true,
         serverSide: true,
         order: [ 0, 'asc' ],
-        pageLength: 25,
+        pageLength: 15,
         ajax: {
             url: "{{ route($route.'api') }}",
             method: 'POST',

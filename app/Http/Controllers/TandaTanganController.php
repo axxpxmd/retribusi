@@ -268,7 +268,7 @@ class TandaTanganController extends Controller
             'lly'  => 795,
             'page' => 1,
             'idkeystore' => $request->id_cert,
-            'reason'     => 'Tanda Tangan DigitallmnRetribusi',
+            'reason'     => 'Tanda Tangan Digitall Retribusi',
             'location'   => 'Tangerang Selatan',
             'updated_at' => ''
         ];
