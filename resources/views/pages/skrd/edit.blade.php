@@ -36,7 +36,6 @@
                                 <form class="needs-validation" id="form" method="PATCH"  enctype="multipart/form-data" novalidate>
                                     {{ method_field('PATCH') }}
                                     <input type="hidden" id="id" name="id" value="{{ $data->id }}"/>
-                                    <input type="hidden" id="token_bjb" name="token_bjb" value="{{ $tokenBJB }}"/>
                                     {{-- <input type="hidden" name="jenis_pendapatan_id" value="{{ $jenis_pendapatan->id }}">
 
                                     <input type="hidden" name="no_skrd" value="{{ $no_skrd }}">
@@ -163,6 +162,16 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="loading" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content" style="background: transparent !important; border: none !important">
+            <div class="modal-body">
+                {{-- <img src="{{ asset('images/loader.svg') }}" class="mx-auto d-block" width="200" height="200" alt="">   --}}
+                <img src="{{ asset('images/hourglass.png') }}" class="mx-auto d-block" width="100" height="100" alt="">               
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 @section('script')
 <script type="text/javascript">
@@ -216,6 +225,14 @@
             event.stopPropagation();
         }
         else{
+            $(document)
+                .ajaxStart(function () {
+                    $('#loading').modal('show');
+                })
+                .ajaxStop(function () {
+                    $('#loading').modal('hide');
+                });
+
             $('#alert').html('');
             $('#action').attr('disabled', true);
             url = "{{ route($route.'update', ':id') }}".replace(':id', $('#id').val());
@@ -241,9 +258,9 @@
                                 text: "ok!",
                                 btnClass: 'btn-primary',
                                 keys: ['enter'],
-                                // action: function () {
-                                //     location.reload();
-                                // }
+                                action: function () {
+                                    location.reload();
+                                }
                             }
                         }
                     });

@@ -526,21 +526,6 @@ class SKRDController extends Controller
 
         $id = \Crypt::decrypt($id);
 
-        // Get Token BJB
-        $resGetTokenBJB = $this->getTokenBJB();
-        if ($resGetTokenBJB->successful()) {
-            $resJson = $resGetTokenBJB->json();
-            if ($resJson['rc'] != 0000)
-                return redirect()
-                    ->route($this->route . 'index')
-                    ->withErrors('Terjadi kegagalan saat mengambil token. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . '');
-            $tokenBJB = $resJson['data'];
-        } else {
-            return redirect()
-                ->route($this->route . 'index')
-                ->withErrors("Terjadi kegagalan saat mengambil token. Error Code " . $resGetTokenBJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator");
-        }
-
         $data = TransaksiOPD::find($id);
         $rincian_jenis_pendapatans = RincianJenisPendapatan::where('id_jenis_pendapatan', $data->id_jenis_pendapatan)->get();
 
@@ -548,8 +533,7 @@ class SKRDController extends Controller
             'route',
             'title',
             'data',
-            'rincian_jenis_pendapatans',
-            'tokenBJB'
+            'rincian_jenis_pendapatans'
         ));
     }
 
@@ -616,35 +600,52 @@ class SKRDController extends Controller
         $data = TransaksiOPD::find($id);
 
         /* Tahapan : 
-         * 1. Update VA
+         * 1. Update VA BJB
          * 2. tmtransaksi_opd
          */
 
         // Tahap 1
-        $tokenBJB = $request->token_bjb;
         $amount   = \strval((int) str_replace(['.', 'Rp', ' '], '', $request->jumlah_bayar));
         $expiredDate   = $request->tgl_skrd_akhir . ' 23:59:59';
         $customer_name = $request->nm_wajib_pajak;
         $va_number     = (int) $data->nomor_va_bjb;
 
-        // update VA BJB
-        $resUpdateVABJB = $this->updateVaBJB($tokenBJB, $amount, $expiredDate, $customer_name, $va_number);
+        $VABJB = $data->nomor_va_bjb;
+        if ($amount != $data->jumlah_bayar) {
+            // Get Token BJB
+            $resGetTokenBJB = $this->getTokenBJB();
+            if ($resGetTokenBJB->successful()) {
+                $resJson = $resGetTokenBJB->json();
+                if ($resJson['rc'] != 0000)
+                    return redirect()
+                        ->route($this->route . 'index')
+                        ->withErrors('Terjadi kegagalan saat mengambil token. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . '');
+                $tokenBJB = $resJson['data'];
+            } else {
+                return redirect()
+                    ->route($this->route . 'index')
+                    ->withErrors("Terjadi kegagalan saat mengambil token. Error Code " . $resGetTokenBJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator");
+            }
 
-        if ($resUpdateVABJB->successful()) {
-            $resJson = $resUpdateVABJB->json();
-            if (isset($resJson['rc']) != 0000)
+            // update VA BJB
+            $resUpdateVABJB = $this->updateVaBJB($tokenBJB, $amount, $expiredDate, $customer_name, $va_number);
+            if ($resUpdateVABJB->successful()) {
+                $resJson = $resUpdateVABJB->json();
+                if (isset($resJson['rc']) != 0000)
+                    return response()->json([
+                        'message' => 'Terjadi kegagalan saat membuat Virtual Account. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . ''
+                    ], 422);
+                $VABJB = $resJson['va_number'];
+            } else {
                 return response()->json([
-                    'message' => 'Terjadi kegagalan saat membuat Virtual Account. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . ''
+                    'message' => "Terjadi kegagalan saat membuat Virtual Account. Error Code " . $resUpdateVABJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator"
                 ], 422);
-            $VABJB = $resJson['va_number'];
-        } else {
-            return response()->json([
-                'message' => "Terjadi kegagalan saat membuat Virtual Account. Error Code " . $resUpdateVABJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator"
-            ], 422);
+            }
         }
 
         // Tahap 2
         $input = $request->all();
+        $input = $request->except('token_bjb');
         $data->update($input);
         $data->update([
             'nomor_va_bjb' => $VABJB,
