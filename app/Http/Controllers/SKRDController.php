@@ -526,6 +526,21 @@ class SKRDController extends Controller
 
         $id = \Crypt::decrypt($id);
 
+        // Get Token BJB
+        $resGetTokenBJB = $this->getTokenBJB();
+        if ($resGetTokenBJB->successful()) {
+            $resJson = $resGetTokenBJB->json();
+            if ($resJson['rc'] != 0000)
+                return redirect()
+                    ->route($this->route . 'index')
+                    ->withErrors('Terjadi kegagalan saat mengambil token. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . '');
+            $tokenBJB = $resJson['data'];
+        } else {
+            return redirect()
+                ->route($this->route . 'index')
+                ->withErrors("Terjadi kegagalan saat mengambil token. Error Code " . $resGetTokenBJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator");
+        }
+
         $data = TransaksiOPD::find($id);
         $rincian_jenis_pendapatans = RincianJenisPendapatan::where('id_jenis_pendapatan', $data->id_jenis_pendapatan)->get();
 
@@ -533,7 +548,8 @@ class SKRDController extends Controller
             'route',
             'title',
             'data',
-            'rincian_jenis_pendapatans'
+            'rincian_jenis_pendapatans',
+            'tokenBJB'
         ));
     }
 
@@ -558,14 +574,80 @@ class SKRDController extends Controller
         ));
     }
 
+    public function updateVaBJB($tokenBJB, $amount, $expiredDate, $customer_name, $va_number)
+    {
+
+        /* Update Virtual Account from Bank BJB
+         * UPDATE BILLING REQUEST (POST /billing/<cin>/<va_number>)
+         */
+
+        $url = $this->urlBJB;
+        $timestamp_now = Carbon::now()->timestamp;
+
+        $cin      = "065";
+        $currency = "360";
+
+        // Base Signature
+        $bodySignature = '{"amount":"' . $amount . '","currency":"' . $currency . '","expired_date":"' . $expiredDate . '","customer_name":"' . $customer_name . '"}';
+        $signature = 'path=/billing/' . $cin . '/' . $va_number . '&method=POST&token=' . $tokenBJB . '&timestamp=' . $timestamp_now . '&body=' . $bodySignature . '';
+        $sha256    = hash_hmac('sha256', $signature, $this->keyBJB);
+
+        // Body / Payload
+        $reqBody = [
+            "amount"   => $amount,
+            "currency" => $currency,
+            "expired_date"  => $expiredDate,
+            "customer_name" => $customer_name
+        ];
+
+        $path = 'billing/' . $cin . '/' . $va_number . '';
+        $res  = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $tokenBJB,
+            'BJB-Timestamp' => $timestamp_now,
+            'BJB-Signature' => $sha256,
+            'Content-Type'  => 'application/json'
+        ])->post($url . $path, $reqBody);
+
+        return $res;
+    }
+
     public function update(Request $request, $id)
     {
         $data = TransaksiOPD::find($id);
 
-        $input = $request->all();
+        /* Tahapan : 
+         * 1. Update VA
+         * 2. tmtransaksi_opd
+         */
 
+        // Tahap 1
+        $tokenBJB = $request->token_bjb;
+        $amount   = \strval((int) str_replace(['.', 'Rp', ' '], '', $request->jumlah_bayar));
+        $expiredDate   = $request->tgl_skrd_akhir . ' 23:59:59';
+        $customer_name = $request->nm_wajib_pajak;
+        $va_number     = (int) $data->nomor_va_bjb;
+
+        // update VA BJB
+        $resUpdateVABJB = $this->updateVaBJB($tokenBJB, $amount, $expiredDate, $customer_name, $va_number);
+
+        if ($resUpdateVABJB->successful()) {
+            $resJson = $resUpdateVABJB->json();
+            if (isset($resJson['rc']) != 0000)
+                return response()->json([
+                    'message' => 'Terjadi kegagalan saat membuat Virtual Account. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . ''
+                ], 422);
+            $VABJB = $resJson['va_number'];
+        } else {
+            return response()->json([
+                'message' => "Terjadi kegagalan saat membuat Virtual Account. Error Code " . $resUpdateVABJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator"
+            ], 422);
+        }
+
+        // Tahap 2
+        $input = $request->all();
         $data->update($input);
         $data->update([
+            'nomor_va_bjb' => $VABJB,
             'total_bayar'  => (int) str_replace(['.', 'Rp', ' '], '', $request->jumlah_bayar),
             'jumlah_bayar' => (int) str_replace(['.', 'Rp', ' '], '', $request->jumlah_bayar),
             'updated_by'   => Auth::user()->pengguna->full_name,

@@ -36,6 +36,7 @@
                                 <form class="needs-validation" id="form" method="PATCH"  enctype="multipart/form-data" novalidate>
                                     {{ method_field('PATCH') }}
                                     <input type="hidden" id="id" name="id" value="{{ $data->id }}"/>
+                                    <input type="hidden" id="token_bjb" name="token_bjb" value="{{ $tokenBJB }}"/>
                                     {{-- <input type="hidden" name="jenis_pendapatan_id" value="{{ $jenis_pendapatan->id }}">
 
                                     <input type="hidden" name="no_skrd" value="{{ $no_skrd }}">
@@ -240,9 +241,9 @@
                                 text: "ok!",
                                 btnClass: 'btn-primary',
                                 keys: ['enter'],
-                                action: function () {
-                                    location.reload();
-                                }
+                                // action: function () {
+                                //     location.reload();
+                                // }
                             }
                         }
                     });
