@@ -121,7 +121,6 @@ return [
     */
 
     'key' => env('APP_KEY'),
-
     'cipher' => 'AES-256-CBC',
 
     // SFTP
@@ -132,6 +131,12 @@ return [
     'signapi' => env('SIGNAPI'),
     'signapi_ipserver' => env('SIGNAPI_IPSERVER'),
     'signapi_bearer' => env('SIGNAPI_BEARER'),
+
+    // BJB
+    'cin_bjb' => env('CIN_BJB'),
+    'ip_api_bjb' => env('IP_API_BJB'),
+    'key_bjb' => env('KEY_BJB'),
+    'client_id_bjb' => env('CLIENT_ID_BJB'),
 
     /*
     |--------------------------------------------------------------------------

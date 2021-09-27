@@ -171,6 +171,37 @@ class TransaksiOPD extends Model
     }
 
     // 
+    public static function querySTRD($from, $to, $opd_id, $no_skrd, $status_ttd)
+    {
+        $now = Carbon::now();
+        $date = $now->format('Y-m-d');
+
+        $data = TransaksiOPD::where('status_bayar', 0)->where('tgl_skrd_akhir', '<=', $date)->orderBy('id', 'DESC');
+
+        if ($opd_id != 0) {
+            $data->where('id_opd', $opd_id);
+        }
+
+        if ($no_skrd != null) {
+            $data->where('no_skrd', 'like', '%' . $no_skrd . '%');
+        }
+
+        if ($status_ttd != null) {
+            $data->where('status_ttd', $status_ttd);
+        }
+
+        if ($from != null ||  $to != null) {
+            if ($from != null && $to == null) {
+                $data->whereDate('tgl_skrd_awal', $from);
+            } else {
+                $data->whereBetween('tgl_skrd_awal', [$from, $to]);
+            }
+        }
+
+        return $data->get();
+    }
+
+    // 
     public static function querySTS($from, $to, $opd_id, $status_bayar, $jenis_tanggal, $no_bayar)
     {
         $data = TransaksiOPD::orderBy('id', 'DESC');

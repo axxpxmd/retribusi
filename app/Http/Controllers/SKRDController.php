@@ -30,9 +30,6 @@ class SKRDController extends Controller
     protected $route  = 'skrd.';
     protected $title  = 'SKRD';
     protected $view   = 'pages.skrd.';
-    protected $urlBJB = 'http://10.31.224.34:23808/';
-    protected $keyBJB = "pUyzZIK_YUlX3VqFC5WQJYeqM5A9ceokMFwtOCcb2R0";
-    protected $clientIdBJB = "XXR4SKMQ";
 
     // Check Permission
     public function __construct()
@@ -188,9 +185,9 @@ class SKRDController extends Controller
         $timestamp_now   = Carbon::now()->timestamp;
         $timestamp_1hour = Carbon::now()->addHour()->timestamp;
 
-        $url = $this->urlBJB;
-        $client_id = $this->clientIdBJB;
-        $key = $this->keyBJB;
+        $url = config('app.ip_api_bjb');
+        $client_id = config('app.client_id_bjb');
+        $key = config('app.key_bjb');
 
         $payload   = array(
             "sub" => "va-online",
@@ -352,10 +349,11 @@ class SKRDController extends Controller
          * CREATE BILLING REQUEST (POST /billing)
          */
 
-        $url = $this->urlBJB;
+        $url = config('app.ip_api_bjb');
+        $key = config('app.key_bjb');
         $timestamp_now = Carbon::now()->timestamp;
 
-        $cin         = "065";
+        $cin         = config('app.cin_bjb');
         $clientType  = "1";
         $productCode = "01";
         $billingType = "f";
@@ -366,7 +364,7 @@ class SKRDController extends Controller
         // Base Signature
         $bodySignature = '{"cin":"' . $cin . '","client_type":"' . $clientType . '","product_code":"' . $productCode . '","billing_type":"' . $billingType . '","va_type":"' . $vaType . '","client_refnum":"' . $clientRefnum . '","amount":"' . $amount . '","currency":"' . $currency . '","expired_date":"' . $expiredDate . '","customer_name":"' . $customerName . '","description":"' . $description . '"}';
         $signature = 'path=/billing&method=POST&token=' . $tokenBJB . '&timestamp=' . $timestamp_now . '&body=' . $bodySignature . '';
-        $sha256    = hash_hmac('sha256', $signature, $this->keyBJB);
+        $sha256    = hash_hmac('sha256', $signature, $key);
 
         // Body / Payload
         $reqBody = [
@@ -565,16 +563,17 @@ class SKRDController extends Controller
          * UPDATE BILLING REQUEST (POST /billing/<cin>/<va_number>)
          */
 
-        $url = $this->urlBJB;
+        $url = config('app.ip_api_bjb');
+        $key = config('app.key_bjb');
         $timestamp_now = Carbon::now()->timestamp;
 
-        $cin      = "065";
+        $cin      = config('app.cin_bjb');
         $currency = "360";
 
         // Base Signature
         $bodySignature = '{"amount":"' . $amount . '","currency":"' . $currency . '","expired_date":"' . $expiredDate . '","customer_name":"' . $customer_name . '"}';
         $signature = 'path=/billing/' . $cin . '/' . $va_number . '&method=POST&token=' . $tokenBJB . '&timestamp=' . $timestamp_now . '&body=' . $bodySignature . '';
-        $sha256    = hash_hmac('sha256', $signature, $this->keyBJB);
+        $sha256    = hash_hmac('sha256', $signature, $key);
 
         // Body / Payload
         $reqBody = [

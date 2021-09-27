@@ -76,6 +76,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('update-status-kirim-ttd/{id}', 'SKRDController@updateStatusKirimTTD')->name('skrd.updateStatusKirimTTD');
     Route::get('update-status-kirim-ttds', 'SKRDController@updateStatusKirimTTDs')->name('skrd.updateStatusKirimTTDs');
 
+    // STRD
+    Route::resource('strd', 'STRDController');
+    Route::post('strd/api', 'STRDController@api')->name('strd.api');
+    Route::get('update-status-kirim-ttd/{id}', 'SKRDController@updateStatusKirimTTD')->name('skrd.updateStatusKirimTTD');
+
     // STS
     Route::resource('sts', 'STSController');
     Route::post('sts/api', 'STSController@api')->name('sts.api');
