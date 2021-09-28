@@ -243,7 +243,7 @@
             </tr>
             <tr class="a">
                 <td colspan="4" class="a">
-                    <p class="m-l-5">Dengan Huruf : <span class="t-bold">{{ $terbilang }}</span></p>
+                    <p class="m-l-5">Dengan Huruf : <span class="t-bold" style="text-transform: uppercase">{{ $terbilang }}</span></p>
                     <p class="fs-14 t-bold m-l-5"><u>PERHATIAN :</u></p>
                     <ol>
                         <li>Penyetoran dilakukan menggunakan Bank Jabar Banten (BJB) melalui Teller/ATM BJB dengan menggunakan <b>{{ $data->no_bayar }}</b></li>
