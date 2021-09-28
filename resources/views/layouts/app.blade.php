@@ -12,7 +12,7 @@ $template = App\Models\Template::select('id', 'logo', 'logo_title', 'logo_auth')
 
     <!-- Title --> 
     <link rel="icon" href="{{ asset('images/template/'.$template->logo_title) }}" type="image/x-icon">
-    <title>SKRD @yield('title')</title>
+    <title>RETRIBUSI @yield('title')</title>
 
     <!-- CSS -->
     @yield('style')

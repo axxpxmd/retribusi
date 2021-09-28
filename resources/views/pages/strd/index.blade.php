@@ -100,49 +100,6 @@
                     </div>
                 </div>
             </div>
-            <div class="tab-pane animated fadeInUpShort" id="tambah-data" role="tabpanel">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div id="alert"></div>
-                        <div class="card">
-                            <h6 class="card-header"><strong>Tambah Data</strong></h6>
-                            <div class="card-body">
-                                <form class="needs-validation" method="GET" action="{{ route('skrd.create') }}" enctype="multipart/form-data" novalidate>
-                                    {{ method_field('GET') }}
-                                    <div class="form-row form-inline">
-                                        <div class="col-md-12">
-                                            <div class="form-group m-0">
-                                                <label class="col-form-label s-12 col-md-2">OPD<span class="text-danger ml-1">*</span></label>
-                                                <div class="col-md-4 p-0 bg-light">
-                                                    <select class="select2 form-control r-0 light s-12" id="opd_id" name="opd_id" autocomplete="off">
-                                                        <option value="0">Pilih</option>
-                                                        @foreach ($opds as $i)
-                                                            <option value="{{ \Crypt::encrypt($i->id) }}">{{ $i->n_opd }}</option>
-                                                            {{-- <option value="{{ $i->id }}">{{ $i->n_opd }}</option> --}}
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="form-group mt-1">
-                                                <label class="col-form-label s-12 col-md-2">Jenis Pendapatan<span class="text-danger ml-1">*</span></label>
-                                                <div class="col-md-4 p-0 bg-light">
-                                                    <select class="select2 form-control r-0 light s-12" id="jenis_pendapatan_id" name="jenis_pendapatan_id" autocomplete="off">
-                                                        <option value="">Pilih</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="form-group mt-2">
-                                                <div class="col-md-2"></div>
-                                                <button type="submit" class="btn btn-primary btn-sm"><i class="icon-arrow_forward mr-2"></i>Selanjutnya</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </div>
@@ -168,7 +125,7 @@
             </div>
             <div class="text-right">
                 <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="icon-times mr-2"></i>Batalkan</button>
-                <a href="{{ route('skrd.updateStatusKirimTTDs') }}" class="btn btn-sm btn-primary ml-2" id="kirimTTDs"><i class="icon-pencil mr-2"></i>Kirim untuk TTD</a>
+                <a href="{{ route('strd.updateStatusKirimTTDs') }}" class="btn btn-sm btn-primary ml-2" id="kirimTTDs"><i class="icon-pencil mr-2"></i>Kirim untuk TTD</a>
             </div>
         </div>
     </div>
@@ -218,30 +175,6 @@
         table.api().ajax.reload();
     }
 
-    $('#opd_id').on('change', function(){
-        val = $(this).val();
-        option = "<option value=''>&nbsp;</option>";
-        if(val == ""){
-            $('#jenis_pendapatan_id').html(option);
-        }else{
-            $('#jenis_pendapatan_id').html("<option value=''>Loading...</option>");
-            url = "{{ route('skrd.getJenisPendapatan', ':id') }}".replace(':id', val);
-            $.get(url, function(data){
-                if(data){
-                    $.each(data, function(index, value){
-                        console.log(value.id);
-                        option += "<option value='" +  value.id + "'>" + value.jenis_pendapatan +"</li>";
-                    });
-                    $('#jenis_pendapatan_id').empty().html(option);
-
-                    $("#jenis_pendapatan_id").val($("#jenis_pendapatan_id option:first").val()).trigger("change.select2");
-                }else{
-                    $('#jenis_pendapatan_id').html(option);
-                }
-            }, 'JSON');
-        }
-    });
-  
     function remove(id){
         $.confirm({
             title: '',
@@ -290,7 +223,7 @@
         $('#updateStatusTTD').modal('show');
         $('#updateStatusTTD').modal({keyboard: false});
 
-        $('#kirimTTD').attr('href', "{{ route('skrd.updateStatusKirimTTD', ':id') }}".replace(':id', id));
+        $('#kirimTTD').attr('href', "{{ route('strd.updateStatusKirimTTD', ':id') }}".replace(':id', id));
     }
 
     function createRoute(){
@@ -300,7 +233,7 @@
         var no_skrd    = $('#no_skrd').val();
         var status_ttd = $('#status_ttd').val();
 
-        $('#kirimTTDs').attr('href', "{{ route('skrd.updateStatusKirimTTDs') }}?tgl_skrd=" + tgl_skrd + "&tgl_skrd1=" + tgl_skrd1 + "&opd_id=" + opd_id + "&status_ttd=" + status_ttd + "&no_skrd=" + no_skrd);
+        $('#kirimTTDs').attr('href', "{{ route('strd.updateStatusKirimTTDs') }}?tgl_skrd=" + tgl_skrd + "&tgl_skrd1=" + tgl_skrd1 + "&opd_id=" + opd_id + "&status_ttd=" + status_ttd + "&no_skrd=" + no_skrd);
     }
 </script>
 @endsection

@@ -723,8 +723,8 @@ class SKRDController extends Controller
         }
 
         // For Filter
-        $from  = $request->tgl_skrd;
-        $to    = $request->tgl_skrd1;
+        $from = $request->tgl_skrd;
+        $to   = $request->tgl_skrd1;
         $no_skrd    = $request->no_skrd;
         $status_ttd = $request->status_ttd;
 

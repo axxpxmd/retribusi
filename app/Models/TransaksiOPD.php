@@ -145,7 +145,10 @@ class TransaksiOPD extends Model
     // 
     public static function querySKRD($from, $to, $opd_id, $no_skrd, $status_ttd)
     {
-        $data = TransaksiOPD::where('status_bayar', 0)->orderBy('id', 'DESC');
+        $now = Carbon::now();
+        $date = $now->format('Y-m-d');
+
+        $data = TransaksiOPD::where('status_bayar', 0)->where('tgl_skrd_akhir', '>=', $date)->orderBy('id', 'DESC');
 
         if ($opd_id != 0) {
             $data->where('id_opd', $opd_id);
