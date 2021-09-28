@@ -107,17 +107,17 @@
     <table class="d">
         <tr class="d">
             <th width="40%" class="d">
-                <div>
-                    <p class="m-b-0">PEMERINTAH KOTA TANGERANG SELATAN</p>
-                    <p class="m-t-1">{{ $data->opd->n_opd }}</p>
+                <div style="margin: 0 auto">
+                    <p class="m-b-0" style="font-size: 13px">PEMERINTAH KOTA TANGERANG SELATAN</p>
+                    <p class="m-t-1" style="font-size: 13px">{{ $data->opd->n_opd }}</p>
                     <p class="m-l-5 f-w-n">{{ $data->opd->alamat }} &nbsp;</p>
                     <p>&nbsp;</p>
                 </div>
             </th>
             <th width="40%" class="d">
-                <div class="{{ $data->opd->alamat != null ? 'mt-n40' : 'mt-n15' }}">
-                    <p class="m-b-0">SURAT KETETAPAN RETRIBUSI DAERAH</p>
-                    <p class="m-t-1">(SKRD)</p>
+                <div style="margin: 0 auto">
+                    <p class="m-b-0" style="font-size: 13px">SURAT KETETAPAN RETRIBUSI DAERAH</p>
+                    <p class="m-t-1" style="font-size: 13px">(SKRD)</p>
                     <p>&nbsp;</p>
                     @if ($data->tgl_skrd_awal != null)
                     <p class="text-left m-l-14 m-t-0 f-w-n">Tanggal SKRD : {{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_awal)->format('d M Y') }}</p>
@@ -127,8 +127,8 @@
                 </div>
             </th>
             <th width="20%" class="d">
-                <div class="{{ $data->opd->alamat != null ? 'mt-n40' : 'mt-n15' }}">
-                    <p class="text-center t-bold m-b-0">NO SKRD</p>
+                <div style="margin: 0 auto">
+                    <p class="text-center t-bold m-b-0" style="font-size: 13px">NO SKRD</p>
                     <p class="text-center m-t-1 f-normal">{{ $data->no_skrd }}</p>
                     <p class="text-left f-normal m-l-5 m-b-0">No BKU : {{ $data->no_bku != null ? $data->no_bku : '-' }}</p>
                     @if ($data->tgl_bku != null)
@@ -155,7 +155,7 @@
                 <td><p class="m-t-0 m-b-0">{{ $data->nmr_daftar }}</p></td>
             </tr>
             <tr class="c">
-                <td><p class="m-t-0 m-b-0">Nama </p></td>
+                <td><p class="m-t-0 m-b-0">Nama/Perusahaan </p></td>
                 <td><span>:</span></td>
                 <td><p class="m-t-0 m-b-0">{{ $data->nm_wajib_pajak }}</p></td>
             </tr>
@@ -201,10 +201,10 @@
     <div class="m-t-15">
         <table class="d">
             <tr class="a">
-                <th width="5%" class="a">NO</th>
-                <th width="20%" class="a">NOMOR REKENING</th>
-                <th width="50%" class="a">URAIAN RETRIBUSI</th>
-                <th width="25%" class="a">JUMLAH (Rp)</th>
+                <th width="5%" class="a"><span>NO</span></th>
+                <th width="20%" class="a"><span>NOMOR REKENING</span></th>
+                <th width="50%" class="a"><span>URAIAN RETRIBUSI</span></th>
+                <th width="25%" class="a"><span>JUMLAH (Rp)</span></th>
             </tr>
             <tr class="a">
                 <td class="a text-center">1</td>
@@ -223,7 +223,7 @@
             </tr>
             <tr class="a">
                 <td rowspan="2" class="a text-center">2</td>
-                <td rowspan="2" class="a"><p class="m-l-5">-</p></td>
+                <td rowspan="2" class="a"><p class="m-l-5">{{ $data->rincian_jenis != null ? $data->rincian_jenis->nmr_rekening_denda : '-' }}</p></td>
                 <td class="a">
                     <p class="m-l-5 m-b-0">Jumlah Ketetapan Pokok Retribusi :</p>
                     <p class="m-l-5 m-t-1 m-b-0">Jumlah Sanksi :</p>
@@ -246,8 +246,8 @@
                     <p class="m-l-5">Dengan Huruf : <span class="t-bold">{{ $terbilang }}</span></p>
                     <p class="fs-14 t-bold m-l-5"><u>PERHATIAN :</u></p>
                     <ol>
-                        <li>Penyetoran dilakukan menggunakan Bank Jabar Banten (BJB) melalui Teller/ATM BJB dengan mencantumkan <b>260721001692</b></li>
-                        <li>Penyetoran dengan bank lain, melalui Transfer/BG/M-Banking/RTGS/ ditujukan ke Rekening Bank Jabar Banten (BJB) An. Rek Pen Pjk Kota Tangerang Selatan <br> No Rekening <b>{{ $data->rincian_jenis != null ? $data->rincian_jenis->nmr_rekening : '-' }}</b> dengan memberikan keterangan menuliskan <b>260721001692</b></li>
+                        <li>Penyetoran dilakukan menggunakan Bank Jabar Banten (BJB) melalui Teller/ATM BJB dengan menggunakan <b>{{ $data->no_bayar }}</b></li>
+                        <li>Penyetoran melalaui transfer dapat melalui Virtual Account BJB dengan nomor <b>( {{ $data->nomor_va_bjb }} )</b>, Berlaku sampai {{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_akhir)->format('d M Y') }}</li>
                         <li>Apabila SKRD ini tidak atau kurang dibayar lewat waktu paling lama 30 hari setelah SKRD diterima atau (tanggal jatuh tempo) sanksi administrasi bunga sebesar 2% per bulan</li>
                     </ol>
                 </td>
@@ -272,9 +272,9 @@
                             <p class="m-b-5"><u>{{ $data->opd->nm_ttd }}</u></p>
                         @endif
                         @if ($data->nip_ttd != null)
-                            <p class="m-t-0">{{ $data->nip_ttd }}</p>
+                            <p class="m-t-0">NIP.{{ $data->nip_ttd }}</p>
                         @else
-                            <p class="m-t-0">{{ $data->opd->nip_ttd }}</p>
+                            <p class="m-t-0">NIP.{{ $data->opd->nip_ttd }}</p>
                         @endif
                     </div>
                 </td>
