@@ -489,9 +489,9 @@ class SKRDController extends Controller
         ];
 
         $check = DataWP::where($where)->count();
-        if ($check == 0) {
+        if ($check == 0)
             DataWP::create($data);
-        }
+
 
         // Tahap 4
         $data = TransaksiOPD::find($dataSKRD->id);
