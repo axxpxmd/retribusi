@@ -321,7 +321,12 @@ class TandaTanganController extends Controller
         $id = \Crypt::decrypt($id);
 
         $data = TransaksiOPD::find($id);
-        $terbilang = Html_number::terbilang($data->total_bayar) . 'rupiah';
+        if ($data->total_bayar_bjb != null) {
+            $total_bayar_final = $data->total_bayar_bjb;
+        } else {
+            $total_bayar_final = $data->total_bayar;
+        }
+        $terbilang = Html_number::terbilang($total_bayar_final) . 'rupiah';
 
         $pdf = app('dompdf.wrapper');
         $pdf->getDomPDF()->set_option("enable_php", true);
