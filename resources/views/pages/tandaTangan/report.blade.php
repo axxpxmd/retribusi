@@ -245,7 +245,7 @@
             </tr>
             <tr>
                 <td class="a"><p class="m-l-5 t-bold">Jumlah Keseluruhan :</p></td>
-                {{-- <td class="a"><p class="m-l-5 t-bold text-right m-r-10">@currency($total_bayar_final),-</p></td> --}}
+                <td class="a"><p class="m-l-5 t-bold text-right m-r-10">@currency($total_bayar_final),-</p></td>
             </tr>
             <tr class="a">
                 <td colspan="4" class="a">
