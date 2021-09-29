@@ -158,16 +158,16 @@
                         <label class="col-md-2 s-12 font-weight-bold text-black-50"><strong>Nama </strong></label>
                         <label class="col-md-9 s-12 font-weight-bold text-black-50" id="nm_wajib_pajak_ttd">:</label>
                     </div>
-                    <div class="row">
-                        <label class="col-md-2 s-12 font-weight-bold text-black-50"><strong>No.SKRD </strong></label>
+                    <div class="row" style="margin-top: -5px !important">
+                        <label class="col-md-2 s-12 font-weight-bold text-black-50"><strong>No SKRD </strong></label>
                         <label class="col-md-9 s-12 font-weight-bold text-black-50" id="no_skrd_ttd">:</label>
                     </div>
-                    <div class="row">
+                    <div class="row" style="margin-top: -5px !important">
                         <label class="col-md-2 s-12 font-weight-bold text-black-50"><strong>Ketetapan </strong></label>
                         <label class="col-md-9 s-12 font-weight-bold text-black-50" id="ketetapan">:</label>
                     </div>
+                    <p class="font-weight-bold text-black-50">Apakah sudah yakin mengirim data ini untuk ditandatangi ?</p>
                 </div>
-                <p class="font-weight-bold text-black-50">Apakah sudah yakin mengirim data ini untuk ditandatangi ?</p>
                 <hr>
                 <div class="text-right">
                     <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="icon-times mr-2"></i>Batalkan</button>

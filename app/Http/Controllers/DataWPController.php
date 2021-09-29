@@ -65,7 +65,7 @@ class DataWPController extends Controller
             ->addColumn('action', function ($p) {
                 return "
                 <a href='#' onclick='remove(" . $p->id . ")' class='text-danger mr-2' title='Hapus Data'><i class='icon-remove'></i></a>
-                <a href='" . route('skrd.create', array('data_wp_id' =>  Crypt::encrypt($p->id))) . "' title='Buat SKRD' class=''><i class='icon-add_box mr-1'></i></a>";
+                <a href='" . route('skrd.create', array('data_wp_id' =>  Crypt::encrypt($p->id))) . "' title='Buat SKRD' class=''><i class='icon-plus mr-1'></i></a>";
             })
             ->editColumn('nm_wajib_pajak', function ($p) {
                 return "<a href='" . route($this->route . 'show', Crypt::encrypt($p->id)) . "' class='text-primary' title='Show Data'>" . $p->nm_wajib_pajak . "</a>";
@@ -102,7 +102,7 @@ class DataWPController extends Controller
         DataWP::where('id', $id)->delete();
 
         return response()->json([
-            'message' => 'Data ' . $this->title . ' berhasil dihapus.'
+            'message' => $this->title . ' berhasil dihapus.'
         ]);
     }
 }
