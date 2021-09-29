@@ -7,6 +7,7 @@ use DataTables;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Http\Services\VABJB;
 use App\Libraries\Html\Html_number;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Crypt;
@@ -136,8 +137,7 @@ class STSController extends Controller
         $route = $this->route;
         $title = $this->title;
 
-        $id = \Crypt::decrypt($id);
-
+        $id   = \Crypt::decrypt($id);
         $data = TransaksiOPD::find($id);
 
         $fileName  = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
@@ -157,7 +157,7 @@ class STSController extends Controller
         $route = $this->route;
         $title = $this->title;
 
-        $id = \Crypt::decrypt($id);
+        $id   = \Crypt::decrypt($id);
         $role = Auth::user()->pengguna->modelHasRole->role->name;
 
         // Check role
