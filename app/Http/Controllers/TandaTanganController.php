@@ -198,7 +198,12 @@ class TandaTanganController extends Controller
          * 2 = Proses
          */
         if ($data->status_ttd == 0 || $data->status_ttd == 2) {
-            $terbilang = Html_number::terbilang($data->total_bayar) . 'rupiah';
+            if ($data->total_bayar_bjb != null) {
+                $total_bayar_final = $data->total_bayar_bjb;
+            } else {
+                $total_bayar_final = $data->total_bayar;
+            }
+            $terbilang = Html_number::terbilang($total_bayar_final) . 'rupiah';
 
             // generate QR Code
             $file_url = config('app.sftp_src') . 'file_ttd_skrd/' . $fileName;
@@ -211,7 +216,8 @@ class TandaTanganController extends Controller
             $pdf->loadView($this->view . 'report', compact(
                 'data',
                 'terbilang',
-                'img'
+                'img',
+                'total_bayar_final'
             ));
 
             // get content PDF
