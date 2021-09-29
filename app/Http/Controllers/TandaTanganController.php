@@ -332,7 +332,8 @@ class TandaTanganController extends Controller
         $pdf->getDomPDF()->set_option("enable_php", true);
         $pdf->loadView('pages.skrd.report', compact(
             'data',
-            'terbilang'
+            'terbilang',
+            'total_bayar_final'
         ));
 
         return $pdf->stream($data->nm_wajib_pajak . '-' . $data->no_skrd . ".pdf");
