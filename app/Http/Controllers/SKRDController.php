@@ -334,7 +334,7 @@ class SKRDController extends Controller
         }
 
         $no_skrd = $generateKodeDinas . '.' . $generateJenisPendapatanId . '.'  . $generateSKRD;
-        $no_bayar = $generateDay . $generateMonth .  $year .  $generateKodeDinas . $generateNoBayar;
+        $no_bayar = $generateDay . $generateMonth .  $year .  $generateKodeDinas . $generateNoBayar; // tanggal, bulan, tahun, kode dinas, no urut
 
         return view($this->view . 'create', compact(
             'route',
