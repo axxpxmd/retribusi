@@ -216,7 +216,6 @@
         dendaReplace = denda.replace(/\./g, '').replace('Rp', '').replace(' ', '');
 
         totalBJB = parseInt(total_bayar) + parseInt(dendaReplace);
-        console.log(totalBJB);
 
         if (isNaN(totalBJB)) {
             $('#rupiah2').val('')
@@ -241,7 +240,6 @@
                 contentType: false,
                 processData: false,
                 success : function(data) {
-                    console.log(data);
                     $.confirm({
                         title: 'Success',
                         content: data.message,
@@ -282,7 +280,6 @@
 
     var rupiah = [];
     for (let index = 1; index <= 2; index++) {
-        console.log('rupiah'+index);
         rupiah[index] = document.getElementById('rupiah'+index);
         rupiah[index].addEventListener('keyup', function(e){
             // tambahkan 'Rp.' pada saat form di ketik

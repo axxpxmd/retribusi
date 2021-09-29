@@ -145,7 +145,6 @@
         $('#opd_display').hide(); 
 
         $('#role_id').change(function(){
-            console.log($('#role_id').val())
             var role_id = $('#role_id').val();
             if(role_id === "5" || role_id === 7 || role_id === 0) {
                 $('#opd_display').hide(); 
@@ -221,7 +220,6 @@
                 contentType: false,
                 processData: false,
                 success : function(data) {
-                    console.log(data);
                     $('#alert').html("<div role='alert' class='alert alert-success alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button><strong>Success!</strong> " + data.message + "</div>");
                     table.api().ajax.reload();
                     add();    

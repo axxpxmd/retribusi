@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use Validator;
 use DataTables;
 use Carbon\Carbon;
 use Firebase\JWT\JWT;
@@ -133,7 +134,7 @@ class SKRDController extends Controller
 
     public function getDataSKRD($id)
     {
-        $data = TransaksiOPD::select('no_skrd', 'nm_wajib_pajak')->where('id', $id)->first();
+        $data = TransaksiOPD::select('no_skrd', 'nm_wajib_pajak', 'jumlah_bayar')->where('id', $id)->first();
 
         return $data;
     }
@@ -213,7 +214,6 @@ class SKRDController extends Controller
 
     public function create(Request $request)
     {
-
         $route = $this->route;
         $title = $this->title;
 
@@ -266,40 +266,65 @@ class SKRDController extends Controller
         $kecamatans = Kecamatan::select('id', 'n_kecamatan')->where('kabupaten_id', 40)->get();
         $rincian_jenis_pendapatans = RincianJenisPendapatan::where('id_jenis_pendapatan', $jenis_pendapatan_id)->get();
 
-        // Get Time
-        $date  = carbon::now();
-        $day   = $date->day;
-        $month = $date->month;
-        $year  = substr($date->year, 2);
+        return view($this->view . 'create', compact(
+            'route',
+            'title',
+            'opd',
+            'jenis_pendapatan',
+            'kecamatans',
+            'rincian_jenis_pendapatans',
+            'data_wp',
+            'tokenBJB'
+        ));
+    }
 
-        // Check amount OPD by year
-        $check = TransaksiOPD::where('id_opd', $opd_id)->where(DB::raw('YEAR(created_at)'), '=', $date->year)->count();
-        if ($check != 0) {
-            $result = $check + 1;
+    public function generateNomor($opd_id, $jenis_pendapatan_id, $jenisGenerate)
+    {
+        $time  = carbon::now();
+        $date  = $time->day;
+        $month = $time->month;
+        $year  = substr($time->year, 2);
+
+        // Check total retribusi by opd, jenis pendapatan, tahun
+        $totalSKRD = TransaksiOPD::where('id_opd', $opd_id)
+            ->where('id_jenis_pendapatan', $jenis_pendapatan_id)
+            ->where(DB::raw('YEAR(created_at)'), '=', $time->year)
+            ->count();
+        if ($totalSKRD != 0) {
+            $noUrutNoSKRD = $totalSKRD + 1;
         } else {
-            $result = '1';
+            $noUrutNoSKRD = '1';
         }
 
-        // Kode Dinas
-        $kodeDinas = $opd->id;
-        if (\strlen($kodeDinas) == 1) {
-            $generateKodeDinas = '0' . $kodeDinas;
-        } elseif (\strlen($kodeDinas) == 2) {
-            $generateKodeDinas = $kodeDinas;
+        // Check total retribusi by opd, tahun
+        $totalNoBayar = TransaksiOPD::where('id_opd', $opd_id)
+            ->where(DB::raw('YEAR(created_at)'), '=', $time->year)
+            ->count();
+        if ($totalNoBayar != 0) {
+            $noUrutNoBayar = $totalNoBayar + 1;
+        } else {
+            $noUrutNoBayar = '1';
         }
 
-        // Jenis Pendapatan
+        // ID OPD
+        if (\strlen($opd_id) == 1) {
+            $generateIdOPD = '0' . $opd_id;
+        } elseif (\strlen($opd_id) == 2) {
+            $generateIdOPD = $opd_id;
+        }
+
+        // ID Jenis Pendapatan
         if (\strlen($jenis_pendapatan_id) == 1) {
-            $generateJenisPendapatanId = '0' . $jenis_pendapatan_id;
+            $generateIdJenisPendapatan = '0' . $jenis_pendapatan_id;
         } elseif (\strlen($jenis_pendapatan_id) == 2) {
-            $generateJenisPendapatanId = $jenis_pendapatan_id;
+            $generateIdJenisPendapatan = $jenis_pendapatan_id;
         }
 
-        // Day
-        if (\strlen($day) == 1) {
-            $generateDay = '0' . $day;
-        } elseif (\strlen($day) == 2) {
-            $generateDay = $day;
+        // Date
+        if (\strlen($date) == 1) {
+            $generateDay = '0' . $date;
+        } elseif (\strlen($date) == 2) {
+            $generateDay = $date;
         }
 
         // Month
@@ -309,45 +334,38 @@ class SKRDController extends Controller
             $generateMonth = $month;
         }
 
-        // Antrian No SKRD
-        if (\strlen($result) == 1) {
-            $generateSKRD = '000' . $result;
-        } elseif (\strlen($result) == 2) {
-            $generateSKRD = '00' . $result;
-        } elseif (\strlen($result) == 3) {
-            $generateSKRD = '0' . $result;
-        } elseif (\strlen($result) == 4) {
-            $generateSKRD = $result;
+        // Nomor Urut SKRD (4 digits)
+        if (\strlen($noUrutNoSKRD) == 1) {
+            $generateSKRD = '000' . $noUrutNoSKRD;
+        } elseif (\strlen($noUrutNoSKRD) == 2) {
+            $generateSKRD = '00' . $noUrutNoSKRD;
+        } elseif (\strlen($noUrutNoSKRD) == 3) {
+            $generateSKRD = '0' . $noUrutNoSKRD;
+        } elseif (\strlen($noUrutNoSKRD) == 4) {
+            $generateSKRD = $noUrutNoSKRD;
         }
 
-        // Antrian No Bayar
-        if (\strlen($result) == 1) {
-            $generateNoBayar = '0000' . $result;
-        } elseif (\strlen($result) == 2) {
-            $generateNoBayar = '000' . $result;
-        } elseif (\strlen($result) == 3) {
-            $generateNoBayar = '00' . $result;
-        } elseif (\strlen($result) == 4) {
-            $generateNoBayar = '0' . $result;
-        } elseif (\strlen($result) == 5) {
-            $generateNoBayar = $result;
+        // Nomor Urut No Bayar (5 digits)
+        if (\strlen($noUrutNoBayar) == 1) {
+            $generateNoBayar = '0000' . $noUrutNoBayar;
+        } elseif (\strlen($noUrutNoBayar) == 2) {
+            $generateNoBayar = '000' . $noUrutNoBayar;
+        } elseif (\strlen($noUrutNoBayar) == 3) {
+            $generateNoBayar = '00' . $noUrutNoBayar;
+        } elseif (\strlen($noUrutNoBayar) == 4) {
+            $generateNoBayar = '0' . $noUrutNoBayar;
+        } elseif (\strlen($noUrutNoBayar) == 5) {
+            $generateNoBayar = $noUrutNoBayar;
         }
 
-        $no_skrd = $generateKodeDinas . '.' . $generateJenisPendapatanId . '.'  . $generateSKRD;
-        $no_bayar = $generateDay . $generateMonth .  $year .  $generateKodeDinas . $generateNoBayar; // tanggal, bulan, tahun, kode dinas, no urut
-
-        return view($this->view . 'create', compact(
-            'route',
-            'title',
-            'opd',
-            'jenis_pendapatan',
-            'no_skrd',
-            'kecamatans',
-            'no_bayar',
-            'rincian_jenis_pendapatans',
-            'data_wp',
-            'tokenBJB'
-        ));
+        // Check Jenis Generate
+        if ($jenisGenerate == 'no_skrd') {
+            $no_skrd = $generateIdOPD . '.' . $generateIdJenisPendapatan . '.'  . $year . '.'  . $generateSKRD; // id_skpd,id_jenis_pendapatan,tahun,no_urut
+            return $no_skrd;
+        } else if ($jenisGenerate == 'no_bayar') {
+            $no_bayar = $generateDay . $generateMonth .  $year .  $generateIdOPD . $generateNoBayar; // tanggal,bulan,tahun,id_skpd,no_urut
+            return $no_bayar;
+        }
     }
 
     public function getVaBJB($tokenBJB, $clientRefnum, $amount, $expiredDate, $customerName, $productCode)
@@ -402,11 +420,9 @@ class SKRDController extends Controller
     {
         $request->validate([
             'id_opd'   => 'required',
-            'no_skrd'  => 'required',
-            'no_bayar' => 'required|unique:tmtransaksi_opd,no_bayar',
             'kecamatan_id' => 'required',
             'kelurahan_id' => 'required',
-            'id_jenis_pendapatan'         => 'required',
+            'id_jenis_pendapatan' => 'required',
             'id_rincian_jenis_pendapatan' => 'required',
             'tgl_ttd' => 'required',
             'nm_ttd'  => 'required',
@@ -414,15 +430,33 @@ class SKRDController extends Controller
         ]);
 
         /* Tahapan : 
-         * 1. Create VA
-         * 2. tmtransaksi_opd
-         * 3. tmdata_wp
-         * 4. Save pdf to SFTP Storage
+         * 1. Generate Nomor (no_skrd & no_bayar)
+         * 2. Create VA
+         * 3. tmtransaksi_opd
+         * 4. tmdata_wp
+         * 5. Save pdf to SFTP Storage
          */
 
         // Tahap 1
+        $jenisGenerate = 'no_skrd';
+        $no_skrd = $this->generateNomor($request->id_opd, $request->id_jenis_pendapatan, $jenisGenerate);
+
+        $jenisGenerate = 'no_bayar';
+        $no_bayar = $this->generateNomor($request->id_opd, $request->id_jenis_pendapatan, $jenisGenerate);
+
+        // Check Duplikat
+        $checkGenerate = [
+            'no_skrd'  => $no_skrd,
+            'no_bayar' => $no_bayar
+        ];
+        Validator::make($checkGenerate, [
+            'no_skrd'  => 'required|unique:tmtransaksi_opd,no_skrd',
+            'no_bayar' => 'required|unique:tmtransaksi_opd,no_bayar',
+        ])->validate();
+
+        // Tahap 2
         $tokenBJB     = $request->token_bjb;
-        $clientRefnum = $request->no_bayar;
+        $clientRefnum = $no_bayar;
         $amount       = \strval((int) str_replace(['.', 'Rp', ' '], '', $request->jumlah_bayar));
         $expiredDate  = $request->tgl_skrd_akhir . ' 23:59:59';
         $customerName = $request->nm_wajib_pajak;
@@ -443,7 +477,7 @@ class SKRDController extends Controller
             ], 422);
         }
 
-        // Tahap 2
+        // Tahap 3
         $data = [
             'id_opd'  => $request->id_opd,
             'tgl_ttd' => $request->tgl_ttd,
@@ -467,16 +501,16 @@ class SKRDController extends Controller
             'status_denda'     => 0,
             'status_diskon'    => 0,
             'status_ttd'       => 0,
-            'no_skrd'          => $request->no_skrd,
+            'no_skrd'          => $no_skrd,
             'tgl_skrd_awal'    => $request->tgl_skrd_awal,
             'tgl_skrd_akhir'   => $request->tgl_skrd_akhir,
-            'no_bayar'         => $request->no_bayar,
+            'no_bayar'         => $no_bayar,
             'created_by'       => Auth::user()->pengguna->full_name
         ];
 
         $dataSKRD = TransaksiOPD::create($data);
 
-        // Tahap 3
+        // Tahap 4
         $data = [
             'id_opd'  => $request->id_opd,
             'id_jenis_pendapatan'         => $request->id_jenis_pendapatan,
@@ -500,7 +534,7 @@ class SKRDController extends Controller
             DataWP::create($data);
 
 
-        // Tahap 4
+        // Tahap 5
         $data = TransaksiOPD::find($dataSKRD->id);
         $terbilang = Html_number::terbilang($data->total_bayar) . 'rupiah';
 

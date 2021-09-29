@@ -150,7 +150,6 @@
     $(function() {
         $('#opd_display').hide(); 
 
-        console.log($('#role_id').val())
         var role_id = $('#role_id').val();
         if(role_id === "5" || role_id === "7") {
             $('#opd_display').hide(); 
@@ -159,7 +158,6 @@
         } 
 
         $('#role_id').change(function(){
-            console.log($('#role_id').val())
             var role_id = $('#role_id').val();
             if(role_id === "5" || role_id === "7") {
                 $('#opd_display').hide(); 
@@ -185,7 +183,6 @@
                 contentType: false,
                 processData: false,
                 success : function(data) {
-                    console.log(data);
                     $.confirm({
                         title: 'Success',
                         content: data.message,

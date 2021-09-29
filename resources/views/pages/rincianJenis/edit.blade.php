@@ -102,7 +102,6 @@
                 contentType: false,
                 processData: false,
                 success : function(data) {
-                    console.log(data);
                     $.confirm({
                         title: 'Success',
                         content: data.message,

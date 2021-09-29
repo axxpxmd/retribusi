@@ -162,6 +162,10 @@
                         <label class="col-md-2 s-12 font-weight-bold text-black-50"><strong>No.SKRD </strong></label>
                         <label class="col-md-9 s-12 font-weight-bold text-black-50" id="no_skrd_ttd">:</label>
                     </div>
+                    <div class="row">
+                        <label class="col-md-2 s-12 font-weight-bold text-black-50"><strong>Ketetapan </strong></label>
+                        <label class="col-md-9 s-12 font-weight-bold text-black-50" id="ketetapan">:</label>
+                    </div>
                 </div>
                 <p class="font-weight-bold text-black-50">Apakah sudah yakin mengirim data ini untuk ditandatangi ?</p>
                 <hr>
@@ -242,7 +246,6 @@
             $.get(url, function(data){
                 if(data){
                     $.each(data, function(index, value){
-                        console.log(value.id);
                         option += "<option value='" +  value.id + "'>" + value.jenis_pendapatan +"</li>";
                     });
                     $('#jenis_pendapatan_id').empty().html(option);
@@ -308,6 +311,7 @@
         $.get(url, function(data){
             $('#no_skrd_ttd').html(': '+data.no_skrd)
             $('#nm_wajib_pajak_ttd').html(': '+data.nm_wajib_pajak)
+            $('#ketetapan').html(': Rp. '+ new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 3 }).format(data.jumlah_bayar))
         }, 'JSON');
 
         $('#kirimTTD').attr('href', "{{ route('skrd.updateStatusKirimTTD', ':id') }}".replace(':id', id));

@@ -38,9 +38,6 @@
                                     <input type="hidden" name="id_opd" value="{{ $opd->id }}">
                                     <input type="hidden" name="id_jenis_pendapatan" value="{{ $jenis_pendapatan->id }}">
 
-                                    <input type="hidden" name="no_skrd" value="{{ $no_skrd }}">
-                                    {{-- <input type="hidden" name="nip_ttd" value="{{ $opd->nip_ttd }}"> --}}
-                                    <input type="hidden" name="no_bayar" value="{{ $no_bayar }}">
                                     <input type="hidden" name="token_bjb" value="{{ $tokenBJB }}">
                                     <input type="hidden" name="kd_jenis" id="kd_jenis" value="{{ $data_wp != null ? $data_wp->rincian_jenis->kd_jenis : '' }}">
                                     <div class="form-row form-inline">
@@ -120,16 +117,8 @@
                                                         <label for="lokasi" class="col-form-label s-12 col-md-4">Lokasi<span class="text-danger ml-1">*</span></label>
                                                         <textarea type="text" rows="2" name="lokasi" id="lokasi" placeholder="Contoh: Ruko Sektor 1.2 BSD" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required>{{ $data_wp != null ? $data_wp->lokasi : '' }}</textarea>
                                                     </div>
-                                                    <div class="form-group m-0">
-                                                        <label class="col-form-label s-12 col-md-4">No Bayar<span class="text-danger ml-1">*</span></label>
-                                                        <input type="text" value="{{ $no_bayar }}" disabled class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
-                                                    </div>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <div class="form-group m-0">
-                                                        <label for="no_skrd" class="col-form-label s-12 col-md-4">Nomor SKRD<span class="text-danger ml-1">*</span></label>
-                                                        <input type="text" name="no_skrd" id="no_skrd" value="{{ $no_skrd }}" readonly class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
-                                                    </div>
                                                     <div class="form-group m-0">
                                                         <label for="tgl_skrd_awal" class="col-form-label s-12 col-md-4">Tanggal SKRD<span class="text-danger ml-1">*</span></label>
                                                         <input type="date" onchange="setDate()" name="tgl_skrd_awal" id="tgl_skrd_awal" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
@@ -198,7 +187,7 @@
     function setDate(){
         var date = document.getElementById('tgl_skrd_awal').value
         var someDate = new Date(date);
-        someDate.setDate(someDate.getDate() + 30); //number  of days to add, e.x. 30 days
+        someDate.setDate(someDate.getDate() + 30); // number  of days to add, e.x. 30 days
         var dateFormated = someDate.toISOString().substr(0,10);
         $('#tgl_skrd_akhir').val(dateFormated);
     }
@@ -209,7 +198,6 @@
         $.get(url, function(data){
             $('#kode_rekening').val(data.nmr_rekening);
             $('#kd_jenis').val(data.kd_jenis);
-            console.log(data.nmr_rekening);
         }, 'JSON');
     });
 
@@ -311,10 +299,10 @@
     /* Fungsi formatRupiah */
     function formatRupiah(angka, prefix){
         var number_string = angka.replace(/[^,\d]/g, '').toString(),
-        split   		= number_string.split(','),
-        sisa     		= split[0].length % 3,
-        rupiah     		= split[0].substr(0, sisa),
-        ribuan     		= split[0].substr(sisa).match(/\d{3}/gi);
+        split  = number_string.split(','),
+        sisa   = split[0].length % 3,
+        rupiah = split[0].substr(0, sisa),
+        ribuan = split[0].substr(sisa).match(/\d{3}/gi);
 
         // tambahkan titik jika yang di input sudah menjadi angka ribuan
         if(ribuan){

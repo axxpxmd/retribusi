@@ -182,7 +182,6 @@
         url = "{{ route('skrd.getKodeRekening', ':id') }}".replace(':id', val);
         $.get(url, function(data){
             $('#kode_rekening').val(data.nmr_rekening);
-            console.log(data.nmr_rekening);
         }, 'JSON');
     });
 
@@ -243,7 +242,6 @@
                 contentType: false,
                 processData: false,
                 success : function(data) {
-                    console.log(data);
                     $.confirm({
                         title: 'Success',
                         content: data.message,

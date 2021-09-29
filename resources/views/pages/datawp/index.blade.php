@@ -126,7 +126,6 @@
             $.get(url, function(data){
                 if(data){
                     $.each(data, function(index, value){
-                        console.log(value.id);
                         option += "<option value='" +  value.id + "'>" + value.jenis_pendapatan +"</li>";
                     });
                     $('#jenis_pendapatan_id').empty().html(option);
