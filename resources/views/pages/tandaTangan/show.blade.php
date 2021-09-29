@@ -198,10 +198,8 @@
                                                 <label class="col-md-8">
                                                     @if ($data->status_ttd == 1)
                                                     <span class="badge badge-success">Sudah TTD</span>
-                                                    @elseif($data->status_ttd == 0)
+                                                    @elseif($data->status_ttd == 0 || $data->status_ttd == 2)
                                                     <span class="badge badge-danger">Belum TTD</span>
-                                                    @elseif($data->status_ttd == 2)
-                                                    <span class="badge badge-warning">Sedang Proses TTD</span>
                                                     @endif
                                                 </label>
                                             </div>
