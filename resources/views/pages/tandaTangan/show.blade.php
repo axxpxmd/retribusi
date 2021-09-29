@@ -58,7 +58,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card mt-2">
-                            <h6 class="card-header"><strong>Data {{ $title }}</strong>@if ($data->status_ttd == 1) | <span class="text-success font-weight-bold">Sudah Ditandatangani</span>@endif</h6>
+                            <h6 class="card-header"><strong>Data SKRD</strong></h6>
                             <div class="card-body">
                                 <div class="col-md-12">
                                     <div class="row">
@@ -184,11 +184,27 @@
                                                 <label class="col-md-8 s-12">-</label>
                                                 @endif
                                             </div> 
+                                            <div class="row">
+                                                <label class="col-md-4 text-right s-12"><strong>Virtual Account BJB :</strong></label>
+                                                <label class="col-md-8 s-12">{{ $data->nomor_va_bjb }}</label>
+                                            </div> 
                                         </div>
                                     </div>
                                     <hr>
                                     <div class="row">
                                         <div class="col-md-6">
+                                            <div class="row">
+                                                <label class="col-md-4 text-right s-12"><strong>Status TTD :</strong></label>
+                                                <label class="col-md-8">
+                                                    @if ($data->status_ttd == 1)
+                                                    <span class="badge badge-success">Sudah TTD</span>
+                                                    @elseif($data->status_ttd == 0)
+                                                    <span class="badge badge-danger">Belum TTD</span>
+                                                    @elseif($data->status_ttd == 2)
+                                                    <span class="badge badge-warning">Sedang Proses TTD</span>
+                                                    @endif
+                                                </label>
+                                            </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>Jumlah Cetak :</strong></label>
                                                 <label class="col-md-8 s-12">{{ $data->jumlah_cetak }}</label>
@@ -216,16 +232,7 @@
                                     <div class="row mt-2">
                                         <label class="col-md-2 text-right s-12"></label>
                                         <label class="col-md-3 s-12">
-                                            @if ($data->status_ttd == 0 || $data->status_ttd == 2)
-                                                <button class="btn btn-sm btn-success" data-toggle="modal" data-target="#preview-file"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</button> 
-                                                @if (count($errors) > 0)
-                                                <button class="btn btn-sm btn-primary" onclick="alertSend()"><i class="icon-pencil mr-2"></i>TandaTangani</button>
-                                                @else
-                                                <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#tte"><i class="icon-pencil mr-2"></i>TandaTangani</button>
-                                                @endif
-                                            @else
-                                            <button class="btn btn-sm btn-success" data-toggle="modal" data-target="#preview-file"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</button> 
-                                            @endif
+                                            <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#preview-file"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</button> 
                                         </label>
                                     </div> 
                                 </div>
