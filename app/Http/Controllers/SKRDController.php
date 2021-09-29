@@ -197,7 +197,7 @@ class SKRDController extends Controller
         $client_id = config('app.client_id_bjb');
         $key = config('app.key_bjb');
 
-        $payload   = array(
+        $payload = array(
             "sub" => "va-online",
             "aud" => "access-token",
             "iat" => $timestamp_now,
@@ -218,7 +218,7 @@ class SKRDController extends Controller
         $title = $this->title;
 
         // Get params
-        $opd_id = $request->opd_id;
+        $opd_id     = $request->opd_id;
         $data_wp_id = $request->data_wp_id;
         $jenis_pendapatan_id = $request->jenis_pendapatan_id;
 
