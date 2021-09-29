@@ -184,11 +184,27 @@
                                                 <label class="col-md-8 s-12">-</label>
                                                 @endif
                                             </div> 
+                                            <div class="row">
+                                                <label class="col-md-4 text-right s-12"><strong>Virtual Account BJB :</strong></label>
+                                                <label class="col-md-8 s-12">{{ $data->nomor_va_bjb }}</label>
+                                            </div>
                                         </div>
                                     </div>
                                     <hr>
                                     <div class="row">
                                         <div class="col-md-6">
+                                            <div class="row">
+                                                <label class="col-md-4 text-right s-12"><strong>Status TTD :</strong></label>
+                                                <label class="col-md-8">
+                                                    @if ($data->status_ttd == 1)
+                                                    <span class="badge badge-success">Sudah TTD</span>
+                                                    @elseif($data->status_ttd == 0)
+                                                    <span class="badge badge-danger">Belum TTD</span>
+                                                    @elseif($data->status_ttd == 2)
+                                                    <span class="badge badge-warning">Sedang Proses TTD</span>
+                                                    @endif
+                                                </label>
+                                            </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>Jumlah Cetak :</strong></label>
                                                 <label class="col-md-8 s-12">{{ $data->jumlah_cetak }}</label>
