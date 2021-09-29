@@ -153,6 +153,16 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-body">
+                <div class="">
+                    <div class="row">
+                        <label class="col-md-2 s-12 font-weight-bold text-black-50"><strong>Nama </strong></label>
+                        <label class="col-md-9 s-12 font-weight-bold text-black-50" id="nm_wajib_pajak_ttd">:</label>
+                    </div>
+                    <div class="row">
+                        <label class="col-md-2 s-12 font-weight-bold text-black-50"><strong>No.SKRD </strong></label>
+                        <label class="col-md-9 s-12 font-weight-bold text-black-50" id="no_skrd_ttd">:</label>
+                    </div>
+                </div>
                 <p class="font-weight-bold text-black-50">Apakah sudah yakin mengirim data ini untuk ditandatangi ?</p>
                 <hr>
                 <div class="text-right">
@@ -289,13 +299,21 @@
         });
     }
 
+    // Single TTD
     function updateStatusTTD(id){
         $('#updateStatusTTD').modal('show');
         $('#updateStatusTTD').modal({keyboard: false});
 
+        url = "{{ route('skrd.getDataSKRD', ':id') }}".replace(':id', id);
+        $.get(url, function(data){
+            $('#no_skrd_ttd').html(': '+data.no_skrd)
+            $('#nm_wajib_pajak_ttd').html(': '+data.nm_wajib_pajak)
+        }, 'JSON');
+
         $('#kirimTTD').attr('href', "{{ route('skrd.updateStatusKirimTTD', ':id') }}".replace(':id', id));
     }
 
+    // Bisa langsung banyak (lagi dihide)
     function createRoute(){
         var tgl_skrd   = $('#tgl_skrd').val();
         var tgl_skrd1  = $('#tgl_skrd1').val();

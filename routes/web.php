@@ -69,6 +69,7 @@ Route::group(['middleware' => ['auth']], function () {
     // SKRD
     Route::resource('skrd', 'SKRDController');
     Route::post('skrd/api', 'SKRDController@api')->name('skrd.api');
+    Route::get('skrd/get-data-skrd/{id}', 'SKRDController@getDataSKRD')->name('skrd.getDataSKRD');
     Route::get('skrd/get-jenis-pendapatan/{opd_id}', 'SKRDController@getJenisPendapatanByOpd')->name('skrd.getJenisPendapatan');
     Route::get('skrd/get-kode-rekening/{id_rincian_jenis_pendapatan}', 'SKRDController@getKodeRekening')->name('skrd.getKodeRekening');
     Route::get('skrd/get-kelurahan/{id}', 'SKRDController@kelurahanByKecamatan')->name('skrd.kelurahanByKecamatan');

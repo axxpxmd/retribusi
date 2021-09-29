@@ -131,6 +131,13 @@ class SKRDController extends Controller
             ->toJson();
     }
 
+    public function getDataSKRD($id)
+    {
+        $data = TransaksiOPD::select('no_skrd', 'nm_wajib_pajak')->where('id', $id)->first();
+
+        return $data;
+    }
+
     public function getJenisPendapatanByOpd($opd_id)
     {
         $opd_id = \Crypt::decrypt($opd_id);
