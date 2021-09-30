@@ -311,7 +311,18 @@
         $.get(url, function(data){
             $('#no_skrd_ttd').html(': '+data.no_skrd)
             $('#nm_wajib_pajak_ttd').html(': '+data.nm_wajib_pajak)
-            $('#ketetapan').html(': Rp. '+ new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 3 }).format(data.jumlah_bayar))
+
+            var bilangan = data.jumlah_bayar;
+            var	number_string = bilangan.toString(),
+                sisa 	= number_string.length % 3,
+                rupiah 	= number_string.substr(0, sisa),
+                ribuan 	= number_string.substr(sisa).match(/\d{3}/g);
+                                    
+            if (ribuan) {
+                separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+            $('#ketetapan').html(': Rp. '+ rupiah)
         }, 'JSON');
 
         $('#kirimTTD').attr('href', "{{ route('skrd.updateStatusKirimTTD', ':id') }}".replace(':id', id));
