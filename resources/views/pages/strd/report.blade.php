@@ -116,19 +116,19 @@
             </th>
             <th width="40%" class="d">
                 <div style="margin: 0 auto">
-                    <p class="m-b-0" style="font-size: 13px">SURAT KETETAPAN RETRIBUSI DAERAH</p>
-                    <p class="m-t-1" style="font-size: 13px">(SKRD)</p>
+                    <p class="m-b-0" style="font-size: 13px">SURAT TAGIHAN RETRIBUSI DAERAH</p>
+                    <p class="m-t-1" style="font-size: 13px">(STRD)</p>
                     <p>&nbsp;</p>
                     @if ($data->tgl_skrd_awal != null)
-                    <p class="text-left m-l-14 m-t-0 f-w-n">Tanggal SKRD : {{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_awal)->format('d F Y') }}</p>
+                    <p class="text-left m-l-14 m-t-0 f-w-n">Tanggal STRD : {{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_awal)->format('d F Y') }}</p>
                     @else
-                    <p class="text-left m-l-14 m-t-0 f-w-n">Tanggal SKRD : - </p>
+                    <p class="text-left m-l-14 m-t-0 f-w-n">Tanggal STRD : - </p>
                     @endif
                 </div>
             </th>
             <th width="20%" class="d">
                 <div style="margin: 0 auto">
-                    <p class="text-center t-bold m-b-0" style="font-size: 13px">NO SKRD</p>
+                    <p class="text-center t-bold m-b-0" style="font-size: 13px">NO STRD</p>
                     <p class="text-center m-t-1 f-normal">{{ $data->no_skrd }}</p>
                     <p class="text-left f-normal m-l-5 m-b-0">No BKU : {{ $data->no_bku != null ? $data->no_bku : '-' }}</p>
                     @if ($data->tgl_bku != null)
@@ -248,7 +248,7 @@
                     <ol>
                         <li>Penyetoran dilakukan menggunakan Bank Jabar Banten (BJB) melalui Teller/ATM BJB dengan menggunakan <b>{{ $data->no_bayar }}</b></li>
                         <li>Penyetoran melalaui transfer dapat melalui Virtual Account BJB dengan nomor <b>( {{ $data->nomor_va_bjb }} )</b>, Berlaku sampai {{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_akhir)->format('d F Y') }}</li>
-                        <li>Apabila SKRD ini tidak atau kurang dibayar lewat waktu paling lama 30 hari setelah SKRD diterima atau (tanggal jatuh tempo) sanksi administrasi bunga sebesar 2% per bulan</li>
+                        <li>Apabila STRD ini tidak atau kurang dibayar lewat waktu paling lama 30 hari setelah STRD diterima atau (tanggal jatuh tempo) sanksi administrasi bunga sebesar 2% per bulan</li>
                     </ol>
                 </td>
             </tr>

@@ -254,7 +254,7 @@ class SKRDController extends Controller
 
         /* Tahapan : 
          * 1. Generate Nomor (no_skrd & no_bayar)
-         * 2. Create VA
+         * 2. Create Virtual Account
          * 3. tmtransaksi_opd
          * 4. tmdata_wp
          * 5. Save pdf to SFTP Storage
