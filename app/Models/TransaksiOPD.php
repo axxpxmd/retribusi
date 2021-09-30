@@ -195,9 +195,9 @@ class TransaksiOPD extends Model
 
         if ($from != null ||  $to != null) {
             if ($from != null && $to == null) {
-                $data->whereDate('tgl_skrd_awal', $from);
+                $data->whereDate('tgl_skrd_akhir', $from);
             } else {
-                $data->whereBetween('tgl_skrd_awal', [$from, $to]);
+                $data->whereBetween('tgl_skrd_akhir', [$from, $to]);
             }
         }
 

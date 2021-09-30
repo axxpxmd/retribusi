@@ -57,7 +57,7 @@
                             </div>
                         </div>
                         <div class="form-group row" style="margin-top: -8px !important">
-                            <label class="col-form-label s-12 col-md-4 text-right font-weight-bolder">Tanggal SKRD:</label>
+                            <label class="col-form-label s-12 col-md-4 text-right font-weight-bolder">Tanggal Jatuh Tempo:</label>
                             <div class="col-sm-5 row">
                                 <input type="date" placeholder="MM/DD/YYYY" value="{{ $today }}" name="tgl_skrd" id="tgl_skrd" class="form-control r-0 light s-12 col-md-4 ml-3" autocomplete="off"/>
                                 <span class="mt-1 ml-2 mr-2">-</span>
