@@ -80,6 +80,7 @@ Route::group(['middleware' => ['auth']], function () {
     // STRD
     Route::resource('strd', 'STRDController');
     Route::post('strd/api', 'STRDController@api')->name('strd.api');
+    Route::get('strd/report/{id}', 'STRDController@printData')->name('strd.report');
     Route::get('update-status-kirim-ttd-strd/{id}', 'STRDController@updateStatusKirimTTD')->name('strd.updateStatusKirimTTD');
     Route::get('update-status-kirim-ttds-strd', 'STRDController@updateStatusKirimTTDs')->name('strd.updateStatusKirimTTDs');
 

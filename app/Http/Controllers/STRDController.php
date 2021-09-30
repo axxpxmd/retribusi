@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use DateTime;
 use DataTables;
 use Carbon\Carbon;
 use Firebase\JWT\JWT;
@@ -141,6 +142,16 @@ class STRDController extends Controller
 
         $data = TransaksiOPD::find($id);
 
+        // $timeNow     = Carbon::now();
+        // $dateTimeNow = new DateTime($timeNow);
+        // $expired     = new DateTime($data->tgl_skrd_akhir . ' 23:59:59');
+        // $interval    = $dateTimeNow->diff($expired);
+        // $montDiff    = $interval->format('%m');
+
+        // $kenaikan = ((int) $montDiff + 1) * 2;
+        // $bunga    = $kenaikan / 100;
+        // dd($montDiff);
+
         $fileName  = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
         $path_sftp = 'file_ttd_skrd/';
 
@@ -158,16 +169,31 @@ class STRDController extends Controller
         $id = \Crypt::decrypt($id);
 
         $data = TransaksiOPD::find($id);
-        $terbilang = Html_number::terbilang($data->total_bayar) . 'rupiah';
 
-        // Update Jumlah Cetak
+        //TODO: Create Bunga (kenaikan 2% tiap bulan)
+        $timeNow     = Carbon::now();
+        $dateTimeNow = new DateTime($timeNow);
+        $expired     = new DateTime($data->tgl_skrd_akhir . ' 23:59:59');
+        $interval    = $dateTimeNow->diff($expired);
+        $monthDiff   = $interval->format('%m');
+
+        $kenaikan = ((int) $monthDiff + 1) * 2;
+        $bunga    = $kenaikan / 100;
+        $jumlahBunga = $data->jumlah_bayar * $bunga;
+
+        $total_bayar = $data->total_bayar + $jumlahBunga;
+        $terbilang   = Html_number::terbilang($total_bayar) . 'rupiah';
+
+        //TODO: Update Jumlah Cetak
         $this->updateJumlahCetak($id, $data->jumlah_cetak);
 
         $pdf = app('dompdf.wrapper');
         $pdf->getDomPDF()->set_option("enable_php", true);
         $pdf->loadView($this->view . 'report', compact(
             'data',
-            'terbilang'
+            'terbilang',
+            'jumlahBunga',
+            'total_bayar'
         ));
 
         return $pdf->stream($data->nm_wajib_pajak . '-' . $data->no_skrd . ".pdf");

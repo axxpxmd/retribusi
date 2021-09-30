@@ -223,7 +223,7 @@
             @if ($data->status_ttd == 1)
             <iframe src="{{ config('app.sftp_src').$path_sftp.$fileName }}" style="margin-left: -160px !important" width="850px" height="940px"></iframe>
             @else
-            <iframe src="{{ route('skrd.report', \Crypt::encrypt($data->id)) }}" style="margin-left: -160px !important" width="850px" height="940px"></iframe>
+            <iframe src="{{ route('strd.report', \Crypt::encrypt($data->id)) }}" style="margin-left: -160px !important" width="850px" height="940px"></iframe>
             @endif
         </div>
     </div>
