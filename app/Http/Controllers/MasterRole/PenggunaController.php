@@ -80,7 +80,7 @@ class PenggunaController extends Controller
                 <a href='#' onclick='show(" . $p->id . ")' title='show data'><i class='icon icon-eye3 mr-1'></i></a>";
             })
             ->editColumn('full_name', function ($p) {
-                return "<a href='" . route($this->route . 'edit', $p->id) . "' class='text-primary' title='Show Data'>" . $p->full_name . "</a>";
+                return "<a href='" . route($this->route . 'edit', $p->id) . "' class='text-primary' title='Menampilkan Data'>" . $p->full_name . "</a>";
             })
             ->editColumn('opd', function ($p) {
                 if ($p->opd == null) {

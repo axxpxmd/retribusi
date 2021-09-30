@@ -95,7 +95,7 @@ class STSController extends Controller
                 }
             })
             ->editColumn('no_bayar', function ($p) {
-                return "<a href='" . route($this->route . 'show', Crypt::encrypt($p->id)) . "' class='text-primary' title='Show Data'>" . $p->no_bayar . "</a>";
+                return "<a href='" . route($this->route . 'show', Crypt::encrypt($p->id)) . "' class='text-primary' title='Menampilkan Data'>" . $p->no_bayar . "</a>";
             })
             ->editColumn('opd_id', function ($p) {
                 return $p->opd->n_opd;

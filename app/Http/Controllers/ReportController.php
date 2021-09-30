@@ -75,7 +75,7 @@ class ReportController extends Controller
             //         <a href='" . route($this->route . 'report', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
             // })
             ->editColumn('no_bayar', function ($p) {
-                return "<a href='" . route($this->route . 'show', Crypt::encrypt($p->id)) . "' class='text-primary' title='Show Data'>" . $p->no_bayar . "</a>";
+                return "<a href='" . route($this->route . 'show', Crypt::encrypt($p->id)) . "' class='text-primary' title='Menampilkan Data'>" . $p->no_bayar . "</a>";
             })
             ->editColumn('opd_id', function ($p) {
                 return $p->opd->n_opd;

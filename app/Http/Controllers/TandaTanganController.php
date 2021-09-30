@@ -84,7 +84,7 @@ class TandaTanganController extends Controller
                 }
             })
             ->editColumn('no_skrd', function ($p) {
-                return "<a href='" . route($this->route . 'show', Crypt::encrypt($p->id)) . "' class='text-primary' title='Show Data'>" . $p->no_skrd . "</a>";
+                return "<a href='" . route($this->route . 'show', Crypt::encrypt($p->id)) . "' class='text-primary' title='Menampilkan Data'>" . $p->no_skrd . "</a>";
             })
             ->editColumn('id_opd', function ($p) {
                 return $p->opd->n_opd;

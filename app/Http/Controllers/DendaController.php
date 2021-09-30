@@ -69,7 +69,7 @@ class DendaController extends Controller
         return DataTables::of($data)
             ->editColumn('no_skrd', function ($p) {
                 return $p->no_skrd;
-                // return "<a href='" . route($this->route . 'show', $p->id) . "' class='text-primary' title='Show Data'>" . $p->no_skrd . "</a>";
+                // return "<a href='" . route($this->route . 'show', $p->id) . "' class='text-primary' title='Menampilkan Data'>" . $p->no_skrd . "</a>";
             })
             ->editColumn('id_opd', function ($p) {
                 return $p->opd->n_opd;

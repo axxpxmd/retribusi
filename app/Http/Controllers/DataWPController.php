@@ -68,7 +68,7 @@ class DataWPController extends Controller
                 <a href='" . route('skrd.create', array('data_wp_id' =>  Crypt::encrypt($p->id))) . "' title='Buat SKRD' class=''><i class='icon-plus mr-1'></i></a>";
             })
             ->editColumn('nm_wajib_pajak', function ($p) {
-                return "<a href='" . route($this->route . 'show', Crypt::encrypt($p->id)) . "' class='text-primary' title='Show Data'>" . $p->nm_wajib_pajak . "</a>";
+                return "<a href='" . route($this->route . 'show', Crypt::encrypt($p->id)) . "' class='text-primary' title='Menampilkan Data'>" . $p->nm_wajib_pajak . "</a>";
             })
             ->editColumn('id_opd', function ($p) {
                 return $p->opd->n_opd;

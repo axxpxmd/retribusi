@@ -44,7 +44,7 @@ class OPDController extends Controller
                 return "<a href='" . route($this->route . 'edit', $p->id) . "' class='text-primary' title='Edit Data'><i class='icon icon-edit'></i></a>";
             })
             ->editColumn('n_opd', function ($p) {
-                return "<a href='" . route($this->route . 'show', $p->id) . "' class='text-primary' title='Show Data'>" . $p->n_opd . "</a>";
+                return "<a href='" . route($this->route . 'show', $p->id) . "' class='text-primary' title='Menampilkan Data'>" . $p->n_opd . "</a>";
             })
             ->editColumn('jenis_pendapatan', function ($p) {
                 $jenis_pendapatan = OPDJenisPendapatan::where('id_opd', $p->id)->count();

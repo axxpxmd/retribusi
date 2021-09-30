@@ -95,13 +95,13 @@ class STRDController extends Controller
                     return $filettd;
                 } else {
                     if ($p->status_ttd != 2) {
-                        return $edit . $delete . $sendttd;
+                        return $delete . $sendttd;
                     }
                     return '-';
                 }
             })
             ->editColumn('no_skrd', function ($p) {
-                return "<a href='" . route($this->route . 'show', Crypt::encrypt($p->id)) . "' class='text-primary' title='Show Data'>" . $p->no_skrd . "</a>";
+                return "<a href='" . route($this->route . 'show', Crypt::encrypt($p->id)) . "' class='text-primary' title='Menampilkan Data'>" . $p->no_skrd . "</a>";
             })
             ->editColumn('id_opd', function ($p) {
                 return $p->opd->n_opd;

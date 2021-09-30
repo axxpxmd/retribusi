@@ -63,7 +63,7 @@ class RincianJenisController extends Controller
                 }
             })
             ->editColumn('rincian_pendapatan', function ($p) {
-                return "<a href='" . route($this->route . 'show', $p->id) . "' class='text-primary' title='Show Data'>" . $p->rincian_pendapatan . "</a>";
+                return "<a href='" . route($this->route . 'show', $p->id) . "' class='text-primary' title='Menampilkan Data'>" . $p->rincian_pendapatan . "</a>";
             })
             ->editColumn('id_jenis_pendapatan', function ($p) {
                 return $p->jenis_pendapatan->jenis_pendapatan;
