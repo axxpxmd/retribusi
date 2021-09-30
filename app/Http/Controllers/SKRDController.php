@@ -599,7 +599,6 @@ class SKRDController extends Controller
 
     public function updateVaBJB($tokenBJB, $amount, $expiredDate, $customer_name, $va_number)
     {
-
         /* Update Virtual Account from Bank BJB
          * UPDATE BILLING REQUEST (POST /billing/<cin>/<va_number>)
          */
@@ -610,9 +609,10 @@ class SKRDController extends Controller
 
         $cin      = config('app.cin_bjb');
         $currency = "360";
+        $description = "Pembayaran Retribusi";
 
         // Base Signature
-        $bodySignature = '{"amount":"' . $amount . '","currency":"' . $currency . '","expired_date":"' . $expiredDate . '","customer_name":"' . $customer_name . '"}';
+        $bodySignature = '{"amount":"' . $amount . '","currency":"' . $currency . '","expired_date":"' . $expiredDate . '","customer_name":"' . $customer_name . '","description":"' . $description . '"}';
         $signature = 'path=/billing/' . $cin . '/' . $va_number . '&method=POST&token=' . $tokenBJB . '&timestamp=' . $timestamp_now . '&body=' . $bodySignature . '';
         $sha256    = hash_hmac('sha256', $signature, $key);
 
@@ -621,7 +621,8 @@ class SKRDController extends Controller
             "amount"   => $amount,
             "currency" => $currency,
             "expired_date"  => $expiredDate,
-            "customer_name" => $customer_name
+            "customer_name" => $customer_name,
+            "description"   => $description
         ];
 
         $path = 'billing/' . $cin . '/' . $va_number . '';
@@ -651,7 +652,7 @@ class SKRDController extends Controller
         $va_number     = (int) $data->nomor_va_bjb;
 
         $VABJB = $data->nomor_va_bjb;
-        if ($amount != $data->jumlah_bayar) {
+        if ($amount != $data->jumlah_bayar || $customer_name != $data->nm_wajib_pajak || $$data->tgl_skrd_akhir != $request->tgl_skrd_akhir) {
             // Get Token BJB
             $resGetTokenBJB = $this->getTokenBJB();
             if ($resGetTokenBJB->successful()) {
