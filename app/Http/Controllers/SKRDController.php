@@ -9,6 +9,7 @@ use DataTables;
 use Carbon\Carbon;
 use Firebase\JWT\JWT;
 
+use App\Http\Services\VABJB;
 use App\Libraries\GenerateNumber;
 use App\Libraries\Html\Html_number;
 use App\Http\Controllers\Controller;
@@ -188,33 +189,6 @@ class SKRDController extends Controller
         return $data;
     }
 
-    public function getTokenBJB()
-    {
-        /* Get Token From Bank BJB
-         * TOKEN REQUEST (POST /oauth/client/token)
-         */
-        $timestamp_now   = Carbon::now()->timestamp;
-        $timestamp_1hour = Carbon::now()->addHour()->timestamp;
-
-        $url = config('app.ip_api_bjb');
-        $client_id = config('app.client_id_bjb');
-        $key = config('app.key_bjb');
-
-        $payload = array(
-            "sub" => "va-online",
-            "aud" => "access-token",
-            "iat" => $timestamp_now,
-            "exp" => $timestamp_1hour
-        );
-
-        $jwt = JWT::encode($payload, $key, 'HS256', $client_id); // Create JWT Signature (HMACSHA256)
-        $res = Http::contentType("text/plain")->send('POST', $url . 'oauth/client/token', [
-            'body' => $jwt
-        ]);
-
-        return $res;
-    }
-
     public function create(Request $request)
     {
         $route = $this->route;
@@ -242,21 +216,6 @@ class SKRDController extends Controller
             $jenis_pendapatan_id = \Crypt::decrypt($jenis_pendapatan_id);
         }
 
-        // Get Token BJB
-        $resGetTokenBJB = $this->getTokenBJB();
-        if ($resGetTokenBJB->successful()) {
-            $resJson = $resGetTokenBJB->json();
-            if ($resJson['rc'] != 0000)
-                return redirect()
-                    ->route($this->route . 'index')
-                    ->withErrors('Terjadi kegagalan saat mengambil token. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . '');
-            $tokenBJB = $resJson['data'];
-        } else {
-            return redirect()
-                ->route($this->route . 'index')
-                ->withErrors("Terjadi kegagalan saat mengambil token. Error Code " . $resGetTokenBJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator");
-        }
-
         // Data wajib Retribusi
         $data_wp = DataWP::where('id', $data_wp_id)->first();
         if ($data_wp != null) {
@@ -276,57 +235,8 @@ class SKRDController extends Controller
             'jenis_pendapatan',
             'kecamatans',
             'rincian_jenis_pendapatans',
-            'data_wp',
-            'tokenBJB'
+            'data_wp'
         ));
-    }
-
-    public function getVaBJB($tokenBJB, $clientRefnum, $amount, $expiredDate, $customerName, $productCode)
-    {
-        /* Create Virtual Account from Bank BJB
-         * CREATE BILLING REQUEST (POST /billing)
-         */
-
-        $url = config('app.ip_api_bjb');
-        $key = config('app.key_bjb');
-        $timestamp_now = Carbon::now()->timestamp;
-
-        $cin         = config('app.cin_bjb');
-        $clientType  = "1";
-        $productCode = "01";
-        $billingType = "f";
-        $vaType      = "a";
-        $currency    = "360";
-        $description = "Pembayaran Retribusi";
-
-        // Base Signature
-        $bodySignature = '{"cin":"' . $cin . '","client_type":"' . $clientType . '","product_code":"' . $productCode . '","billing_type":"' . $billingType . '","va_type":"' . $vaType . '","client_refnum":"' . $clientRefnum . '","amount":"' . $amount . '","currency":"' . $currency . '","expired_date":"' . $expiredDate . '","customer_name":"' . $customerName . '","description":"' . $description . '"}';
-        $signature = 'path=/billing&method=POST&token=' . $tokenBJB . '&timestamp=' . $timestamp_now . '&body=' . $bodySignature . '';
-        $sha256    = hash_hmac('sha256', $signature, $key);
-
-        // Body / Payload
-        $reqBody = [
-            "cin"           => $cin,
-            "client_type"   => $clientType,
-            "product_code"  => $productCode,
-            "billing_type"  => $billingType,
-            "va_type"       => $vaType,
-            "client_refnum" => $clientRefnum,
-            "amount"   => $amount,
-            "currency" => $currency,
-            "expired_date"  => $expiredDate,
-            "customer_name" => $customerName,
-            "description"   => $description,
-        ];
-
-        $res = Http::withHeaders([
-            'Authorization' => 'Bearer ' . $tokenBJB,
-            'BJB-Timestamp' => $timestamp_now,
-            'BJB-Signature' => $sha256,
-            'Content-Type'  => 'application/json'
-        ])->post($url . 'billing', $reqBody);
-
-        return $res;
     }
 
     public function store(Request $request)
@@ -357,7 +267,7 @@ class SKRDController extends Controller
         $jenisGenerate = 'no_bayar';
         $no_bayar = GenerateNumber::generate($request->id_opd, $request->id_jenis_pendapatan, $jenisGenerate);
 
-        //TODO: Check Duplikat
+        //TODO: Check Duplikat (no_bayar, no_skrd)
         $checkGenerate = [
             'no_skrd'  => $no_skrd,
             'no_bayar' => $no_bayar
@@ -368,6 +278,7 @@ class SKRDController extends Controller
         ])->validate();
 
         //* Tahap 2
+        $VABJB   = '';
         $timeNow = Carbon::now();
 
         $dateTimeNow = new DateTime($timeNow);
@@ -376,7 +287,6 @@ class SKRDController extends Controller
         $daysDiff    = $interval->format('%r%a');
 
         //TODO: Check Expired Date (jika tgl_skrd_akhir kurang dari tanggal sekarang tidak bisa buat VA)
-        $VABJB = '';
         if ($daysDiff > 0) {
             $tokenBJB     = $request->token_bjb;
             $clientRefnum = $no_bayar;
@@ -385,8 +295,23 @@ class SKRDController extends Controller
             $customerName = $request->nm_wajib_pajak;
             $productCode  = $request->kd_jenis;
 
-            $resGetVABJB = $this->getVaBJB($tokenBJB, $clientRefnum, $amount, $expiredDate, $customerName, $productCode);
+            //TODO: Get Token BJB
+            $resGetTokenBJB = VABJB::getTokenBJB();
+            if ($resGetTokenBJB->successful()) {
+                $resJson = $resGetTokenBJB->json();
+                if ($resJson['rc'] != 0000)
+                    return response()->json([
+                        'message' => 'Terjadi kegagalan saat mengambil token. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . ''
+                    ], 422);
+                $tokenBJB = $resJson['data'];
+            } else {
+                return response()->json([
+                    'message' => "Terjadi kegagalan saat mengambil token. Error Code " . $resGetTokenBJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator"
+                ], 422);
+            }
 
+            //TODO: Create VA BJB
+            $resGetVABJB = VABJB::createVABJB($tokenBJB, $clientRefnum, $amount, $expiredDate, $customerName, $productCode);
             if ($resGetVABJB->successful()) {
                 $resJson = $resGetVABJB->json();
                 if (isset($resJson['rc']) != 0000)
@@ -522,45 +447,6 @@ class SKRDController extends Controller
         ));
     }
 
-    public function updateVaBJB($tokenBJB, $amount, $expiredDate, $customer_name, $va_number)
-    {
-        /* Update Virtual Account from Bank BJB
-         * UPDATE BILLING REQUEST (POST /billing/<cin>/<va_number>)
-         */
-
-        $url = config('app.ip_api_bjb');
-        $key = config('app.key_bjb');
-        $timestamp_now = Carbon::now()->timestamp;
-
-        $cin      = config('app.cin_bjb');
-        $currency = "360";
-        $description = "Pembayaran Retribusi";
-
-        // Base Signature
-        $bodySignature = '{"amount":"' . $amount . '","currency":"' . $currency . '","expired_date":"' . $expiredDate . '","customer_name":"' . $customer_name . '","description":"' . $description . '"}';
-        $signature = 'path=/billing/' . $cin . '/' . $va_number . '&method=POST&token=' . $tokenBJB . '&timestamp=' . $timestamp_now . '&body=' . $bodySignature . '';
-        $sha256    = hash_hmac('sha256', $signature, $key);
-
-        // Body / Payload
-        $reqBody = [
-            "amount"   => $amount,
-            "currency" => $currency,
-            "expired_date"  => $expiredDate,
-            "customer_name" => $customer_name,
-            "description"   => $description
-        ];
-
-        $path = 'billing/' . $cin . '/' . $va_number . '';
-        $res  = Http::withHeaders([
-            'Authorization' => 'Bearer ' . $tokenBJB,
-            'BJB-Timestamp' => $timestamp_now,
-            'BJB-Signature' => $sha256,
-            'Content-Type'  => 'application/json'
-        ])->post($url . $path, $reqBody);
-
-        return $res;
-    }
-
     public function update(Request $request, $id)
     {
         $data = TransaksiOPD::find($id);
@@ -574,12 +460,12 @@ class SKRDController extends Controller
         $amount = \strval((int) str_replace(['.', 'Rp', ' '], '', $request->jumlah_bayar));
         $expiredDate   = $request->tgl_skrd_akhir . ' 23:59:59';
         $customer_name = $request->nm_wajib_pajak;
-        $va_number     = (int) $data->nomor_va_bjb;
+        $va_number = (int) $data->nomor_va_bjb;
+        $VABJB     = $data->nomor_va_bjb;
 
-        $VABJB = $data->nomor_va_bjb;
-        if ($amount != $data->jumlah_bayar || $customer_name != $data->nm_wajib_pajak || $$data->tgl_skrd_akhir != $request->tgl_skrd_akhir) {
-            // Get Token BJB
-            $resGetTokenBJB = $this->getTokenBJB();
+        if ($amount != $data->jumlah_bayar || $customer_name != $data->nm_wajib_pajak || $data->tgl_skrd_akhir != $request->tgl_skrd_akhir) {
+            //TODO: Get Token BJB
+            $resGetTokenBJB = VABJB::getTokenBJB();
             if ($resGetTokenBJB->successful()) {
                 $resJson = $resGetTokenBJB->json();
                 if ($resJson['rc'] != 0000)
@@ -593,8 +479,8 @@ class SKRDController extends Controller
                 ], 422);
             }
 
-            // update VA BJB
-            $resUpdateVABJB = $this->updateVaBJB($tokenBJB, $amount, $expiredDate, $customer_name, $va_number);
+            //TODO: Update Va BJB
+            $resUpdateVABJB = VABJB::updateVaBJB($tokenBJB, $amount, $expiredDate, $customer_name, $va_number);
             if ($resUpdateVABJB->successful()) {
                 $resJson = $resUpdateVABJB->json();
                 if (isset($resJson['rc']) != 0000)

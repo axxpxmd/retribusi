@@ -37,8 +37,6 @@
                                     {{ method_field('POST') }}
                                     <input type="hidden" name="id_opd" value="{{ $opd->id }}">
                                     <input type="hidden" name="id_jenis_pendapatan" value="{{ $jenis_pendapatan->id }}">
-
-                                    <input type="hidden" name="token_bjb" value="{{ $tokenBJB }}">
                                     <input type="hidden" name="kd_jenis" id="kd_jenis" value="{{ $data_wp != null ? $data_wp->rincian_jenis->kd_jenis : '' }}">
                                     <div class="form-row form-inline">
                                         <div class="col-md-12">
