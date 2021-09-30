@@ -90,6 +90,10 @@
                                                         <textarea type="text" rows="3" name="alamat_wp" id="alamat_wp" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required>{{ $data_wp != null ? $data_wp->alamat_wp : '' }}</textarea>
                                                     </div>
                                                     <div class="form-group m-0">
+                                                        <label for="lokasi" class="col-form-label s-12 col-md-4">Lokasi<span class="text-danger ml-1">*</span></label>
+                                                        <textarea type="text" rows="2" name="lokasi" id="lokasi" placeholder="Contoh: Ruko Sektor 1.2 BSD" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required>{{ $data_wp != null ? $data_wp->lokasi : '' }}</textarea>
+                                                    </div>
+                                                    <div class="form-group m-0">
                                                         <label class="col-form-label s-12 col-md-4">Kecamatan<span class="text-danger ml-1">*</span></label>
                                                         <div class="col-md-8 p-0 bg-light">
                                                             <select class="select2 form-control r-0 light s-12" id="kecamatan_id" name="kecamatan_id" autocomplete="off">
@@ -110,10 +114,6 @@
                                                                 <option value="">Pilih</option>
                                                             </select>
                                                         </div>
-                                                    </div>
-                                                    <div class="form-group mt-1">
-                                                        <label for="lokasi" class="col-form-label s-12 col-md-4">Lokasi<span class="text-danger ml-1">*</span></label>
-                                                        <textarea type="text" rows="2" name="lokasi" id="lokasi" placeholder="Contoh: Ruko Sektor 1.2 BSD" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required>{{ $data_wp != null ? $data_wp->lokasi : '' }}</textarea>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
