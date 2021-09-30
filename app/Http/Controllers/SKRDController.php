@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use DateTime;
 use Validator;
 use DataTables;
 use Carbon\Carbon;
@@ -349,14 +350,14 @@ class SKRDController extends Controller
          * 5. Save pdf to SFTP Storage
          */
 
-        // Tahap 1
+        //* Tahap 1
         $jenisGenerate = 'no_skrd';
         $no_skrd = GenerateNumber::generate($request->id_opd, $request->id_jenis_pendapatan, $jenisGenerate);
 
         $jenisGenerate = 'no_bayar';
         $no_bayar = GenerateNumber::generate($request->id_opd, $request->id_jenis_pendapatan, $jenisGenerate);
 
-        // Check Duplikat
+        //TODO: Check Duplikat
         $checkGenerate = [
             'no_skrd'  => $no_skrd,
             'no_bayar' => $no_bayar
@@ -366,30 +367,41 @@ class SKRDController extends Controller
             'no_bayar' => 'required|unique:tmtransaksi_opd,no_bayar',
         ])->validate();
 
-        // Tahap 2
-        $tokenBJB     = $request->token_bjb;
-        $clientRefnum = $no_bayar;
-        $amount       = \strval((int) str_replace(['.', 'Rp', ' '], '', $request->jumlah_bayar));
-        $expiredDate  = $request->tgl_skrd_akhir . ' 23:59:59';
-        $customerName = $request->nm_wajib_pajak;
-        $productCode  = $request->kd_jenis;
+        //* Tahap 2
+        $timeNow = Carbon::now();
 
-        $resGetVABJB = $this->getVaBJB($tokenBJB, $clientRefnum, $amount, $expiredDate, $customerName, $productCode);
+        $dateTimeNow = new DateTime($timeNow);
+        $expired     = new DateTime($request->tgl_skrd_akhir . ' 23:59:59');
+        $interval    = $dateTimeNow->diff($expired);
+        $daysDiff    = $interval->format('%r%a');
 
-        if ($resGetVABJB->successful()) {
-            $resJson = $resGetVABJB->json();
-            if (isset($resJson['rc']) != 0000)
+        //TODO: Check Expired Date (jika tgl_skrd_akhir kurang dari tanggal sekarang tidak bisa buat VA)
+        $VABJB = '';
+        if ($daysDiff > 0) {
+            $tokenBJB     = $request->token_bjb;
+            $clientRefnum = $no_bayar;
+            $amount       = \strval((int) str_replace(['.', 'Rp', ' '], '', $request->jumlah_bayar));
+            $expiredDate  = $request->tgl_skrd_akhir . ' 23:59:59';
+            $customerName = $request->nm_wajib_pajak;
+            $productCode  = $request->kd_jenis;
+
+            $resGetVABJB = $this->getVaBJB($tokenBJB, $clientRefnum, $amount, $expiredDate, $customerName, $productCode);
+
+            if ($resGetVABJB->successful()) {
+                $resJson = $resGetVABJB->json();
+                if (isset($resJson['rc']) != 0000)
+                    return response()->json([
+                        'message' => 'Terjadi kegagalan saat membuat Virtual Account. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . ''
+                    ], 422);
+                $VABJB = $resJson['va_number'];
+            } else {
                 return response()->json([
-                    'message' => 'Terjadi kegagalan saat membuat Virtual Account. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . ''
+                    'message' => "Terjadi kegagalan saat membuat Virtual Account. Error Code " . $resGetVABJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator"
                 ], 422);
-            $VABJB = $resJson['va_number'];
-        } else {
-            return response()->json([
-                'message' => "Terjadi kegagalan saat membuat Virtual Account. Error Code " . $resGetVABJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator"
-            ], 422);
+            }
         }
 
-        // Tahap 3
+        //* Tahap 3
         $data = [
             'id_opd'  => $request->id_opd,
             'tgl_ttd' => $request->tgl_ttd,
@@ -422,7 +434,7 @@ class SKRDController extends Controller
 
         $dataSKRD = TransaksiOPD::create($data);
 
-        // Tahap 4
+        //* Tahap 4
         $data = [
             'id_opd'  => $request->id_opd,
             'id_jenis_pendapatan'         => $request->id_jenis_pendapatan,
@@ -441,12 +453,13 @@ class SKRDController extends Controller
             'id_rincian_jenis_pendapatan' => \Crypt::decrypt($request->id_rincian_jenis_pendapatan)
         ];
 
+        //TODO: Check existed data WP(wajid pajak) (menyimpan data wp jika belum pernah dibuat)
         $check = DataWP::where($where)->count();
         if ($check == 0)
             DataWP::create($data);
 
 
-        // Tahap 5
+        //* Tahap 5
         $data = TransaksiOPD::find($dataSKRD->id);
         $terbilang = Html_number::terbilang($data->total_bayar) . 'rupiah';
 
@@ -457,11 +470,11 @@ class SKRDController extends Controller
             'terbilang'
         ));
 
-        // get content PDF
+        //TODO: get content PDF
         $fileName = str_replace(' ', '', $data->nm_wajib_pajak) . '-'  . $data->no_skrd . ".pdf";
         $content = $pdf->download()->getOriginalContent();
 
-        // save PDF to sftp storage
+        //TODO: save PDF to sftp storage
         $path_sftp = 'file_ttd_skrd/';
         Storage::disk('sftp')->put($path_sftp . $fileName, $content);
 
@@ -557,7 +570,7 @@ class SKRDController extends Controller
          * 2. tmtransaksi_opd
          */
 
-        // Tahap 1
+        //* Tahap 1
         $amount = \strval((int) str_replace(['.', 'Rp', ' '], '', $request->jumlah_bayar));
         $expiredDate   = $request->tgl_skrd_akhir . ' 23:59:59';
         $customer_name = $request->nm_wajib_pajak;
@@ -596,7 +609,7 @@ class SKRDController extends Controller
             }
         }
 
-        // Tahap 2
+        //* Tahap 2
         $input = $request->all();
         $input = $request->except('token_bjb');
         $data->update($input);
