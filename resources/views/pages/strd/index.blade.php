@@ -107,7 +107,21 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-body">
-                <p class="font-weight-bold text-black-50">Apakah sudah yakin mengirim data ini untuk ditandatangi ?</p>
+                <div class="">
+                    <div class="row">
+                        <label class="col-md-2 s-12 font-weight-bold text-black-50"><strong>Nama </strong></label>
+                        <label class="col-md-9 s-12 font-weight-bold text-black-50" id="nm_wajib_pajak_ttd">:</label>
+                    </div>
+                    <div class="row" style="margin-top: -5px !important">
+                        <label class="col-md-2 s-12 font-weight-bold text-black-50"><strong>No SKRD </strong></label>
+                        <label class="col-md-9 s-12 font-weight-bold text-black-50" id="no_skrd_ttd">:</label>
+                    </div>
+                    <div class="row" style="margin-top: -5px !important">
+                        <label class="col-md-2 s-12 font-weight-bold text-black-50"><strong>Ketetapan </strong></label>
+                        <label class="col-md-9 s-12 font-weight-bold text-black-50" id="ketetapan">:</label>
+                    </div>
+                    <p class="font-weight-bold text-black-50">Apakah sudah yakin mengirim data ini untuk ditandatangi ?</p>
+                </div>
                 <hr>
                 <div class="text-right">
                     <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="icon-times mr-2"></i>Batalkan</button>
@@ -222,6 +236,24 @@
     function updateStatusTTD(id){
         $('#updateStatusTTD').modal('show');
         $('#updateStatusTTD').modal({keyboard: false});
+
+        url = "{{ route('skrd.getDataSKRD', ':id') }}".replace(':id', id);
+        $.get(url, function(data){
+            $('#no_skrd_ttd').html(': '+data.no_skrd)
+            $('#nm_wajib_pajak_ttd').html(': '+data.nm_wajib_pajak)
+
+            var bilangan = data.jumlah_bayar;
+            var	number_string = bilangan.toString(),
+                sisa 	= number_string.length % 3,
+                rupiah 	= number_string.substr(0, sisa),
+                ribuan 	= number_string.substr(sisa).match(/\d{3}/g);
+                                    
+            if (ribuan) {
+                separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+            $('#ketetapan').html(': Rp. '+ rupiah)
+        }, 'JSON');
 
         $('#kirimTTD').attr('href', "{{ route('strd.updateStatusKirimTTD', ':id') }}".replace(':id', id));
     }

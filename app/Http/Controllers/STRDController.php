@@ -32,6 +32,12 @@ class STRDController extends Controller
     protected $title = 'STRD';
     protected $path  = '';
 
+    // Check Permission
+    public function __construct()
+    {
+        $this->middleware(['permission:STRD']);
+    }
+
     public function index()
     {
         $route = $this->route;

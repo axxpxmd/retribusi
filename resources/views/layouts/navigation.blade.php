@@ -85,12 +85,14 @@
         </a>
     </li>
     @endcan
-    {{-- <li class="no-b">
+    @can('STRD')
+    <li class="no-b">
         <a href="{{ route('strd.index') }}">
             <i class="icon icon-document-list green-text s-18"></i> 
             <span>STRD</span>
         </a>
-    </li> --}}
+    </li>
+    @endcan
     @can('STS')
     <li class="no-b">
         <a href="{{ route('sts.index') }}">
