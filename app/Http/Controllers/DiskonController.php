@@ -7,6 +7,7 @@ use DataTables;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Http\Services\VABJB;
 use App\Http\Controllers\Controller;
 
 // Models
@@ -115,15 +116,14 @@ class DiskonController extends Controller
             $opd_id = $checkOPD;
         }
 
-        // For Filter
-        $jenis_pendapatan_id = $request->jenis_pendapatan_id;
-        $from  = $request->tgl_skrd;
-        $to    = $request->tgl_skrd1;
-        $status_diskon_filter = $request->status_diskon_filter;
-        $no_skrd = $request->no_skrd;
-
-        // Data
+        //TODO: Validation
         $status_diskon = $request->status_diskon;
+        if ($status_diskon == null) {
+            return redirect()
+                ->route($this->route . 'index')
+                ->withErrors('Silahkan pilih diskon.');
+        }
+
         if ($status_diskon == 1) {
             $request->validate([
                 'diskon' => 'required|numeric|max:100'
@@ -134,38 +134,75 @@ class DiskonController extends Controller
             $diskon = 0;
         }
 
+        //TODO: Get params
+        $from    = $request->tgl_skrd;
+        $to      = $request->tgl_skrd1;
+        $no_skrd = $request->no_skrd;
+        $jenis_pendapatan_id  = $request->jenis_pendapatan_id;
+        $status_diskon_filter = $request->status_diskon_filter;
+
         $datas = TransaksiOPD::queryDiskon($opd_id, $jenis_pendapatan_id, $from, $to, $status_diskon_filter, $no_skrd);
+
+        //TODO: Get length datas
         $dataLength = count($datas);
-
-        // Check status diskon
-        if ($status_diskon == null) {
-            return redirect()
-                ->route($this->route . 'index')
-                ->withErrors('Silahkan pilih diskon.');
-        }
-
-        // check data if empty
         if ($dataLength == 0)
             return redirect()
                 ->route($this->route . 'index')
                 ->withErrors('Tidak ada data yang diupdate, pastikan filter data sudah sesuai.');
 
-        /**
-         * * Check
-         * 0 = Tidak Diskon
-         * 1 = Diskon
+        //TODO: Get Token BJB
+        $resGetTokenBJB = VABJB::getTokenBJB();
+        if ($resGetTokenBJB->successful()) {
+            $resJson = $resGetTokenBJB->json();
+            if ($resJson['rc'] != 0000)
+                return redirect()
+                    ->route($this->route . 'index')
+                    ->withErrors('Terjadi kegagalan saat mengambil token. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . '');
+            $tokenBJB = $resJson['data'];
+        } else {
+            return redirect()
+                ->route($this->route . 'index')
+                ->withErrors("Terjadi kegagalan saat mengambil token. Error Code " . $resGetTokenBJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator");
+        }
+
+        /* Tahapan:
+         * 1. Update VA BJB
+         * 2. tmtransaksi_opd
          */
         for ($i = 0; $i < $dataLength; $i++) {
             if ($status_diskon == 1) {
-                $total_bayar = $datas[$i]->jumlah_bayar;
+                //TODO: Create discount
+                $total_bayar    = $datas[$i]->jumlah_bayar;
                 $diskon_percent = $diskon / 100;
 
-                $diskon_harga = $diskon_percent * $total_bayar;
+                $diskon_harga       = $diskon_percent * $total_bayar;
                 $total_bayar_update = $total_bayar - $diskon_harga;
 
+                //* Tahap 1
+                $amount = \strval((int) str_replace(['.', 'Rp', ' '], '', $total_bayar_update));
+                $expiredDate   = $datas[$i]->tgl_skrd_akhir . ' 23:59:59';
+                $customer_name = $datas[$i]->nm_wajib_pajak;
+                $va_number     = (int) $datas[$i]->nomor_va_bjb;
+
+                $resUpdateVABJB = VABJB::updateVaBJB($tokenBJB, $amount, $expiredDate, $customer_name, $va_number);
+                if ($resUpdateVABJB->successful()) {
+                    $resJson = $resUpdateVABJB->json();
+                    if (isset($resJson['rc']) != 0000)
+                        return redirect()
+                            ->route($this->route . 'index')
+                            ->withErrors('Terjadi kegagalan saat memperbarui Virtual Account. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . '');
+                    $VABJB = $resJson['va_number'];
+                } else {
+                    return redirect()
+                        ->route($this->route . 'index')
+                        ->withErrors("Terjadi kegagalan saat memperbarui Virtual Account. Error Code " . $resUpdateVABJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator");
+                }
+
+                //* Tahap 2
                 $datas[$i]->update([
                     'total_bayar'   => $total_bayar_update,
                     'status_diskon' => $status_diskon,
+                    'nomor_va_bjb'  => $VABJB,
                     'diskon' => $diskon
                 ]);
             } else {

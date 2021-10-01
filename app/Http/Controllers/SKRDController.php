@@ -461,8 +461,8 @@ class SKRDController extends Controller
         $expiredDate   = $request->tgl_skrd_akhir . ' 23:59:59';
         $customer_name = $request->nm_wajib_pajak;
         $va_number = (int) $data->nomor_va_bjb;
-        $VABJB     = $data->nomor_va_bjb;
 
+        $VABJB = $data->nomor_va_bjb;
         if ($amount != $data->jumlah_bayar || $customer_name != $data->nm_wajib_pajak || $data->tgl_skrd_akhir != $request->tgl_skrd_akhir) {
             //TODO: Get Token BJB
             $resGetTokenBJB = VABJB::getTokenBJB();

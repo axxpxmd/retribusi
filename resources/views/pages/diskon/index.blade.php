@@ -103,7 +103,7 @@
                                 <div class="form-group row" style="margin-top: -8px !important">
                                     <label class="col-form-label s-12 col-md-3 text-right font-weight-bolder"></label>
                                     <div class="col-sm-5 row">
-                                        <a href="#" data-toggle="modal" onclick="createRoute()" data-target="#exampleModalCenter" class="btn btn-sm btn-primary ml-3"><i class="icon-system_update_alt mr-2"></i>Update Diskon</a>
+                                        <a href="#" data-toggle="modal" onclick="createRoute()" data-target="#modalDiskon" class="btn btn-sm btn-primary ml-3"><i class="icon-system_update_alt mr-2"></i>Update Diskon</a>
                                     </div>
                                 </div>
                             </div>
@@ -138,15 +138,26 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="modalDiskon" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-body">
                 <p class="font-weight-bold">Apakah anda yakin ingin mengupdate data ini?</p>
+                <hr>
+                <div class="text-right">
+                    <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="icon-times mr-2"></i>Batalkan</button>
+                    <a href="{{ route('diskon.updateDiskon') }}" onclick="loading()" class="btn btn-sm btn-primary" id="updateDiskon"><i class="icon-system_update_alt mr-2"></i>Update Data</a>
+                </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="icon-times mr-2"></i>Batalkan</button>
-                <a href="{{ route('diskon.updateDiskon') }}" class="btn btn-sm btn-primary" id="updateDiskon"><i class="icon-system_update_alt mr-2"></i>Update Data</a>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="loading" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content" style="background: transparent !important; border: none !important">
+            <div class="modal-body">
+                {{-- <img src="{{ asset('images/loader.svg') }}" class="mx-auto d-block" width="200" height="200" alt="">   --}}
+                <img src="{{ asset('images/hourglass.png') }}" class="mx-auto d-block" width="100" height="100" alt="">               
             </div>
         </div>
     </div>
@@ -164,6 +175,13 @@
             } 
         });
     });
+
+    function loading(){
+        // Close modal diskon
+        $('#modalDiskon').modal('hide');
+        // Show loading
+        $('#loading').modal('show');
+    }
 
     var table = $('#dataTable').dataTable({
         scrollX: true,
