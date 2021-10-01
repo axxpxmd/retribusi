@@ -123,7 +123,7 @@
 
         $('#tgl_skrd_text').html('Tanggal SKRD :');
         $('#jenis').change(function(){
-            if($('#jenis').val() === "1") {
+            if($('#jenis').val() === "2") {
                 $('#status_bayar_display').hide(); 
                 $('#tgl_skrd_text').html('Tanggal SKRD :');
             } else {
