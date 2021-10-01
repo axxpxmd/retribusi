@@ -84,7 +84,7 @@ class VABJB
         return $res;
     }
 
-    public static function updateVaBJB($tokenBJB, $amount, $expiredDate, $customer_name, $va_number)
+    public static function updateVaBJB($tokenBJB, $amount, $expiredDate, $customerName, $va_number)
     {
         /* Update Virtual Account from Bank BJB
          * UPDATE BILLING REQUEST (POST /billing/<cin>/<va_number>)
@@ -99,7 +99,7 @@ class VABJB
         $description = "Pembayaran Retribusi";
 
         // Base Signature
-        $bodySignature = '{"amount":"' . $amount . '","currency":"' . $currency . '","expired_date":"' . $expiredDate . '","customer_name":"' . $customer_name . '","description":"' . $description . '"}';
+        $bodySignature = '{"amount":"' . $amount . '","currency":"' . $currency . '","expired_date":"' . $expiredDate . '","customer_name":"' . $customerName . '","description":"' . $description . '"}';
         $signature = 'path=/billing/' . $cin . '/' . $va_number . '&method=POST&token=' . $tokenBJB . '&timestamp=' . $timestamp_now . '&body=' . $bodySignature . '';
         $sha256    = hash_hmac('sha256', $signature, $key);
 
@@ -108,7 +108,7 @@ class VABJB
             "amount"   => $amount,
             "currency" => $currency,
             "expired_date"  => $expiredDate,
-            "customer_name" => $customer_name,
+            "customer_name" => $customerName,
             "description"   => $description
         ];
 

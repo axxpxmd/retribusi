@@ -458,12 +458,12 @@ class SKRDController extends Controller
 
         //* Tahap 1
         $amount = \strval((int) str_replace(['.', 'Rp', ' '], '', $request->jumlah_bayar));
-        $expiredDate   = $request->tgl_skrd_akhir . ' 23:59:59';
-        $customer_name = $request->nm_wajib_pajak;
-        $va_number = (int) $data->nomor_va_bjb;
+        $expiredDate  = $request->tgl_skrd_akhir . ' 23:59:59';
+        $customerName = $request->nm_wajib_pajak;
+        $va_number    = (int) $data->nomor_va_bjb;
 
         $VABJB = $data->nomor_va_bjb;
-        if ($amount != $data->jumlah_bayar || $customer_name != $data->nm_wajib_pajak || $data->tgl_skrd_akhir != $request->tgl_skrd_akhir) {
+        if ($amount != $data->jumlah_bayar || $customerName != $data->nm_wajib_pajak || $data->tgl_skrd_akhir != $request->tgl_skrd_akhir) {
             //TODO: Get Token BJB
             $resGetTokenBJB = VABJB::getTokenBJB();
             if ($resGetTokenBJB->successful()) {
@@ -480,7 +480,7 @@ class SKRDController extends Controller
             }
 
             //TODO: Update Va BJB
-            $resUpdateVABJB = VABJB::updateVaBJB($tokenBJB, $amount, $expiredDate, $customer_name, $va_number);
+            $resUpdateVABJB = VABJB::updateVaBJB($tokenBJB, $amount, $expiredDate, $customerName, $va_number);
             if ($resUpdateVABJB->successful()) {
                 $resJson = $resUpdateVABJB->json();
                 if (isset($resJson['rc']) != 0000)

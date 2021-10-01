@@ -109,13 +109,6 @@ class DiskonController extends Controller
 
     public function updateDiskon(Request $request)
     {
-        $checkOPD = Auth::user()->pengguna->opd_id;
-        if ($checkOPD == 0) {
-            $opd_id = $request->opd_id;
-        } else {
-            $opd_id = $checkOPD;
-        }
-
         //TODO: Validation
         $status_diskon = $request->status_diskon;
         if ($status_diskon == null) {
@@ -135,11 +128,18 @@ class DiskonController extends Controller
         }
 
         //TODO: Get params
-        $from    = $request->tgl_skrd;
         $to      = $request->tgl_skrd1;
+        $from    = $request->tgl_skrd;
         $no_skrd = $request->no_skrd;
         $jenis_pendapatan_id  = $request->jenis_pendapatan_id;
         $status_diskon_filter = $request->status_diskon_filter;
+
+        $checkOPD = Auth::user()->pengguna->opd_id;
+        if ($checkOPD == 0) {
+            $opd_id = $request->opd_id;
+        } else {
+            $opd_id = $checkOPD;
+        }
 
         $datas = TransaksiOPD::queryDiskon($opd_id, $jenis_pendapatan_id, $from, $to, $status_diskon_filter, $no_skrd);
 
@@ -180,11 +180,11 @@ class DiskonController extends Controller
 
                 //* Tahap 1
                 $amount = \strval((int) str_replace(['.', 'Rp', ' '], '', $total_bayar_update));
-                $expiredDate   = $datas[$i]->tgl_skrd_akhir . ' 23:59:59';
-                $customer_name = $datas[$i]->nm_wajib_pajak;
-                $va_number     = (int) $datas[$i]->nomor_va_bjb;
+                $expiredDate  = $datas[$i]->tgl_skrd_akhir . ' 23:59:59';
+                $customerName = $datas[$i]->nm_wajib_pajak;
+                $va_number    = (int) $datas[$i]->nomor_va_bjb;
 
-                $resUpdateVABJB = VABJB::updateVaBJB($tokenBJB, $amount, $expiredDate, $customer_name, $va_number);
+                $resUpdateVABJB = VABJB::updateVaBJB($tokenBJB, $amount, $expiredDate, $customerName, $va_number);
                 if ($resUpdateVABJB->successful()) {
                     $resJson = $resUpdateVABJB->json();
                     if (isset($resJson['rc']) != 0000)
