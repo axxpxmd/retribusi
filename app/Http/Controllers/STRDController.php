@@ -239,22 +239,22 @@ class STRDController extends Controller
             $opd_id = $checkOPD;
         }
 
-        // For Filter
+        //TODO: Get params
         $from = $request->tgl_skrd;
         $to   = $request->tgl_skrd1;
         $no_skrd    = $request->no_skrd;
         $status_ttd = $request->status_ttd;
 
         $datas = TransaksiOPD::querySTRD($from, $to, $opd_id, $no_skrd, $status_ttd);
-        $dataLength = count($datas);
 
-        // check data if empty
+        //TODO: Check length datas
+        $dataLength = count($datas);
         if ($dataLength == 0)
             return redirect()
                 ->route($this->route . 'index')
                 ->withErrors('Tidak ada data yang dikirim, pastikan filter data sudah sesuai.');
 
-        // process kirim TTD
+        //TODO: Proses update status TTD
         for ($i = 0; $i < $dataLength; $i++) {
             $datas[$i]->update([
                 'status_ttd' => 0
