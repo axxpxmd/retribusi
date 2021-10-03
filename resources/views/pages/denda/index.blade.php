@@ -137,10 +137,11 @@
         <div class="modal-content">
             <div class="modal-body">
                 <p class="font-weight-bold">Apakah anda yakin ingin mengupdate data ini?</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="icon-times mr-2"></i>Close</button>
-                <a href="{{ route('denda.updateDenda') }}" class="btn btn-sm btn-primary" id="exportpdf"><i class="icon-system_update_alt mr-2"></i>Update Denda</a>
+                <hr>
+                <div class="text-right">
+                    <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="icon-times mr-2"></i>Close</button>
+                    <a href="{{ route('denda.updateDenda') }}" class="btn btn-sm btn-primary" id="exportpdf"><i class="icon-system_update_alt mr-2"></i>Update Denda</a>
+                </div>
             </div>
         </div>
     </div>

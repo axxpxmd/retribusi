@@ -41,7 +41,7 @@
                         </div> 
                         @endif
                         <div class="form-group row" style="margin-top: -8px !important">
-                            <label for="no_skrd" class="col-form-label s-12 col-md-4 text-right font-weight-bolder">NO SKRD : </label>
+                            <label for="no_skrd" class="col-form-label s-12 col-md-4 text-right font-weight-bolder">NO STRD : </label>
                             <div class="col-sm-4">
                                 <input type="text" name="no_skrd" id="no_skrd" class="form-control r-0 s-12 col-md-12" autocomplete="off" required/>
                             </div>
@@ -81,14 +81,15 @@
                                     <table id="dataTable" class="table display nowrap table-striped table-bordered" style="width:100%">
                                         <thead>
                                             <th>No</th>
-                                            <th>Nomor SKRD</th>
+                                            <th>Nomor STRD</th>
                                             <th>Nomor Bayar</th>
                                             <th>Nama WP</th>
                                             {{-- <th width="21%">Nama Dinas</th> --}}
                                             <th>Jenis Retribusi</th>
-                                            <th>Tanggal SKRD</th>
-                                            <th>Masa Berlaku SKRD</th>
+                                            <th>Tanggal STRD</th>
+                                            <th>Masa Berlaku STRD</th>
                                             <th>Ketetapan</th>
+                                            <th>Bunga</th>
                                             <th>Aksi</th>
                                             <th>Status TTD</th>
                                         </thead>
@@ -113,7 +114,7 @@
                         <label class="col-md-9 s-12 font-weight-bold text-black-50" id="nm_wajib_pajak_ttd">:</label>
                     </div>
                     <div class="row" style="margin-top: -5px !important">
-                        <label class="col-md-2 s-12 font-weight-bold text-black-50"><strong>No SKRD </strong></label>
+                        <label class="col-md-2 s-12 font-weight-bold text-black-50"><strong>No STRD </strong></label>
                         <label class="col-md-9 s-12 font-weight-bold text-black-50" id="no_skrd_ttd">:</label>
                     </div>
                     <div class="row" style="margin-top: -5px !important">
@@ -136,10 +137,11 @@
         <div class="modal-content">
             <div class="modal-body">
                 <p class="font-weight-bold">Apakah sudah yakin mengirim data ini untuk ditandatangi ?</p>
-            </div>
-            <div class="text-right">
-                <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="icon-times mr-2"></i>Batalkan</button>
-                <a href="{{ route('strd.updateStatusKirimTTDs') }}" class="btn btn-sm btn-primary ml-2" id="kirimTTDs"><i class="icon-pencil mr-2"></i>Kirim untuk TTD</a>
+                <hr>
+                <div class="text-right">
+                    <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="icon-times mr-2"></i>Batalkan</button>
+                    <a href="{{ route('strd.updateStatusKirimTTDs') }}" class="btn btn-sm btn-primary ml-2" id="kirimTTDs"><i class="icon-pencil mr-2"></i>Kirim untuk TTD</a>
+                </div>
             </div>
         </div>
     </div>
@@ -180,6 +182,7 @@
             {data: 'tgl_skrd', name: 'tgl_skrd'},
             {data: 'masa_berlaku', name: 'masa_berlaku'},
             {data: 'jumlah_bayar', name: 'jumlah_bayar'},
+            {data: 'bunga', name: 'bunga'},
             {data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center'},
             {data: 'status_ttd', name: 'status_ttd', orderable: false, searchable: false, className: 'text-center'}
         ]

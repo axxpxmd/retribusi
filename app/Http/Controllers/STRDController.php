@@ -86,19 +86,17 @@ class STRDController extends Controller
                 $path_sftp = 'file_ttd_skrd/';
                 $fileName  = str_replace(' ', '', $p->nm_wajib_pajak) . '-' . $p->no_skrd . ".pdf";
 
-                $report  = "<a href='" . route('skrd.report', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
                 $filettd = "<a href='" . config('app.sftp_src') . $path_sftp . $fileName . "' target='_blank' class='cyan-text' title='File TTD'><i class='icon-document-file-pdf2'></i></a>";
                 $sendttd = "<a href='#' onclick='updateStatusTTD(" . $p->id . ")' class='amber-text' title='Kirim Untuk TTD'><i class='icon icon-send'></i></a>";
-                $edit    = "<a href='" . route($this->route . 'edit', Crypt::encrypt($p->id)) . "' class='text-primary mr-2' title='Edit Data'><i class='icon icon-edit'></i></a>";
                 $delete  = "<a href='#' onclick='remove(" . $p->id . ")' class='text-danger mr-2' title='Hapus Data'><i class='icon icon-remove'></i></a>";
 
-                if ($p->status_ttd == 1) {
+                if ($p->statu_ttd == 3) {
                     return $filettd;
                 } else {
-                    if ($p->status_ttd != 2) {
-                        return $delete . $sendttd;
+                    if ($p->status_ttd == 4) {
+                        return '-';
                     }
-                    return '-';
+                    return $delete . $sendttd;
                 }
             })
             ->editColumn('no_skrd', function ($p) {
@@ -119,17 +117,24 @@ class STRDController extends Controller
             ->editColumn('jumlah_bayar', function ($p) {
                 return 'Rp. ' . number_format($p->jumlah_bayar);
             })
+            ->addColumn('bunga', function ($p) {
+                $tgl_skrd_akhir = $p->tgl_skrd_akhir;
+                $jumlah_bayar   = $p->jumlah_bayar;
+                list($jumlahBunga, $kenaikan) = $this->createBunga($tgl_skrd_akhir, $jumlah_bayar);
+
+                return 'Rp. ' . number_format($jumlahBunga) . ' (' . $kenaikan . '%)';
+            })
             ->addColumn('status_ttd', function ($p) {
-                if ($p->status_ttd == 0) {
+                if ($p->status_ttd == 0 || $p->status_ttd == 1 || $p->status_ttd == 2) {
                     return "<span class='badge badge-danger'>Belum</span>";
-                } elseif ($p->status_ttd == 1) {
+                } elseif ($p->status_ttd == 3) {
                     return "<span class='badge badge-success'>Sudah</span>";
-                } elseif ($p->status_ttd == 2) {
+                } elseif ($p->status_ttd == 4) {
                     return "<span class='badge badge-warning'>Proses</span>";
                 }
             })
             ->addIndexColumn()
-            ->rawColumns(['action', 'no_skrd', 'id_opd', 'id_jenis_pendapatan', 'tgl_skrd', 'masa_berlaku', 'status_ttd'])
+            ->rawColumns(['action', 'no_skrd', 'id_opd', 'id_jenis_pendapatan', 'tgl_skrd', 'masa_berlaku', 'status_ttd', 'bunga'])
             ->toJson();
     }
 
@@ -141,16 +146,6 @@ class STRDController extends Controller
         $id = \Crypt::decrypt($id);
 
         $data = TransaksiOPD::find($id);
-
-        // $timeNow     = Carbon::now();
-        // $dateTimeNow = new DateTime($timeNow);
-        // $expired     = new DateTime($data->tgl_skrd_akhir . ' 23:59:59');
-        // $interval    = $dateTimeNow->diff($expired);
-        // $montDiff    = $interval->format('%m');
-
-        // $kenaikan = ((int) $montDiff + 1) * 2;
-        // $bunga    = $kenaikan / 100;
-        // dd($montDiff);
 
         $fileName  = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
         $path_sftp = 'file_ttd_skrd/';
@@ -164,23 +159,34 @@ class STRDController extends Controller
         ));
     }
 
+    public function createBunga($tgl_skrd_akhir, $jumlah_bayar)
+    {
+        //TODO: Create Bunga (kenaikan 2% tiap bulan)
+        $timeNow     = Carbon::now();
+        $dateTimeNow = new DateTime($timeNow);
+        $expired     = new DateTime($tgl_skrd_akhir . ' 23:59:59');
+        $interval    = $dateTimeNow->diff($expired);
+        $monthDiff   = $interval->format('%m');
+
+        $kenaikan = ((int) $monthDiff + 1) * 2;
+        $bunga    = $kenaikan / 100;
+        $jumlahBunga = $jumlah_bayar * $bunga;
+
+        return [$jumlahBunga, $kenaikan];
+    }
+
     public function printData(Request $request, $id)
     {
         $id = \Crypt::decrypt($id);
 
         $data = TransaksiOPD::find($id);
 
-        //TODO: Create Bunga (kenaikan 2% tiap bulan)
-        $timeNow     = Carbon::now();
-        $dateTimeNow = new DateTime($timeNow);
-        $expired     = new DateTime($data->tgl_skrd_akhir . ' 23:59:59');
-        $interval    = $dateTimeNow->diff($expired);
-        $monthDiff   = $interval->format('%m');
+        //* Bunga
+        $tgl_skrd_akhir = $data->tgl_skrd_akhir;
+        $jumlah_bayar   = $data->jumlah_bayar;
+        list($jumlahBunga, $kenaikan) = $this->createBunga($tgl_skrd_akhir, $jumlah_bayar);
 
-        $kenaikan = ((int) $monthDiff + 1) * 2;
-        $bunga    = $kenaikan / 100;
-        $jumlahBunga = $data->jumlah_bayar * $bunga;
-
+        //* Total Bayar + Bunga
         $total_bayar = $data->total_bayar + $jumlahBunga;
         $terbilang   = Html_number::terbilang($total_bayar) . 'rupiah';
 
@@ -216,12 +222,48 @@ class STRDController extends Controller
     {
         $data = TransaksiOPD::find($id);
         $data->update([
-            'status_ttd' => 2
+            'status_ttd' => 4
         ]);
 
         return redirect()
             ->route($this->route . 'index')
             ->withSuccess('Selamat! Data berhasil dikirim untuk ditandatangan.');
+    }
+
+    public function updateStatusKirimTTDs(Request $request)
+    {
+        $checkOPD = Auth::user()->pengguna->opd_id;
+        if ($checkOPD == 0) {
+            $opd_id = $request->opd_id;
+        } else {
+            $opd_id = $checkOPD;
+        }
+
+        // For Filter
+        $from = $request->tgl_skrd;
+        $to   = $request->tgl_skrd1;
+        $no_skrd    = $request->no_skrd;
+        $status_ttd = $request->status_ttd;
+
+        $datas = TransaksiOPD::querySTRD($from, $to, $opd_id, $no_skrd, $status_ttd);
+        $dataLength = count($datas);
+
+        // check data if empty
+        if ($dataLength == 0)
+            return redirect()
+                ->route($this->route . 'index')
+                ->withErrors('Tidak ada data yang dikirim, pastikan filter data sudah sesuai.');
+
+        // process kirim TTD
+        for ($i = 0; $i < $dataLength; $i++) {
+            $datas[$i]->update([
+                'status_ttd' => 0
+            ]);
+        }
+
+        return redirect()
+            ->route($this->route . 'index')
+            ->withSuccess('Selamat! ' . $dataLength . ' Data berhasil dikirim untuk ditandatangan.');
     }
 
     public function destroy($id)
