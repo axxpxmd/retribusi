@@ -88,7 +88,7 @@ class STSController extends Controller
                     if ($p->status_ttd == 1) {
                         return $reportTTD . ' ' . $edit;
                     } elseif ($p->status_ttd == 2) {
-                        return $report . $edit;
+                        return $edit . $report;
                     } elseif ($p->status_ttd == 0) {
                         return $edit . $report;
                     }
@@ -140,8 +140,59 @@ class STSController extends Controller
         $id   = \Crypt::decrypt($id);
         $data = TransaksiOPD::find($id);
 
+        $va_number = (int) $data->nomor_va_bjb;
         $fileName  = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
         $path_sftp = 'file_ttd_skrd/';
+
+        //* Check status pembayaran VA BJB
+        if ($data->status_bayar == 0 && $data->nomor_va_bjb != null) {
+            //TODO: Get Token BJB
+            $resGetTokenBJB = VABJB::getTokenBJB();
+            if ($resGetTokenBJB->successful()) {
+                $resJson = $resGetTokenBJB->json();
+                if ($resJson['rc'] != 0000)
+                    return redirect()
+                        ->route($this->route . 'index')
+                        ->withErrors('Terjadi kegagalan saat mengambil token. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . '');
+                $tokenBJB = $resJson['data'];
+            } else {
+                return redirect()
+                    ->route($this->route . 'index')
+                    ->withErrors("Terjadi kegagalan saat mengambil token. Error Code " . $resGetTokenBJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator");
+            }
+
+            //TODO: Check VA BJB
+            $resCheckVABJB = VABJB::CheckVABJB($tokenBJB, $va_number);
+            if ($resCheckVABJB->successful()) {
+                $resJson = $resCheckVABJB->json();
+                if (isset($resJson['rc']) != 0000)
+                    return redirect()
+                        ->route($this->route . 'index')
+                        ->withErrors('Terjadi kegagalan saat mengecek status pembayaran VA BJB. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . '');
+                $VABJB  = $resJson['va_number'];
+                $status = $resJson['status'];
+                $transactionTime = $resJson['transactions']['transaction_date'];
+                $transactionAmount = $resJson['transactions']['transaction_amount'];
+            } else {
+                return redirect()
+                    ->route($this->route . 'index')
+                    ->withErrors("Terjadi kegagalan saat mengecek status pembayaran VA BJB. Error Code " . $resCheckVABJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator");
+            }
+
+            //TODO: Update tmtransaksi_opd
+            if ($status == 2) {
+                $ntb = \md5($data->no_bayar);
+
+                $data->update([
+                    'ntb'        => $ntb,
+                    'tgl_bayar'  => $transactionTime,
+                    'updated_by' => 'Check Inquiry',
+                    'status_bayar' => 1,
+                    'chanel_bayar' => 'Virtual Account',
+                    'total_bayar_bjb' => $transactionAmount,
+                ]);
+            }
+        }
 
         return view($this->view . 'show', compact(
             'route',
@@ -167,7 +218,58 @@ class STSController extends Controller
             $readonly = 'readonly';
         }
 
-        $data = TransaksiOPD::find($id);
+        $data      = TransaksiOPD::find($id);
+        $va_number = (int) $data->nomor_va_bjb;
+
+        //* Check status pembayaran VA BJB
+        if ($data->status_bayar == 0 && $data->nomor_va_bjb != null) {
+            //TODO: Get Token BJB
+            $resGetTokenBJB = VABJB::getTokenBJB();
+            if ($resGetTokenBJB->successful()) {
+                $resJson = $resGetTokenBJB->json();
+                if ($resJson['rc'] != 0000)
+                    return redirect()
+                        ->route($this->route . 'index')
+                        ->withErrors('Terjadi kegagalan saat mengambil token. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . '');
+                $tokenBJB = $resJson['data'];
+            } else {
+                return redirect()
+                    ->route($this->route . 'index')
+                    ->withErrors("Terjadi kegagalan saat mengambil token. Error Code " . $resGetTokenBJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator");
+            }
+
+            //TODO: Check VA BJB
+            $resCheckVABJB = VABJB::CheckVABJB($tokenBJB, $va_number);
+            if ($resCheckVABJB->successful()) {
+                $resJson = $resCheckVABJB->json();
+                if (isset($resJson['rc']) != 0000)
+                    return redirect()
+                        ->route($this->route . 'index')
+                        ->withErrors('Terjadi kegagalan saat mengecek status pembayaran VA BJB. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . '');
+                $VABJB  = $resJson['va_number'];
+                $status = $resJson['status'];
+                $transactionTime = $resJson['transactions']['transaction_date'];
+                $transactionAmount = $resJson['transactions']['transaction_amount'];
+            } else {
+                return redirect()
+                    ->route($this->route . 'index')
+                    ->withErrors("Terjadi kegagalan saat mengecek status pembayaran VA BJB. Error Code " . $resCheckVABJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator");
+            }
+
+            //TODO: Update tmtransaksi_opd
+            if ($status == 2) {
+                $ntb = \md5($data->no_bayar);
+
+                $data->update([
+                    'ntb'        => $ntb,
+                    'tgl_bayar'  => $transactionTime,
+                    'updated_by' => 'Check Inquiry',
+                    'status_bayar' => 1,
+                    'chanel_bayar' => 'Virtual Account',
+                    'total_bayar_bjb' => $transactionAmount,
+                ]);
+            }
+        }
 
         return view($this->view . 'edit', compact(
             'route',

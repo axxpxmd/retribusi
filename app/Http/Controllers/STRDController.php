@@ -53,7 +53,7 @@ class STRDController extends Controller
             $opds = OPD::where('id', $opd_id)->whereIn('id', $opdArray)->get();
         }
 
-        $time = Carbon::now();
+        $time = Carbon::yesterday();
         $today = $time->format('Y-m-d');
 
         return view($this->view . 'index', compact(

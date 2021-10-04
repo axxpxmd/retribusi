@@ -288,7 +288,6 @@ class SKRDController extends Controller
 
         //TODO: Check Expired Date (jika tgl_skrd_akhir kurang dari tanggal sekarang maka VA tidak terbuat)
         if ($daysDiff > 0) {
-            $tokenBJB     = $request->token_bjb;
             $clientRefnum = $no_bayar;
             $amount       = \strval((int) str_replace(['.', 'Rp', ' '], '', $request->jumlah_bayar));
             $expiredDate  = $request->tgl_skrd_akhir . ' 23:59:59';
@@ -479,7 +478,7 @@ class SKRDController extends Controller
                 ], 422);
             }
 
-            //TODO: Update Va BJB
+            //TODO: Update VA BJB
             $resUpdateVABJB = VABJB::updateVaBJB($tokenBJB, $amount, $expiredDate, $customerName, $va_number);
             if ($resUpdateVABJB->successful()) {
                 $resJson = $resUpdateVABJB->json();
@@ -497,7 +496,6 @@ class SKRDController extends Controller
 
         //* Tahap 2
         $input = $request->all();
-        $input = $request->except('token_bjb');
         $data->update($input);
         $data->update([
             'nomor_va_bjb' => $VABJB,

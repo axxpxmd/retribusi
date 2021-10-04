@@ -124,16 +124,25 @@ class VABJB
     }
 
 
-    // public static function CheckVABJB()
-    // {
-    //     $url = config('app.ip_api_bjb');
-    //     $key = config('app.key_bjb');
-    //     $cin = config('app.cin_bjb');
-    //     $currency      = "360";
-    //     $timestamp_now = Carbon::now()->timestamp;
+    public static function CheckVABJB($tokenBJB, $va_number)
+    {
+        $url = config('app.ip_api_bjb');
+        $key = config('app.key_bjb');
+        $cin = config('app.cin_bjb');
+        $timestamp_now = Carbon::now()->timestamp;
 
-    //     // Base Signature
-    //     $signature = 'path=/billing/' . $cin . '/' . $va_number . '&method=POST&token=' . $tokenBJB . '&timestamp=' . $timestamp_now . '&body=""';
-    //     $sha256    = hash_hmac('sha256', $signature, $key);
-    // }
+        // Base Signature
+        $signature = 'path=/billing/' . $cin . '/' . $va_number . '&method=GET&token=' . $tokenBJB . '&timestamp=' . $timestamp_now . '&body=';
+        $sha256    = hash_hmac('sha256', $signature, $key);
+
+        $path = 'billing/' . $cin . '/' . $va_number . '';
+        $res  = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $tokenBJB,
+            'BJB-Timestamp' => $timestamp_now,
+            'BJB-Signature' => $sha256,
+            'Content-Type'  => 'application/json'
+        ])->get($url . $path);
+
+        return $res;
+    }
 }
