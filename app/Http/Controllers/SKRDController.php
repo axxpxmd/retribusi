@@ -246,6 +246,7 @@ class SKRDController extends Controller
             'kecamatan_id'   => 'required',
             'kelurahan_id'   => 'required',
             'nm_wajib_pajak' => 'required|alpha',
+            'kode_rekening'  => 'required',
             'id_jenis_pendapatan' => 'required',
             'id_rincian_jenis_pendapatan' => 'required',
             'tgl_ttd' => 'required',
