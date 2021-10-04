@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use DateTime;
 use DataTables;
 use Carbon\Carbon;
 
@@ -77,7 +78,7 @@ class TandaTanganController extends Controller
                 $path_sftp = 'file_ttd_skrd/';
                 $fileName  = str_replace(' ', '', $p->nm_wajib_pajak) . '-' . $p->no_skrd . ".pdf";
 
-                if ($p->status_ttd == 0 || $p->status_ttd == 2) {
+                if ($p->status_ttd != 3 || $p->status_ttd != 1) {
                     return '-';
                 } else {
                     return "<a href='" . config('app.sftp_src') . $path_sftp . $fileName . "' target='_blank' class='cyan-text'><i class='icon-document-file-pdf2'></i></a>";
@@ -102,7 +103,7 @@ class TandaTanganController extends Controller
                 return 'Rp. ' . number_format($p->jumlah_bayar);
             })
             ->addColumn('status_ttd', function ($p) {
-                if ($p->status_ttd == 0 || $p->status_ttd == 2) {
+                if ($p->status_ttd != 3 || $p->status_ttd != 1) {
                     return 'Belum TTD';
                 } else {
                     return "Sudah TTD";
@@ -197,7 +198,7 @@ class TandaTanganController extends Controller
          * 1 = Sudah 
          * 2 = Proses
          */
-        if ($data->status_ttd == 0 || $data->status_ttd == 2) {
+        if ($data->status_ttd == 0 || $data->status_ttd == 2 || $data->status_ttd == 4) {
             if ($data->total_bayar_bjb != null) {
                 $total_bayar_final = $data->total_bayar_bjb;
             } else {
@@ -340,6 +341,49 @@ class TandaTanganController extends Controller
             'data',
             'terbilang',
             'total_bayar_final'
+        ));
+
+        return $pdf->stream($data->nm_wajib_pajak . '-' . $data->no_skrd . ".pdf");
+    }
+
+    public function createBunga($tgl_skrd_akhir, $jumlah_bayar)
+    {
+        //TODO: Create Bunga (kenaikan 2% tiap bulan)
+        $timeNow     = Carbon::now();
+        $dateTimeNow = new DateTime($timeNow);
+        $expired     = new DateTime($tgl_skrd_akhir . ' 23:59:59');
+        $interval    = $dateTimeNow->diff($expired);
+        $monthDiff   = $interval->format('%m');
+
+        $kenaikan = ((int) $monthDiff + 1) * 2;
+        $bunga    = $kenaikan / 100;
+        $jumlahBunga = $jumlah_bayar * $bunga;
+
+        return [$jumlahBunga, $kenaikan];
+    }
+
+    public function printDataSTRD(Request $request, $id)
+    {
+        $id = \Crypt::decrypt($id);
+
+        $data = TransaksiOPD::find($id);
+
+        //* Bunga
+        $tgl_skrd_akhir = $data->tgl_skrd_akhir;
+        $jumlah_bayar   = $data->jumlah_bayar;
+        list($jumlahBunga, $kenaikan) = $this->createBunga($tgl_skrd_akhir, $jumlah_bayar);
+
+        //* Total Bayar + Bunga
+        $total_bayar = $data->total_bayar + $jumlahBunga;
+        $terbilang   = Html_number::terbilang($total_bayar) . 'rupiah';
+
+        $pdf = app('dompdf.wrapper');
+        $pdf->getDomPDF()->set_option("enable_php", true);
+        $pdf->loadView('pages.strd.report', compact(
+            'data',
+            'terbilang',
+            'jumlahBunga',
+            'total_bayar'
         ));
 
         return $pdf->stream($data->nm_wajib_pajak . '-' . $data->no_skrd . ".pdf");

@@ -196,11 +196,11 @@
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>Status TTD :</strong></label>
                                                 <label class="col-md-8">
-                                                    @if ($data->status_ttd == 1)
+                                                    @if ($data->status_ttd == 1 || $data->status_ttd == 3)
                                                     <span class="badge badge-success">Sudah TTD</span>
                                                     @elseif($data->status_ttd == 0)
                                                     <span class="badge badge-danger">Belum TTD</span>
-                                                    @elseif($data->status_ttd == 2)
+                                                    @elseif($data->status_ttd == 2 || $data->status_ttd == 4)
                                                     <span class="badge badge-warning">Sedang Proses TTD</span>
                                                     @endif
                                                 </label>
@@ -232,7 +232,7 @@
                                     <div class="row mt-2">
                                         <label class="col-md-2 text-right s-12"></label>
                                         <label class="col-md-3 s-12">
-                                            @if ($data->status_ttd == 0 || $data->status_ttd == 2)
+                                            @if ($data->status_ttd == 0 || $data->status_ttd == 2 || $data->status_ttd == 4)
                                                 <button class="btn btn-sm btn-success" data-toggle="modal" data-target="#preview-file"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</button> 
                                                 @if (count($errors) > 0)
                                                 <button class="btn btn-sm btn-primary" onclick="alertSend()"><i class="icon-pencil mr-2"></i>TandaTangani</button>
@@ -303,6 +303,8 @@
         <div class="modal-content">
             @if ($data->status_ttd == 0 || $data->status_ttd == 2)
             <iframe src="{{ route('tanda-tangan.report', \Crypt::encrypt($data->id)) }}" style="margin-left: -160px !important" width="850px" height="940px"></iframe>
+            @elseif ($data->status_ttd == 0 || $data->status_ttd == 4)
+            <iframe src="{{ route('tanda-tangan.reportstrd', \Crypt::encrypt($data->id)) }}" style="margin-left: -160px !important" width="850px" height="940px"></iframe>
             @else
             <iframe src="{{ config('app.sftp_src').$path_sftp.$fileName }}" style="margin-left: -160px !important" width="850px" height="940px"></iframe>
             @endif
