@@ -293,7 +293,7 @@ class SKRDController extends Controller
             $clientRefnum = $no_bayar;
             $amount       = \strval((int) str_replace(['.', 'Rp', ' '], '', $request->jumlah_bayar));
             // $expiredDate  = $request->tgl_skrd_awal . ' 23:59:59';
-            $expiredDate  = Carbon::now()->addMinute(2)->format('Y-m-d H:i:s');
+            $expiredDate  = Carbon::now()->addMinute()->format('Y-m-d H:i:s');
             $customerName = $request->nm_wajib_pajak;
             $productCode  = $request->kd_jenis;
 
