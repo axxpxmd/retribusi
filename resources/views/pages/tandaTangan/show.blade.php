@@ -58,7 +58,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card mt-2">
-                            <h6 class="card-header"><strong>Data {{ $title }}</strong>@if ($data->status_ttd == 1) | <span class="text-success font-weight-bold">Sudah Ditandatangani</span>@endif</h6>
+                            <h6 class="card-header"><strong>Data {{ $title }}</strong>@if ($data->status_ttd == 1 || $data->status_ttd == 3) | <span class="text-success font-weight-bold">Sudah Ditandatangani</span>@endif</h6>
                             <div class="card-body">
                                 <div class="col-md-12">
                                     <div class="row">
