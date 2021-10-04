@@ -59,17 +59,17 @@ class PermissionController extends Controller
 
     public function store(Request $request)
     {
-        // $request->validate([
-        //     'name' => 'required|unique:permissions,name',
-        //     'guard_name' => 'required'
-        // ]);
+        $request->validate([
+            'name' => 'required|unique:permissions,name',
+            'guard_name' => 'required'
+        ]);
 
-        // $input = $request->all();
-        // Permission::create($input);
+        $input = $request->all();
+        Permission::create($input);
 
-        // return response()->json([
-        //     'message' => 'Data ' . $this->title . ' berhasil tersimpan.'
-        // ]);
+        return response()->json([
+            'message' => 'Data ' . $this->title . ' berhasil tersimpan.'
+        ]);
 
         return response()->json([
             'message' => 'Maaf tidak bisa menambah data'
