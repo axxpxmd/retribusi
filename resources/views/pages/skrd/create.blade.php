@@ -248,6 +248,7 @@
                     });
                 },
                 error : function(data){
+                    $('#loading').modal('hide');
                     $('#action').attr('disabled', false);
                     err = '';
                     respon = data.responseJSON;
