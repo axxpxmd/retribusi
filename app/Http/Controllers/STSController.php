@@ -85,9 +85,9 @@ class STSController extends Controller
                         return $report;
                     }
                 } else {
-                    if ($p->status_ttd == 1) {
+                    if ($p->status_ttd == 1 || $p->status_ttd == 3) {
                         return $reportTTD . ' ' . $edit;
-                    } elseif ($p->status_ttd == 2) {
+                    } elseif ($p->status_ttd == 2 || $p->status_ttd == 4) {
                         return $edit . $report;
                     } elseif ($p->status_ttd == 0) {
                         return $edit . $report;
