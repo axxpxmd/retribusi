@@ -303,9 +303,7 @@
         <div class="modal-content">
             @if ($data->status_ttd == 0 || $data->status_ttd == 2)
             <iframe src="{{ route('tanda-tangan.report', \Crypt::encrypt($data->id)) }}" style="margin-left: -160px !important" width="850px" height="940px"></iframe>
-            @elseif ($data->status_ttd == 0 || $data->status_ttd == 4)
-            <iframe src="{{ route('tanda-tangan.reportstrd', \Crypt::encrypt($data->id)) }}" style="margin-left: -160px !important" width="850px" height="940px"></iframe>
-            @else
+            @elseif ($data->status_ttd == 1 || $data->status_ttd == 3)
             <iframe src="{{ config('app.sftp_src').$path_sftp.$fileName }}" style="margin-left: -160px !important" width="850px" height="940px"></iframe>
             @endif
         </div>
