@@ -286,7 +286,7 @@ class SKRDController extends Controller
         $interval    = $dateTimeNow->diff($expired);
         $daysDiff    = $interval->format('%r%a');
 
-        //TODO: Check Expired Date (jika tgl_skrd_akhir kurang dari tanggal sekarang tidak bisa buat VA)
+        //TODO: Check Expired Date (jika tgl_skrd_akhir kurang dari tanggal sekarang maka VA tidak terbuat)
         if ($daysDiff > 0) {
             $tokenBJB     = $request->token_bjb;
             $clientRefnum = $no_bayar;

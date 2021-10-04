@@ -246,7 +246,7 @@ class TransaksiOPD extends Model
     public static function queryTandaTangan($from, $to, $opd_id, $no_skrd, $status_ttd)
     {
         $data = TransaksiOPD::where('status_bayar', 0)
-            ->whereIn('status_ttd', [1, 2])
+            ->whereIn('status_ttd', [1, 2, 3, 4])
             ->orderBy('id', 'DESC');
 
         if ($opd_id != 0) {
@@ -260,7 +260,7 @@ class TransaksiOPD extends Model
         if ($status_ttd != null) {
             $data->where('status_ttd', $status_ttd);
         } else {
-            $data->whereIn('status_ttd', [0, 2]);
+            $data->whereIn('status_ttd', [0, 2, 4]);
         }
 
         if ($from != null ||  $to != null) {
