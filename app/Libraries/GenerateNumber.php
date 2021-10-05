@@ -17,56 +17,20 @@ class GenerateNumber
         $month = $time->month;
         $year  = substr($time->year, 2);
 
-        // Check total retribusi by opd, jenis pendapatan, tahun
+        //TODO: Generate no_skrd
         $totalSKRD = TransaksiOPD::where('id_opd', $opd_id)
             ->where('id_jenis_pendapatan', $jenis_pendapatan_id)
             ->where(DB::raw('YEAR(created_at)'), '=', $time->year)
-            ->count();
-        if ($totalSKRD != 0) {
-            $noUrutNoSKRD = $totalSKRD + 1;
+            ->orderBy('no_skrd', 'DESC')
+            ->get();
+
+        if ($totalSKRD->count() != 0) {
+            $noUrutNoSKRD = substr($totalSKRD[0]->no_skrd, 9) + 1;
         } else {
             $noUrutNoSKRD = '1';
         }
 
-        // Check total retribusi by opd, tahun
-        $totalNoBayar = TransaksiOPD::where('id_opd', $opd_id)
-            ->where(DB::raw('YEAR(created_at)'), '=', $time->year)
-            ->count();
-        if ($totalNoBayar != 0) {
-            $noUrutNoBayar = $totalNoBayar + 1;
-        } else {
-            $noUrutNoBayar = '1';
-        }
-
-        // ID OPD
-        if (\strlen($opd_id) == 1) {
-            $generateIdOPD = '0' . $opd_id;
-        } elseif (\strlen($opd_id) == 2) {
-            $generateIdOPD = $opd_id;
-        }
-
-        // ID Jenis Pendapatan
-        if (\strlen($jenis_pendapatan_id) == 1) {
-            $generateIdJenisPendapatan = '0' . $jenis_pendapatan_id;
-        } elseif (\strlen($jenis_pendapatan_id) == 2) {
-            $generateIdJenisPendapatan = $jenis_pendapatan_id;
-        }
-
-        // Date
-        if (\strlen($date) == 1) {
-            $generateDay = '0' . $date;
-        } elseif (\strlen($date) == 2) {
-            $generateDay = $date;
-        }
-
-        // Month
-        if (\strlen($month) == 1) {
-            $generateMonth = '0' . $month;
-        } elseif (\strlen($month) == 2) {
-            $generateMonth = $month;
-        }
-
-        // Nomor Urut SKRD (4 digits)
+        //* no_skrd terdiri dari 4 digits 
         if (\strlen($noUrutNoSKRD) == 1) {
             $generateSKRD = '000' . $noUrutNoSKRD;
         } elseif (\strlen($noUrutNoSKRD) == 2) {
@@ -77,7 +41,19 @@ class GenerateNumber
             $generateSKRD = $noUrutNoSKRD;
         }
 
-        // Nomor Urut No Bayar (5 digits)
+        //TODO: Generate no_bayar
+        $totalNoBayar = TransaksiOPD::where('id_opd', $opd_id)
+            ->where(DB::raw('YEAR(created_at)'), '=', $time->year)
+            ->orderBy('no_bayar', 'DESC')
+            ->get();
+
+        if ($totalNoBayar->count() != 0) {
+            $noUrutNoBayar = substr($totalNoBayar[0]->no_bayar, 8) + 1;
+        } else {
+            $noUrutNoBayar = '1';
+        }
+
+        //* no_bayar terdiri dari 5 digits
         if (\strlen($noUrutNoBayar) == 1) {
             $generateNoBayar = '0000' . $noUrutNoBayar;
         } elseif (\strlen($noUrutNoBayar) == 2) {
@@ -90,7 +66,35 @@ class GenerateNumber
             $generateNoBayar = $noUrutNoBayar;
         }
 
-        // Check Jenis Generate
+        //TODO: Generate id_opd
+        if (\strlen($opd_id) == 1) {
+            $generateIdOPD = '0' . $opd_id;
+        } elseif (\strlen($opd_id) == 2) {
+            $generateIdOPD = $opd_id;
+        }
+
+        //TODO: Generate id_jenis_pendapatan
+        if (\strlen($jenis_pendapatan_id) == 1) {
+            $generateIdJenisPendapatan = '0' . $jenis_pendapatan_id;
+        } elseif (\strlen($jenis_pendapatan_id) == 2) {
+            $generateIdJenisPendapatan = $jenis_pendapatan_id;
+        }
+
+        //TODO: Generate Date
+        if (\strlen($date) == 1) {
+            $generateDay = '0' . $date;
+        } elseif (\strlen($date) == 2) {
+            $generateDay = $date;
+        }
+
+        //TODO: Generate Month
+        if (\strlen($month) == 1) {
+            $generateMonth = '0' . $month;
+        } elseif (\strlen($month) == 2) {
+            $generateMonth = $month;
+        }
+
+        //TODO: Check jenis return
         if ($jenisGenerate == 'no_skrd') {
             $no_skrd = $generateIdOPD . '.' . $generateIdJenisPendapatan . '.'  . $year . '.'  . $generateSKRD; // id_skpd,id_jenis_pendapatan,tahun,no_urut
             return $no_skrd;

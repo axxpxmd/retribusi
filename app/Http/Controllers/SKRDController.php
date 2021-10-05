@@ -7,7 +7,6 @@ use DateTime;
 use Validator;
 use DataTables;
 use Carbon\Carbon;
-use Firebase\JWT\JWT;
 
 use App\Http\Services\VABJB;
 use App\Libraries\GenerateNumber;
@@ -15,8 +14,6 @@ use App\Libraries\Html\Html_number;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Storage;
 
@@ -149,7 +146,7 @@ class SKRDController extends Controller
 
         $datas = OPDJenisPendapatan::getJenisPendapatanByOpd($opd_id);
 
-        // encrypt id
+        //TODO: Encrypt id
         if ($datas->count() == 0) {
             $response = [];
         } else {
@@ -245,7 +242,7 @@ class SKRDController extends Controller
             'id_opd'   => 'required',
             'kecamatan_id'   => 'required',
             'kelurahan_id'   => 'required',
-            // 'nm_wajib_pajak' => 'required|alpha',
+            'nm_wajib_pajak' => 'required|alpha',
             'kode_rekening'  => 'required',
             'id_jenis_pendapatan' => 'required',
             'id_rincian_jenis_pendapatan' => 'required',
