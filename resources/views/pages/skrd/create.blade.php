@@ -83,7 +83,7 @@
                                                     </div>
                                                     <div class="form-group m-0">
                                                         <label for="nm_wajib_pajak" class="col-form-label s-12 col-md-4">Nama Wajib Retribusi<span class="text-danger ml-1">*</span></label>
-                                                        <input type="text" name="nm_wajib_pajak" id="nm_wajib_pajak" value="{{ $data_wp != null ? $data_wp->nm_wajib_pajak : '' }}" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
+                                                        <input type="text" name="nm_wajib_pajak" id="nm_wajib_pajak" value="{{ $data_wp != null ? $data_wp->nm_wajib_pajak : '' }}" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode==32)"/>
                                                     </div>
                                                     <div class="form-group m-0">
                                                         <label for="alamat_wp" class="col-form-label s-12 col-md-4">Alamat Wajib Retribusi<span class="text-danger ml-1">*</span></label>
