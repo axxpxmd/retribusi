@@ -206,6 +206,7 @@
             event.stopPropagation();
         }
         else{
+            $('#loading').modal('hide');
             $(document)
                 .ajaxStart(function () {
                     $('#loading').modal('show');
