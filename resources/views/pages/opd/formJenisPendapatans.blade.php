@@ -3,8 +3,8 @@
 @section('content')
 <div class="page has-sidebar-left bg-light">
     <header class="blue accent-3 relative nav-sticky">
-        <div class="container-fluid text-white">
-            <div class="row">
+         <div class="container-fluid text-white">
+            <div class="row p-t-b-10 ">
                 <div class="col">
                     <h4>
                         <i class="icon icon-document-list mr-2"></i>

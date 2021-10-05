@@ -3,8 +3,8 @@
 @section('content')
 <div class="page has-sidebar-left height-full">
     <header class="blue accent-3 relative nav-sticky">
-        <div class="container-fluid text-white">
-            <div class="row">
+         <div class="container-fluid text-white">
+            <div class="row p-t-b-10 ">
                 <div class="col">
                     <h4>
                         <i class="icon icon-document-list mr-2"></i>
@@ -90,7 +90,7 @@
                                                     </div>
                                                     <div class="form-group m-0">
                                                         <label for="alamat_wp" class="col-form-label s-12 col-md-4">Alamat Wajib Retribusi<span class="text-danger ml-1">*</span></label>
-                                                        <input type="text" name="alamat_wp" id="alamat_wp" value="{{ $data->alamat_wp }}" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
+                                                        <textarea type="text" rows="3" name="alamat_wp" id="alamat_wp" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required>{{ $data->alamat_wp }}</textarea>
                                                     </div>
                                                     <div class="form-group m-0">
                                                         <label for="kecamatan_id" class="col-form-label s-12 col-md-4">Kecamatan</label>
@@ -102,7 +102,7 @@
                                                     </div>
                                                     <div class="form-group m-0">
                                                         <label for="lokasi" class="col-form-label s-12 col-md-4">Lokasi<span class="text-danger ml-1">*</span></label>
-                                                        <input type="text" name="lokasi" id="lokasi" value="{{ $data->lokasi }}" placeholder="Contoh: Ruko Sektor 1.2 BSD" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
+                                                        <textarea type="text" rows="2" name="lokasi" id="lokasi" placeholder="Contoh: Ruko Sektor 1.2 BSD" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required>{{ $data->lokasi }}</textarea>
                                                     </div>
                                                     <div class="form-group m-0">
                                                         <label class="col-form-label s-12 col-md-4">No Bayar<span class="text-danger ml-1">*</span></label>
