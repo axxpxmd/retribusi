@@ -115,19 +115,18 @@
                                     <div class="form-row form-inline">
                                         <div class="col-md-12">
                                             <div class="form-group m-0">
-                                                <label class="col-form-label s-12 col-md-2">OPD<span class="text-danger ml-1">*</span></label>
+                                                <label class="form-control label-input-custom col-md-2 font-weight-normal">OPD<span class="text-danger ml-1">*</span></label>
                                                 <div class="col-md-4 p-0 bg-light">
                                                     <select class="select2 form-control r-0 light s-12" id="opd_id" name="opd_id" autocomplete="off">
                                                         <option value="0">Pilih</option>
                                                         @foreach ($opds as $i)
                                                             <option value="{{ \Crypt::encrypt($i->id) }}">{{ $i->n_opd }}</option>
-                                                            {{-- <option value="{{ $i->id }}">{{ $i->n_opd }}</option> --}}
                                                         @endforeach
                                                     </select>
                                                 </div>
                                             </div>
                                             <div class="form-group mt-1">
-                                                <label class="col-form-label s-12 col-md-2">Jenis Pendapatan<span class="text-danger ml-1">*</span></label>
+                                                <label class="form-control label-input-custom col-md-2 font-weight-normal">Jenis Pendapatan<span class="text-danger ml-1">*</span></label>
                                                 <div class="col-md-4 p-0 bg-light">
                                                     <select class="select2 form-control r-0 light s-12" id="jenis_pendapatan_id" name="jenis_pendapatan_id" autocomplete="off">
                                                         <option value="">Pilih</option>
