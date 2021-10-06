@@ -199,71 +199,6 @@
         }, 'JSON');
     });
 
-    $('#loading').modal('hide');
-    $('#form').on('submit', function (e) {
-        if ($(this)[0].checkValidity() === false) {
-            event.preventDefault();
-            event.stopPropagation();
-        }
-        else{
-            $(document)
-                .ajaxStart(function () {
-                    $('#loading').modal('show');
-                })
-                .ajaxStop(function () {
-                    $('#loading').modal('hide');
-                });
-            $('#alert').html('');
-            $("#kecamatan_id").prop("disabled", false);
-            $("#kelurahan_id").prop("disabled", false);
-            $("#id_rincian_jenis_pendapatan").prop("disabled", false);
-            $('#action').attr('disabled', true);
-            url = "{{ route($route.'store') }}";
-            $.ajax({
-                url : url,
-                type : 'POST',
-                data: new FormData(($(this)[0])),
-                contentType: false,
-                processData: false,
-                success : function(data) {
-                    $.confirm({
-                        title: 'Success',
-                        content: data.message,
-                        icon: 'icon icon-check', 
-                        theme: 'modern',
-                        animation: 'scale',
-                        autoClose: 'ok|3000',
-                        type: 'green',
-                        buttons: {
-                            ok: {
-                                text: "ok!",
-                                btnClass: 'btn-primary',
-                                keys: ['enter'],
-                                action: function () {
-                                    window.location.href = "{{ route('skrd.index')}}";
-                                }
-                            }
-                        }
-                    });
-                },
-                error : function(data){
-                    $('#action').attr('disabled', false);
-                    err = '';
-                    respon = data.responseJSON;
-                    if(respon.errors){
-                        $.each(respon.errors, function( index, value ) {
-                            err = err + "<li>" + value +"</li>";
-                        });
-                    }
-                    $('#loading').modal('hide');
-                    $('#alert').html("<div role='alert' class='alert alert-danger alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button><strong>Error!</strong> " + respon.message + "<ol class='pl-3 m-0'>" + err + "</ol></div>");
-                }
-            });
-            return false;
-        }
-        $(this).addClass('was-validated');
-    });
-
     $('#kecamatan_id').on('change', function(){
         val = $(this).val();
         option = "<option value=''>&nbsp;</option>";
@@ -311,6 +246,69 @@
         rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
         return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
     }
+
+    $('#form').on('submit', function (e) {
+        if ($(this)[0].checkValidity() === false) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        else{
+            $(document)
+                .ajaxStart(function () {
+                    $('#loading').modal('show');
+                    console.log('go');
+                });
+            $('#alert').html('');
+            $("#kecamatan_id").prop("disabled", false);
+            $("#kelurahan_id").prop("disabled", false);
+            $("#id_rincian_jenis_pendapatan").prop("disabled", false);
+            $('#action').attr('disabled', true);
+            url = "{{ route($route.'store') }}";
+            $.ajax({
+                url : url,
+                type : 'POST',
+                data: new FormData(($(this)[0])),
+                contentType: false,
+                processData: false,
+                success : function(data) {
+                    $.confirm({
+                        title: 'Success',
+                        content: data.message,
+                        icon: 'icon icon-check', 
+                        theme: 'modern',
+                        animation: 'scale',
+                        autoClose: 'ok|3000',
+                        type: 'green',
+                        buttons: {
+                            ok: {
+                                text: "ok!",
+                                btnClass: 'btn-primary',
+                                keys: ['enter'],
+                                action: function () {
+                                    window.location.href = "{{ route('skrd.index')}}";
+                                }
+                            }
+                        }
+                    });
+                },
+                error : function(data){
+                    err = '';
+                    respon = data.responseJSON;
+                    if(respon.errors){
+                        $.each(respon.errors, function( index, value ) {
+                            err = err + "<li>" + value +"</li>";
+                        });
+                    }
+                    $('#alert').html("<div role='alert' class='alert alert-danger alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button><strong>Error!</strong> " + respon.message + "<ol class='pl-3 m-0'>" + err + "</ol></div>");
+                    $('#action').removeAttr('disabled');
+                    $('#loading').modal('hide');
+                    console.log('stop');
+                }
+            });
+            return false;
+        }
+        $(this).addClass('was-validated');
+    });
 
 </script>
 @endsection

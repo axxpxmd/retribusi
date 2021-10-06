@@ -231,9 +231,9 @@
                     <p class="m-l-5 m-t-1">b. Kenaikan</p>
                 </td>
                 <td class="a">
-                    <p class="m-l-5 m-b-0 m-r-10 text-right">-</p>
-                    <p class="m-l-5 m-t-1 m-b-0">&nbsp;</p>
-                    <p class="m-l-5 m-t-1 m-b-0">&nbsp;</p>
+                    <p class="m-l-5 m-b-0 m-r-10 text-right">&nbsp;</p>
+                    <p class="m-l-5 m-t-1 m-b-0 m-r-10 text-right">&nbsp;</p>
+                    <p class="m-l-5 m-t-1 m-b-0 m-r-10 text-right">-</p>
                     <p class="m-l-5 m-t-1">&nbsp;</p>
                 </td>
             </tr>

@@ -239,16 +239,22 @@ class SKRDController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'id_opd'   => 'required',
-            'kecamatan_id'   => 'required',
-            'kelurahan_id'   => 'required',
-            'nm_wajib_pajak' => 'required|alpha',
-            'kode_rekening'  => 'required',
-            'id_jenis_pendapatan' => 'required',
-            'id_rincian_jenis_pendapatan' => 'required',
+            'id_opd'  => 'required',
             'tgl_ttd' => 'required',
             'nm_ttd'  => 'required',
-            'nip_ttd' => 'required'
+            'nip_ttd' => 'required',
+            'alamat_wp'      => 'required',
+            'nmr_daftar'     => 'required|unique:tmtransaksi_opd,nmr_daftar',
+            'kecamatan_id'   => 'required',
+            'kelurahan_id'   => 'required',
+            'kode_rekening'  => 'required',
+            'nm_wajib_pajak' => 'required',
+            'tgl_skrd_awal'  => 'required|date_format:Y-m-d',
+            'tgl_skrd_akhir' => 'required|date_format:Y-m-d',
+            'jumlah_bayar'   => 'required',
+            'uraian_retribusi'    => 'required',
+            'id_jenis_pendapatan' => 'required',
+            'id_rincian_jenis_pendapatan' => 'required',
         ]);
 
         /* Tahapan : 
@@ -448,6 +454,20 @@ class SKRDController extends Controller
     public function update(Request $request, $id)
     {
         $data = TransaksiOPD::find($id);
+        $request->validate([
+            'tgl_ttd' => 'required',
+            'nm_ttd'  => 'required',
+            'nip_ttd' => 'required',
+            'alamat_wp'      => 'required',
+            'nmr_daftar'     => 'required|unique:tmtransaksi_opd,nmr_daftar,' . $id,
+            'kode_rekening'  => 'required',
+            'nm_wajib_pajak' => 'required',
+            'tgl_skrd_awal'  => 'required|date_format:Y-m-d',
+            'tgl_skrd_akhir' => 'required|date_format:Y-m-d',
+            'jumlah_bayar'   => 'required',
+            'uraian_retribusi' => 'required',
+            'id_rincian_jenis_pendapatan' => 'required',
+        ]);
 
         /* Tahapan : 
          * 1. Update VA BJB
@@ -495,6 +515,7 @@ class SKRDController extends Controller
 
         //* Tahap 2
         $input = $request->all();
+        $input = $request->except('kode_rekening');
         $data->update($input);
         $data->update([
             'nomor_va_bjb' => $VABJB,

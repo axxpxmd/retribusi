@@ -63,7 +63,7 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group m-0">
                                                         <label for="kode_rekening" class="form-control label-input-custom col-md-4">Kode Rekening<span class="text-danger ml-1">*</span></label>
-                                                        <input type="text" id="kode_rekening" class="form-control r-0 light s-12 col-md-8" autocomplete="off" readonly required/>
+                                                        <input type="text" id="kode_rekening" name="kode_rekening" class="form-control r-0 light s-12 col-md-8" autocomplete="off" readonly required/>
                                                     </div>
                                                     <div class="form-group m-0">
                                                         <label for="uraian_retribusi" class="form-control label-input-custom col-md-4">Uraian Retribusi<span class="text-danger ml-1">*</span></label>
@@ -81,7 +81,7 @@
                                                     </div>
                                                     <div class="form-group m-0">
                                                         <label for="nm_wajib_pajak" class="form-control label-input-custom col-md-4">Nama Wajib Retribusi<span class="text-danger ml-1">*</span></label>
-                                                        <input type="text" name="nm_wajib_pajak" id="nm_wajib_pajak" value="{{ $data->nm_wajib_pajak }}" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
+                                                        <input type="text" name="nm_wajib_pajak" id="nm_wajib_pajak" value="{{ $data->nm_wajib_pajak }}" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode==32)"/>
                                                     </div>
                                                     <div class="form-group m-0">
                                                         <label for="alamat_wp" class="form-control label-input-custom col-md-4">Alamat Wajib Retribusi<span class="text-danger ml-1">*</span></label>
@@ -92,23 +92,15 @@
                                                         <textarea type="text" rows="2" name="lokasi" id="lokasi" placeholder="Contoh: Ruko Sektor 1.2 BSD" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required>{{ $data->lokasi }}</textarea>
                                                     </div>
                                                     <div class="form-group m-0">
-                                                        <label for="kecamatan_id" class="form-control label-input-custom col-md-4">Kecamatan</label>
+                                                        <label for="kecamatan_id" class="form-control label-input-custom col-md-4">Kecamatan<span class="text-danger ml-1">*</span></label>
                                                         <input type="text" disabled id="kecamatan_id" value="{{ $data->kecamatan->n_kecamatan }}" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
                                                     </div>
                                                     <div class="form-group m-0">
-                                                        <label for="kelurahan_id" class="form-control label-input-custom col-md-4">Kelurahan</label>
+                                                        <label for="kelurahan_id" class="form-control label-input-custom col-md-4">Kelurahan<span class="text-danger ml-1">*</span></label>
                                                         <input type="text" disabled id="kelurahan_id" value="{{ $data->kelurahan->n_kelurahan }}" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
-                                                    </div>
-                                                    <div class="form-group m-0">
-                                                        <label class="form-control label-input-custom col-md-4">No Bayar<span class="text-danger ml-1">*</span></label>
-                                                        <input type="text" value="{{ $data->no_bayar }}" readonly class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <div class="form-group m-0">
-                                                        <label for="no_skrd" class="form-control label-input-custom col-md-4">Nomor SKRD<span class="text-danger ml-1">*</span></label>
-                                                        <input type="text" name="no_skrd" id="no_skrd" value="{{ $data->no_skrd }}" readonly class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
-                                                    </div>
                                                     <div class="form-group m-0">
                                                         <label for="tgl_skrd_awal" class="form-control label-input-custom col-md-4">Tanggal SKRD<span class="text-danger ml-1">*</span></label>
                                                         <input type="date" onchange="setDate()" value="{{ $data->tgl_skrd_awal }}" name="tgl_skrd_awal" id="tgl_skrd_awal" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
@@ -122,7 +114,7 @@
                                                         <input type="text" name="nm_ttd" id="nm_ttd" value="{{ $data->nm_ttd }}" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
                                                     </div>
                                                     <div class="form-group m-0">
-                                                        <label for="nip_ttd" class="form-control label-input-custom col-md-4">NIP Penandatangan</label>
+                                                        <label for="nip_ttd" class="form-control label-input-custom col-md-4">NIP Penandatangan<span class="text-danger ml-1">*</span></label>
                                                         <input type="text" name="nip_ttd" id="nip_ttd" value="{{ $data->nip_ttd }}" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
                                                     </div>
                                                     <div class="form-group m-0">
@@ -218,14 +210,9 @@
             event.stopPropagation();
         }
         else{
-            $(document)
-                .ajaxStart(function () {
-                    $('#loading').modal('show');
-                })
-                .ajaxStop(function () {
-                    $('#loading').modal('hide');
-                });
-
+            $('#loading').modal('show');
+            console.log('go');
+              
             $('#alert').html('');
             $('#action').attr('disabled', true);
             url = "{{ route($route.'update', ':id') }}".replace(':id', $('#id').val());
@@ -236,6 +223,8 @@
                 contentType: false,
                 processData: false,
                 success : function(data) {
+                    $('#loading').modal('hide');
+                    console.log('stop');
                     $.confirm({
                         title: 'Success',
                         content: data.message,
@@ -267,6 +256,8 @@
                     }
                     $('#alert').html("<div role='alert' class='alert alert-danger alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button><strong>Error!</strong> " + respon.message + "<ol class='pl-3 m-0'>" + err + "</ol></div>");
                     $('#action').removeAttr('disabled');
+                    $('#loading').modal('hide');
+                    console.log('stop');
                 }
             });
             return false;
