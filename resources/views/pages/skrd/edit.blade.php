@@ -36,25 +36,20 @@
                                 <form class="needs-validation" id="form" method="PATCH"  enctype="multipart/form-data" novalidate>
                                     {{ method_field('PATCH') }}
                                     <input type="hidden" id="id" name="id" value="{{ $data->id }}"/>
-                                    {{-- <input type="hidden" name="jenis_pendapatan_id" value="{{ $jenis_pendapatan->id }}">
-
-                                    <input type="hidden" name="no_skrd" value="{{ $no_skrd }}">
-                                    <input type="hidden" name="nm_ttd" value="{{ $opd->nm_ttd }}">
-                                    <input type="hidden" name="nip_ttd" value="{{ $opd->nip_ttd }}"> --}}
                                     <div class="form-row form-inline">
                                         <div class="col-md-12">
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group m-0">
-                                                        <label for="n_opd" class="col-form-label s-12 col-md-4">Nama OPD<span class="text-danger ml-1">*</span></label>
+                                                        <label for="n_opd" class="form-control label-input-custom col-md-4">Nama OPD<span class="text-danger ml-1">*</span></label>
                                                         <input type="text" value="{{ $data->opd->n_opd }}"  class="form-control r-0 light s-12 col-md-8" autocomplete="off" disabled required/>
                                                     </div>
                                                     <div class="form-group m-0">
-                                                        <label for="rincian_jenis_pendapatan" class="col-form-label s-12 col-md-4">Jenis Pendapatan<span class="text-danger ml-1">*</span></label>
+                                                        <label for="rincian_jenis_pendapatan" class="form-control label-input-custom col-md-4">Jenis Pendapatan<span class="text-danger ml-1">*</span></label>
                                                         <input type="text" name="rincian_jenis_pendapatan" id="rincian_jenis_pendapatan" value="{{ $data->jenis_pendapatan->jenis_pendapatan }}"  class="form-control r-0 light s-12 col-md-8" autocomplete="off" disabled required/>
                                                     </div>
                                                     <div class="form-group m-0">
-                                                        <label class="col-form-label s-12 col-md-4">Rincian Jenis Pendapatan<span class="text-danger ml-1">*</span></label>
+                                                        <label class="form-control label-input-custom col-md-4">Rincian Jenis Pendapatan<span class="text-danger ml-1">*</span></label>
                                                         <div class="col-md-8 p-0 bg-light">
                                                             <select class="select2 form-control r-0 light s-12" id="id_rincian_jenis_pendapatan" name="id_rincian_jenis_pendapatan" autocomplete="off">
                                                                 <option value="{{ \Crypt::encrypt(0) }}">Pilih</option>
@@ -67,11 +62,11 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group m-0">
-                                                        <label for="kode_rekening" class="col-form-label s-12 col-md-4">Kode Rekening<span class="text-danger ml-1">*</span></label>
+                                                        <label for="kode_rekening" class="form-control label-input-custom col-md-4">Kode Rekening<span class="text-danger ml-1">*</span></label>
                                                         <input type="text" id="kode_rekening" class="form-control r-0 light s-12 col-md-8" autocomplete="off" readonly required/>
                                                     </div>
                                                     <div class="form-group m-0">
-                                                        <label for="uraian_retribusi" class="col-form-label s-12 col-md-4">Uraian Retribusi<span class="text-danger ml-1">*</span></label>
+                                                        <label for="uraian_retribusi" class="form-control label-input-custom col-md-4">Uraian Retribusi<span class="text-danger ml-1">*</span></label>
                                                         <textarea type="text" rows="3" name="uraian_retribusi" id="uraian_retribusi" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required>{{ $data->uraian_retribusi }}</textarea>
                                                     </div>
                                                 </div>
@@ -81,61 +76,61 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group m-0">
-                                                        <label for="nmr_daftar" class="col-form-label s-12 col-md-4">Nomor Daftar<span class="text-danger ml-1">*</span></label>
+                                                        <label for="nmr_daftar" class="form-control label-input-custom col-md-4">Nomor Daftar<span class="text-danger ml-1">*</span></label>
                                                         <input type="text" name="nmr_daftar" id="nmr_daftar" value="{{ $data->nmr_daftar }}" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
                                                     </div>
                                                     <div class="form-group m-0">
-                                                        <label for="nm_wajib_pajak" class="col-form-label s-12 col-md-4">Nama Wajib Retribusi<span class="text-danger ml-1">*</span></label>
+                                                        <label for="nm_wajib_pajak" class="form-control label-input-custom col-md-4">Nama Wajib Retribusi<span class="text-danger ml-1">*</span></label>
                                                         <input type="text" name="nm_wajib_pajak" id="nm_wajib_pajak" value="{{ $data->nm_wajib_pajak }}" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
                                                     </div>
                                                     <div class="form-group m-0">
-                                                        <label for="alamat_wp" class="col-form-label s-12 col-md-4">Alamat Wajib Retribusi<span class="text-danger ml-1">*</span></label>
+                                                        <label for="alamat_wp" class="form-control label-input-custom col-md-4">Alamat Wajib Retribusi<span class="text-danger ml-1">*</span></label>
                                                         <textarea type="text" rows="3" name="alamat_wp" id="alamat_wp" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required>{{ $data->alamat_wp }}</textarea>
                                                     </div>
                                                     <div class="form-group m-0">
-                                                        <label for="kecamatan_id" class="col-form-label s-12 col-md-4">Kecamatan</label>
-                                                        <input type="text" disabled id="kecamatan_id" value="{{ $data->kecamatan->n_kecamatan }}" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
-                                                    </div>
-                                                    <div class="form-group m-0">
-                                                        <label for="kelurahan_id" class="col-form-label s-12 col-md-4">Kelurahan</label>
-                                                        <input type="text" disabled id="kelurahan_id" value="{{ $data->kelurahan->n_kelurahan }}" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
-                                                    </div>
-                                                    <div class="form-group m-0">
-                                                        <label for="lokasi" class="col-form-label s-12 col-md-4">Lokasi<span class="text-danger ml-1">*</span></label>
+                                                        <label for="lokasi" class="form-control label-input-custom col-md-4">Lokasi<span class="text-danger ml-1">*</span></label>
                                                         <textarea type="text" rows="2" name="lokasi" id="lokasi" placeholder="Contoh: Ruko Sektor 1.2 BSD" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required>{{ $data->lokasi }}</textarea>
                                                     </div>
                                                     <div class="form-group m-0">
-                                                        <label class="col-form-label s-12 col-md-4">No Bayar<span class="text-danger ml-1">*</span></label>
+                                                        <label for="kecamatan_id" class="form-control label-input-custom col-md-4">Kecamatan</label>
+                                                        <input type="text" disabled id="kecamatan_id" value="{{ $data->kecamatan->n_kecamatan }}" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
+                                                    </div>
+                                                    <div class="form-group m-0">
+                                                        <label for="kelurahan_id" class="form-control label-input-custom col-md-4">Kelurahan</label>
+                                                        <input type="text" disabled id="kelurahan_id" value="{{ $data->kelurahan->n_kelurahan }}" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
+                                                    </div>
+                                                    <div class="form-group m-0">
+                                                        <label class="form-control label-input-custom col-md-4">No Bayar<span class="text-danger ml-1">*</span></label>
                                                         <input type="text" value="{{ $data->no_bayar }}" readonly class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group m-0">
-                                                        <label for="no_skrd" class="col-form-label s-12 col-md-4">Nomor SKRD<span class="text-danger ml-1">*</span></label>
+                                                        <label for="no_skrd" class="form-control label-input-custom col-md-4">Nomor SKRD<span class="text-danger ml-1">*</span></label>
                                                         <input type="text" name="no_skrd" id="no_skrd" value="{{ $data->no_skrd }}" readonly class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
                                                     </div>
                                                     <div class="form-group m-0">
-                                                        <label for="tgl_skrd_awal" class="col-form-label s-12 col-md-4">Tanggal SKRD<span class="text-danger ml-1">*</span></label>
+                                                        <label for="tgl_skrd_awal" class="form-control label-input-custom col-md-4">Tanggal SKRD<span class="text-danger ml-1">*</span></label>
                                                         <input type="date" onchange="setDate()" value="{{ $data->tgl_skrd_awal }}" name="tgl_skrd_awal" id="tgl_skrd_awal" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
                                                     </div>
                                                     <div class="form-group m-0">
-                                                        <label for="tgl_skrd_akhir" class="col-form-label s-12 col-md-4">Jatuh Tempo<span class="text-danger ml-1">*</span></label>
+                                                        <label for="tgl_skrd_akhir" class="form-control label-input-custom col-md-4">Jatuh Tempo<span class="text-danger ml-1">*</span></label>
                                                         <input type="date" name="tgl_skrd_akhir" readonly value="{{ $data->tgl_skrd_akhir }}" id="tgl_skrd_akhir" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
                                                     </div>
                                                     <div class="form-group m-0">
-                                                        <label for="nm_ttd" class="col-form-label s-12 col-md-4">Nama Penandatangan<span class="text-danger ml-1">*</span></label>
+                                                        <label for="nm_ttd" class="form-control label-input-custom col-md-4">Nama Penandatangan<span class="text-danger ml-1">*</span></label>
                                                         <input type="text" name="nm_ttd" id="nm_ttd" value="{{ $data->nm_ttd }}" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
                                                     </div>
                                                     <div class="form-group m-0">
-                                                        <label for="nip_ttd" class="col-form-label s-12 col-md-4">NIP Penandatangan</label>
+                                                        <label for="nip_ttd" class="form-control label-input-custom col-md-4">NIP Penandatangan</label>
                                                         <input type="text" name="nip_ttd" id="nip_ttd" value="{{ $data->nip_ttd }}" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
                                                     </div>
                                                     <div class="form-group m-0">
-                                                        <label for="tgl_ttd" class="col-form-label s-12 col-md-4">Tanggal TTD<span class="text-danger ml-1">*</span></label>
+                                                        <label for="tgl_ttd" class="form-control label-input-custom col-md-4">Tanggal TTD<span class="text-danger ml-1">*</span></label>
                                                         <input type="date" name="tgl_ttd" id="tgl_ttd" value="{{ $data->tgl_ttd }}" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
                                                     </div>
                                                     <div class="form-group m-0">
-                                                        <label for="jumlah_bayar" class="col-form-label s-12 col-md-4">Ketetapan<span class="text-danger ml-1">*</span></label>
+                                                        <label for="jumlah_bayar" class="form-control label-input-custom col-md-4">Ketetapan<span class="text-danger ml-1">*</span></label>
                                                         <input type="text" name="jumlah_bayar" id="rupiah" value="{{ $data->jumlah_bayar }}" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
                                                     </div>
                                                 </div>
@@ -166,7 +161,6 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content" style="background: transparent !important; border: none !important">
             <div class="modal-body">
-                {{-- <img src="{{ asset('images/loader.svg') }}" class="mx-auto d-block" width="200" height="200" alt="">   --}}
                 <img src="{{ asset('images/hourglass.png') }}" class="mx-auto d-block" width="100" height="100" alt="">               
             </div>
         </div>

@@ -43,15 +43,15 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group m-0">
-                                                        <label for="n_opd" class="col-form-label s-12 col-md-4">Nama OPD<span class="text-danger ml-1">*</span></label>
+                                                        <label for="n_opd" class="form-control label-input-custom col-md-4">Nama OPD<span class="text-danger ml-1">*</span></label>
                                                         <input type="text" name="n_opd" id="n_opd" value="{{ $opd->n_opd }}"  class="form-control r-0 light s-12 col-md-8" autocomplete="off" readonly required/>
                                                     </div>
                                                     <div class="form-group m-0">
-                                                        <label for="rincian_jenis_pendapatan" class="col-form-label s-12 col-md-4">Jenis Pendapatan<span class="text-danger ml-1">*</span></label>
+                                                        <label for="rincian_jenis_pendapatan" class="form-control label-input-custom col-md-4">Jenis Pendapatan<span class="text-danger ml-1">*</span></label>
                                                         <input type="text" name="rincian_jenis_pendapatan" id="rincian_jenis_pendapatan" value="{{ $jenis_pendapatan->jenis_pendapatan }}"  class="form-control r-0 light s-12 col-md-8" autocomplete="off" readonly required/>
                                                     </div>
                                                     <div class="form-group m-0">
-                                                        <label class="col-form-label s-12 col-md-4">Rincian Jenis Pendapatan<span class="text-danger ml-1">*</span></label>
+                                                        <label class="form-control label-input-custom col-md-4">Rincian Jenis Pendapatan<span class="text-danger ml-1">*</span></label>
                                                         <div class="col-md-8 p-0 bg-light">
                                                             <select class="select2 form-control r-0 light s-12" id="id_rincian_jenis_pendapatan" name="id_rincian_jenis_pendapatan" autocomplete="off">
                                                                 <option value="{{ \Crypt::encrypt(0) }}">Pilih</option>
@@ -64,11 +64,11 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group m-0">
-                                                        <label for="kode_rekening" class="col-form-label s-12 col-md-4">Kode Rekening<span class="text-danger ml-1">*</span></label>
+                                                        <label for="kode_rekening" class="form-control label-input-custom col-md-4">Kode Rekening<span class="text-danger ml-1">*</span></label>
                                                         <input type="text" name="kode_rekening" id="kode_rekening" value="{{ $data_wp != null ? $data_wp->rincian_jenis->nmr_rekening : '' }}" class="form-control r-0 light s-12 col-md-8" autocomplete="off" readonly required/>
                                                     </div>
                                                     <div class="form-group m-0">
-                                                        <label for="uraian_retribusi" class="col-form-label s-12 col-md-4">Uraian Retribusi<span class="text-danger ml-1">*</span></label>
+                                                        <label for="uraian_retribusi" class="form-control label-input-custom col-md-4">Uraian Retribusi<span class="text-danger ml-1">*</span></label>
                                                         <textarea type="text" rows="3" name="uraian_retribusi" id="uraian_retribusi" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required></textarea>
                                                     </div>
                                                 </div>
@@ -78,23 +78,23 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group m-0">
-                                                        <label for="nmr_daftar" class="col-form-label s-12 col-md-4">Nomor Daftar<span class="text-danger ml-1">*</span></label>
+                                                        <label for="nmr_daftar" class="form-control label-input-custom col-md-4">Nomor Daftar<span class="text-danger ml-1">*</span></label>
                                                         <input type="text" name="nmr_daftar" id="nmr_daftar" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
                                                     </div>
                                                     <div class="form-group m-0">
-                                                        <label for="nm_wajib_pajak" class="col-form-label s-12 col-md-4">Nama Wajib Retribusi<span class="text-danger ml-1">*</span></label>
+                                                        <label for="nm_wajib_pajak" class="form-control label-input-custom col-md-4">Nama Wajib Retribusi<span class="text-danger ml-1">*</span></label>
                                                         <input type="text" name="nm_wajib_pajak" id="nm_wajib_pajak" value="{{ $data_wp != null ? $data_wp->nm_wajib_pajak : '' }}" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode==32)"/>
                                                     </div>
                                                     <div class="form-group m-0">
-                                                        <label for="alamat_wp" class="col-form-label s-12 col-md-4">Alamat Wajib Retribusi<span class="text-danger ml-1">*</span></label>
+                                                        <label for="alamat_wp" class="form-control label-input-custom col-md-4">Alamat Wajib Retribusi<span class="text-danger ml-1">*</span></label>
                                                         <textarea type="text" rows="3" name="alamat_wp" id="alamat_wp" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required>{{ $data_wp != null ? $data_wp->alamat_wp : '' }}</textarea>
                                                     </div>
                                                     <div class="form-group m-0">
-                                                        <label for="lokasi" class="col-form-label s-12 col-md-4">Lokasi<span class="text-danger ml-1">*</span></label>
+                                                        <label for="lokasi" class="form-control label-input-custom col-md-4">Lokasi<span class="text-danger ml-1">*</span></label>
                                                         <textarea type="text" rows="2" name="lokasi" id="lokasi" placeholder="Contoh: Ruko Sektor 1.2 BSD" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required>{{ $data_wp != null ? $data_wp->lokasi : '' }}</textarea>
                                                     </div>
                                                     <div class="form-group m-0">
-                                                        <label class="col-form-label s-12 col-md-4">Kecamatan<span class="text-danger ml-1">*</span></label>
+                                                        <label class="form-control label-input-custom col-md-4">Kecamatan<span class="text-danger ml-1">*</span></label>
                                                         <div class="col-md-8 p-0 bg-light">
                                                             <select class="select2 form-control r-0 light s-12" id="kecamatan_id" name="kecamatan_id" autocomplete="off">
                                                                 <option value="">Pilih</option>
@@ -105,7 +105,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group mt-1">
-                                                        <label class="col-form-label s-12 col-md-4">Kelurahan<span class="text-danger ml-1">*</span></label>
+                                                        <label class="form-control label-input-custom col-md-4">Kelurahan<span class="text-danger ml-1">*</span></label>
                                                         <div class="col-md-8 p-0 bg-light">
                                                             <select class="select2 form-control r-0 light s-12" id="kelurahan_id" name="kelurahan_id" autocomplete="off">
                                                                 @if ($data_wp != null)
@@ -118,27 +118,27 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group m-0">
-                                                        <label for="tgl_skrd_awal" class="col-form-label s-12 col-md-4">Tanggal SKRD<span class="text-danger ml-1">*</span></label>
+                                                        <label for="tgl_skrd_awal" class="form-control label-input-custom col-md-4">Tanggal SKRD<span class="text-danger ml-1">*</span></label>
                                                         <input type="date" onchange="setDate()" name="tgl_skrd_awal" id="tgl_skrd_awal" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
                                                     </div>
                                                     <div class="form-group m-0">
-                                                        <label for="tgl_skrd_akhir" class="col-form-label s-12 col-md-4">Jatuh Tempo<span class="text-danger ml-1">*</span></label>
+                                                        <label for="tgl_skrd_akhir" class="form-control label-input-custom col-md-4">Jatuh Tempo<span class="text-danger ml-1">*</span></label>
                                                         <input type="date" name="tgl_skrd_akhir" id="tgl_skrd_akhir" readonly class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
                                                     </div>
                                                     <div class="form-group m-0">
-                                                        <label for="nm_ttd" class="col-form-label s-12 col-md-4">Nama Penandatangan<span class="text-danger ml-1">*</span></label>
+                                                        <label for="nm_ttd" class="form-control label-input-custom col-md-4">Nama Penandatangan<span class="text-danger ml-1">*</span></label>
                                                         <input type="text" name="nm_ttd" id="nm_ttd" readonly value="{{ $opd->nm_ttd }}" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
                                                     </div>
                                                     <div class="form-group m-0">
-                                                        <label for="nip_ttd" class="col-form-label s-12 col-md-4">NIP Penandatangan<span class="text-danger ml-1">*</span></label>
+                                                        <label for="nip_ttd" class="form-control label-input-custom col-md-4">NIP Penandatangan<span class="text-danger ml-1">*</span></label>
                                                         <input type="text" name="nip_ttd" id="nip_ttd" readonly value="{{ $opd->nip_ttd }}" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
                                                     </div>
                                                     <div class="form-group m-0">
-                                                        <label for="tgl_ttd" class="col-form-label s-12 col-md-4">Tanggal TTD<span class="text-danger ml-1">*</span></label>
+                                                        <label for="tgl_ttd" class="form-control label-input-custom col-md-4">Tanggal TTD<span class="text-danger ml-1">*</span></label>
                                                         <input type="date" name="tgl_ttd" id="tgl_ttd" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
                                                     </div>
                                                     <div class="form-group m-0">
-                                                        <label for="jumlah_bayar" class="col-form-label s-12 col-md-4">Ketetapan<span class="text-danger ml-1">*</span></label>
+                                                        <label for="jumlah_bayar" class="form-control label-input-custom col-md-4">Ketetapan<span class="text-danger ml-1">*</span></label>
                                                         <input type="text" name="jumlah_bayar" id="rupiah" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
                                                     </div>
                                                 </div>
