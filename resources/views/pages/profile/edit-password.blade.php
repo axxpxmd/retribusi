@@ -39,15 +39,15 @@
                                     <div class="form-row form-inline">
                                         <div class="col-md-8">
                                             <div class="form-group m-0">
-                                                <label for="username" class="col-form-label s-12 col-md-2">Password<span class="text-danger ml-1">*</span></label>
+                                                <label for="username" class="form-control col-md-3 label-input-custom">Password<span class="text-danger ml-1">*</span></label>
                                                 <input type="password" name="password" id="password" class="form-control r-0 light s-12 col-md-6" autocomplete="off" required autofocus/>
                                             </div>
                                             <div class="form-group m-0">
-                                                <label for="username" class="col-form-label s-12 col-md-2">Konfirmasi Password<span class="text-danger ml-1">*</span></label>
+                                                <label for="username" class="form-control col-md-3 label-input-custom">Konfirmasi Password<span class="text-danger ml-1">*</span></label>
                                                 <input type="password" name="confirm_password" id="confirm_password" class="form-control r-0 light s-12 col-md-6" autocomplete="off" required/>
                                             </div>
                                             <div class="form-group mt-2">
-                                                <div class="col-md-2"></div>
+                                                <div class="col-md-3"></div>
                                                 <button type="submit" class="btn btn-primary btn-sm" id="action"><i class="icon-save mr-2"></i>Simpan Perubahan</button>
                                             </div>
                                         </div>

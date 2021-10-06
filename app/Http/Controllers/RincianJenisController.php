@@ -78,8 +78,9 @@ class RincianJenisController extends Controller
         $request->validate([
             'id_jenis_pendapatan' => 'required',
             'rincian_pendapatan'  => 'required',
-            'nmr_rekening' => 'required',
-            'kd_jenis'     => 'required|numeric|max:99|unique:tmrincian_jenis_pendapatans,kd_jenis'
+            'nmr_rekening'        => 'required',
+            'nmr_rekening_denda'  => 'required',
+            'kd_jenis'            => 'required|numeric|max:99|unique:tmrincian_jenis_pendapatans,kd_jenis'
         ]);
 
         $id_jenis_pendapatan = $request->id_jenis_pendapatan;
@@ -138,8 +139,9 @@ class RincianJenisController extends Controller
         $request->validate([
             'id_jenis_pendapatan' => 'required',
             'rincian_pendapatan'  => 'required',
-            'nmr_rekening' => 'required',
-            'kd_jenis'     => 'required|numeric|max:99|unique:tmrincian_jenis_pendapatans,kd_jenis,' . $id
+            'nmr_rekening'        => 'required',
+            'nmr_rekening_denda'  => 'required',
+            'kd_jenis'            => 'required|numeric|max:99|unique:tmrincian_jenis_pendapatans,kd_jenis,' . $id
         ]);
 
         // get params

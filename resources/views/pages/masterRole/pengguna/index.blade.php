@@ -78,7 +78,7 @@
                                     <div class="form-row form-inline">
                                         <div class="col-md-8">
                                             <div class="form-group m-0">
-                                                <label for="role_id" class="col-form-label s-12 col-md-2">Role<span class="text-danger ml-1">*</span></label>
+                                                <label for="role_id" class="form-control label-input-custom col-md-2">Role<span class="text-danger ml-1">*</span></label>
                                                 <div class="col-md-6 p-0 bg-light">
                                                     <select class="select2 form-control r-0 light s-12" name="role_id" id="role_id" autocomplete="off">
                                                         <option value="0">Pilih</option>
@@ -89,21 +89,21 @@
                                                 </div>
                                             </div>
                                             <div class="form-group mt-1">
-                                                <label for="username" class="col-form-label s-12 col-md-2">Username<span class="text-danger ml-1">*</span></label>
+                                                <label for="username" class="form-control label-input-custom col-md-2">Username<span class="text-danger ml-1">*</span></label>
                                                 <input type="text" name="username" id="username" class="form-control r-0 light s-12 col-md-6" autocomplete="off" required/>
                                             </div>
                                             <div class="form-group m-0">
-                                                <label for="password" class="col-form-label text-left s-12 col-md-2">Password<span class="text-danger ml-1">*</span></label>
+                                                <label for="password" class="form-control label-input-custom col-md-2">Password<span class="text-danger ml-1">*</span></label>
                                                 <input type="password" name="password" id="password" class="form-control r-0 light s-12 col-md-6" autocomplete="off" required/>
                                             </div>
                                             <hr>
 
                                             <div class="form-group m-0">
-                                                <label for="full_name" class="col-form-label s-12 col-md-2">Nama Lengkap<span class="text-danger ml-1">*</span></label>
+                                                <label for="full_name" class="form-control label-input-custom col-md-2">Nama Lengkap<span class="text-danger ml-1">*</span></label>
                                                 <input type="text" name="full_name" id="full_name" class="form-control r-0 light s-12 col-md-6" autocomplete="off" required/>
                                             </div>
                                             <div class="form-group m-0" id="opd_display">
-                                                <label for="opd_id" class="col-form-label s-12 col-md-2">OPD<span class="text-danger ml-1">*</span></label>
+                                                <label for="opd_id" class="form-control label-input-custom col-md-2">OPD<span class="text-danger ml-1">*</span></label>
                                                 <div class="col-md-6 p-0 bg-light">
                                                     <select class="select2 form-control r-0 light s-12" name="opd_id" id="opd_id" autocomplete="off">
                                                         <option value="0">Pilih</option>
@@ -114,11 +114,11 @@
                                                 </div>
                                             </div>
                                             <div class="form-group mt-1">
-                                                <label for="email" class="col-form-label s-12 col-md-2">Email<span class="text-danger ml-1">*</span></label>
+                                                <label for="email" class="form-control label-input-custom col-md-2">Email<span class="text-danger ml-1">*</span></label>
                                                 <input type="email" name="email" id="email" class="form-control r-0 light s-12 col-md-6" autocomplete="off" required/>
                                             </div>
                                             <div class="row m-0">
-                                                <label for="phone" class="s-12 col-md-2" style="text-align: left !important">No Telp<span class="text-danger ml-1">*</span></label>
+                                                <label for="phone" class="form-control label-input-custom col-md-2">No Telp<span class="text-danger ml-1">*</span></label>
                                                 <input type="text" name="phone" id="phone" class="form-control r-0 light s-12 col-md-6" autocomplete="off" required/>
                                             </div>
                                             <div class="form-group mt-2">

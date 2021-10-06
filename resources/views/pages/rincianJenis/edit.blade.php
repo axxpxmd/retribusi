@@ -39,8 +39,8 @@
                                     <div class="form-row form-inline">
                                         <div class="col-md-12">
                                             <div class="form-group m-0">
-                                                <label for="id_jenis_pendapatan" class="col-form-label s-12 col-md-2">Jenis Pendapatan<span class="text-danger ml-1">*</span></label>
-                                                <div class="col-md-6 p-0 bg-light">
+                                                <label for="id_jenis_pendapatan" class="form-control label-input-custom col-md-2">Jenis Pendapatan<span class="text-danger ml-1">*</span></label>
+                                                <div class="col-md-5 p-0 bg-light">
                                                     <select class="select2 form-control r-0 light s-12" name="id_jenis_pendapatan" id="id_jenis_pendapatan" autocomplete="off">
                                                         <option value="0">Pilih</option>
                                                         @foreach ($jenis_pendapatans as $i)
@@ -50,20 +50,20 @@
                                                 </div>
                                             </div>
                                             <div class="form-group mt-1">
-                                                <label for="rincian_pendapatan" class="col-form-label s-12 col-md-2">Rincian Jenis Pendapatan<span class="text-danger ml-1">*</span></label>
-                                                <textarea rows="4" name="rincian_pendapatan" id="rincian_pendapatan" class="form-control r-0 light s-12 col-md-6" autocomplete="off" required>{{ $data->rincian_pendapatan }}</textarea>
+                                                <label for="rincian_pendapatan" class="form-control label-input-custom col-md-2">Rincian Jenis Pendapatan<span class="text-danger ml-1">*</span></label>
+                                                <textarea rows="4" name="rincian_pendapatan" id="rincian_pendapatan" class="form-control r-0 light s-12 col-md-5" autocomplete="off" required>{{ $data->rincian_pendapatan }}</textarea>
                                             </div> 
                                             <div class="form-group m-0">
-                                                <label for="kd_jenis" class="col-form-label s-12 col-md-2">Kode Jenis<span class="text-danger ml-1">*</span></label>
-                                                <input type="text" name="kd_jenis" id="kd_jenis" class="form-control r-0 light s-12 col-md-6" value="{{ $data->kd_jenis }}" autocomplete="off" required/>
+                                                <label for="kd_jenis" class="form-control label-input-custom col-md-2">Kode Jenis<span class="text-danger ml-1">*</span></label>
+                                                <input type="text" name="kd_jenis" id="kd_jenis" class="form-control r-0 light s-12 col-md-2" value="{{ $data->kd_jenis }}" autocomplete="off" required/>
                                             </div>  
                                             <div class="form-group m-0">
-                                                <label for="nmr_rekening" class="col-form-label s-12 col-md-2">Nomor Rekening<span class="text-danger ml-1">*</span></label>
-                                                <input type="text" name="nmr_rekening" id="nmr_rekening" class="form-control r-0 light s-12 col-md-6" value="{{ $data->nmr_rekening }}" autocomplete="off" required/>
+                                                <label for="nmr_rekening" class="form-control label-input-custom col-md-2">Nomor Rekening<span class="text-danger ml-1">*</span></label>
+                                                <input type="text" name="nmr_rekening" id="nmr_rekening" class="form-control r-0 light s-12 col-md-2" value="{{ $data->nmr_rekening }}" autocomplete="off" required/>
                                             </div>  
                                             <div class="form-group m-0">
-                                                <label for="nmr_rekening_denda" class="col-form-label s-12 col-md-2">Nomor Rekening Denda</label>
-                                                <input type="text" name="nmr_rekening_denda" id="nmr_rekening_denda" class="form-control r-0 light s-12 col-md-6" value="{{ $data->nmr_rekening_denda }}" autocomplete="off"/>
+                                                <label for="nmr_rekening_denda" class="form-control label-input-custom col-md-2">Nomor Rekening Denda<span class="text-danger ml-1">*</span></label>
+                                                <input type="text" name="nmr_rekening_denda" id="nmr_rekening_denda" class="form-control r-0 light s-12 col-md-2" value="{{ $data->nmr_rekening_denda }}" autocomplete="off" required/>
                                             </div>  
                                             <div class="form-group mt-2">
                                                 <div class="col-md-2"></div>
@@ -117,7 +117,7 @@
                                 btnClass: 'btn-primary',
                                 keys: ['enter'],
                                 action: function () {
-                                    location.reload();
+                                    window.location.href = "{{ route('sts.index')}}";
                                 }
                             }
                         }

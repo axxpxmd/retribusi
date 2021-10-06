@@ -45,11 +45,11 @@
                             <div class="form-row form-inline">
                                 <div class="col-md-12">
                                     <div class="form-group m-0">
-                                        <label for="name" class="col-form-label s-12 col-md-4">Nama</label>
+                                        <label for="name" class="form-control label-input-custom col-md-4">Nama</label>
                                         <input type="text" name="name" id="name" placeholder="" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
                                     </div>
                                     <div class="form-group m-0">
-                                        <label for="guard_name" class="col-form-label s-12 col-md-4">Guard Name</label>
+                                        <label for="guard_name" class="form-control label-input-custom col-md-4">Guard Name</label>
                                         <input type="text" name="guard_name" id="guard_name" placeholder="" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
                                     </div>
                                     <div class="form-group mt-2">

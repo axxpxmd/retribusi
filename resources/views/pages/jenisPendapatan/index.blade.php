@@ -44,11 +44,11 @@
                             <div class="form-row form-inline">
                                 <div class="col-md-12">
                                     <div class="form-group m-0">
-                                        <label for="jenis_pendapatan" class="col-form-label s-12 col-md-4">Nama</label>
+                                        <label for="jenis_pendapatan" class="form-control label-input-custom col-md-4">Nama</label>
                                         <textarea type="text" rows="5" name="jenis_pendapatan" id="jenis_pendapatan" placeholder="" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required></textarea>
                                     </div>
                                     <div class="form-group m-0">
-                                        <label for="target_pendapatan" class="col-form-label s-12 col-md-4">Target Pendapatan</label>
+                                        <label for="target_pendapatan" class="form-control label-input-custom col-md-4">Target Pendapatan</label>
                                         <input type="text" name="target_pendapatan" id="rupiah" placeholder="" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
                                     </div>
                                     <div class="form-group mt-2">
