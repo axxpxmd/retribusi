@@ -303,7 +303,7 @@ class STSController extends Controller
                 'ntb'    => $request->ntb,
                 'denda'  => (int) str_replace(['.', 'Rp', ' '], '', $request->denda),
                 'diskon' => $request->diskon,
-                'total_bayar_bjb' => (int) str_replace(['.', 'Rp', ' '], '', $request->total_bayar_bjb)
+                'total_bayar_bjb' => $request->total_bayar_bjb == 0 ? null : (int) str_replace(['.', 'Rp', ' '], '', $request->total_bayar_bjb)
             ]);
         } else {
             if ($role == 'bendahara-opd') {
@@ -329,7 +329,7 @@ class STSController extends Controller
                     'ntb'    => $request->ntb,
                     'denda'  => (int) str_replace(['.', 'Rp', ' '], '', $request->denda),
                     'diskon' => $request->diskon,
-                    'total_bayar_bjb' => (int) str_replace(['.', 'Rp', ' '], '', $request->total_bayar_bjb)
+                    'total_bayar_bjb' => $request->total_bayar_bjb == 0 ? null : (int) str_replace(['.', 'Rp', ' '], '', $request->total_bayar_bjb)
                 ]);
             }
         }

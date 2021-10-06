@@ -117,7 +117,7 @@
                                 btnClass: 'btn-primary',
                                 keys: ['enter'],
                                 action: function () {
-                                    window.location.href = "{{ route('sts.index')}}";
+                                    location.reload();
                                 }
                             }
                         }
