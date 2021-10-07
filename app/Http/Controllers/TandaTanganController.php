@@ -199,59 +199,43 @@ class TandaTanganController extends Controller
          * 2 = Proses
          */
         if ($data->status_ttd == 0 || $data->status_ttd == 2 || $data->status_ttd == 4) {
+            //* Bunga
+            $tgl_skrd_akhir = $data->tgl_skrd_akhir;
+            $total_bayar    = $data->jumlah_bayar;
+            list($jumlahBunga, $kenaikan) = $this->createBunga($tgl_skrd_akhir, $total_bayar);
+
+            //* Total Bayar + Bunga
+            $total_bayar = $data->total_bayar + $jumlahBunga;
+            $terbilang   = Html_number::terbilang($total_bayar) . 'rupiah';
+
+            //* Tanggal Jatuh Tempo STRD
+            if ($data->tgl_strd_akhir == null) {
+                $tgl_jatuh_tempo = $data->tgl_skrd_akhir;
+            } else {
+                $tgl_jatuh_tempo = $data->tgl_strd_akhir;
+            }
 
             if ($data->status_ttd == 2) {
-                if ($data->total_bayar_bjb != null) {
-                    $total_bayar_final = $data->total_bayar_bjb;
-                } else {
-                    $total_bayar_final = $data->total_bayar;
-                }
-                $terbilang = Html_number::terbilang($total_bayar_final) . 'rupiah';
-
-                // generate QR Code
-                $file_url = config('app.sftp_src') . 'file_ttd_skrd/' . $fileName;
-                $b   = base64_encode(\SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')->merge(public_path('images/logo-png.png'), 0.2, true)->size(900)->errorCorrection('H')->margin(0)->generate($file_url));
-                $img = '<img width="60" height="61" src="data:image/png;base64, ' . $b . '" alt="qr code" />';
-
-                // generate PDF
                 $pdf = app('dompdf.wrapper');
                 $pdf->getDomPDF()->set_option("enable_php", true);
-                $pdf->loadView($this->view . 'report', compact(
-                    'data',
-                    'terbilang',
-                    'img',
-                    'total_bayar_final'
-                ));
-            } elseif ($data->status_ttd == 4) {
-                if ($data->total_bayar_bjb != null) {
-                    $total_bayar_final = $data->total_bayar_bjb;
-                } else {
-                    $total_bayar_final = $data->total_bayar;
-                }
-
-                //* Bunga
-                $tgl_skrd_akhir = $data->tgl_skrd_akhir;
-                $jumlah_bayar   = $data->jumlah_bayar;
-                list($jumlahBunga, $kenaikan) = $this->createBunga($tgl_skrd_akhir, $jumlah_bayar);
-
-                //* Total Bayar + Bunga
-                $total_bayar = $total_bayar_final + $jumlahBunga;
-                $terbilang   = Html_number::terbilang($total_bayar_final) . 'rupiah';
-
-                // generate QR Code
-                $file_url = config('app.sftp_src') . 'file_ttd_skrd/' . $fileName;
-                $b   = base64_encode(\SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')->merge(public_path('images/logo-png.png'), 0.2, true)->size(900)->errorCorrection('H')->margin(0)->generate($file_url));
-                $img = '<img width="60" height="61" src="data:image/png;base64, ' . $b . '" alt="qr code" />';
-
-                // generate PDF
-                $pdf = app('dompdf.wrapper');
-                $pdf->getDomPDF()->set_option("enable_php", true);
-                $pdf->loadView('pages.tandaTangan.report-strd', compact(
-                    'img',
+                $pdf->loadView('pages.skrd.report', compact(
                     'data',
                     'terbilang',
                     'jumlahBunga',
-                    'total_bayar'
+                    'total_bayar',
+                    'kenaikan',
+                    'tgl_jatuh_tempo'
+                ));
+            } elseif ($data->status_ttd == 4) {
+                $pdf = app('dompdf.wrapper');
+                $pdf->getDomPDF()->set_option("enable_php", true);
+                $pdf->loadView('pages.strd.report', compact(
+                    'data',
+                    'terbilang',
+                    'jumlahBunga',
+                    'total_bayar',
+                    'kenaikan',
+                    'tgl_jatuh_tempo'
                 ));
             }
 
