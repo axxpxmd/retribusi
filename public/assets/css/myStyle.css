@@ -1,3 +1,12 @@
+.label-input-custom{
+    font-size: 12px !important;
+    text-align: right !important;
+    border: none !important;
+    padding-right: 1.5rem !important;
+    color: #86939E !important;
+    font-weight: 400 !important
+}
+
 .form-inline input,
 select,
 textarea {
