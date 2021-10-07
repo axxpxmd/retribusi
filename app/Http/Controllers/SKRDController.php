@@ -548,8 +548,7 @@ class SKRDController extends Controller
 
         //* Tahap 2
         $input = $request->all();
-        $input = $request->except('kode_rekening');
-        $input = $request->except('kd_jenis');
+        $input = $request->except(['kode_rekening', 'kd_jenis']);
         $data->update($input);
         $data->update([
             'nomor_va_bjb' => $VABJB,
