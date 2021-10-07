@@ -1,6 +1,16 @@
 @extends('layouts.app')
 @section('title', '| '.$title.'')
 @section('content')
+<style>
+    .label-input-custom{
+        font-size: 12px !important;
+        text-align: right !important;
+        border: none !important;
+        padding-right: 1.5rem !important;
+        color: #86939E !important;
+        font-weight: 400 !important
+    }
+</style>
 <div class="page has-sidebar-left height-full">
     <header class="blue accent-3 relative nav-sticky">
          <div class="container-fluid text-white">
