@@ -159,7 +159,7 @@
                                                     </div>
                                                     <div class="form-group mt-1">
                                                         <label for="tgl_bayar" class="form-control label-input-custom col-md-4">Tanggal Bayar</label>
-                                                        <input type="datetime-local" name="tgl_bayar" {{ $readonly }} value="{{ date('Y-m-d\TH:i', strtotime($data->tgl_bayar)) }}" id="tgl_bayar" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
+                                                        <input type="datetime-local" name="tgl_bayar" {{ $readonly }} value="{{ $data->tgl_bayar != null ? date('Y-m-d\TH:i', strtotime($data->tgl_bayar)) : $now }}" id="tgl_bayar" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
                                                     </div>
                                                     <div class="form-group m-0">
                                                         <label for="no_bku" class="form-control label-input-custom col-md-4">Nomor BKU</label>
