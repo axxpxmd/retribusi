@@ -281,6 +281,7 @@
                 contentType: false,
                 processData: false,
                 success : function(data) {
+                    $('#loading').modal('hide');
                     $.confirm({
                         title: 'Success',
                         content: data.message,
@@ -319,7 +320,6 @@
         }
         $(this).addClass('was-validated');
     });
-    $('#loading').modal('hide');
     
 </script>
 @endsection

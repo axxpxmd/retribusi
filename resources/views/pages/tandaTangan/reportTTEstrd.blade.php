@@ -27,9 +27,11 @@
             border: 1px solid black;
             font-size: 12px;
         }
+
         table.c{
             font-size: 15px 
         }
+
         .t-bold {
             font-weight: bold
         }
@@ -37,6 +39,10 @@
         .m-b-0{
             margin-bottom: 0px;
         }
+        .m-r-10{
+            margin-right: 10px;
+        }
+
         .m-t-0{
             margin-top: 0px;
         }
@@ -47,9 +53,6 @@
 
         .text-right{
             text-align: right
-        }
-        .text-left{
-            text-align: left
         }
         .text-center{
             text-align: center
@@ -65,36 +68,32 @@
         .m-l-14{
             margin-left: 25px
         }
+
         .m-r-20{
             margin-right: 20px
+        }
+
+        .f-w-n{
+            font-weight: normal
         }
         .m-t-1{
             margin-top: 1px
         }
-        .f-w-n{
-            font-weight: normal
-        }
 
-        .m-l-10{
-            margin-left: 10px;
-        }
-        .m-r-10{
-            margin-right: 10px;
-        }
-        .m-b-5{
-            margin-bottom: 5px
-        }
         .m-l-50{
             margin-left: 50px;
         }
         .m-t-15{
             margin-top: 15px
         }
-        .fs-12{
-            font-size: 12px 
+        .m-b-5{
+            margin-bottom: 5px
         }
         .f-normal{
             font-weight: normal
+        }
+        .mt-n40{
+            margin-top: -30px !important
         }
         .mt-n40{
             margin-top: -30px !important
@@ -122,19 +121,19 @@
             </th>
             <th width="40%" class="d">
                 <div style="margin: 0 auto">
-                    <p class="m-b-0" style="font-size: 13px">SURAT KETETAPAN RETRIBUSI DAERAH</p>
-                    <p class="m-t-1" style="font-size: 13px">(SKRD)</p>
+                    <p class="m-b-0" style="font-size: 13px">SURAT TAGIHAN RETRIBUSI DAERAH</p>
+                    <p class="m-t-1" style="font-size: 13px">(STRD)</p>
                     <p>&nbsp;</p>
                     @if ($data->tgl_skrd_awal != null)
-                    <p class="text-left m-l-14 m-t-0 f-w-n">Tanggal SKRD : {{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_awal)->format('d F Y') }}</p>
+                    <p class="text-left m-l-14 m-t-0 f-w-n">Tanggal STRD : {{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_awal)->format('d F Y') }}</p>
                     @else
-                    <p class="text-left m-l-14 m-t-0 f-w-n">Tanggal SKRD : - </p>
+                    <p class="text-left m-l-14 m-t-0 f-w-n">Tanggal STRD : - </p>
                     @endif
                 </div>
             </th>
             <th width="20%" class="d">
                 <div style="margin: 0 auto">
-                    <p class="text-center t-bold m-b-0" style="font-size: 13px">NO SKRD</p>
+                    <p class="text-center t-bold m-b-0" style="font-size: 13px">NO STRD</p>
                     <p class="text-center m-t-1 f-normal">{{ $data->no_skrd }}</p>
                     <p class="text-left f-normal m-l-5 m-b-0">No BKU : {{ $data->no_bku != null ? $data->no_bku : '-' }}</p>
                     @if ($data->tgl_bku != null)
@@ -194,8 +193,8 @@
             <tr class="c">
                 <td><p class="m-t-0 m-b-0">Jatuh Tempo </p></td>
                 <td><span>:</span></td>
-                @if ($data->tgl_skrd_akhir != null)
-                <td><p class="m-t-0 m-b-0">{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_akhir)->format('d F Y') }}</p></td>
+                @if ($tgl_jatuh_tempo != null)
+                <td><p class="m-t-0 m-b-0">{{ Carbon\Carbon::createFromFormat('Y-m-d', $tgl_jatuh_tempo)->format('d F Y') }}</p></td>
                 @else
                 <td><p class="m-t-0 m-b-0">- </p></td>
                 @endif
@@ -207,10 +206,10 @@
     <div class="m-t-15">
         <table class="d">
             <tr class="a">
-                <th width="5%" class="a">NO</th>
-                <th width="20%" class="a">NOMOR REKENING</th>
-                <th width="50%" class="a">URAIAN RETRIBUSI</th>
-                <th width="25%" class="a">JUMLAH (Rp)</th>
+                <th width="5%" class="a"><span>NO</span></th>
+                <th width="20%" class="a"><span>NOMOR REKENING</span></th>
+                <th width="50%" class="a"><span>URAIAN RETRIBUSI</span></th>
+                <th width="25%" class="a"><span>JUMLAH (Rp)</span></th>
             </tr>
             <tr class="a">
                 <td class="a text-center">1</td>
@@ -223,7 +222,7 @@
                 <td class="a">
                     <p class="m-l-5 text-right m-r-10">@currency($data->jumlah_bayar),-</p>
                     @if ($data->status_diskon == 1)
-                    <p class="m-l-5 text-right m-r-10">(Diskon {{ (int)$data->diskon }}%)&nbsp;&nbsp; @currency(((int)$data->diskon / 100) * (int)$data->jumlah_bayar),-</p>
+                    <p class="m-l-5 text-right m-r-10">(Diskon {{(int) $data->diskon }}%)&nbsp;&nbsp; @currency(($data->diskon / 100) * $data->jumlah_bayar),-</p>
                     @endif
                 </td>
             </tr>
@@ -237,15 +236,15 @@
                     <p class="m-l-5 m-t-1">b. Kenaikan</p>
                 </td>
                 <td class="a">
-                    <p class="m-l-5 m-b-0 m-r-10 text-right">@currency((int)$data->denda),-</p>
+                    <p class="m-l-5 m-b-0 m-r-10 text-right">&nbsp;</p>
                     <p class="m-l-5 m-t-1 m-b-0">&nbsp;</p>
-                    <p class="m-l-5 m-t-1 m-b-0">&nbsp;</p>
-                    <p class="m-l-5 m-t-1">&nbsp;</p>
+                    <p class="m-l-5 m-t-1 m-b-0 text-right m-r-10">@currency($jumlahBunga),-</p>
+                    <p class="m-l-5 m-t-1 text-right m-r-10">{{ $kenaikan }}%</p>
                 </td>
             </tr>
             <tr>
                 <td class="a"><p class="m-l-5 t-bold">Jumlah Keseluruhan :</p></td>
-                <td class="a"><p class="m-l-5 t-bold text-right m-r-10">@currency($total_bayar_final),-</p></td>
+                <td class="a"><p class="m-l-5 t-bold text-right m-r-10">@currency($data->total_bayar),-</p></td>
             </tr>
             <tr class="a">
                 <td colspan="4" class="a">
@@ -253,8 +252,8 @@
                     <p class="fs-14 t-bold m-l-5"><u>PERHATIAN :</u></p>
                     <ol>
                         <li>Penyetoran dilakukan menggunakan Bank Jabar Banten (BJB) melalui Teller/ATM BJB dengan menggunakan <b>{{ $data->no_bayar }}</b></li>
-                        <li>Penyetoran melalaui transfer dapat melalui Virtual Account BJB dengan nomor <b>( {{ $data->nomor_va_bjb }} )</b>, Berlaku sampai {{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_akhir)->format('d F Y') }}</li>
-                        <li>Apabila SKRD ini tidak atau kurang dibayar lewat waktu paling lama 30 hari setelah SKRD diterima atau (tanggal jatuh tempo) sanksi administrasi bunga sebesar 2% per bulan</li>
+                        <li>Penyetoran melalaui transfer dapat melalui Virtual Account BJB dengan nomor <b>( {{ $data->nomor_va_bjb }} )</b>, Berlaku sampai {{ Carbon\Carbon::createFromFormat('Y-m-d', $tgl_jatuh_tempo)->format('d F Y') }}</li>
+                        <li>Apabila STRD ini tidak atau kurang dibayar lewat waktu paling lama 30 hari setelah STRD diterima atau (tanggal jatuh tempo) sanksi administrasi bunga sebesar 2% per bulan</li>
                     </ol>
                 </td>
             </tr>

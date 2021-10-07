@@ -107,6 +107,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('tanda-tangan/report/{id}', 'TandaTanganController@printData')->name('tanda-tangan.report');
     Route::get('tanda-tangan/report-strd/{id}', 'TandaTanganController@printDataSTRD')->name('tanda-tangan.reportstrd');
 
+    // Print 
+    Route::get('print/skrd/{id}', 'PrintController@printSKRD')->name('print.skrd');
+    Route::get('print/strd/{id}', 'PrintController@printSTS')->name('print.strd');
+
     // Report
     Route::get('report', 'ReportController@index')->name('report.index');
     Route::get('repost/{id}', 'ReportController@show')->name('report.show');

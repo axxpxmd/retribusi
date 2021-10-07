@@ -138,7 +138,7 @@ class STRDController extends Controller
             ->addColumn('bunga', function ($p) {
                 $tgl_skrd_akhir = $p->tgl_skrd_akhir;
                 $total_bayar    = $p->total_bayar;
-                list($jumlahBunga, $kenaikan) = $this->createBunga($tgl_skrd_akhir, $total_bayar);
+                list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);;
 
                 return 'Rp. ' . number_format($jumlahBunga) . ' (' . $kenaikan . '%)';
             })
@@ -213,7 +213,7 @@ class STRDController extends Controller
         //TODO: Get bunga
         $tgl_skrd_akhir = $data->tgl_skrd_akhir;
         $total_bayar    = $data->total_bayar;
-        list($jumlahBunga, $kenaikan) = $this->createBunga($tgl_skrd_akhir, $total_bayar);
+        list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);;
 
         return view($this->view . 'show', compact(
             'route',
@@ -314,22 +314,6 @@ class STRDController extends Controller
             ->withSuccess('Selamat! Data STRD berhasil diperbaharui.');
     }
 
-    public function createBunga($tgl_skrd_akhir, $total_bayar)
-    {
-        //TODO: Create Bunga (kenaikan 2% tiap bulan)
-        $timeNow     = Carbon::now();
-        $dateTimeNow = new DateTime($timeNow);
-        $expired     = new DateTime($tgl_skrd_akhir . ' 23:59:59');
-        $interval    = $dateTimeNow->diff($expired);
-        $monthDiff   = $interval->format('%m');
-
-        $kenaikan = ((int) $monthDiff + 1) * 2;
-        $bunga    = $kenaikan / 100;
-        $jumlahBunga = $total_bayar * $bunga;
-
-        return [$jumlahBunga, $kenaikan];
-    }
-
     public function printData(Request $request, $id)
     {
         $id = \Crypt::decrypt($id);
@@ -339,7 +323,7 @@ class STRDController extends Controller
         //* Bunga
         $tgl_skrd_akhir = $data->tgl_skrd_akhir;
         $total_bayar    = $data->jumlah_bayar;
-        list($jumlahBunga, $kenaikan) = $this->createBunga($tgl_skrd_akhir, $total_bayar);
+        list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);
 
         //* Total Bayar + Bunga
         $total_bayar = $data->total_bayar + $jumlahBunga;

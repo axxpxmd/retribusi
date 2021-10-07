@@ -215,27 +215,35 @@ class TandaTanganController extends Controller
                 $tgl_jatuh_tempo = $data->tgl_strd_akhir;
             }
 
+            //TODO: generate QR Code
+            $fileName = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
+            $file_url = config('app.sftp_src') . 'file_ttd_skrd/' . $fileName;
+            $b   = base64_encode(\SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')->merge(public_path('images/logo-png.png'), 0.2, true)->size(900)->errorCorrection('H')->margin(0)->generate($file_url));
+            $img = '<img width="60" height="61" src="data:image/png;base64, ' . $b . '" alt="qr code" />';
+
             if ($data->status_ttd == 2) {
                 $pdf = app('dompdf.wrapper');
                 $pdf->getDomPDF()->set_option("enable_php", true);
-                $pdf->loadView('pages.skrd.report', compact(
+                $pdf->loadView($this->view . 'reportTTEskrd', compact(
                     'data',
                     'terbilang',
                     'jumlahBunga',
                     'total_bayar',
                     'kenaikan',
-                    'tgl_jatuh_tempo'
+                    'tgl_jatuh_tempo',
+                    'img'
                 ));
             } elseif ($data->status_ttd == 4) {
                 $pdf = app('dompdf.wrapper');
                 $pdf->getDomPDF()->set_option("enable_php", true);
-                $pdf->loadView('pages.strd.report', compact(
+                $pdf->loadView($this->view . 'reportTTEstrd', compact(
                     'data',
                     'terbilang',
                     'jumlahBunga',
                     'total_bayar',
                     'kenaikan',
-                    'tgl_jatuh_tempo'
+                    'tgl_jatuh_tempo',
+                    'img'
                 ));
             }
 
