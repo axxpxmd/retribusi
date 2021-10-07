@@ -143,7 +143,7 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group mt-2">
                                                         <div class="col-md-4"></div>
-                                                        <button type="submit" class="btn btn-primary btn-sm"><i class="icon-save mr-2"></i>Simpan Perubahan</button>
+                                                        <button type="submit" id="action" class="btn btn-primary btn-sm"><i class="icon-save mr-2"></i>Simpan Perubahan</button>
                                                     </div>  
                                                 </div>
                                                 <div class="col-md-6">
@@ -222,11 +222,9 @@
             event.stopPropagation();
         }
         else{
-            $('#loading').modal('show');
-            console.log('go');
-              
             $('#alert').html('');
             $('#action').attr('disabled', true);
+            $('#loading').modal('show');
             url = "{{ route($route.'update', ':id') }}".replace(':id', $('#id').val());
             $.ajax({
                 url : url,
@@ -236,7 +234,6 @@
                 processData: false,
                 success : function(data) {
                     $('#loading').modal('hide');
-                    console.log('stop');
                     $.confirm({
                         title: 'Success',
                         content: data.message,
@@ -269,7 +266,6 @@
                     $('#alert').html("<div role='alert' class='alert alert-danger alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button><strong>Error!</strong> " + respon.message + "<ol class='pl-3 m-0'>" + err + "</ol></div>");
                     $('#action').removeAttr('disabled');
                     $('#loading').modal('hide');
-                    console.log('stop');
                 }
             });
             return false;
