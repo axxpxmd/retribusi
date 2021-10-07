@@ -17,13 +17,13 @@ $template = App\Models\Template::select('id', 'logo', 'logo_title', 'logo_auth')
     <!-- CSS -->
     @yield('style')
     <link rel="stylesheet" href="{{ asset('css/util.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/myStyle.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/myStyle.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/animate.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/jquery-confirm.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/jquery-fancybox.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/buttons.dataTables.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/myStyle.css') }}">
    
 </head>
 <body class="light">
