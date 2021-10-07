@@ -206,8 +206,8 @@
         $.get(url, function(data){
             $('#kode_rekening').val(data.nmr_rekening);
             $('#kd_jenis').val(data.kd_jenis);
-            $('#loading').modal('hide');    
         }, 'JSON');
+        $('#loading').modal('hide');    
     });
 
     $('#kecamatan_id').on('change', function(){
@@ -229,8 +229,8 @@
                 }else{
                     $('#kelurahan_id').html(option);
                 }
-                $('#loading').modal('hide'); 
             }, 'JSON');
+            $('#loading').modal('hide'); 
         }
     });
 
