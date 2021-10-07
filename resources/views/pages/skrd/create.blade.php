@@ -206,8 +206,7 @@
         $.get(url, function(data){
             $('#kode_rekening').val(data.nmr_rekening);
             $('#kd_jenis').val(data.kd_jenis);
-        }, 'JSON');
-        $('#loading').modal('hide');    
+        }, 'JSON');    
     });
 
     $('#kecamatan_id').on('change', function(){
@@ -229,8 +228,7 @@
                 }else{
                     $('#kelurahan_id').html(option);
                 }
-            }, 'JSON');
-            $('#loading').modal('hide'); 
+            }, 'JSON'); 
         }
     });
 
@@ -265,16 +263,12 @@
             event.stopPropagation();
         }
         else{
-            $(document)
-                .ajaxStart(function () {
-                    $('#loading').modal('show');
-                    console.log('go');
-                });
             $('#alert').html('');
             $("#kecamatan_id").prop("disabled", false);
             $("#kelurahan_id").prop("disabled", false);
             $("#id_rincian_jenis_pendapatan").prop("disabled", false);
             $('#action').attr('disabled', true);
+            $('#loading').modal('show');
             url = "{{ route($route.'store') }}";
             $.ajax({
                 url : url,
@@ -315,7 +309,6 @@
                     $('#alert').html("<div role='alert' class='alert alert-danger alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button><strong>Error!</strong> " + respon.message + "<ol class='pl-3 m-0'>" + err + "</ol></div>");
                     $('#action').removeAttr('disabled');
                     $('#loading').modal('hide');
-                    console.log('stop');
                 }
             });
             return false;
