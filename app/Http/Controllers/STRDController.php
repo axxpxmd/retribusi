@@ -231,7 +231,6 @@ class STRDController extends Controller
     public function perbaruiSTRD($id)
     {
         $data = TransaksiOPD::find($id);
-        $id_ecnrypt = \Crypt::encrypt($id);
 
         /* Tahapan : 
          * 1. Update VA BJB / Create VA BJB
@@ -245,7 +244,9 @@ class STRDController extends Controller
             $tgl_jatuh_tempo = $data->tgl_strd_akhir;
         }
         //TODO: Generate new tgl_jatuh_tempo (+30 day from last jatuh tempo)
-        $tgl_jatuh_tempo = Carbon::createFromFormat('Y-m-d', $tgl_jatuh_tempo)->addDays(30)->format('Y-m-d');
+        $daysDiff = $this->getDiffDays($data->tgl_skrd_akhir);
+        $days = (int) abs($daysDiff) + 30;
+        $tgl_jatuh_tempo = Carbon::createFromFormat('Y-m-d', $tgl_jatuh_tempo)->addDays($days)->format('Y-m-d');
 
         $amount = \strval((int) str_replace(['.', 'Rp', ' '], '', $data->total_bayar));
         $expiredDate  = $tgl_jatuh_tempo . ' 23:59:59';

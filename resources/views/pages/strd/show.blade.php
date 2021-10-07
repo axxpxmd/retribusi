@@ -205,13 +205,6 @@
                                     <div class="row mt-2">
                                         <label class="col-md-2 text-right s-12"></label>
                                         <label class="col-md-3 s-12">
-                                            {{-- @if ($data->tgl_strd_akhir == null)
-                                            <a href="#" data-toggle="modal" data-target="#confirm"  class="btn btn-sm btn-success"><i class="icon-refresh mr-2"></i>Perbarui STRD</a>
-                                            @else
-                                                @if ($daysDiff < 0)
-                                                <a href="#" data-toggle="modal" data-target="#confirm" class="btn btn-sm btn-success"><i class="icon-refresh mr-2"></i>Perbarui STRD</a>
-                                                @endif
-                                            @endif --}}
                                             <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#preview-file"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</button> 
                                         </label>
                                     </div> 
@@ -236,41 +229,8 @@
         </div>
     </div>
 </div>
-<!-- Confirm -->
-<div class="modal fade" id="confirm" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-body">
-                <p class="font-weight-bold">Data STRD akan diperbarui, Tanggal jatuh tempo akan ditambah 30 hari.</p>
-                <hr>
-                <div class="text-right">
-                    <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="icon-times mr-2"></i>Batalkan</button>
-                    <a href="{{ route('strd.perbaruiSTRD', $data->id) }}" onclick="loading()" class="btn btn-sm btn-primary" id="updateDiskon"><i class="icon-refresh mr-2"></i>Perbarui STRD</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Loading -->
-<div class="modal fade" id="loading" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content" style="background: transparent !important; border: none !important">
-            <div class="modal-body">
-                {{-- <img src="{{ asset('images/loader.svg') }}" class="mx-auto d-block" width="200" height="200" alt="">   --}}
-                <img src="{{ asset('images/hourglass.png') }}" class="mx-auto d-block" width="100" height="100" alt="">               
-            </div>
-        </div>
-    </div>
-</div>
 @endsection
 @section('script')
 <script type="text/javascript">
-
-function loading(){
-    $('#confirm').modal('hide');
-
-    $('#loading').modal('show');
-}
-
 </script>
 @endsection
