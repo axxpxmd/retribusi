@@ -236,6 +236,18 @@ class SKRDController extends Controller
         ));
     }
 
+    public function getDiffDays($tgl_skrd_akhir)
+    {
+        $timeNow = Carbon::now();
+
+        $dateTimeNow = new DateTime($timeNow);
+        $expired     = new DateTime($tgl_skrd_akhir . ' 23:59:59');
+        $interval    = $dateTimeNow->diff($expired);
+        $daysDiff    = $interval->format('%r%a');
+
+        return $daysDiff;
+    }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -283,15 +295,10 @@ class SKRDController extends Controller
         ])->validate();
 
         //* Tahap 2
-        $VABJB   = '';
-        $timeNow = Carbon::now();
-
-        $dateTimeNow = new DateTime($timeNow);
-        $expired     = new DateTime($request->tgl_skrd_akhir . ' 23:59:59');
-        $interval    = $dateTimeNow->diff($expired);
-        $daysDiff    = $interval->format('%r%a');
+        $daysDiff = $this->getDiffDays($request->tgl_skrd_akhir);
 
         //TODO: Check Expired Date (jika tgl_skrd_akhir kurang dari tanggal sekarang maka VA tidak terbuat)
+        $VABJB   = '';
         if ($daysDiff > 0) {
             $clientRefnum = $no_bayar;
             $amount       = \strval((int) str_replace(['.', 'Rp', ' '], '', $request->jumlah_bayar));
@@ -470,7 +477,7 @@ class SKRDController extends Controller
         ]);
 
         /* Tahapan : 
-         * 1. Update VA BJB
+         * 1. Update VA BJB / Create VA BJB
          * 2. tmtransaksi_opd
          */
 
@@ -479,9 +486,14 @@ class SKRDController extends Controller
         $expiredDate  = $request->tgl_skrd_akhir . ' 23:59:59';
         $customerName = $request->nm_wajib_pajak;
         $va_number    = (int) $data->nomor_va_bjb;
+        $VABJB        = $data->nomor_va_bjb;
+        $clientRefnum = $data->no_bayar;
+        $productCode  = $request->kd_jenis;
 
-        $VABJB = $data->nomor_va_bjb;
-        if ($amount != $data->jumlah_bayar || $customerName != $data->nm_wajib_pajak || $data->tgl_skrd_akhir != $request->tgl_skrd_akhir) {
+        $daysDiff = $this->getDiffDays($request->tgl_skrd_akhir);
+
+        //TODO: Check Expired Date (jika tgl_skrd_akhir kurang dari tanggal sekarang maka VA tidak terbuat)
+        if ($daysDiff > 0) {
             //TODO: Get Token BJB
             $resGetTokenBJB = VABJB::getTokenBJB();
             if ($resGetTokenBJB->successful()) {
@@ -497,20 +509,41 @@ class SKRDController extends Controller
                 ], 422);
             }
 
-            //TODO: Update VA BJB
-            $resUpdateVABJB = VABJB::updateVaBJB($tokenBJB, $amount, $expiredDate, $customerName, $va_number);
-            if ($resUpdateVABJB->successful()) {
-                $resJson = $resUpdateVABJB->json();
-                if (isset($resJson['rc']) != 0000)
+            if ($VABJB == null) {
+                //TODO: Create VA BJB
+                $resGetVABJB = VABJB::createVABJB($tokenBJB, $clientRefnum, $amount, $expiredDate, $customerName, $productCode);
+                if ($resGetVABJB->successful()) {
+                    $resJson = $resGetVABJB->json();
+                    if (isset($resJson['rc']) != 0000)
+                        return response()->json([
+                            'message' => 'Terjadi kegagalan saat membuat Virtual Account. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . ''
+                        ], 422);
+                    $VABJB = $resJson['va_number'];
+                } else {
                     return response()->json([
-                        'message' => 'Terjadi kegagalan saat memperbarui Virtual Account. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . ''
+                        'message' => "Terjadi kegagalan saat membuat Virtual Account. Error Code " . $resGetVABJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator"
                     ], 422);
-                $VABJB = $resJson['va_number'];
+                }
             } else {
-                return response()->json([
-                    'message' => "Terjadi kegagalan saat memperbarui Virtual Account. Error Code " . $resUpdateVABJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator"
-                ], 422);
+                if ($amount != $data->total_bayar || $customerName != $data->nm_wajib_pajak || $data->tgl_skrd_akhir != $request->tgl_skrd_akhir) {
+                    //TODO: Update VA BJB
+                    $resUpdateVABJB = VABJB::updateVaBJB($tokenBJB, $amount, $expiredDate, $customerName, $va_number);
+                    if ($resUpdateVABJB->successful()) {
+                        $resJson = $resUpdateVABJB->json();
+                        if (isset($resJson['rc']) != 0000)
+                            return response()->json([
+                                'message' => 'Terjadi kegagalan saat memperbarui Virtual Account. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . ''
+                            ], 422);
+                        $VABJB = $resJson['va_number'];
+                    } else {
+                        return response()->json([
+                            'message' => "Terjadi kegagalan saat memperbarui Virtual Account. Error Code " . $resUpdateVABJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator"
+                        ], 422);
+                    }
+                }
             }
+        } else {
+            $VABJB = null;
         }
 
         //* Tahap 2
@@ -584,6 +617,7 @@ class SKRDController extends Controller
             ->withSuccess('Selamat! Data berhasil dikirim untuk ditandatangan.');
     }
 
+    //* Sedang dihide
     public function updateStatusKirimTTDs(Request $request)
     {
         $checkOPD = Auth::user()->pengguna->opd_id;

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use DateTime;
 use DataTables;
 
 use Carbon\Carbon;
@@ -178,9 +179,28 @@ class DiskonController extends Controller
                 $diskon_harga       = $diskon_percent * $total_bayar;
                 $total_bayar_update = $total_bayar - $diskon_harga;
 
+                if ($datas[$i]->tgl_strd_akhir == null) {
+                    $tgl_jatuh_tempo = $datas[$i]->tgl_skrd_akhir;
+                } else {
+                    $tgl_jatuh_tempo = $datas[$i]->tgl_strd_akhir;
+                }
+
+                $timeNow = Carbon::now();
+
+                $dateTimeNow = new DateTime($timeNow);
+                $expired     = new DateTime($tgl_jatuh_tempo . ' 23:59:59');
+                $interval    = $dateTimeNow->diff($expired);
+                $daysDiff    = $interval->format('%r%a');
+
+                if ($daysDiff < 0) {
+                    return redirect()
+                        ->route($this->route . 'index')
+                        ->withErrors('Error, No SKRD ' . $datas[$i]->no_skrd . ' tidak bisa diupdate dikarenakan tanggal jatuh tempo kadaluarsa');
+                }
+
                 //* Tahap 1
                 $amount = \strval((int) str_replace(['.', 'Rp', ' '], '', $total_bayar_update));
-                $expiredDate  = $datas[$i]->tgl_skrd_akhir . ' 23:59:59';
+                $expiredDate  = $tgl_jatuh_tempo . ' 23:59:59';
                 $customerName = $datas[$i]->nm_wajib_pajak;
                 $va_number    = (int) $datas[$i]->nomor_va_bjb;
 

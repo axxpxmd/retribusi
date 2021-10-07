@@ -83,6 +83,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('strd/report/{id}', 'STRDController@printData')->name('strd.report');
     Route::get('update-status-kirim-ttd-strd/{id}', 'STRDController@updateStatusKirimTTD')->name('strd.updateStatusKirimTTD');
     Route::get('update-status-kirim-ttds-strd', 'STRDController@updateStatusKirimTTDs')->name('strd.updateStatusKirimTTDs');
+    Route::get('perbarui-strd/{id}', 'STRDController@perbaruiSTRD')->name('strd.perbaruiSTRD');
 
     // STS
     Route::resource('sts', 'STSController');

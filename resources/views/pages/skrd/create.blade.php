@@ -309,6 +309,7 @@
         }
         $(this).addClass('was-validated');
     });
-
+    $('#loading').modal('hide');
+    
 </script>
 @endsection

@@ -18,7 +18,7 @@
                         <a class="nav-link" href="{{ route($route.'index') }}"><i class="icon icon-arrow_back"></i>Semua Data</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active show" id="tab1" data-toggle="tab" href="#semua-data" role="tab"><i class="icon icon-document-list"></i>SKRD</a>
+                        <a class="nav-link active show" id="tab1" data-toggle="tab" href="#semua-data" role="tab"><i class="icon icon-document-list"></i>STRD</a>
                     </li>
                 </ul>
             </div>
@@ -26,11 +26,12 @@
     </header>
     <div class="container-fluid relative animatedParent animateOnce">
         <div class="tab-content my-3" id="pills-tabContent">
+            @include('layouts.alerts')
             <div class="tab-pane animated fadeInUpShort show active" id="semua-data" role="tabpanel">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card mt-2">
-                            <h6 class="card-header"><strong>Data SKRD</strong></h6>
+                            <h6 class="card-header"><strong>Data STRD</strong></h6>
                             <div class="card-body">
                                 <div class="col-md-12">
                                     <div class="row">
@@ -40,15 +41,15 @@
                                                 <label class="col-md-8 s-12">{{ $data->opd->n_opd }}</label>
                                             </div>
                                             <div class="row">
-                                                <label class="col-md-4 text-right s-12"><strong>Jenis Pendapatan:</strong></label>
+                                                <label class="col-md-4 text-right s-12"><strong>Jenis Pendapatan :</strong></label>
                                                 <label class="col-md-8 s-12">{{ $data->jenis_pendapatan->jenis_pendapatan }}</label>
                                             </div>
                                             <div class="row">
-                                                <label class="col-md-4 text-right s-12"><strong>Rincian Jenis Retribusi:</strong></label>
+                                                <label class="col-md-4 text-right s-12"><strong>Rincian Jenis Retribusi :</strong></label>
                                                 <label class="col-md-8 s-12">{{ $data->rincian_jenis != null ? $data->rincian_jenis->rincian_pendapatan : '-' }}</label>
                                             </div>
                                             <div class="row">
-                                                <label class="col-md-4 text-right s-12"><strong>Uraian Retribusi:</strong></label>
+                                                <label class="col-md-4 text-right s-12"><strong>Uraian Retribusi :</strong></label>
                                                 <label class="col-md-8 s-12">{{ $data->uraian_retribusi }}</label>
                                             </div>
                                         </div>
@@ -83,11 +84,11 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="row">
-                                                <label class="col-md-4 text-right s-12"><strong>Nomor Daftar:</strong></label>
+                                                <label class="col-md-4 text-right s-12"><strong>Nomor Daftar :</strong></label>
                                                 <label class="col-md-8 s-12">{{ $data->nmr_daftar }}</label>
                                             </div>
                                             <div class="row">
-                                                <label class="col-md-4 text-right s-12"><strong>Nama Wajib Retribusi:</strong></label>
+                                                <label class="col-md-4 text-right s-12"><strong>Nama Wajib Retribusi :</strong></label>
                                                 <label class="col-md-8 s-12">{{ $data->nm_wajib_pajak }}</label>
                                             </div>
                                             <div class="row">
@@ -107,17 +108,21 @@
                                                 <label class="col-md-8 s-12">{{ $data->lokasi }}</label>
                                             </div>
                                             <div class="row">
-                                                <label class="col-md-4 text-right s-12"><strong>Tanggal SKRD:</strong></label>
+                                                <label class="col-md-4 text-right s-12"><strong>Tanggal STRD :</strong></label>
                                                 <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_awal)->format('d M Y') }}</label>
                                             </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>Jatuh Tempo :</strong></label>
-                                                <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_akhir)->format('d M Y') }}</label>
+                                                @if ($daysDiff < 0)
+                                                <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d', $tgl_jatuh_tempo)->format('d M Y') }} | <span class="badge badge-warning" style="font-size: 10.5px !important">Kadaluarsa</span></label>
+                                                @else
+                                                <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d', $tgl_jatuh_tempo)->format('d M Y') }} | <span class="badge badge-success" style="font-size: 10.5px !important">Berlaku</span></label></label> 
+                                                @endif
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="row">
-                                                <label class="col-md-4 text-right s-12"><strong>Nomor SKRD:</strong></label>
+                                                <label class="col-md-4 text-right s-12"><strong>Nomor STRD :</strong></label>
                                                 <label class="col-md-8 s-12">{{ $data->no_skrd }}</label>
                                             </div>
                                             <div class="row">
@@ -145,16 +150,12 @@
                                                 @endif
                                             </div> 
                                             <div class="row">
-                                                <label class="col-md-4 text-right s-12"><strong>Total Bayar :</strong></label>
-                                                <label class="col-md-8 s-12">@currency($data->total_bayar)</label>
-                                            </div> 
+                                                <label class="col-md-4 text-right s-12"><strong>Bunga :</strong></label>
+                                                <label class="col-md-8 s-12"> ({{ $kenaikan }}%) &nbsp;@currency($jumlahBunga)</label>
+                                            </div>
                                             <div class="row">
-                                                <label class="col-md-4 text-right s-12"><strong>Total Bayar BJB:</strong></label>
-                                                @if ($data->total_bayar_bjb != null)
-                                                <label class="col-md-8 s-12">@currency($data->total_bayar_bjb)</label>
-                                                @else
-                                                <label class="col-md-8 s-12">-</label>
-                                                @endif
+                                                <label class="col-md-4 text-right s-12"><strong>Total Bayar :</strong></label>
+                                                <label class="col-md-8 s-12">@currency($data->total_bayar + $jumlahBunga)</label>
                                             </div> 
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>Virtual Account BJB :</strong></label>
@@ -197,13 +198,20 @@
                                             </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>Diupdate Oleh :</strong></label>
-                                                <label class="col-md-8 s-12">{{ $data->updated_by }}</label>
+                                                <label class="col-md-8 s-12">{{ $data->updated_by }} </label>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row mt-2">
                                         <label class="col-md-2 text-right s-12"></label>
                                         <label class="col-md-3 s-12">
+                                            {{-- @if ($data->tgl_strd_akhir == null)
+                                            <a href="#" data-toggle="modal" data-target="#confirm"  class="btn btn-sm btn-success"><i class="icon-refresh mr-2"></i>Perbarui STRD</a>
+                                            @else
+                                                @if ($daysDiff < 0)
+                                                <a href="#" data-toggle="modal" data-target="#confirm" class="btn btn-sm btn-success"><i class="icon-refresh mr-2"></i>Perbarui STRD</a>
+                                                @endif
+                                            @endif --}}
                                             <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#preview-file"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</button> 
                                         </label>
                                     </div> 
@@ -220,17 +228,49 @@
 <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="preview-file" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
-            @if ($data->status_ttd == 1)
+            @if ($data->status_ttd == 3)
             <iframe src="{{ config('app.sftp_src').$path_sftp.$fileName }}" style="margin-left: -160px !important" width="850px" height="940px"></iframe>
             @else
-            <iframe src="{{ route('strd.report', \Crypt::encrypt($data->id)) }}" style="margin-left: -160px !important" width="850px" height="940px"></iframe>
+            <iframe src="{{ route('strd.report', \Crypt::encrypt($data->id)) }}" style="margin-left: -160px !important;" width="850px" height="940px"></iframe>
             @endif
+        </div>
+    </div>
+</div>
+<!-- Confirm -->
+<div class="modal fade" id="confirm" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p class="font-weight-bold">Data STRD akan diperbarui, Tanggal jatuh tempo akan ditambah 30 hari.</p>
+                <hr>
+                <div class="text-right">
+                    <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="icon-times mr-2"></i>Batalkan</button>
+                    <a href="{{ route('strd.perbaruiSTRD', $data->id) }}" onclick="loading()" class="btn btn-sm btn-primary" id="updateDiskon"><i class="icon-refresh mr-2"></i>Perbarui STRD</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Loading -->
+<div class="modal fade" id="loading" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content" style="background: transparent !important; border: none !important">
+            <div class="modal-body">
+                {{-- <img src="{{ asset('images/loader.svg') }}" class="mx-auto d-block" width="200" height="200" alt="">   --}}
+                <img src="{{ asset('images/hourglass.png') }}" class="mx-auto d-block" width="100" height="100" alt="">               
+            </div>
         </div>
     </div>
 </div>
 @endsection
 @section('script')
 <script type="text/javascript">
+
+function loading(){
+    $('#confirm').modal('hide');
+
+    $('#loading').modal('show');
+}
 
 </script>
 @endsection

@@ -36,6 +36,7 @@
                                 <form class="needs-validation" id="form" method="PATCH"  enctype="multipart/form-data" novalidate>
                                     {{ method_field('PATCH') }}
                                     <input type="hidden" id="id" name="id" value="{{ $data->id }}"/>
+                                    <input type="hidden" name="kd_jenis" id="kd_jenis">
                                     <div class="form-row form-inline">
                                         <div class="col-md-12">
                                             <div class="row">
@@ -168,6 +169,7 @@
         url = "{{ route('skrd.getKodeRekening', ':id') }}".replace(':id', val);
         $.get(url, function(data){
             $('#kode_rekening').val(data.nmr_rekening);
+            $('#kd_jenis').val(data.kd_jenis);
         }, 'JSON');
     });
 

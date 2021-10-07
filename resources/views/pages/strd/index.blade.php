@@ -86,10 +86,11 @@
                                             <th>Nama WP</th>
                                             {{-- <th width="21%">Nama Dinas</th> --}}
                                             <th>Jenis Retribusi</th>
-                                            <th>Tanggal STRD</th>
+                                            <th>Masa Berlaku SKRD</th>
                                             <th>Masa Berlaku STRD</th>
                                             <th>Ketetapan</th>
                                             <th>Bunga</th>
+                                            <th>Status STRD</th>
                                             <th>Aksi</th>
                                             <th>Status TTD</th>
                                         </thead>
@@ -104,6 +105,7 @@
         </div>
     </div>
 </div>
+<!-- send TTD -->
 <div class="modal fade" id="updateStatusTTD" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -132,6 +134,7 @@
         </div>
     </div>
 </div>
+<!-- send TTDs -->
 <div class="modal fade" id="updateStatusTTDs" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -142,6 +145,46 @@
                     <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="icon-times mr-2"></i>Batalkan</button>
                     <a href="{{ route('strd.updateStatusKirimTTDs') }}" class="btn btn-sm btn-primary ml-2" id="kirimTTDs"><i class="icon-pencil mr-2"></i>Kirim untuk TTD</a>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- perbarui STRD -->
+<div class="modal fade" id="perbaruiSTRD" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="">
+                    <div class="row">
+                        <label class="col-md-2 s-12 font-weight-bold text-black-50"><strong>Nama </strong></label>
+                        <label class="col-md-9 s-12 font-weight-bold text-black-50" id="nm_wajib_pajak_ttd1">:</label>
+                    </div>
+                    <div class="row" style="margin-top: -5px !important">
+                        <label class="col-md-2 s-12 font-weight-bold text-black-50"><strong>No STRD </strong></label>
+                        <label class="col-md-9 s-12 font-weight-bold text-black-50" id="no_skrd_ttd1">:</label>
+                    </div>
+                    <div class="row" style="margin-top: -5px !important">
+                        <label class="col-md-2 s-12 font-weight-bold text-black-50"><strong>Ketetapan </strong></label>
+                        <label class="col-md-9 s-12 font-weight-bold text-black-50" id="ketetapan1">:</label>
+                    </div>
+                    <p class="font-weight-bold text-black-50">Data STRD akan diperbarui, Tanggal jatuh tempo akan ditambah 30 hari.</p>
+                </div>
+                <hr>
+                <div class="text-right">
+                    <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="icon-times mr-2"></i>Batalkan</button>
+                    <a href="" class="btn btn-sm btn-primary ml-2" onclick="loading()" id="perbaruiSTRDroute"><i class="icon-refresh mr-2"></i>Perbarui STRD</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Loading -->
+<div class="modal fade" id="loading" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content" style="background: transparent !important; border: none !important">
+            <div class="modal-body">
+                {{-- <img src="{{ asset('images/loader.svg') }}" class="mx-auto d-block" width="200" height="200" alt="">   --}}
+                <img src="{{ asset('images/hourglass.png') }}" class="mx-auto d-block" width="100" height="100" alt="">               
             </div>
         </div>
     </div>
@@ -179,10 +222,11 @@
             {data: 'nm_wajib_pajak', name: 'nm_wajib_pajak'},
             // {data: 'id_opd', name: 'id_opd'},
             {data: 'id_jenis_pendapatan', name: 'id_jenis_pendapatan'},
-            {data: 'tgl_skrd', name: 'tgl_skrd'},
-            {data: 'masa_berlaku', name: 'masa_berlaku'},
+            {data: 'masa_berlaku_skrd', name: 'masa_berlaku_skrd'},
+            {data: 'masa_berlaku_strd', name: 'masa_berlaku_strd'},
             {data: 'jumlah_bayar', name: 'jumlah_bayar'},
             {data: 'bunga', name: 'bunga'},
+            {data: 'status_strd', name: 'status_strd', orderable: false, searchable: false, className: 'text-center'},
             {data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center'},
             {data: 'status_ttd', name: 'status_ttd', orderable: false, searchable: false, className: 'text-center'}
         ]
@@ -234,6 +278,36 @@
                 cancel: function(){}
             }
         });
+    }
+
+    function loading(){
+        $('#perbaruiSTRD').modal('hide');
+
+        $('#loading').modal('show');
+    }
+
+    function perbaruiSTRD(id){
+        $('#perbaruiSTRD').modal('show');
+
+        url = "{{ route('skrd.getDataSKRD', ':id') }}".replace(':id', id);
+        $.get(url, function(data){
+            $('#no_skrd_ttd1').html(': '+data.no_skrd)
+            $('#nm_wajib_pajak_ttd1').html(': '+data.nm_wajib_pajak)
+
+            var bilangan = data.jumlah_bayar;
+            var	number_string = bilangan.toString(),
+                sisa 	= number_string.length % 3,
+                rupiah 	= number_string.substr(0, sisa),
+                ribuan 	= number_string.substr(sisa).match(/\d{3}/g);
+                                    
+            if (ribuan) {
+                separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+            $('#ketetapan1').html(': Rp. '+ rupiah)
+        }, 'JSON');
+
+        $('#perbaruiSTRDroute').attr('href', "{{ route('strd.perbaruiSTRD', ':id') }}".replace(':id', id));
     }
 
     function updateStatusTTD(id){
