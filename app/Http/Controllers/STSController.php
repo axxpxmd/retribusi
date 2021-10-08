@@ -86,7 +86,7 @@ class STSController extends Controller
                     }
                 } else {
                     if ($p->status_ttd == 1 || $p->status_ttd == 3) {
-                        return $reportTTD . ' ' . $edit;
+                        return $edit . $reportTTD;
                     } elseif ($p->status_ttd == 2 || $p->status_ttd == 4) {
                         return $edit . $report;
                     } elseif ($p->status_ttd == 0) {
@@ -380,6 +380,25 @@ class STSController extends Controller
         ));
 
         return $pdf->stream($data->nm_wajib_pajak . ' - ' . $data->no_skrd . ".pdf");
+    }
+
+    public function batalBayar($id)
+    {
+        $data       = TransaksiOPD::find($id);
+        $id_encrypt = \Crypt::encrypt($id);
+
+        $data->update([
+            'status_bayar' => 0,
+            'tgl_bayar'    => null,
+            'no_bku'       => null,
+            'ntb'          => null,
+            'chanel_bayar' => null,
+            'total_bayar_bjb' => null,
+        ]);
+
+        return redirect()
+            ->route($this->route . 'show', $id_encrypt)
+            ->withSuccess('Selamat! Data berhasil diubah.');
     }
 
     public function updateJumlahCetak($id, $jumlah_cetak)

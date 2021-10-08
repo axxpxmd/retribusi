@@ -89,6 +89,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('sts', 'STSController');
     Route::post('sts/api', 'STSController@api')->name('sts.api');
     Route::get('sts/report/{id}', 'STSController@printData')->name('sts.report');
+    Route::get('batal_bayar/{id}', 'STSController@batalBayar')->name('sts.batalBayar');
 
     // Diskon
     Route::get('diskon', 'DiskonController@index')->name('diskon.index');

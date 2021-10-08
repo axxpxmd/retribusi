@@ -179,7 +179,7 @@ class TransaksiOPD extends Model
         $now = Carbon::now();
         $date = $now->format('Y-m-d');
 
-        $data = TransaksiOPD::where('status_bayar', 0)->where('tgl_skrd_akhir', '<=', $date)->orderBy('id', 'DESC');
+        $data = TransaksiOPD::where('status_bayar', 0)->where('tgl_skrd_akhir', '<', $date)->orderBy('id', 'DESC');
 
         if ($opd_id != 0) {
             $data->where('id_opd', $opd_id);
@@ -195,7 +195,7 @@ class TransaksiOPD extends Model
 
         if ($from != null ||  $to != null) {
             if ($from != null && $to == null) {
-                $data->whereDate('tgl_skrd_akhir', $from);
+                $data->whereDate('tgl_skrd_akhir', '<', $from);
             } else {
                 $data->whereBetween('tgl_skrd_akhir', [$from, $to]);
             }

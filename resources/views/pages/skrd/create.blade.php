@@ -297,9 +297,9 @@
                             err = err + "<li>" + value +"</li>";
                         });
                     }
+                    $('#loading').modal('hide');
                     $('#alert').html("<div role='alert' class='alert alert-danger alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button><strong>Error!</strong> " + respon.message + "<ol class='pl-3 m-0'>" + err + "</ol></div>");
                     $('#action').removeAttr('disabled');
-                    $('#loading').modal('hide');
                 }
             });
             return false;

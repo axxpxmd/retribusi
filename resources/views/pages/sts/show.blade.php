@@ -26,6 +26,7 @@
     </header>
     <div class="container-fluid relative animatedParent animateOnce">
         <div class="tab-content my-3" id="pills-tabContent">
+            @include('layouts.alerts')
             <div class="tab-pane animated fadeInUpShort show active" id="semua-data" role="tabpanel">
                 <div class="row">
                     <div class="col-md-12">
@@ -241,13 +242,32 @@
                                     <div class="row mt-2">
                                         <label class="col-md-2 text-right s-12"></label>
                                         <label class="col-md-3 s-12">
-                                            <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#preview-file"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</button> 
+                                            <button class="btn btn-sm btn-primary mr-1" data-toggle="modal" data-target="#preview-file"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</button> 
+                                            @if ($data->status_bayar == 1)
+                                                <button class="btn btn-sm btn-dark" data-toggle="modal" data-target="#batal_bayar"><i class="icon-cancel mr-2"></i>Batal Bayar</button>
+                                            @endif
                                         </label>
                                     </div> 
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="batal_bayar" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="">
+                    <p class="font-weight-bold text-black-50">Apakah yakin ingin membatalkan pembayaran ini ?</p>
+                </div>
+                <hr>
+                <div class="text-right">
+                    <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="icon-times mr-2"></i>Tidak</button>
+                    <a href="{{ route('sts.batalBayar', $data->id) }}" class="btn btn-sm btn-primary ml-2" id="kirimTTD"><i class="icon-check mr-2"></i>Batalkan</a>
                 </div>
             </div>
         </div>
