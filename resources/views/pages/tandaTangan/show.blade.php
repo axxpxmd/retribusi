@@ -309,8 +309,9 @@
             <iframe src="{{ route('print.strd', $data->id) }}" style="margin-left: -160px !important" width="850px" height="940px"></iframe>
             @endif
 
+            <!-- TTE SKRD & STRD -->
             @if ($data->status_ttd == 1 || $data->status_ttd == 3)
-            <iframe src="{{ config('app.sftp_src').$path_sftp.$fileName }}" style="margin-left: -160px !important" width="850px" height="940px"></iframe>
+            <iframe src="http://docs.google.com/gview?url={{ config('app.sftp_src').$path_sftp.$fileName }}&embedded=true" style="margin-left: -160px !important" width="850px" height="940px"></iframe>
             @endif
         </div>
     </div>
