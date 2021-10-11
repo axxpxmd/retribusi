@@ -103,6 +103,20 @@ class DendaController extends Controller
 
     public function updateDenda(Request $request)
     {
+        //TODO: Validation
+        $status_denda = $request->status_denda;
+        if ($status_denda == null)
+            return redirect()
+                ->route($this->route . 'index')
+                ->withErrors('Silahkan pilih denda.');
+
+        //TODO: Get params
+        $from    = $request->tgl_skrd;
+        $to      = $request->tgl_skrd1;
+        $no_skrd = $request->no_skrd;
+        $jenis_pendapatan_id = $request->jenis_pendapatan_id;
+        $status_denda_filter = $request->status_denda_filter;
+
         $checkOPD = Auth::user()->pengguna->opd_id;
         if ($checkOPD == 0) {
             $opd_id = $request->opd_id;
@@ -110,32 +124,20 @@ class DendaController extends Controller
             $opd_id = $checkOPD;
         }
 
-        $jenis_pendapatan_id = $request->jenis_pendapatan_id;
-        $from  = $request->tgl_skrd;
-        $to    = $request->tgl_skrd1;
-        $status_denda_filter = $request->status_denda_filter;
-        $status_denda = $request->status_denda;
-        $no_skrd = $request->no_skrd;
-
         $datas = TransaksiOPD::queryDenda($opd_id, $jenis_pendapatan_id, $from, $to, $status_denda_filter, $no_skrd);
+
+        //TODO: Get length datas
         $dataLength = count($datas);
-
-        // Check status denda
-        if ($status_denda == null) {
-            return redirect()
-                ->route($this->route . 'index')
-                ->withErrors('Silahkan pilih denda.');
-        }
-
-        // check data if empty
         if ($dataLength == 0)
             return redirect()
                 ->route($this->route . 'index')
                 ->withErrors('Tidak ada data yang diupdate, pastikan filter data sudah sesuai.');
 
+        //* Update tmtransaksi_opd
         for ($i = 0; $i < $dataLength; $i++) {
             $datas[$i]->update([
                 'status_denda' => $status_denda,
+                'updated_by'   => Auth::user()->pengguna->full_name . ' | Update denda'
             ]);
         }
 

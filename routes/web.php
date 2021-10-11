@@ -73,7 +73,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('skrd/get-jenis-pendapatan/{opd_id}', 'SKRDController@getJenisPendapatanByOpd')->name('skrd.getJenisPendapatan');
     Route::get('skrd/get-kode-rekening/{id_rincian_jenis_pendapatan}', 'SKRDController@getKodeRekening')->name('skrd.getKodeRekening');
     Route::get('skrd/get-kelurahan/{id}', 'SKRDController@kelurahanByKecamatan')->name('skrd.kelurahanByKecamatan');
-    Route::get('skrd/report/{id}', 'SKRDController@printData')->name('skrd.report');
     Route::get('update-status-kirim-ttd-skrd/{id}', 'SKRDController@updateStatusKirimTTD')->name('skrd.updateStatusKirimTTD');
     Route::get('update-status-kirim-ttds-skrd', 'SKRDController@updateStatusKirimTTDs')->name('skrd.updateStatusKirimTTDs');
 
@@ -110,11 +109,12 @@ Route::group(['middleware' => ['auth']], function () {
 
     // Print 
     Route::get('print/skrd/{id}', 'PrintController@printSKRD')->name('print.skrd');
-    Route::get('print/strd/{id}', 'PrintController@printSTS')->name('print.strd');
+    Route::get('print/sts/{id}', 'PrintController@printSTS')->name('print.sts');
+    Route::get('print/strd/{id}', 'PrintController@printSTRD')->name('print.strd');
 
     // Report
     Route::get('report', 'ReportController@index')->name('report.index');
-    Route::get('repost/{id}', 'ReportController@show')->name('report.show');
+    Route::get('report/{id}', 'ReportController@show')->name('report.show');
     Route::post('report/api-skrd', 'ReportController@api')->name('report.api');
     Route::get('report/cetak-skrd', 'ReportController@cetakSKRD')->name('report.cetakSKRD');
     Route::get('report/get-jenis-pendapatan/{opd_id}', 'ReportController@getJenisPendapatanByOpd')->name('report.getJenisPendapatan');

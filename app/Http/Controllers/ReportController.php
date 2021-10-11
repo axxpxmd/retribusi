@@ -69,11 +69,6 @@ class ReportController extends Controller
         $data = TransaksiOPD::queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis);
 
         return DataTables::of($data)
-            // ->addColumn('action', function ($p) {
-            //     return "
-            //         <a href='" . route($this->route . 'edit', Crypt::encrypt($p->id)) . "' class='text-primary mr-2' title='Hapus Data'><i class='icon icon-edit'></i></a>
-            //         <a href='" . route($this->route . 'report', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
-            // })
             ->editColumn('no_bayar', function ($p) {
                 return "<a href='" . route($this->route . 'show', Crypt::encrypt($p->id)) . "' class='text-primary' title='Menampilkan Data'>" . $p->no_bayar . "</a>";
             })
@@ -113,10 +108,8 @@ class ReportController extends Controller
             })
             ->editColumn('status_bayar', function ($p) {
                 if ($p->status_bayar == 1) {
-                    // return "Sudah Dibayar <i class='icon icon-check-circle text-primary'></i>";
                     return 'Sudah Dibayar';
                 } else {
-                    // return "Belum Dibayar <i class='icon icon-times-circle text-danger'></i>";
                     return 'Belum Dibayar';
                 }
             })
@@ -128,11 +121,11 @@ class ReportController extends Controller
                 if ($p->status_ttd == 1)
                     return "<a href='" . config('app.sftp_src') . $path_sftp . $fileName . "' target='_blank' class='cyan-text' title='File TTD'><i class='icon-document-file-pdf2'></i></a>";
 
-                return "<a href='" . route($skrd_route . 'report', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
+                return "<a href='" . route('print.skrd', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
             })
             ->addColumn('cetak_sts', function ($p) {
                 $skrd_route = 'sts.';
-                return "<a href='" . route($skrd_route . 'report', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
+                return "<a href='" . route('print.skrd', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
             })
             ->addIndexColumn()
             ->rawColumns(['no_bayar', 'opd_id', 'id_jenis_pendapatan', 'tgl_skrd', 'masa_berlaku', 'status_bayar', 'diskon', 'cetak_skrd', 'cetak_sts'])

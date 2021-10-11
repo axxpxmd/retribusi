@@ -226,7 +226,8 @@ class DiskonController extends Controller
                 'total_bayar'   => $total_bayar_update,
                 'status_diskon' => $status_diskon,
                 'nomor_va_bjb'  => $VABJB,
-                'diskon' => $diskon
+                'diskon'        => $diskon,
+                'updated_by'    => Auth::user()->pengguna->full_name . ' | Update diskon'
             ]);
         }
 

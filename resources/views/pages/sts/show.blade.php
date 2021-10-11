@@ -76,7 +76,7 @@
                                             </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>Tanggal TTD :</strong></label>
-                                                <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_ttd)->format('d M Y') }}</label>
+                                                <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_ttd)->format('d F Y') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -109,11 +109,11 @@
                                             </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>Tanggal SKRD:</strong></label>
-                                                <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_awal)->format('d M Y') }}</label>
+                                                <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_awal)->format('d F Y') }}</label>
                                             </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>Jatuh Tempo :</strong></label>
-                                                <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_akhir)->format('d M Y') }}</label>
+                                                <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_akhir)->format('d F Y') }}</label>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -130,25 +130,39 @@
                                                 <label class="col-md-8 s-12">@currency($data->jumlah_bayar)</label>
                                             </div> 
                                             <div class="row">
-                                                <label class="col-md-4 text-right s-12"><strong>Denda :</strong></label>
-                                                @if ($data->denda != null)
-                                                <label class="col-md-8 s-12">@currency($data->denda)</label>
+                                                <label class="col-md-4 text-right s-12"><strong>Denda  :</strong></label>
+                                                @if ($data->status_denda == 0)
+                                                <label class="col-md-8 s-12">(Tidak) @currency($data->denda)</label>
                                                 @else
-                                                <label class="col-md-8 s-12">-</label>
+                                                <label class="col-md-8 s-12">(Ya) @currency($data->denda)</label>
                                                 @endif
                                             </div> 
                                             <div class="row">
-                                                <label class="col-md-4 text-right s-12"><strong>Diskon :</strong></label>
-                                                @if ($data->diskon != null)
+                                                <label class="col-md-4 text-right s-12"><strong>Diskon  :</strong></label>
+                                                @if ($data->status_diskon == 0)
                                                 <label class="col-md-8 s-12">({{ $data->diskon }}%) &nbsp;@currency(((int) $data->diskon / 100) * $data->jumlah_bayar)</label>
                                                 @else
-                                                <label class="col-md-8 s-12">-</label>
+                                                <label class="col-md-8 s-12">({{ $data->diskon }}%) &nbsp;@currency(((int) $data->diskon / 100) * $data->jumlah_bayar)</label>
                                                 @endif
                                             </div> 
+                                            <!-- STRD (+bunga) -->
+                                            @if ($data->tgl_skrd_akhir < $dateNow)
+                                            <div class="row">
+                                                <label class="col-md-4 text-right s-12"><strong>Bunga :</strong></label>
+                                                <label class="col-md-8 s-12"> ({{ $kenaikan }}%) &nbsp;@currency($jumlahBunga)</label>
+                                            </div>
+                                            <div class="row">
+                                                <label class="col-md-4 text-right s-12"><strong>Total Bayar :</strong></label>
+                                                <label class="col-md-8 s-12">@currency($data->total_bayar + $jumlahBunga)</label>
+                                            </div> 
+                                            @endif
+                                            <!-- SKRD -->
+                                            @if ($data->tgl_skrd_akhir >= $dateNow)
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>Total Bayar :</strong></label>
                                                 <label class="col-md-8 s-12">@currency($data->total_bayar)</label>
                                             </div> 
+                                            @endif
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>Virtual Account BJB :</strong></label>
                                                 <label class="col-md-8 s-12">{{ $data->nomor_va_bjb }}</label>
@@ -171,7 +185,7 @@
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>Tanggal Bayar:</strong></label>
                                                 @if ($data->tgl_bayar != null)
-                                                <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $data->tgl_bayar)->format('d M Y | H:i:s') }}</label>
+                                                <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $data->tgl_bayar)->format('d F Y | H:i:s') }}</label>
                                                 @else
                                                 <label class="col-md-8 s-12">-</label>
                                                 @endif
@@ -222,7 +236,7 @@
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>Terakhir Cetak Pada :</strong></label>
                                                 @if ($data->tgl_cetak_trkhr != null)
-                                                <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $data->tgl_cetak_trkhr)->format('d M Y | H:i:s') }}</label>
+                                                <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $data->tgl_cetak_trkhr)->format('d F Y | H:i:s') }}</label>
                                                 @else
                                                 <label class="col-md-8 s-12">-</label>
                                                 @endif
@@ -242,7 +256,6 @@
                                     <div class="row mt-2">
                                         <label class="col-md-2 text-right s-12"></label>
                                         <label class="col-md-3 s-12">
-                                            <button class="btn btn-sm btn-primary mr-1" data-toggle="modal" data-target="#preview-file"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</button> 
                                             @if ($data->status_bayar == 1)
                                                 <button class="btn btn-sm btn-dark" data-toggle="modal" data-target="#batal_bayar"><i class="icon-cancel mr-2"></i>Batal Bayar</button>
                                             @endif
@@ -270,14 +283,6 @@
                     <a href="{{ route('sts.batalBayar', $data->id) }}" class="btn btn-sm btn-primary ml-2" id="kirimTTD"><i class="icon-check mr-2"></i>Batalkan</a>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
-<!-- Preview File -->
-<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="preview-file" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <iframe src="{{ route('sts.report', \Crypt::encrypt($data->id)) }}" style="margin-left: -160px !important" width="850px" height="940px"></iframe>
         </div>
     </div>
 </div>

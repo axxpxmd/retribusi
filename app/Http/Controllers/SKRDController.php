@@ -10,12 +10,10 @@ use Carbon\Carbon;
 
 use App\Http\Services\VABJB;
 use App\Libraries\GenerateNumber;
-use App\Libraries\Html\Html_number;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\Storage;
 
 // Models
 use App\Models\OPD;
@@ -87,7 +85,7 @@ class SKRDController extends Controller
                 $path_sftp = 'file_ttd_skrd/';
                 $fileName  = str_replace(' ', '', $p->nm_wajib_pajak) . '-' . $p->no_skrd . ".pdf";
 
-                $report  = "<a href='" . route($this->route . 'report', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
+                $report  = "<a href='" . route('print.skrd', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
                 $filettd = "<a href='" . config('app.sftp_src') . $path_sftp . $fileName . "' target='_blank' class='cyan-text' title='File TTD'><i class='icon-document-file-pdf2'></i></a>";
                 $sendttd = "<a href='#' onclick='updateStatusTTD(" . $p->id . ")' class='amber-text' title='Kirim Untuk TTD'><i class='icon icon-send'></i></a>";
                 $edit    = "<a href='" . route($this->route . 'edit', Crypt::encrypt($p->id)) . "' class='text-primary mr-2' title='Edit Data'><i class='icon icon-edit'></i></a>";
@@ -364,8 +362,7 @@ class SKRDController extends Controller
             'no_bayar'         => $no_bayar,
             'created_by'       => Auth::user()->pengguna->full_name
         ];
-
-        $dataSKRD = TransaksiOPD::create($data);
+        TransaksiOPD::create($data);
 
         //* Tahap 4
         $data = [
@@ -528,48 +525,17 @@ class SKRDController extends Controller
         $input = $request->except(['kode_rekening', 'kd_jenis']);
         $data->update($input);
         $data->update([
-            'nomor_va_bjb' => $VABJB,
-            'total_bayar'  => (int) str_replace(['.', 'Rp', ' '], '', $request->jumlah_bayar),
-            'jumlah_bayar' => (int) str_replace(['.', 'Rp', ' '], '', $request->jumlah_bayar),
-            'updated_by'   => Auth::user()->pengguna->full_name,
+            'nomor_va_bjb'  => $VABJB,
+            'status_diskon' => 0,
+            'diskon'        => 0,
+            'total_bayar'   => (int) str_replace(['.', 'Rp', ' '], '', $request->jumlah_bayar),
+            'jumlah_bayar'  => (int) str_replace(['.', 'Rp', ' '], '', $request->jumlah_bayar),
+            'updated_by'    => Auth::user()->pengguna->full_name . ' | Update data menu SKRD',
             'id_rincian_jenis_pendapatan' => \Crypt::decrypt($request->id_rincian_jenis_pendapatan)
         ]);
 
         return response()->json([
             'message' => 'Data ' . $this->title . ' berhasil diperbaharui.'
-        ]);
-    }
-
-    public function printData(Request $request, $id)
-    {
-        $id = \Crypt::decrypt($id);
-
-        $data = TransaksiOPD::find($id);
-        $terbilang = Html_number::terbilang($data->total_bayar) . 'rupiah';
-
-        // Update Jumlah Cetak
-        $this->updateJumlahCetak($id, $data->jumlah_cetak);
-
-        $pdf = app('dompdf.wrapper');
-        $pdf->getDomPDF()->set_option("enable_php", true);
-        $pdf->loadView($this->view . 'report', compact(
-            'data',
-            'terbilang'
-        ));
-
-        return $pdf->stream($data->nm_wajib_pajak . '-' . $data->no_skrd . ".pdf");
-    }
-
-    public function updateJumlahCetak($id, $jumlah_cetak)
-    {
-        $time    = Carbon::now();
-        $tanggal = $time->toDateString();
-        $jam     = $time->toTimeString();
-        $now     = $tanggal . ' ' . $jam;
-
-        TransaksiOPD::where('id', $id)->update([
-            'jumlah_cetak' => $jumlah_cetak + 1,
-            'tgl_cetak_trkhr' => $now
         ]);
     }
 

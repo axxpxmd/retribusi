@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use Auth;
 use DataTables;
-
 use Carbon\Carbon;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
+
 use App\Http\Services\VABJB;
 use App\Libraries\Html\Html_number;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Crypt;
 
 // Models
 use App\Models\OPD;
@@ -23,7 +24,7 @@ class STSController extends Controller
     protected $title = 'STS';
     protected $view  = 'pages.sts.';
 
-    // Check Permission
+    //TODO: Check Permission
     public function __construct()
     {
         $this->middleware(['permission:STS']);
@@ -43,6 +44,7 @@ class STSController extends Controller
             $opds = OPD::where('id', $opd_id)->whereIn('id', $opdArray)->get();
         }
 
+        //TODO: Set filters to date now
         $time = Carbon::now();
         $today = $time->format('Y-m-d');
 
@@ -75,7 +77,7 @@ class STSController extends Controller
         return DataTables::of($data)
             ->addColumn('action', function ($p) {
                 $edit      = "<a href='" . route($this->route . 'edit', Crypt::encrypt($p->id)) . "' class='text-primary mr-2' title='Edit Data'><i class='icon icon-edit'></i></a>";
-                $report    = "<a href='" . route($this->route . 'report', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
+                $report    = "<a href='" . route('print.sts', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
                 $reportTTD = "<a href='" . route($this->route . 'report', Crypt::encrypt($p->id)) . "' target='blank' class='cyan-text' title='File TTD'><i class='icon-document-file-pdf2'></i></a>";
 
                 if ($p->status_bayar == 1) {
@@ -143,6 +145,12 @@ class STSController extends Controller
         $va_number = (int) $data->nomor_va_bjb;
         $fileName  = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
         $path_sftp = 'file_ttd_skrd/';
+        $dateNow   = Carbon::now()->format('Y-m-d');
+
+        //TODO: Get bunga
+        $tgl_skrd_akhir = $data->tgl_skrd_akhir;
+        $total_bayar    = $data->jumlah_bayar;
+        list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);
 
         //* Check status pembayaran VA BJB
         if ($data->status_bayar == 0 && $data->nomor_va_bjb != null) {
@@ -186,7 +194,7 @@ class STSController extends Controller
                 $data->update([
                     'ntb'        => $ntb,
                     'tgl_bayar'  => $transactionTime,
-                    'updated_by' => 'Check Inquiry',
+                    'updated_by' => 'Bank BJB | Check Inquiry',
                     'status_bayar' => 1,
                     'chanel_bayar' => 'Virtual Account',
                     'total_bayar_bjb' => $transactionAmount,
@@ -199,7 +207,10 @@ class STSController extends Controller
             'title',
             'data',
             'path_sftp',
-            'fileName'
+            'fileName',
+            'kenaikan',
+            'jumlahBunga',
+            'dateNow'
         ));
     }
 
@@ -264,7 +275,7 @@ class STSController extends Controller
                 $data->update([
                     'ntb'        => $ntb,
                     'tgl_bayar'  => $transactionTime,
-                    'updated_by' => 'Check Inquiry',
+                    'updated_by' => 'Bank BJB | Check Inquiry',
                     'status_bayar' => 1,
                     'chanel_bayar' => 'Virtual Account',
                     'total_bayar_bjb' => $transactionAmount,
@@ -293,19 +304,21 @@ class STSController extends Controller
         $role = Auth::user()->pengguna->modelHasRole->role->name;
 
         $status_bayar = $request->status_bayar;
+        $tgl_bayar    = $data->tgl_bayar == null ? null : $request->tgl_bayar;
 
         // Check 
         if ($status_bayar == 1) {
             $data->update([
                 'status_bayar' => 1,
-                'tgl_bayar'    => $request->tgl_bayar,
+                'tgl_bayar'    => $tgl_bayar,
                 'no_bku'       => $request->no_bku,
                 // 'tgl_bku'   => $request->tgl_bku,
                 'chanel_bayar' => $request->chanel_bayar,
                 'ntb'    => $request->ntb,
                 'denda'  => (int) str_replace(['.', 'Rp', ' '], '', $request->denda),
                 'diskon' => $request->diskon,
-                'total_bayar_bjb' => $request->total_bayar_bjb == 0 ? null : (int) str_replace(['.', 'Rp', ' '], '', $request->total_bayar_bjb)
+                'total_bayar_bjb' => $request->total_bayar_bjb == 0 ? null : (int) str_replace(['.', 'Rp', ' '], '', $request->total_bayar_bjb),
+                'updated_by'      => Auth::user()->pengguna->full_name . ' | Update data menu STS'
             ]);
         } else {
             if ($role == 'bendahara-opd') {
@@ -319,19 +332,21 @@ class STSController extends Controller
                     'denda'  => 0,
                     'diskon' => null,
                     'total_bayar_bjb' => null,
-                    'total_bayar' => $data->jumlah_bayar
+                    'total_bayar' => $data->jumlah_bayar,
+                    'updated_by'  => Auth::user()->pengguna->full_name . ' | Update data menu STS'
                 ]);
             } else {
                 $data->update([
                     'status_bayar' => $status_bayar,
-                    'tgl_bayar'    => $request->tgl_bayar,
+                    'tgl_bayar'    => $tgl_bayar,
                     'no_bku'       => $request->no_bku,
                     // 'tgl_bku'   => $request->tgl_bku,
                     'chanel_bayar' => $request->chanel_bayar,
                     'ntb'    => $request->ntb,
                     'denda'  => (int) str_replace(['.', 'Rp', ' '], '', $request->denda),
                     'diskon' => $request->diskon,
-                    'total_bayar_bjb' => $request->total_bayar_bjb == 0 ? null : (int) str_replace(['.', 'Rp', ' '], '', $request->total_bayar_bjb)
+                    'total_bayar_bjb' => $request->total_bayar_bjb == 0 ? null : (int) str_replace(['.', 'Rp', ' '], '', $request->total_bayar_bjb),
+                    'updated_by'      => Auth::user()->pengguna->full_name . ' | Update data menu STS'
                 ]);
             }
         }
@@ -392,6 +407,7 @@ class STSController extends Controller
             'tgl_bayar'    => null,
             'no_bku'       => null,
             'ntb'          => null,
+            'updated_by'   => Auth::user()->pengguna->full_name . ' | Batal Bayar',
             'chanel_bayar' => null,
             'total_bayar_bjb' => null,
         ]);

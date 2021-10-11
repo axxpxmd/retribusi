@@ -76,7 +76,7 @@
                                             </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>Tanggal TTD :</strong></label>
-                                                <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_ttd)->format('d M Y') }}</label>
+                                                <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_ttd)->format('d F Y') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -109,14 +109,14 @@
                                             </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>Tanggal STRD :</strong></label>
-                                                <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_awal)->format('d M Y') }}</label>
+                                                <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_awal)->format('d F Y') }}</label>
                                             </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>Jatuh Tempo :</strong></label>
                                                 @if ($daysDiff < 0)
-                                                <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d', $tgl_jatuh_tempo)->format('d M Y') }} | <span class="badge badge-warning" style="font-size: 10.5px !important">Kadaluarsa</span></label>
+                                                <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d', $tgl_jatuh_tempo)->format('d F Y') }} | <span class="badge badge-warning" style="font-size: 10.5px !important">Kadaluarsa</span></label>
                                                 @else
-                                                <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d', $tgl_jatuh_tempo)->format('d M Y') }} | <span class="badge badge-success" style="font-size: 10.5px !important">Berlaku</span></label></label> 
+                                                <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d', $tgl_jatuh_tempo)->format('d F Y') }} | <span class="badge badge-success" style="font-size: 10.5px !important">Berlaku</span></label></label> 
                                                 @endif
                                             </div>
                                         </div>
@@ -134,19 +134,19 @@
                                                 <label class="col-md-8 s-12">@currency($data->jumlah_bayar)</label>
                                             </div> 
                                             <div class="row">
-                                                <label class="col-md-4 text-right s-12"><strong>Denda :</strong></label>
-                                                @if ($data->denda != null)
-                                                <label class="col-md-8 s-12">@currency($data->denda)</label>
+                                                <label class="col-md-4 text-right s-12"><strong>Denda  :</strong></label>
+                                                @if ($data->status_denda == 0)
+                                                <label class="col-md-8 s-12">(Tidak) @currency($data->denda)</label>
                                                 @else
-                                                <label class="col-md-8 s-12">-</label>
+                                                <label class="col-md-8 s-12">(Ya) @currency($data->denda)</label>
                                                 @endif
                                             </div> 
                                             <div class="row">
-                                                <label class="col-md-4 text-right s-12"><strong>Diskon :</strong></label>
-                                                @if ($data->diskon != null)
+                                                <label class="col-md-4 text-right s-12"><strong>Diskon  :</strong></label>
+                                                @if ($data->status_diskon == 0)
                                                 <label class="col-md-8 s-12">({{ $data->diskon }}%) &nbsp;@currency(((int) $data->diskon / 100) * $data->jumlah_bayar)</label>
                                                 @else
-                                                <label class="col-md-8 s-12">-</label>
+                                                <label class="col-md-8 s-12">({{ $data->diskon }}%) &nbsp;@currency(((int) $data->diskon / 100) * $data->jumlah_bayar)</label>
                                                 @endif
                                             </div> 
                                             <div class="row">
@@ -185,7 +185,7 @@
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>Terakhir Cetak Pada :</strong></label>
                                                 @if ($data->tgl_cetak_trkhr != null)
-                                                <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $data->tgl_cetak_trkhr)->format('d M Y | H:i:s') }}</label>
+                                                <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $data->tgl_cetak_trkhr)->format('d F Y | H:i:s') }}</label>
                                                 @else
                                                 <label class="col-md-8 s-12">-</label>
                                                 @endif
@@ -224,7 +224,7 @@
             @if ($data->status_ttd == 3)
             <iframe src="{{ config('app.sftp_src').$path_sftp.$fileName }}" style="margin-left: -160px !important" width="850px" height="940px"></iframe>
             @else
-            <iframe src="{{ route('strd.report', \Crypt::encrypt($data->id)) }}" style="margin-left: -160px !important;" width="850px" height="940px"></iframe>
+            <iframe src="{{ route('print.strd', \Crypt::encrypt($data->id)) }}" style="margin-left: -160px !important;" width="850px" height="940px"></iframe>
             @endif
         </div>
     </div>

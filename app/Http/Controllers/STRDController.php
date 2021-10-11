@@ -212,8 +212,8 @@ class STRDController extends Controller
 
         //TODO: Get bunga
         $tgl_skrd_akhir = $data->tgl_skrd_akhir;
-        $total_bayar    = $data->total_bayar;
-        list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);;
+        $total_bayar    = $data->jumlah_bayar;
+        list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);
 
         return view($this->view . 'show', compact(
             'route',
