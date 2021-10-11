@@ -48,7 +48,6 @@ class VABJB
 
         $cin         = config('app.cin_bjb');
         $clientType  = "1";
-        $productCode = "01";
         $billingType = "f";
         $vaType      = "a";
         $currency    = "360";

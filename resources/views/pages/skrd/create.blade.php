@@ -183,6 +183,7 @@
 @endsection
 @section('script')
 <script type="text/javascript">
+    // set tgl_skrd_akhir 30 days from tgl_skrd_awal
     function setDate(){
         var date = document.getElementById('tgl_skrd_awal').value
         var someDate = new Date(date);

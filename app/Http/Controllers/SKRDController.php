@@ -33,7 +33,7 @@ class SKRDController extends Controller
     protected $title  = 'SKRD';
     protected $view   = 'pages.skrd.';
 
-    // Check Permission
+    //TODO: Check Permission
     public function __construct()
     {
         $this->middleware(['permission:SKRD']);
@@ -44,7 +44,7 @@ class SKRDController extends Controller
         $route = $this->route;
         $title = $this->title;
 
-        $opd_id = Auth::user()->pengguna->opd_id;
+        $opd_id   = Auth::user()->pengguna->opd_id;
         $opdArray = OPDJenisPendapatan::select('id_opd')->get()->toArray();
 
         if ($opd_id == 0) {
@@ -53,7 +53,8 @@ class SKRDController extends Controller
             $opds = OPD::where('id', $opd_id)->whereIn('id', $opdArray)->get();
         }
 
-        $time = Carbon::now();
+        //TODO: Set filters to date now
+        $time  = Carbon::now();
         $today = $time->format('Y-m-d');
 
         return view($this->view . 'index', compact(
@@ -191,29 +192,25 @@ class SKRDController extends Controller
         $route = $this->route;
         $title = $this->title;
 
-        // Get params
         $opd_id     = $request->opd_id;
         $data_wp_id = $request->data_wp_id;
         $jenis_pendapatan_id = $request->jenis_pendapatan_id;
 
-        // Check data wajib Retribusi
+        //TODO: Check data wajib Retribusi
         if (isset($data_wp_id)) {
-            // Decrypt params
             $data_wp_id = \Crypt::decrypt($data_wp_id);
         } else {
-            // Validation
-            if ($opd_id == '' || $jenis_pendapatan_id == '') {
+            //TODO: Validation
+            if ($opd_id == '' || $jenis_pendapatan_id == '')
                 return redirect()
                     ->route($this->route . 'index')
                     ->withErrors('Semua form wajid diisi.');
-            }
 
-            // Decrypt params
             $opd_id = \Crypt::decrypt($opd_id);
             $jenis_pendapatan_id = \Crypt::decrypt($jenis_pendapatan_id);
         }
 
-        // Data wajib Retribusi
+        //TODO: Get data wajib Retribusi
         $data_wp = DataWP::where('id', $data_wp_id)->first();
         if ($data_wp != null) {
             $opd_id = $data_wp->id_opd;
@@ -274,7 +271,6 @@ class SKRDController extends Controller
          * 2. Create Virtual Account
          * 3. tmtransaksi_opd
          * 4. tmdata_wp
-         * 5. Save pdf to SFTP Storage
          */
 
         //* Tahap 1
@@ -355,6 +351,7 @@ class SKRDController extends Controller
             'uraian_retribusi' => $request->uraian_retribusi,
             'jumlah_bayar'     => (int) str_replace(['.', 'Rp', ' '], '', $request->jumlah_bayar),
             'denda'            => 0,
+            'diskon'           => 0,
             'total_bayar'      => (int) str_replace(['.', 'Rp', ' '], '', $request->jumlah_bayar),
             'nomor_va_bjb'     => $VABJB,
             'status_bayar'     => 0,
@@ -389,30 +386,10 @@ class SKRDController extends Controller
             'id_rincian_jenis_pendapatan' => \Crypt::decrypt($request->id_rincian_jenis_pendapatan)
         ];
 
-        //TODO: Check existed data WP(wajid pajak) (menyimpan data wp jika belum pernah dibuat)
+        //TODO: Check existed data wajib Retribusi (menyimpan data wp jika belum pernah dibuat)
         $check = DataWP::where($where)->count();
         if ($check == 0)
             DataWP::create($data);
-
-
-        //* Tahap 5
-        $data = TransaksiOPD::find($dataSKRD->id);
-        $terbilang = Html_number::terbilang($data->total_bayar) . 'rupiah';
-
-        $pdf = app('dompdf.wrapper');
-        $pdf->getDomPDF()->set_option("enable_php", true);
-        $pdf->loadView($this->view . 'report', compact(
-            'data',
-            'terbilang'
-        ));
-
-        //TODO: get content PDF
-        $fileName = str_replace(' ', '', $data->nm_wajib_pajak) . '-'  . $data->no_skrd . ".pdf";
-        $content = $pdf->download()->getOriginalContent();
-
-        //TODO: save PDF to sftp storage
-        $path_sftp = 'file_ttd_skrd/';
-        Storage::disk('sftp')->put($path_sftp . $fileName, $content);
 
         return response()->json([
             'message' => "Data " . $this->title . " berhasil tersimpan."

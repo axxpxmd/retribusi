@@ -158,6 +158,7 @@
         </div>
     </div>
 </div>
+<!-- Single TTD -->
 <div class="modal fade" id="updateStatusTTD" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -186,15 +187,16 @@
         </div>
     </div>
 </div>
+<!-- Bisa langsung banyak kirim TTD (lagi dihide) -->
 <div class="modal fade" id="updateStatusTTDs" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-body">
                 <p class="font-weight-bold">Apakah sudah yakin mengirim data ini untuk ditandatangi ?</p>
-            </div>
-            <div class="text-right">
-                <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="icon-times mr-2"></i>Batalkan</button>
-                <a href="{{ route('skrd.updateStatusKirimTTDs') }}" class="btn btn-sm btn-primary ml-2" id="kirimTTDs"><i class="icon-pencil mr-2"></i>Kirim untuk TTD</a>
+                <div class="text-right">
+                    <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="icon-times mr-2"></i>Batalkan</button>
+                    <a href="{{ route('skrd.updateStatusKirimTTDs') }}" class="btn btn-sm btn-primary ml-2" id="kirimTTDs"><i class="icon-pencil mr-2"></i>Kirim untuk TTD</a>
+                </div>
             </div>
         </div>
     </div>
@@ -316,6 +318,7 @@
         $('#updateStatusTTD').modal('show');
         $('#updateStatusTTD').modal({keyboard: false});
 
+        // get detail data
         url = "{{ route('skrd.getDataSKRD', ':id') }}".replace(':id', id);
         $.get(url, function(data){
             $('#no_skrd_ttd').html(': '+data.no_skrd)
@@ -337,7 +340,7 @@
         $('#kirimTTD').attr('href', "{{ route('skrd.updateStatusKirimTTD', ':id') }}".replace(':id', id));
     }
 
-    // Bisa langsung banyak (lagi dihide)
+    // Bisa langsung banyak kirim TTD (lagi dihide)
     function createRoute(){
         var tgl_skrd   = $('#tgl_skrd').val();
         var tgl_skrd1  = $('#tgl_skrd1').val();

@@ -112,11 +112,11 @@ class DiskonController extends Controller
     {
         //TODO: Validation
         $status_diskon = $request->status_diskon;
-        if ($status_diskon == null) {
+        if ($status_diskon == null)
             return redirect()
                 ->route($this->route . 'index')
                 ->withErrors('Silahkan pilih diskon.');
-        }
+
 
         if ($status_diskon == 1) {
             $request->validate([
@@ -171,6 +171,25 @@ class DiskonController extends Controller
          * 2. tmtransaksi_opd
          */
         for ($i = 0; $i < $dataLength; $i++) {
+            //TODO: Check expired data
+            if ($datas[$i]->tgl_strd_akhir == null) {
+                $tgl_jatuh_tempo = $datas[$i]->tgl_skrd_akhir;
+            } else {
+                $tgl_jatuh_tempo = $datas[$i]->tgl_strd_akhir;
+            }
+
+            $timeNow = Carbon::now();
+
+            $dateTimeNow = new DateTime($timeNow);
+            $expired     = new DateTime($tgl_jatuh_tempo . ' 23:59:59');
+            $interval    = $dateTimeNow->diff($expired);
+            $daysDiff    = $interval->format('%r%a');
+
+            if ($daysDiff < 0)
+                return redirect()
+                    ->route($this->route . 'index')
+                    ->withErrors('Error, No SKRD ' . $datas[$i]->no_skrd . ' tidak bisa diupdate dikarenakan tanggal jatuh tempo kadaluarsa');
+
             if ($status_diskon == 1) {
                 //TODO: Create discount
                 $total_bayar    = $datas[$i]->jumlah_bayar;
@@ -178,62 +197,37 @@ class DiskonController extends Controller
 
                 $diskon_harga       = $diskon_percent * $total_bayar;
                 $total_bayar_update = $total_bayar - $diskon_harga;
-
-                if ($datas[$i]->tgl_strd_akhir == null) {
-                    $tgl_jatuh_tempo = $datas[$i]->tgl_skrd_akhir;
-                } else {
-                    $tgl_jatuh_tempo = $datas[$i]->tgl_strd_akhir;
-                }
-
-                $timeNow = Carbon::now();
-
-                $dateTimeNow = new DateTime($timeNow);
-                $expired     = new DateTime($tgl_jatuh_tempo . ' 23:59:59');
-                $interval    = $dateTimeNow->diff($expired);
-                $daysDiff    = $interval->format('%r%a');
-
-                if ($daysDiff < 0) {
-                    return redirect()
-                        ->route($this->route . 'index')
-                        ->withErrors('Error, No SKRD ' . $datas[$i]->no_skrd . ' tidak bisa diupdate dikarenakan tanggal jatuh tempo kadaluarsa');
-                }
-
-                //* Tahap 1
-                $amount = \strval((int) str_replace(['.', 'Rp', ' '], '', $total_bayar_update));
-                $expiredDate  = $tgl_jatuh_tempo . ' 23:59:59';
-                $customerName = $datas[$i]->nm_wajib_pajak;
-                $va_number    = (int) $datas[$i]->nomor_va_bjb;
-
-                $resUpdateVABJB = VABJB::updateVaBJB($tokenBJB, $amount, $expiredDate, $customerName, $va_number);
-                if ($resUpdateVABJB->successful()) {
-                    $resJson = $resUpdateVABJB->json();
-                    if (isset($resJson['rc']) != 0000)
-                        return redirect()
-                            ->route($this->route . 'index')
-                            ->withErrors('Terjadi kegagalan saat memperbarui Virtual Account. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . '');
-                    $VABJB = $resJson['va_number'];
-                } else {
-                    return redirect()
-                        ->route($this->route . 'index')
-                        ->withErrors("Terjadi kegagalan saat memperbarui Virtual Account. Error Code " . $resUpdateVABJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator");
-                }
-
-                //* Tahap 2
-                $datas[$i]->update([
-                    'total_bayar'   => $total_bayar_update,
-                    'status_diskon' => $status_diskon,
-                    'nomor_va_bjb'  => $VABJB,
-                    'diskon' => $diskon
-                ]);
             } else {
                 $total_bayar_update = $datas[$i]->jumlah_bayar;
-
-                $datas[$i]->update([
-                    'total_bayar'   => $total_bayar_update,
-                    'status_diskon' => $status_diskon,
-                    'diskon' => $diskon
-                ]);
             }
+
+            //* Tahap 1
+            $amount = \strval((int) str_replace(['.', 'Rp', ' '], '', $total_bayar_update));
+            $expiredDate  = $tgl_jatuh_tempo . ' 23:59:59';
+            $customerName = $datas[$i]->nm_wajib_pajak;
+            $va_number    = (int) $datas[$i]->nomor_va_bjb;
+
+            $resUpdateVABJB = VABJB::updateVaBJB($tokenBJB, $amount, $expiredDate, $customerName, $va_number);
+            if ($resUpdateVABJB->successful()) {
+                $resJson = $resUpdateVABJB->json();
+                if (isset($resJson['rc']) != 0000)
+                    return redirect()
+                        ->route($this->route . 'index')
+                        ->withErrors('Terjadi kegagalan saat memperbarui Virtual Account. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . '');
+                $VABJB = $resJson['va_number'];
+            } else {
+                return redirect()
+                    ->route($this->route . 'index')
+                    ->withErrors("Terjadi kegagalan saat memperbarui Virtual Account. Error Code " . $resUpdateVABJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator");
+            }
+
+            //* Tahap 2
+            $datas[$i]->update([
+                'total_bayar'   => $total_bayar_update,
+                'status_diskon' => $status_diskon,
+                'nomor_va_bjb'  => $VABJB,
+                'diskon' => $diskon
+            ]);
         }
 
         return redirect()
