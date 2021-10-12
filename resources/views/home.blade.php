@@ -40,7 +40,7 @@
                         @include('pages.dashboard.pieChart')
                     </div>
                 </div>
-                <div class="p-0 col-md-12 mt-3">
+                {{-- <div class="p-0 col-md-12 mt-3">
                     <div class="card">
                         <div class="card-header">
                             <h6>Transaksi Hari Ini</h6>
@@ -80,7 +80,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
                 @endrole
             </div>
         </div>
