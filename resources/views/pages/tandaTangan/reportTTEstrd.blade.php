@@ -244,7 +244,7 @@
             </tr>
             <tr>
                 <td class="a"><p class="m-l-5 t-bold">Jumlah Keseluruhan :</p></td>
-                <td class="a"><p class="m-l-5 t-bold text-right m-r-10">@currency($data->total_bayar),-</p></td>
+                <td class="a"><p class="m-l-5 t-bold text-right m-r-10">@currency($total_bayar),-</p></td>
             </tr>
             <tr class="a">
                 <td colspan="4" class="a">
@@ -262,9 +262,9 @@
                 <td colspan="3" class="a" style="border-left: none !important">
                     <div style="text-align:center; margin-right: -400px !important">
                         @if ($data->tgl_ttd != null)
-                        <p>Serpong, {{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_ttd)->format('d F Y') }}</p>
+                        <p>Tangerang Selatan, {{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_ttd)->format('d F Y') }}</p>
                         @else
-                        <p>Serpong, </p>
+                        <p>Tangerang Selatan, </p>
                         @endif
                         <table style="margin-left: 380px !important; margin-top: -8px; margin-bottom: -8px">
                             <tr class="a">
@@ -293,5 +293,24 @@
             </tr>
         </table>
     </div>
+
+    @if (isset($statusSTS))
+    <div class="">
+        <table class="c">
+            <tr class="c">
+                <td><p class="m-b-0 fs-12">NTB</p></td>
+                <td><p class="m-b-0 fs-12">: {{ $data->ntb != null ? $data->ntb : ''}}</p></td>
+            </tr>
+            <tr class="c">
+                <td><p class="m-t-0 m-b-0 fs-12">TANGGAL BAYAR</p></td>
+                @if ($data->tgl_bayar != null)
+                <td><p class="m-t-0 m-b-0 fs-12">: {{ Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $data->tgl_bayar)->format('d F Y | H:i:s') }}</p></td>
+                @else
+                <td><p class="m-t-0 m-b-0 fs-12">: </p></td>
+                @endif
+            </tr>
+        </table>
+    </div>
+    @endif
 </body>
 </html>

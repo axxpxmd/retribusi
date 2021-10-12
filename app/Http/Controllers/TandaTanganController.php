@@ -186,6 +186,7 @@ class TandaTanganController extends Controller
         $id   = \Crypt::decrypt($id);
         $data = TransaksiOPD::find($id);
         $nip_ttd = $data->nip_ttd;
+        $dateNow = Carbon::now()->format('Y-m-d');
 
         $token_godem = '';
         $id_cert     = '';
@@ -202,7 +203,7 @@ class TandaTanganController extends Controller
             //* Bunga
             $tgl_skrd_akhir = $data->tgl_skrd_akhir;
             $total_bayar    = $data->jumlah_bayar;
-            list($jumlahBunga, $kenaikan) = $this->createBunga($tgl_skrd_akhir, $total_bayar);
+            list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);
 
             //* Total Bayar + Bunga
             $total_bayar = $data->total_bayar + $jumlahBunga;
@@ -221,31 +222,24 @@ class TandaTanganController extends Controller
             $b   = base64_encode(\SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')->merge(public_path('images/logo-png.png'), 0.2, true)->size(900)->errorCorrection('H')->margin(0)->generate($file_url));
             $img = '<img width="60" height="61" src="data:image/png;base64, ' . $b . '" alt="qr code" />';
 
+            //TODO: Check status TTD
             if ($data->status_ttd == 2) {
-                $pdf = app('dompdf.wrapper');
-                $pdf->getDomPDF()->set_option("enable_php", true);
-                $pdf->loadView($this->view . 'reportTTEskrd', compact(
-                    'data',
-                    'terbilang',
-                    'jumlahBunga',
-                    'total_bayar',
-                    'kenaikan',
-                    'tgl_jatuh_tempo',
-                    'img'
-                ));
+                $file = 'pages.tandaTangan.reportTTEskrd';
             } elseif ($data->status_ttd == 4) {
-                $pdf = app('dompdf.wrapper');
-                $pdf->getDomPDF()->set_option("enable_php", true);
-                $pdf->loadView($this->view . 'reportTTEstrd', compact(
-                    'data',
-                    'terbilang',
-                    'jumlahBunga',
-                    'total_bayar',
-                    'kenaikan',
-                    'tgl_jatuh_tempo',
-                    'img'
-                ));
+                $file = 'pages.tandaTangan.reportTTEstrd';
             }
+
+            $pdf = app('dompdf.wrapper');
+            $pdf->getDomPDF()->set_option("enable_php", true);
+            $pdf->loadView($file, compact(
+                'data',
+                'terbilang',
+                'jumlahBunga',
+                'total_bayar',
+                'kenaikan',
+                'tgl_jatuh_tempo',
+                'img'
+            ));
 
             // get content PDF
             $content  = $pdf->download()->getOriginalContent();
@@ -271,7 +265,8 @@ class TandaTanganController extends Controller
             'token_godem',
             'id_cert',
             'fileName',
-            'path_sftp'
+            'path_sftp',
+            'dateNow'
         ));
     }
 
@@ -353,71 +348,5 @@ class TandaTanganController extends Controller
         return redirect()
             ->route($this->route . 'show', \Crypt::encrypt($id))
             ->withErrors("Terjadi kegagalan dalam memuat tandatangan digital. Error Code " . $res->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator");
-    }
-
-    public function printData(Request $request, $id)
-    {
-        $id = \Crypt::decrypt($id);
-
-        $data = TransaksiOPD::find($id);
-        if ($data->total_bayar_bjb != null) {
-            $total_bayar_final = $data->total_bayar_bjb;
-        } else {
-            $total_bayar_final = $data->total_bayar;
-        }
-        $terbilang = Html_number::terbilang($total_bayar_final) . 'rupiah';
-
-        $pdf = app('dompdf.wrapper');
-        $pdf->getDomPDF()->set_option("enable_php", true);
-        $pdf->loadView('pages.skrd.report', compact(
-            'data',
-            'terbilang',
-            'total_bayar_final'
-        ));
-
-        return $pdf->stream($data->nm_wajib_pajak . '-' . $data->no_skrd . ".pdf");
-    }
-
-    public function createBunga($tgl_skrd_akhir, $jumlah_bayar)
-    {
-        //TODO: Create Bunga (kenaikan 2% tiap bulan)
-        $timeNow     = Carbon::now();
-        $dateTimeNow = new DateTime($timeNow);
-        $expired     = new DateTime($tgl_skrd_akhir . ' 23:59:59');
-        $interval    = $dateTimeNow->diff($expired);
-        $monthDiff   = $interval->format('%m');
-
-        $kenaikan = ((int) $monthDiff + 1) * 2;
-        $bunga    = $kenaikan / 100;
-        $jumlahBunga = $jumlah_bayar * $bunga;
-
-        return [$jumlahBunga, $kenaikan];
-    }
-
-    public function printDataSTRD(Request $request, $id)
-    {
-        $id = \Crypt::decrypt($id);
-
-        $data = TransaksiOPD::find($id);
-
-        //* Bunga
-        $tgl_skrd_akhir = $data->tgl_skrd_akhir;
-        $jumlah_bayar   = $data->jumlah_bayar;
-        list($jumlahBunga, $kenaikan) = $this->createBunga($tgl_skrd_akhir, $jumlah_bayar);
-
-        //* Total Bayar + Bunga
-        $total_bayar = $data->total_bayar + $jumlahBunga;
-        $terbilang   = Html_number::terbilang($total_bayar) . 'rupiah';
-
-        $pdf = app('dompdf.wrapper');
-        $pdf->getDomPDF()->set_option("enable_php", true);
-        $pdf->loadView('pages.strd.report', compact(
-            'data',
-            'terbilang',
-            'jumlahBunga',
-            'total_bayar'
-        ));
-
-        return $pdf->stream($data->nm_wajib_pajak . '-' . $data->no_skrd . ".pdf");
     }
 }

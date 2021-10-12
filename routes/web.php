@@ -79,7 +79,6 @@ Route::group(['middleware' => ['auth']], function () {
     // STRD
     Route::resource('strd', 'STRDController');
     Route::post('strd/api', 'STRDController@api')->name('strd.api');
-    Route::get('strd/report/{id}', 'STRDController@printData')->name('strd.report');
     Route::get('update-status-kirim-ttd-strd/{id}', 'STRDController@updateStatusKirimTTD')->name('strd.updateStatusKirimTTD');
     Route::get('update-status-kirim-ttds-strd', 'STRDController@updateStatusKirimTTDs')->name('strd.updateStatusKirimTTDs');
     Route::get('perbarui-strd/{id}', 'STRDController@perbaruiSTRD')->name('strd.perbaruiSTRD');
@@ -87,7 +86,7 @@ Route::group(['middleware' => ['auth']], function () {
     // STS
     Route::resource('sts', 'STSController');
     Route::post('sts/api', 'STSController@api')->name('sts.api');
-    Route::get('sts/report/{id}', 'STSController@printData')->name('sts.report');
+    Route::get('sts/report-ttd/{id}', 'STSController@printDataTTD')->name('sts.reportTTD');
     Route::get('batal_bayar/{id}', 'STSController@batalBayar')->name('sts.batalBayar');
 
     // Diskon
@@ -104,8 +103,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('tanda-tangan', 'TandaTanganController');
     Route::post('tanda-tangan/api', 'TandaTanganController@api')->name('tanda-tangan.api');
     Route::post('tanda-tangan/tte', 'TandaTanganController@tte')->name('tanda-tangan.tte');
-    Route::get('tanda-tangan/report/{id}', 'TandaTanganController@printData')->name('tanda-tangan.report');
-    Route::get('tanda-tangan/report-strd/{id}', 'TandaTanganController@printDataSTRD')->name('tanda-tangan.reportstrd');
 
     // Print 
     Route::get('print/skrd/{id}', 'PrintController@printSKRD')->name('print.skrd');

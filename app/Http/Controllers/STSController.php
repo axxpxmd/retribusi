@@ -78,7 +78,7 @@ class STSController extends Controller
             ->addColumn('action', function ($p) {
                 $edit      = "<a href='" . route($this->route . 'edit', Crypt::encrypt($p->id)) . "' class='text-primary mr-2' title='Edit Data'><i class='icon icon-edit'></i></a>";
                 $report    = "<a href='" . route('print.sts', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
-                $reportTTD = "<a href='" . route($this->route . 'report', Crypt::encrypt($p->id)) . "' target='blank' class='cyan-text' title='File TTD'><i class='icon-document-file-pdf2'></i></a>";
+                $reportTTD = "<a href='" . route($this->route . 'reportTTD', Crypt::encrypt($p->id)) . "' target='blank' class='cyan-text' title='File TTD'><i class='icon-document-file-pdf2'></i></a>";
 
                 if ($p->status_bayar == 1) {
                     if ($p->status_ttd == 1) {
@@ -356,42 +356,54 @@ class STSController extends Controller
         ]);
     }
 
-    public function printData(Request $request, $id)
+    public function printDataTTD(Request $request, $id)
     {
-        $id = \Crypt::decrypt($id);
-
+        $id   = \Crypt::decrypt($id);
         $data = TransaksiOPD::find($id);
-        if ($data->total_bayar_bjb != null) {
-            $total_bayar_final = $data->total_bayar_bjb;
-        } else {
-            $total_bayar_final = $data->total_bayar;
-        }
-        $terbilang = Html_number::terbilang($total_bayar_final) . 'rupiah';
 
-        // generate QR Code
+        //* Bunga
+        $tgl_skrd_akhir = $data->tgl_skrd_akhir;
+        $total_bayar    = $data->jumlah_bayar;
+        list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);
+
+        //* Total Bayar + Bunga
+        $total_bayar = $data->total_bayar + $jumlahBunga;
+        $terbilang   = Html_number::terbilang($total_bayar) . 'rupiah';
+
+        //* Tanggal Jatuh Tempo STRD
+        if ($data->tgl_strd_akhir == null) {
+            $tgl_jatuh_tempo = $data->tgl_skrd_akhir;
+        } else {
+            $tgl_jatuh_tempo = $data->tgl_strd_akhir;
+        }
+
+        //TODO: generate QR Code
         $fileName = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
         $file_url = config('app.sftp_src') . 'file_ttd_skrd/' . $fileName;
         $b   = base64_encode(\SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')->merge(public_path('images/logo-png.png'), 0.2, true)->size(900)->errorCorrection('H')->margin(0)->generate($file_url));
         $img = '<img width="60" height="61" src="data:image/png;base64, ' . $b . '" alt="qr code" />';
 
-        // Update Jumlah Cetak
-        $this->updateJumlahCetak($id, $data->jumlah_cetak);
-
         $pdf = app('dompdf.wrapper');
         $pdf->getDomPDF()->set_option("enable_php", true);
 
-        // Check status TTD
+        //TODO: Check status TTD
         if ($data->status_ttd == 1) {
-            $file = 'reportTTE';
-        } else {
-            $file = 'report';
+            $file = 'pages.tandaTangan.reportTTEskrd';
+        } elseif ($data->status_ttd == 3) {
+            $file = 'pages.tandaTangan.reportTTEstrd';
         }
 
-        $pdf->loadView($this->view . $file, compact(
-            'img',
+        $statusSTS = 1;
+
+        $pdf->loadView($file, compact(
             'data',
             'terbilang',
-            'total_bayar_final'
+            'jumlahBunga',
+            'total_bayar',
+            'kenaikan',
+            'tgl_jatuh_tempo',
+            'img',
+            'statusSTS'
         ));
 
         return $pdf->stream($data->nm_wajib_pajak . ' - ' . $data->no_skrd . ".pdf");
@@ -415,18 +427,5 @@ class STSController extends Controller
         return redirect()
             ->route($this->route . 'show', $id_encrypt)
             ->withSuccess('Selamat! Data berhasil diubah.');
-    }
-
-    public function updateJumlahCetak($id, $jumlah_cetak)
-    {
-        $time    = Carbon::now();
-        $tanggal = $time->toDateString();
-        $jam     = $time->toTimeString();
-        $now     = $tanggal . ' ' . $jam;
-
-        TransaksiOPD::where('id', $id)->update([
-            'jumlah_cetak' => $jumlah_cetak + 1,
-            'tgl_cetak_trkhr' => $now
-        ]);
     }
 }

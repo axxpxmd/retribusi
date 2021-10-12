@@ -100,7 +100,7 @@ class STRDController extends Controller
                 $delete  = "<a href='#' onclick='remove(" . $p->id . ")' class='text-danger mr-2' title='Hapus Data'><i class='icon icon-remove'></i></a>";
                 $edit    = "<a href='" . route($this->route . 'edit', Crypt::encrypt($p->id)) . "' class='text-primary mr-2' title='Edit Data'><i class='icon icon-edit'></i></a>";
 
-                if ($p->statu_ttd == 3) {
+                if ($p->status_ttd == 3) {
                     return $filettd;
                 } else {
                     if ($p->status_ttd == 4) {
@@ -312,58 +312,6 @@ class STRDController extends Controller
         return redirect()
             ->route($this->route . 'index')
             ->withSuccess('Selamat! Data STRD berhasil diperbaharui.');
-    }
-
-    public function printData(Request $request, $id)
-    {
-        $id = \Crypt::decrypt($id);
-
-        $data = TransaksiOPD::find($id);
-
-        //* Bunga
-        $tgl_skrd_akhir = $data->tgl_skrd_akhir;
-        $total_bayar    = $data->jumlah_bayar;
-        list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);
-
-        //* Total Bayar + Bunga
-        $total_bayar = $data->total_bayar + $jumlahBunga;
-        $terbilang   = Html_number::terbilang($total_bayar) . 'rupiah';
-
-        //TODO: Update Jumlah Cetak
-        $this->updateJumlahCetak($id, $data->jumlah_cetak);
-
-        //* Tanggal Jatuh Tempo STRD
-        if ($data->tgl_strd_akhir == null) {
-            $tgl_jatuh_tempo = $data->tgl_skrd_akhir;
-        } else {
-            $tgl_jatuh_tempo = $data->tgl_strd_akhir;
-        }
-
-        $pdf = app('dompdf.wrapper');
-        $pdf->getDomPDF()->set_option("enable_php", true);
-        $pdf->loadView($this->view . 'report', compact(
-            'data',
-            'terbilang',
-            'jumlahBunga',
-            'total_bayar',
-            'kenaikan',
-            'tgl_jatuh_tempo'
-        ));
-
-        return $pdf->stream($data->nm_wajib_pajak . '-' . $data->no_skrd . ".pdf");
-    }
-
-    public function updateJumlahCetak($id, $jumlah_cetak)
-    {
-        $time    = Carbon::now();
-        $tanggal = $time->toDateString();
-        $jam     = $time->toTimeString();
-        $now     = $tanggal . ' ' . $jam;
-
-        TransaksiOPD::where('id', $id)->update([
-            'jumlah_cetak' => $jumlah_cetak + 1,
-            'tgl_cetak_trkhr' => $now
-        ]);
     }
 
     public function updateStatusKirimTTD($id)

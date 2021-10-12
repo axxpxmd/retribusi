@@ -27,9 +27,11 @@
             border: 1px solid black;
             font-size: 12px;
         }
+
         table.c{
             font-size: 15px 
         }
+
         .t-bold {
             font-weight: bold
         }
@@ -37,6 +39,10 @@
         .m-b-0{
             margin-bottom: 0px;
         }
+        .m-r-10{
+            margin-right: 10px;
+        }
+
         .m-t-0{
             margin-top: 0px;
         }
@@ -47,9 +53,6 @@
 
         .text-right{
             text-align: right
-        }
-        .text-left{
-            text-align: left
         }
         .text-center{
             text-align: center
@@ -65,36 +68,32 @@
         .m-l-14{
             margin-left: 25px
         }
+
         .m-r-20{
             margin-right: 20px
+        }
+
+        .f-w-n{
+            font-weight: normal
         }
         .m-t-1{
             margin-top: 1px
         }
-        .f-w-n{
-            font-weight: normal
-        }
 
-        .m-l-10{
-            margin-left: 10px;
-        }
-        .m-r-10{
-            margin-right: 10px;
-        }
-        .m-b-5{
-            margin-bottom: 5px
-        }
         .m-l-50{
             margin-left: 50px;
         }
         .m-t-15{
             margin-top: 15px
         }
-        .fs-12{
-            font-size: 12px 
+        .m-b-5{
+            margin-bottom: 5px
         }
         .f-normal{
             font-weight: normal
+        }
+        .mt-n40{
+            margin-top: -30px !important
         }
         .mt-n40{
             margin-top: -30px !important
@@ -142,7 +141,7 @@
                     @else 
                     <p class="text-left f-normal m-l-5 m-b-0 m-t-1">Tanggal &nbsp;: -</p>
                     @endif
-                    <p class="text-left f-normal m-l-5 m-t-1">Rek &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </p>
+                    <p class="text-left f-normal m-l-5 m-t-1">Rek &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: -</p>
                 </div>
             </th>
         </tr>
@@ -207,10 +206,10 @@
     <div class="m-t-15">
         <table class="d">
             <tr class="a">
-                <th width="5%" class="a">NO</th>
-                <th width="20%" class="a">NOMOR REKENING</th>
-                <th width="50%" class="a">URAIAN RETRIBUSI</th>
-                <th width="25%" class="a">JUMLAH (Rp)</th>
+                <th width="5%" class="a"><span>NO</span></th>
+                <th width="20%" class="a"><span>NOMOR REKENING</span></th>
+                <th width="50%" class="a"><span>URAIAN RETRIBUSI</span></th>
+                <th width="25%" class="a"><span>JUMLAH (Rp)</span></th>
             </tr>
             <tr class="a">
                 <td class="a text-center">1</td>
@@ -223,7 +222,7 @@
                 <td class="a">
                     <p class="m-l-5 text-right m-r-10">@currency($data->jumlah_bayar),-</p>
                     @if ($data->status_diskon == 1)
-                    <p class="m-l-5 text-right m-r-10">(Diskon {{ (int)$data->diskon }}%)&nbsp;&nbsp; @currency(((int)$data->diskon / 100) * (int)$data->jumlah_bayar),-</p>
+                    <p class="m-l-5 text-right m-r-10">(Diskon {{(int) $data->diskon }}%)&nbsp;&nbsp; @currency(($data->diskon / 100) * $data->jumlah_bayar),-</p>
                     @endif
                 </td>
             </tr>
@@ -238,9 +237,9 @@
                 </td>
                 <td class="a">
                     <p class="m-l-5 m-b-0 m-r-10 text-right">&nbsp;</p>
-                    <p class="m-l-5 m-t-1 m-b-0">&nbsp;</p>
-                    <p class="m-l-5 m-t-1 m-b-0">&nbsp;</p>
-                    <p class="m-l-5 m-t-1">&nbsp;</p>
+                    <p class="m-l-5 m-t-1 m-b-0 m-r-10 text-right">&nbsp;</p>
+                    <p class="m-l-5 m-t-1 m-b-0 m-r-10 text-right">-</p>
+                    <p class="m-l-5 m-t-1 m-r-10 text-right">-</p>
                 </td>
             </tr>
             <tr>
@@ -250,7 +249,7 @@
             <tr class="a">
                 <td colspan="4" class="a">
                     <p class="m-l-5">Dengan Huruf : <span class="t-bold" style="text-transform: uppercase">{{ $terbilang }}</span></p>
-                    <p class="fs-14 t-bold m-l-5"><u>PERHATIAN :</u></p>
+                    <p class="fs-12 t-bold m-l-5"><u>PERHATIAN :</u></p>
                     <ol>
                         <li>Penyetoran dilakukan menggunakan Bank Jabar Banten (BJB) melalui Teller/ATM BJB dengan menggunakan <b>{{ $data->no_bayar }}</b></li>
                         <li>Penyetoran melalaui transfer dapat melalui Virtual Account BJB dengan nomor <b>( {{ $data->nomor_va_bjb }} )</b>, Berlaku sampai {{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_akhir)->format('d F Y') }}</li>
@@ -263,9 +262,9 @@
                 <td colspan="3" class="a" style="border-left: none !important">
                     <div style="text-align:center; margin-right: -400px !important">
                         @if ($data->tgl_ttd != null)
-                        <p>Serpong, {{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_ttd)->format('d F Y') }}</p>
+                        <p>Tangerang Selatan, {{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_ttd)->format('d F Y') }}</p>
                         @else
-                        <p>Serpong, </p>
+                        <p>Tangerang Selatan, </p>
                         @endif
                         <table style="margin-left: 380px !important; margin-top: -8px; margin-bottom: -8px">
                             <tr class="a">
@@ -294,5 +293,24 @@
             </tr>
         </table>
     </div>
+
+    @if (isset($statusSTS))
+    <div class="">
+        <table class="c">
+            <tr class="c">
+                <td><p class="m-b-0 fs-12">NTB</p></td>
+                <td><p class="m-b-0 fs-12">: {{ $data->ntb != null ? $data->ntb : ''}}</p></td>
+            </tr>
+            <tr class="c">
+                <td><p class="m-t-0 m-b-0 fs-12">TANGGAL BAYAR</p></td>
+                @if ($data->tgl_bayar != null)
+                <td><p class="m-t-0 m-b-0 fs-12">: {{ Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $data->tgl_bayar)->format('d F Y | H:i:s') }}</p></td>
+                @else
+                <td><p class="m-t-0 m-b-0 fs-12">: </p></td>
+                @endif
+            </tr>
+        </table>
+    </div>
+    @endif
 </body>
 </html>
