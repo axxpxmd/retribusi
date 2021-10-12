@@ -259,7 +259,7 @@ class STRDController extends Controller
         if ($data->denda == 0) {
             $total_amount = $total_bayar;
         } else {
-            $total_amount = $data->denda;
+            $total_amount = $data->denda + $data->total_bayar;
         }
 
         $amount = \strval((int) str_replace(['.', 'Rp', ' '], '', $total_amount));
