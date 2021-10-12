@@ -132,9 +132,13 @@
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>Denda  :</strong></label>
                                                 @if ($data->status_denda == 0)
-                                                <label class="col-md-8 s-12">(Tidak) @currency($data->denda)</label>
+                                                    @if ($data->tgl_skrd_akhir < $dateNow)
+                                                    <label class="col-md-8 s-12"> ({{ $kenaikan }}%) &nbsp;@currency($jumlahBunga)</label>
+                                                    @else
+                                                    <label class="col-md-8 s-12">@currency($data->denda)</label>
+                                                    @endif
                                                 @else
-                                                <label class="col-md-8 s-12">(Ya) @currency($data->denda)</label>
+                                                <label class="col-md-8 s-12">(Ya {{ $kenaikan }}%) @currency($data->denda)</label>
                                                 @endif
                                             </div> 
                                             <div class="row">
@@ -147,10 +151,6 @@
                                             </div> 
                                             <!-- STRD (+bunga) -->
                                             @if ($data->tgl_skrd_akhir < $dateNow)
-                                            <div class="row">
-                                                <label class="col-md-4 text-right s-12"><strong>Bunga :</strong></label>
-                                                <label class="col-md-8 s-12"> ({{ $kenaikan }}%) &nbsp;@currency($jumlahBunga)</label>
-                                            </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>Total Bayar :</strong></label>
                                                 <label class="col-md-8 s-12">@currency($data->total_bayar + $jumlahBunga)</label>
