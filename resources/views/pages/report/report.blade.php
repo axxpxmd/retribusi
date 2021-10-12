@@ -39,8 +39,8 @@
                 <th class="d">Jenis Retribusi</th>
                 <th class="d">Tanggal SKRD</th>
                 <th class="d">Tanggal Bayar</th>
-                <th class="d">Ketetapan</th>
                 <th class="d">NTB</th>
+                <th class="d">Ketetapan</th>
                 <th class="d">Diskon</th>
                 <th class="d">Denda</th>
                 <th class="d">Total Bayar</th>
@@ -82,8 +82,8 @@
                     <td width="30%" class="d p-l-5">{{ $i->jenis_pendapatan->jenis_pendapatan }}</td>
                     <td width="10%" class="d p-l-5"> {{ Carbon\Carbon::createFromFormat('Y-m-d', $i->tgl_skrd_awal)->format('d M Y') }}</td>
                     <td width="15%" class="d p-l-5"> {{ $i->tgl_bayar != null ? Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $i->tgl_bayar)->format('d M Y | H:i:s') : '' }}</td>
-                    <td width="13%" class="d p-l-5">@currency($i->jumlah_bayar)</td>
                     <td width="13%" class="d p-l-5">{{ $i->ntb }}</td>
+                    <td width="13%" class="d p-l-5">@currency($i->jumlah_bayar)</td>
                     <td width="10%" class="d p-l-5">@currency(((int) $i->diskon / 100) * $i->jumlah_bayar)</td>
                     <td width="10%" class="d p-l-5">@currency((int)$totalDenda)</td>
                     <td width="12%" class="d p-l-5" >@currency((int)$totalBayar)</td>
