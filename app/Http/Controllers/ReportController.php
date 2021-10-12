@@ -173,14 +173,28 @@ class ReportController extends Controller
         $route = $this->route;
         $title = $this->title;
 
-        $id = \Crypt::decrypt($id);
-
+        $id   = \Crypt::decrypt($id);
         $data = TransaksiOPD::find($id);
+
+        $va_number = (int) $data->nomor_va_bjb;
+        $fileName  = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
+        $path_sftp = 'file_ttd_skrd/';
+        $dateNow   = Carbon::now()->format('Y-m-d');
+
+        //TODO: Get bunga
+        $tgl_skrd_akhir = $data->tgl_skrd_akhir;
+        $total_bayar    = $data->jumlah_bayar;
+        list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);
 
         return view($this->view . 'show', compact(
             'route',
             'title',
-            'data'
+            'data',
+            'path_sftp',
+            'fileName',
+            'kenaikan',
+            'jumlahBunga',
+            'dateNow'
         ));
     }
 

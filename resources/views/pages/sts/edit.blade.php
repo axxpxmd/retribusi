@@ -92,7 +92,7 @@
                                                     </div>
                                                     <div class="form-group m-0">
                                                         <label for="alamat_wp" class="form-control label-input-custom col-md-4">Alamat Wajib Retribusi<span class="text-danger ml-1">*</span></label>
-                                                        <input type="text" name="alamat_wp" id="alamat_wp" value="{{ $data->alamat_wp }}" readonly class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
+                                                        <textarea name="alamat_wp" rows="3" id="alamat_wp" readonly class="form-control r-0 light s-12 col-md-8" autocomplete="off" required>{{ $data->alamat_wp }}</textarea>
                                                     </div>
                                                     <div class="form-group m-0">
                                                         <label for="lokasi" class="form-control label-input-custom col-md-4">Lokasi<span class="text-danger ml-1">*</span></label>

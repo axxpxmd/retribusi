@@ -168,11 +168,11 @@
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>Status TTD  :</strong></label>
                                                 <label class="col-md-8">
-                                                    @if ($data->status_ttd == 1)
+                                                    @if ($data->status_ttd == 1 || $data->status_ttd == 3)
                                                     <span class="badge badge-success">Sudah TTD</span>
                                                     @elseif($data->status_ttd == 0)
                                                     <span class="badge badge-danger">Belum TTD</span>
-                                                    @elseif($data->status_ttd == 2)
+                                                    @elseif($data->status_ttd == 2 || $data->status_ttd == 4)
                                                     <span class="badge badge-warning">Sedang Proses TTD</span>
                                                     @endif
                                                 </label>
