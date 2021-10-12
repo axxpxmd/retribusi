@@ -113,6 +113,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('report', 'ReportController@index')->name('report.index');
     Route::get('report/{id}', 'ReportController@show')->name('report.show');
     Route::post('report/api-skrd', 'ReportController@api')->name('report.api');
-    Route::get('report/cetak-skrd', 'ReportController@cetakSKRD')->name('report.cetakSKRD');
+    Route::get('cetak-skrd', 'ReportController@cetakSKRD')->name('report.cetakSKRD');
     Route::get('report/get-jenis-pendapatan/{opd_id}', 'ReportController@getJenisPendapatanByOpd')->name('report.getJenisPendapatan');
 });

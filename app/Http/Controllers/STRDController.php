@@ -138,7 +138,7 @@ class STRDController extends Controller
             ->addColumn('bunga', function ($p) {
                 $tgl_skrd_akhir = $p->tgl_skrd_akhir;
                 $total_bayar    = $p->jumlah_bayar;
-                list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);;
+                list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);
 
                 return 'Rp. ' . number_format($jumlahBunga) . ' (' . $kenaikan . '%)';
             })

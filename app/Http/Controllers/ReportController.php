@@ -89,7 +89,25 @@ class ReportController extends Controller
                 return Carbon::createFromFormat('Y-m-d', $p->tgl_skrd_awal)->format('d M Y');
             })
             ->editColumn('total_bayar', function ($p) {
-                return 'Rp. ' . number_format($p->total_bayar);
+                $dateNow   = Carbon::now()->format('Y-m-d');
+
+                if ($p->status_denda == 0) {
+                    // SKRD
+                    if ($p->tgl_skrd_akhir >= $dateNow) {
+                        return 'Rp. ' . number_format($p->total_bayar + $p->denda);
+                    }
+
+                    // STRD
+                    if ($p->tgl_skrd_akhir < $dateNow) {
+                        $tgl_skrd_akhir = $p->tgl_skrd_akhir;
+                        $total_bayar    = $p->jumlah_bayar;
+                        list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);;
+
+                        return 'Rp. ' . number_format($p->total_bayar + $jumlahBunga);
+                    }
+                } else {
+                    return 'Rp. ' . number_format($p->total_bayar + $p->denda);
+                }
             })
             ->editColumn('diskon', function ($p) {
                 $diskonHarga = ((int) $p->diskon / 100) * $p->jumlah_bayar;
@@ -100,8 +118,22 @@ class ReportController extends Controller
                 }
             })
             ->editColumn('denda', function ($p) {
+                $dateNow   = Carbon::now()->format('Y-m-d');
+
                 if ($p->status_denda == 0) {
-                    return '-';
+                    // SKRD
+                    if ($p->tgl_skrd_akhir >= $dateNow) {
+                        return 'Rp. ' . number_format($p->denda);
+                    }
+
+                    // STRD
+                    if ($p->tgl_skrd_akhir < $dateNow) {
+                        $tgl_skrd_akhir = $p->tgl_skrd_akhir;
+                        $total_bayar    = $p->jumlah_bayar;
+                        list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);;
+
+                        return 'Rp. ' . number_format($jumlahBunga);
+                    }
                 } else {
                     return ' Rp. ' . number_format((int) $p->denda);
                 }
@@ -171,15 +203,16 @@ class ReportController extends Controller
             $opd_id = $checkOPD;
         }
 
-        // Get time now
+        //* Get time now
         $time = Carbon::now();
         $today = $time->format('Y-m-d');
 
-        $jenis_pendapatan_id = $request->jenis_pendapatan_id;
-        $status_bayar = $request->status_bayar;
-        $from = $request->tgl_skrd != null ? $request->tgl_skrd : $today;
-        $to = $request->tgl_skrd1 != null ? $request->tgl_skrd1 : $today;
+        //TODO: Get params
+        $from  = $request->tgl_skrd != null ? $request->tgl_skrd : $today;
+        $to    = $request->tgl_skrd1 != null ? $request->tgl_skrd1 : $today;
         $jenis = $request->jenis;
+        $status_bayar        = $request->status_bayar;
+        $jenis_pendapatan_id = $request->jenis_pendapatan_id;
 
         $data = TransaksiOPD::queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis);
 

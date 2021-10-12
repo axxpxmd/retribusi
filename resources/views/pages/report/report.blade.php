@@ -39,6 +39,7 @@
                 <th class="d">Jenis Retribusi</th>
                 <th class="d">Tanggal SKRD</th>
                 <th class="d">Tanggal Bayar</th>
+                <th class="d">Ketetapan</th>
                 <th class="d">NTB</th>
                 <th class="d">Diskon</th>
                 <th class="d">Denda</th>
@@ -48,6 +49,31 @@
         </thead>
         <tbody>
             @forelse  ($data as $index => $i)
+                @php
+                    $dateNow = Carbon\Carbon::now()->format('Y-m-d');
+
+                    if ($i->status_denda == 0) {
+                        // SKRD
+                        if ($i->tgl_skrd_akhir >= $dateNow) {
+                            $totalDenda = $i->denda;
+                            $totalBayar = $i->total_bayar + $i->denda;
+                        }
+
+                        // STRD
+                        if ($i->tgl_skrd_akhir < $dateNow) {
+                            $tgl_skrd_akhir = $i->tgl_skrd_akhir;
+                            $total_bayar    = $i->jumlah_bayar;
+                            list($jumlahBunga, $kenaikan) = App\Http\Controllers\PrintController::createBunga($tgl_skrd_akhir, $total_bayar);;
+
+                            $totalDenda = $jumlahBunga;
+                            $totalBayar = $i->total_bayar + $jumlahBunga;
+                        }
+                    } else {
+                        $totalDenda = $i->denda;
+                        $totalBayar = $i->total_bayar + $i->denda;
+                    }
+                @endphp 
+
                 <tr class="d">
                     <td width="3%" class="d text-center">{{ $index+1 }}</td>
                     <td width="10%" class="d p-l-5">{{ $i->no_bayar }}</td>
@@ -56,10 +82,11 @@
                     <td width="30%" class="d p-l-5">{{ $i->jenis_pendapatan->jenis_pendapatan }}</td>
                     <td width="10%" class="d p-l-5"> {{ Carbon\Carbon::createFromFormat('Y-m-d', $i->tgl_skrd_awal)->format('d M Y') }}</td>
                     <td width="15%" class="d p-l-5"> {{ $i->tgl_bayar != null ? Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $i->tgl_bayar)->format('d M Y | H:i:s') : '' }}</td>
+                    <td width="13%" class="d p-l-5">@currency($i->jumlah_bayar)</td>
                     <td width="13%" class="d p-l-5">{{ $i->ntb }}</td>
-                    <td width="10%" class="d p-l-5">@currency(((int) $i->diskon / 100) * $i->total_bayar)</td>
-                    <td width="10%" class="d p-l-5">@currency((int)$i->denda)</td>
-                    <td width="12%" class="d p-l-5" >@currency((int)$i->total_bayar)</td>
+                    <td width="10%" class="d p-l-5">@currency(((int) $i->diskon / 100) * $i->jumlah_bayar)</td>
+                    <td width="10%" class="d p-l-5">@currency((int)$totalDenda)</td>
+                    <td width="12%" class="d p-l-5" >@currency((int)$totalBayar)</td>
                     <td width="10%" class="d p-l-5">{{ $i->status_bayar == 1 ? 'Sudah' : 'Belum' }}</td>
                 </tr>
             @empty
