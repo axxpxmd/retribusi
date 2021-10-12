@@ -306,6 +306,13 @@ class STSController extends Controller
         $status_bayar = $request->status_bayar;
         $tgl_bayar    = $data->tgl_bayar == null ? null : $request->tgl_bayar;
 
+        //* Status Denda
+        if ($request->denda == 0) {
+            $status_denda = 0;
+        } else {
+            $status_denda = 1;
+        }
+
         // Check 
         if ($status_bayar == 1) {
             $data->update([
@@ -314,6 +321,7 @@ class STSController extends Controller
                 'no_bku'       => $request->no_bku,
                 // 'tgl_bku'   => $request->tgl_bku,
                 'chanel_bayar' => $request->chanel_bayar,
+                'status_denda' => $status_denda,
                 'ntb'    => $request->ntb,
                 'denda'  => (int) str_replace(['.', 'Rp', ' '], '', $request->denda),
                 'diskon' => $request->diskon,
@@ -342,6 +350,7 @@ class STSController extends Controller
                     'no_bku'       => $request->no_bku,
                     // 'tgl_bku'   => $request->tgl_bku,
                     'chanel_bayar' => $request->chanel_bayar,
+                    'status_denda' => $status_denda,
                     'ntb'    => $request->ntb,
                     'denda'  => (int) str_replace(['.', 'Rp', ' '], '', $request->denda),
                     'diskon' => $request->diskon,
