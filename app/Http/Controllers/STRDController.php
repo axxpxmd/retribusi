@@ -137,7 +137,7 @@ class STRDController extends Controller
             })
             ->addColumn('bunga', function ($p) {
                 $tgl_skrd_akhir = $p->tgl_skrd_akhir;
-                $total_bayar    = $p->total_bayar;
+                $total_bayar    = $p->jumlah_bayar;
                 list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);;
 
                 return 'Rp. ' . number_format($jumlahBunga) . ' (' . $kenaikan . '%)';
@@ -243,12 +243,26 @@ class STRDController extends Controller
         } else {
             $tgl_jatuh_tempo = $data->tgl_strd_akhir;
         }
+
         //TODO: Generate new tgl_jatuh_tempo (+30 day from last jatuh tempo)
         $daysDiff = $this->getDiffDays($data->tgl_skrd_akhir);
         $days = (int) abs($daysDiff) + 30;
         $tgl_jatuh_tempo = Carbon::createFromFormat('Y-m-d', $tgl_jatuh_tempo)->addDays($days)->format('Y-m-d');
 
-        $amount = \strval((int) str_replace(['.', 'Rp', ' '], '', $data->total_bayar));
+        //* Bunga
+        $tgl_skrd_akhir = $data->tgl_skrd_akhir;
+        $total_bayar    = $data->jumlah_bayar;
+        list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);
+        $total_bayar = $data->total_bayar + $jumlahBunga;
+
+        //TODO: Create amount
+        if ($data->denda == 0) {
+            $total_amount = $total_bayar;
+        } else {
+            $total_amount = $data->denda;
+        }
+
+        $amount = \strval((int) str_replace(['.', 'Rp', ' '], '', $total_amount));
         $expiredDate  = $tgl_jatuh_tempo . ' 23:59:59';
         $customerName = $data->nm_wajib_pajak;
         $va_number    = (int) $data->nomor_va_bjb;

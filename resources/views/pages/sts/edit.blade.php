@@ -95,16 +95,16 @@
                                                         <input type="text" name="alamat_wp" id="alamat_wp" value="{{ $data->alamat_wp }}" readonly class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
                                                     </div>
                                                     <div class="form-group m-0">
+                                                        <label for="lokasi" class="form-control label-input-custom col-md-4">Lokasi<span class="text-danger ml-1">*</span></label>
+                                                        <input type="text" name="lokasi" id="lokasi" value="{{ $data->lokasi }}" readonly placeholder="Contoh: Ruko Sektor 1.2 BSD" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
+                                                    </div>
+                                                    <div class="form-group m-0">
                                                         <label for="kecamatan_id" class="form-control label-input-custom col-md-4">Kecamatan<span class="text-danger ml-1">*</span></label>
                                                         <input type="text" name="kecamatan_id" id="kecamatan_id" value="{{ $data->kecamatan->n_kecamatan }}" readonly class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
                                                     </div>
                                                     <div class="form-group m-0">
                                                         <label for="kelurahan_id" class="form-control label-input-custom col-md-4">Kelurahan<span class="text-danger ml-1">*</span></label>
                                                         <input type="text" name="kelurahan_id" id="kelurahan_id" value="{{ $data->kelurahan->n_kelurahan }}" readonly class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
-                                                    </div>
-                                                    <div class="form-group m-0">
-                                                        <label for="lokasi" class="form-control label-input-custom col-md-4">Lokasi<span class="text-danger ml-1">*</span></label>
-                                                        <input type="text" name="lokasi" id="lokasi" value="{{ $data->lokasi }}" readonly placeholder="Contoh: Ruko Sektor 1.2 BSD" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
@@ -125,12 +125,16 @@
                                                         <input type="text" name="nm_ttd" id="nm_ttd" value="{{ $data->nm_ttd }}" readonly class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
                                                     </div>
                                                     <div class="form-group m-0">
+                                                        <label for="nip_ttd" class="form-control label-input-custom col-md-4">NIP Penandatangan<span class="text-danger ml-1">*</span></label>
+                                                        <input type="text" name="nip_ttd" id="nip_ttd" value="{{ $data->nip_ttd }}" readonly class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
+                                                    </div>
+                                                    <div class="form-group m-0">
                                                         <label for="tgl_ttd" class="form-control label-input-custom col-md-4">Tanggal TTD<span class="text-danger ml-1">*</span></label>
                                                         <input type="date" name="tgl_ttd" id="tgl_ttd" value="{{ $data->tgl_ttd }}" readonly class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
                                                     </div>
                                                     <div class="form-group m-0">
-                                                        <label for="jumlah_bayar" class="form-control label-input-custom col-md-4">Total Bayar<span class="text-danger ml-1">*</span></label>
-                                                        <input type="text" name="jumlah_bayar" value="{{ $data->total_bayar }}" readonly class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
+                                                        <label for="jumlah_bayar" class="form-control label-input-custom col-md-4">Ketetapan<span class="text-danger ml-1">*</span></label>
+                                                        <input type="text" name="jumlah_bayar" value="{{ $data->jumlah_bayar }}" readonly class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
                                                     </div>
                                                 </div>
                                             </div> 
@@ -181,11 +185,12 @@
                                                     </div>
                                                     <div class="form-group m-0">
                                                         <label for="denda" class="form-control label-input-custom col-md-4">Denda</label>
-                                                        <input type="text" name="denda" value="{{ $data->denda }}" {{ $readonly }} id="rupiah1" onkeyup="totalBayarBJB()" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
+                                                        <input type="text" name="denda" value="{{ $data->denda == 0 ? $jumlahBunga : $data->denda }}" {{ $readonly }} id="rupiah1" onkeyup="totalBayarBJB()" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
                                                     </div>
                                                     <div class="form-group m-0">
-                                                        <label for="diskon" class="form-control label-input-custom col-md-4">Diskon (%) : </label>
-                                                        <input type="text" name="diskon" value="{{ $data->diskon }}" readonly id="diskon" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
+                                                        <label for="diskon" class="form-control label-input-custom col-md-4">Diskon</label>
+                                                        <input type="text" name="diskon" value="{{ $data->diskon }} %" readonly id="diskon" class="form-control r-0 light col-md-1 s-12" autocomplete="off"/>
+                                                        <input type="text" name="jumlah_diskon" value="@currency($data->diskon / 100 * $data->jumlah_bayar )" readonly id="diskon" class="form-control r-0 light col-md-7 s-12" autocomplete="off"/>
                                                     </div>
                                                     <div class="form-group m-0">
                                                         <label for="total_bayar_bjb" class="form-control label-input-custom col-md-4">Total Bayar Bank</label>
@@ -219,6 +224,10 @@
 <script type="text/javascript">
     $('#status_bayar').val("{{ $data->status_bayar }}");
     $('#status_bayar').trigger('change.select2');
+
+    $(document).ready(function () {
+        totalBayarBJB();
+    });
 
     function totalBayarBJB() {
         total_bayar = "{{ $data->total_bayar }}";
@@ -265,7 +274,7 @@
                                 btnClass: 'btn-primary',
                                 keys: ['enter'],
                                 action: function () {
-                                    window.location.href = "{{ route('sts.index')}}";
+                                    location.reload();
                                 }
                             }
                         }

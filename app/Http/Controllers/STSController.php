@@ -223,7 +223,7 @@ class STSController extends Controller
         $role = Auth::user()->pengguna->modelHasRole->role->name;
         $now  = Carbon::now()->format('Y-m-d\TH:i');
 
-        // Check role
+        //TODO: Check role
         if ($role == 'super-admin' || $role == 'admin-opd') {
             $readonly = '';
         } else {
@@ -232,6 +232,15 @@ class STSController extends Controller
 
         $data      = TransaksiOPD::find($id);
         $va_number = (int) $data->nomor_va_bjb;
+
+        //TODO: Get bunga
+        $jumlahBunga = 0;
+        $dateNow = Carbon::now()->format('Y-m-d');
+        if ($data->tgl_skrd_akhir < $dateNow) {
+            $tgl_skrd_akhir = $data->tgl_skrd_akhir;
+            $total_bayar    = $data->jumlah_bayar;
+            list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);
+        }
 
         //* Check status pembayaran VA BJB
         if ($data->status_bayar == 0 && $data->nomor_va_bjb != null) {
@@ -289,7 +298,8 @@ class STSController extends Controller
             'data',
             'role',
             'readonly',
-            'now'
+            'now',
+            'jumlahBunga'
         ));
     }
 
@@ -304,10 +314,10 @@ class STSController extends Controller
         $role = Auth::user()->pengguna->modelHasRole->role->name;
 
         $status_bayar = $request->status_bayar;
-        $tgl_bayar    = $data->tgl_bayar == null ? null : $request->tgl_bayar;
+        $tgl_bayar    = $request->tgl_bayar;
 
         //* Status Denda
-        if ($request->denda == 0) {
+        if ($request->denda == 0 || $request->denda == null) {
             $status_denda = 0;
         } else {
             $status_denda = 1;
@@ -324,7 +334,6 @@ class STSController extends Controller
                 'status_denda' => $status_denda,
                 'ntb'    => $request->ntb,
                 'denda'  => (int) str_replace(['.', 'Rp', ' '], '', $request->denda),
-                'diskon' => $request->diskon,
                 'total_bayar_bjb' => $request->total_bayar_bjb == 0 ? null : (int) str_replace(['.', 'Rp', ' '], '', $request->total_bayar_bjb),
                 'updated_by'      => Auth::user()->pengguna->full_name . ' | Update data menu STS'
             ]);
@@ -338,7 +347,8 @@ class STSController extends Controller
                     'chanel_bayar' => $request->chanel_bayar,
                     'ntb'    => null,
                     'denda'  => 0,
-                    'diskon' => null,
+                    'diskon' => 0,
+                    'status_diskon' => 0,
                     'total_bayar_bjb' => null,
                     'total_bayar' => $data->jumlah_bayar,
                     'updated_by'  => Auth::user()->pengguna->full_name . ' | Update data menu STS'
@@ -353,7 +363,6 @@ class STSController extends Controller
                     'status_denda' => $status_denda,
                     'ntb'    => $request->ntb,
                     'denda'  => (int) str_replace(['.', 'Rp', ' '], '', $request->denda),
-                    'diskon' => $request->diskon,
                     'total_bayar_bjb' => $request->total_bayar_bjb == 0 ? null : (int) str_replace(['.', 'Rp', ' '], '', $request->total_bayar_bjb),
                     'updated_by'      => Auth::user()->pengguna->full_name . ' | Update data menu STS'
                 ]);
@@ -376,7 +385,7 @@ class STSController extends Controller
         list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);
 
         //* Total Bayar + Bunga
-        $total_bayar = $data->total_bayar + $jumlahBunga;
+        $total_bayar = $total_bayar + $jumlahBunga;
         $terbilang   = Html_number::terbilang($total_bayar) . 'rupiah';
 
         //* Tanggal Jatuh Tempo STRD
