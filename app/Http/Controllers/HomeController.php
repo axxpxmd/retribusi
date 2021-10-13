@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DataWP;
+use App\Models\JenisPendapatan;
 use Auth;
 use Carbon\Carbon;
 
@@ -10,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 // Models
 use App\Models\OPD;
 use App\Models\OPDJenisPendapatan;
+use App\Models\RincianJenisPendapatan;
 use App\Models\TransaksiOPD;
 
 class HomeController extends Controller
@@ -102,10 +105,19 @@ class HomeController extends Controller
         $parentJson = json_encode($parents);
         $childJson  = json_encode($childs);
 
-        $totalSKRD = TransaksiOPD::where('status_bayar', 0)->count();
+        // 
+        $dateNow   = Carbon::now()->format('Y-m-d');
+        $totalSKRD = TransaksiOPD::where('status_bayar', 0)->where('tgl_skrd_akhir', '>=', $date)->count();
+        $totalSTRD = TransaksiOPD::where('status_bayar', 0)->where('tgl_skrd_akhir', '<', $date)->count();
         $totalSTS  = TransaksiOPD::where('status_bayar', 1)->count();
+        $totalWR   = DataWP::count();
 
         $todayDatas = TransaksiOPD::orderBy('id', 'DESC')->whereDate('created_at', $day)->get();
+
+        $jenisPendapatan = JenisPendapatan::select(DB::raw("SUM(tmtransaksi_opd.total_bayar_bjb) as diterima"), 'jenis_pendapatan', 'target_pendapatan')->join('tmtransaksi_opd', 'tmtransaksi_opd.id_jenis_pendapatan', '=', 'tmjenis_pendapatan.id')
+            ->groupBy('tmtransaksi_opd.id_jenis_pendapatan')
+            ->orderBy('diterima', 'DESC')
+            ->paginate(5);
 
         return view('home', compact(
             'transaksiOPD',
@@ -128,7 +140,10 @@ class HomeController extends Controller
             'totalSKRD',
             'totalSTS',
             'todayDatas',
-            'jenisPendapatanTotalSudahBayar'
+            'jenisPendapatanTotalSudahBayar',
+            'totalSTRD',
+            'totalWR',
+            'jenisPendapatan'
         ));
     }
 }

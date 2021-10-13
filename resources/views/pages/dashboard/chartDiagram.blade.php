@@ -7,7 +7,8 @@
     }
 
     #container {
-        height: 400px;
+        width: auto;
+        height: auto;
     }
 
     .highcharts-data-table table {
@@ -47,13 +48,14 @@
     }
 
 </style>
-<div class="card">
+<div class="card no-b">
+    <h6 class="card-header bg-white font-weight-bold text-black">Total Pendapatan Tiap Dinas</h6>
     <div class="card-body">
         <figure class="highcharts-figure">
             <div id="container"></div>
         </figure>
     </div>
-</div>
+</div> 
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/data.js"></script>
 <script src="https://code.highcharts.com/modules/drilldown.js"></script>
@@ -74,7 +76,7 @@
             enabled: false
         },
         title: {
-            text: 'Total Pendapatan Retribusi Tiap Dinas, '+ year
+            text: 'Tahun '+ year
         },
         accessibility: {
             announceNewData: {

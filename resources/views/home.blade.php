@@ -8,6 +8,9 @@
     .bb-n{
         border-bottom: none !important
     }
+    .mr-n15{
+        margin-right: -15px !important
+    }
 </style>
 <div class="page has-sidebar-left height-full">
     <header class="blue accent-3 relative nav-sticky">
@@ -24,15 +27,97 @@
     </header>
     <div class="container-fluid relative animatedParent animateOnce">
         <div class="tab-content pb-3" id="v-pills-tabContent">
-            <div class="tab-pane animated fadeInUpShort show active" id="v-pills-1">
-                @role('super-admin|admin-bjb')
-                    @include('pages.dashboard.card1')
-                @endrole
-                @role('admin-opd|bendahara-opd|operator-opd|penandatangan')
-                    @include('pages.dashboard.card2')
-                @endrole
-                @role('super-admin|admin-bjb')
-                <div class="row p-0 col-md-12">
+            <div class="tab-pane animated fadeInUpShort show p-0 active" id="v-pills-1">
+                @role('super-admin')
+                <!-- Atas -->
+                <div class="row p-0 col-md-12 mt-3">
+                    <div class="col-md-7">
+                        <div class="card no-b" style="height: 374px !important">
+                            <h6 class="card-header bg-white font-weight-bold text-black">Pendapatan Dinas</h6>
+                            <div class="card-body">
+                                <div class="">
+                                    <table class="table table-striped">
+                                        <thead >
+                                            <tr class="text-black">
+                                                <th>No</th>
+                                                <th>Jenis Pendapatan</th>
+                                                <th>Target</th>
+                                                <th>Diterima</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($jenisPendapatan as $index => $i)
+                                            <tr>
+                                                <td class="text-center">{{  $index + $jenisPendapatan->firstItem() }}</td>
+                                                <td>{{ $i->jenis_pendapatan }}</td>
+                                                <td>@currency($i->target_pendapatan)</td>
+                                                <td>@currency($i->diterima)</td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                    <div>
+                                        {{ $jenisPendapatan->links() }}
+                                    </div>
+                                </div>    
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-0 col-md-5">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card no-b mr-n15">
+                                    <h6 class="card-header bg-white font-weight-bold text-black">Total SKRD</h6>
+                                    <div class="card-body">
+                                        <div class="text-center">
+                                            <i class="icon-taxes amber-text fs-40"></i>
+                                            <p class="fs-32 mt-3 mb-0"><span class="badge badge-pill badge-light sc-counter">{{ $totalSKRD }}</span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card no-b mr-n15">
+                                    <h6 class="card-header bg-white font-weight-bold text-black">Total STRD</h6>
+                                    <div class="card-body">
+                                        <div class="text-center">
+                                            <i class="icon-calendar-times-o text-danger fs-40"></i>
+                                            <p class="fs-32 mt-3 mb-0"><span class="badge badge-pill badge-light sc-counter">{{ $totalSTRD }}</span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row my-3">
+                            <div class="col-md-6">
+                                <div class="card no-b mr-n15">
+                                    <h6 class="card-header bg-white font-weight-bold text-black">Total STS</h6>
+                                    <div class="card-body">
+                                        <div class="text-center">
+                                            <i class="icon-pay-point text-primary fs-40"></i>
+                                            <p class="fs-32 mt-3 mb-0"><span class="badge badge-pill badge-light sc-counter">{{ $totalSTS }}</span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card no-b mr-n15">
+                                    <h6 class="card-header bg-white font-weight-bold text-black">Total Wajib Retribusi</h6>
+                                    <div class="card-body">
+                                        <div class="text-center">
+                                            <i class="icon-group text-success fs-40"></i>
+                                            <p class="fs-32 mt-3 mb-0"><span class="badge badge-pill badge-light sc-counter">{{ $totalWR }}</span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Tengah -->
+                @include('pages.dashboard.card1')
+                <!-- Bawah -->
+                <div class="row p-0 col-md-12 my-3">
                     <div class="col-md-8">
                         @include('pages.dashboard.chartDiagram')
                     </div>
@@ -40,47 +125,6 @@
                         @include('pages.dashboard.pieChart')
                     </div>
                 </div>
-                {{-- <div class="p-0 col-md-12 mt-3">
-                    <div class="card">
-                        <div class="card-header">
-                            <h6>Transaksi Hari Ini</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-striped table-bordered">
-                                    <thead >
-                                        <tr>
-                                            <th class="bb-n text-center" width="4%">NO</th>
-                                            <th class="bb-n" width="10%">NO SKRD</th>
-                                            <th class="bb-n" width="10%">Nomor Bayar</th>
-                                            <th class="bb-n" width="31%">Nama Dinas</th>
-                                            <th class="bb-n" width="25%">Jenis Retribusi</th>
-                                            <th class="bb-n" width="10%">Tanggal SKRD</th>
-                                            <th class="bb-n" width="10%">Ketetapan</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @forelse ($todayDatas as $index => $i)
-                                        <tr>
-                                            <td class="text-center">{{ $index+1 }}</td>
-                                            <td>{{ $i->no_skrd }}</td>
-                                            <td>{{ $i->no_bayar }}</td>
-                                            <td>{{ $i->opd->n_opd }}</td>
-                                            <td>{{ $i->jenis_pendapatan->jenis_pendapatan }}</td>
-                                            <td>{{ Carbon\Carbon::createFromFormat('Y-m-d', $i->tgl_skrd_awal)->format('d M Y') }}</td>
-                                            <td>Rp. {{ number_format($i->total_bayar) }}</td>
-                                        </tr>
-                                        @empty
-                                        <tr>
-                                            <td colspan="7" class="text-center">Tidak ada data hari ini</td>
-                                        </tr>
-                                        @endforelse
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div> --}}
                 @endrole
             </div>
         </div>

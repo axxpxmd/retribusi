@@ -1,4 +1,10 @@
-<div class="card" style="margin-right: -15px !important">
+<style>
+    /* #pieChart {
+        height: 300px !important
+    } */
+</style>
+<div class="card no-b mr-n15">
+    <h6 class="card-header bg-white font-weight-bold text-black">Total Transaksi</h6>
     <div class="card-body">
         <figure class="highcharts-figure">
             <div id="pieChart"></div>
@@ -23,7 +29,7 @@
             enabled: false
         },
         title: {
-            text: 'Total Transaksi Retribusi, ' + year
+            text: 'Tahun ' + year
         },
         tooltip: {
             pointFormat: '{series.name}: <b>{point.y}</b>'
@@ -49,12 +55,18 @@
             data: [{
                 name: 'SKRD',
                 y: {{ $totalSKRD }},
-                color: '#2196f3'
+                color: '#2196f3',
+                sliced: true
             }, {
                 name: 'STS',
                 y: {{ $totalSTS }},
-                color: '#ffee58',
+                color: '#ffeb3b',
                 sliced: true
+            }, {
+                name: 'STRD',
+                y: {{ $totalSTRD }},
+                color: '#4caf50',
+                // sliced: true
             }]
         }]
     });
