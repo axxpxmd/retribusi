@@ -10,12 +10,12 @@
             <?php $no++ ;?>
             @if ($no % 2 == 0)
                 <div class="p-5 bg-light">
-                    <h5 class="font-weight-normal text-black s-14" title="{{ $i->n_opd }}" style="margin-bottom: 20px">{{ $i->initial }}</h5>
+                    <h5 class="font-weight-normal text-primary s-14" title="{{ $i->n_opd }}" style="margin-bottom: 20px">{{ $i->initial }}</h5>
                     <span class="s-48 font-weight-lighter text-primary">{{ $i->transaksi_opd_count }}</span>
                 </div>
                 @else
                 <div class="p-5">
-                    <h5 class="font-weight-normal text-black s-14" title="{{ $i->n_opd }}" style="margin-bottom: 20px">{{ $i->initial }}</h5>
+                    <h5 class="font-weight-normal amber-text s-14" title="{{ $i->n_opd }}" style="margin-bottom: 20px">{{ $i->initial }}</h5>
                     <span class="s-48 font-weight-lighter amber-text">{{ $i->transaksi_opd_count }}</span>
                 </div>
                 @endif

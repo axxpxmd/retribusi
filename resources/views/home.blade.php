@@ -108,7 +108,7 @@
                                     <h6 class="card-header bg-white font-weight-bold text-black">Total Wajib Retribusi</h6>
                                     <div class="card-body">
                                         <div class="text-center">
-                                            <i class="icon-group text-success fs-40"></i>
+                                            <i class="icon-user-circle text-success fs-40"></i>
                                             <p class="fs-32 mt-3 mb-0"><span class="badge badge-pill badge-light sc-counter">{{ $totalWR }}</span></p>
                                         </div>
                                     </div>
