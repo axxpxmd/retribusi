@@ -11,6 +11,9 @@
     .mr-n15{
         margin-right: -15px !important
     }
+    .mr-n30{
+        margin-right: -30px !important
+    }
 </style>
 <div class="page has-sidebar-left height-full">
     <header class="blue accent-3 relative nav-sticky">
@@ -123,17 +126,23 @@
                 @endrole
                 <!-- Bawah -->
                 <div class="row p-0 col-md-12">
+                    @role('super-admin|admin-bjb')
                     <div class="col-md-8">
-                        @role('super-admin|admin-bjb')
-                            @include('pages.dashboard.chartDiagram')
-                        @endrole
-                        @role('admin-opd|operator-opd|bendahara-opd|penandatangan')
-                            {{-- Data Hari ini & Bulan ini --}}
-                        @endrole
+                        @include('pages.dashboard.chartDiagram')
                     </div>
                     <div class="p-0 col-md-4">
                         @include('pages.dashboard.pieChart')
                     </div>
+                    @endrole
+
+                    @role('admin-opd|operator-opd|bendahara-opd|penandatangan')
+                    <div class="col-md-4">
+                        @include('pages.dashboard.pieChart')
+                    </div>
+                    <div class="col-md-8">
+                        {{--  --}}
+                    </div>
+                    @endrole
                 </div>
             </div>
         </div>

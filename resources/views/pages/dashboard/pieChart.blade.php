@@ -56,7 +56,7 @@
                 name: 'SKRD',
                 y: {{ $totalSKRD }},
                 color: '#2196f3',
-                sliced: true
+                // sliced: true
             }, {
                 name: 'STS',
                 y: {{ $totalSTS }},
