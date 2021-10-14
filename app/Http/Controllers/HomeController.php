@@ -114,7 +114,9 @@ class HomeController extends Controller
 
         $todayDatas = TransaksiOPD::orderBy('id', 'DESC')->whereDate('created_at', $day)->get();
 
-        $jenisPendapatan = JenisPendapatan::select(DB::raw("SUM(tmtransaksi_opd.total_bayar_bjb) as diterima"), 'jenis_pendapatan', 'target_pendapatan')->join('tmtransaksi_opd', 'tmtransaksi_opd.id_jenis_pendapatan', '=', 'tmjenis_pendapatan.id')
+        $jenisPendapatan = JenisPendapatan::select(DB::raw("SUM(tmtransaksi_opd.total_bayar_bjb) as diterima"), 'jenis_pendapatan', 'target_pendapatan')
+            ->join('tmtransaksi_opd', 'tmtransaksi_opd.id_jenis_pendapatan', '=', 'tmjenis_pendapatan.id')
+            ->where('tmtransaksi_opd.total_bayar_bjb', '!=', 0)
             ->groupBy('tmtransaksi_opd.id_jenis_pendapatan')
             ->orderBy('diterima', 'DESC')
             ->paginate(5);
