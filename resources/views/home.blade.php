@@ -28,7 +28,6 @@
     <div class="container-fluid relative animatedParent animateOnce">
         <div class="tab-content pb-3" id="v-pills-tabContent">
             <div class="tab-pane animated fadeInUpShort show p-0 active" id="v-pills-1">
-                @role('super-admin')
                 <!-- Atas -->
                 <div class="row p-0 col-md-12 mt-3">
                     <div class="col-md-7">
@@ -46,18 +45,22 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($jenisPendapatan as $index => $i)
+                                            @forelse ($targetPendapatan as $index => $i)
                                             <tr>
-                                                <td class="text-center">{{  $index + $jenisPendapatan->firstItem() }}</td>
+                                                <td class="text-center">{{  $index + $targetPendapatan->firstItem() }}</td>
                                                 <td>{{ $i->jenis_pendapatan }}</td>
                                                 <td>@currency($i->target_pendapatan)</td>
                                                 <td>@currency($i->diterima)</td>
                                             </tr>
-                                            @endforeach
+                                            @empty
+                                            <tr>
+                                                <td colspan="4" class="text-center">Tidak ada data.</td>
+                                            </tr>
+                                            @endforelse
                                         </tbody>
                                     </table>
                                     <div>
-                                        {{ $jenisPendapatan->links() }}
+                                        {{ $targetPendapatan->links() }}
                                     </div>
                                 </div>    
                             </div>
@@ -115,17 +118,23 @@
                     </div>
                 </div>
                 <!-- Tengah -->
-                @include('pages.dashboard.card1')
+                @role('super-admin|admin-bjb')
+                    @include('pages.dashboard.card1')
+                @endrole
                 <!-- Bawah -->
-                <div class="row p-0 col-md-12 my-3">
+                <div class="row p-0 col-md-12">
                     <div class="col-md-8">
-                        @include('pages.dashboard.chartDiagram')
+                        @role('super-admin|admin-bjb')
+                            @include('pages.dashboard.chartDiagram')
+                        @endrole
+                        @role('admin-opd|operator-opd|bendahara-opd|penandatangan')
+                            {{-- Data Hari ini & Bulan ini --}}
+                        @endrole
                     </div>
                     <div class="p-0 col-md-4">
                         @include('pages.dashboard.pieChart')
                     </div>
                 </div>
-                @endrole
             </div>
         </div>
     </div>

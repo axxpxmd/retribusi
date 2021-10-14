@@ -29,39 +29,50 @@ class HomeController extends Controller
         $date  = $time->toDateString();
         $month = $time->month;
         $day   = Carbon::today();
+        $dateNow = $time->format('Y-m-d');
 
+        // Check opd_id
         $opd_id = Auth::user()->pengguna->opd_id;
 
-        // Card 1
-        $jenisOpdIn     = OPDJenisPendapatan::select('id_opd')->get()->toArray();
-        $transaksiOPD   = OPD::whereIn('id', $jenisOpdIn)->withCount('transaksi_opd')->get();
-        $transaksiTotal = TransaksiOPD::count();
-
-        // Card 2 
-        $sudahBayar = TransaksiOPD::select(DB::raw("SUM(total_bayar) as total_bayar"), DB::raw("COUNT(id) as total_data"))->where('status_bayar', 1)->where('id_opd', $opd_id)->groupBy('id_opd')->first();
-        $belumBayar = TransaksiOPD::select(DB::raw("SUM(total_bayar) as total_bayar"), DB::raw("COUNT(id) as total_data"))->where('status_bayar', 0)->where('id_opd', $opd_id)->groupBy('id_opd')->first();
-        // check
-        $sudahBayarTotalData  = $sudahBayar != null ? $sudahBayar->total_data : 0;
-        $sudahBayarTotalBayar = $sudahBayar != null ? $sudahBayar->total_bayar : 0;
-        $belumBayarTotalData  = $belumBayar != null ? $belumBayar->total_data : 0;
-        $belumBayarTotalBayar = $belumBayar != null ? $belumBayar->total_bayar : 0;
-
-
-        $jenisPendapatanOpds = TransaksiOPD::select(DB::raw("SUM(total_bayar) as total_bayar"), DB::raw("COUNT(id_jenis_pendapatan) as jumlah"), 'id_jenis_pendapatan')
-            ->where('id_opd', $opd_id)
-            ->groupBy('id_jenis_pendapatan')
+        //* Tabel Target Pendapatan
+        $targetPendapatan = JenisPendapatan::select(DB::raw("SUM(tmtransaksi_opd.total_bayar_bjb) as diterima"), 'jenis_pendapatan', 'target_pendapatan')
+            ->join('tmtransaksi_opd', 'tmtransaksi_opd.id_jenis_pendapatan', '=', 'tmjenis_pendapatan.id')
+            ->where('tmtransaksi_opd.total_bayar_bjb', '!=', 0)
+            ->when($opd_id != 0, function ($q) use ($opd_id) {
+                $q->where('tmtransaksi_opd.id_opd', $opd_id);
+            })
+            ->groupBy('tmtransaksi_opd.id_jenis_pendapatan')
+            ->orderBy('diterima', 'DESC')
             ->paginate(5);
-        $jenisPendapatanTotal = TransaksiOPD::select(DB::raw("SUM(total_bayar) as total_bayar"), DB::raw("COUNT(id_jenis_pendapatan) as jumlah"))->where('id_opd', $opd_id)->first();
-        $jenisPendapatanTotalSudahBayar = TransaksiOPD::select(DB::raw("SUM(total_bayar) as total_bayar"), DB::raw("COUNT(id_jenis_pendapatan) as jumlah"))->where('id_opd', $opd_id)->where('status_bayar', 1)->first();
 
-        $todays     = TransaksiOPD::where('id_opd', $opd_id)->whereDate('created_at', $day)->orderBy('id', 'DESC')->get();
-        $todaysskrd = TransaksiOPD::where('id_opd', $opd_id)->where('status_bayar', 0)->whereDate('created_at', $day)->count();
-        $todayssts  = TransaksiOPD::where('id_opd', $opd_id)->where('status_bayar', 1)->whereDate('created_at', $day)->count();
+        //* Total SKRD, STRD, STS, Wajib Retribusi
+        $totalSKRD = TransaksiOPD::where('status_bayar', 0)
+            ->where('tgl_skrd_akhir', '>=', $date)
+            ->when($opd_id != 0, function ($q) use ($opd_id) {
+                $q->where('tmtransaksi_opd.id_opd', $opd_id);
+            })
+            ->count();
+        $totalSTRD = TransaksiOPD::where('status_bayar', 0)
+            ->where('tgl_skrd_akhir', '<', $date)
+            ->when($opd_id != 0, function ($q) use ($opd_id) {
+                $q->where('tmtransaksi_opd.id_opd', $opd_id);
+            })
+            ->count();
+        $totalSTS  = TransaksiOPD::where('status_bayar', 1)
+            ->when($opd_id != 0, function ($q) use ($opd_id) {
+                $q->where('tmtransaksi_opd.id_opd', $opd_id);
+            })
+            ->count();
+        $totalWR   = DataWP::when($opd_id != 0, function ($q) use ($opd_id) {
+            $q->where('tmdata_wp.id_opd', $opd_id);
+        })->count();
 
-        $months     = TransaksiOPD::where('id_opd', $opd_id)->whereRaw('extract(month from created_at) = ?', [$month])->orderBy('id', 'DESC')->get();
-        $monthsskrd = TransaksiOPD::where('id_opd', $opd_id)->where('status_bayar', 0)->whereRaw('extract(month from created_at) = ?', [$month])->count();
-        $monthssts  = TransaksiOPD::where('id_opd', $opd_id)->where('status_bayar', 1)->whereRaw('extract(month from created_at) = ?', [$month])->count();
+        //* Total Retribsui / Dinas
+        $totalRetribusi = TransaksiOPD::count();
+        $existedOPD     = OPDJenisPendapatan::select('id_opd')->get()->toArray();
+        $totalRetribusiOPD = OPD::whereIn('id', $existedOPD)->withCount('transaksi_opd')->get();
 
+        //* Diagram Chart (Role: super-admin)
         $higherIncome = TransaksiOPD::select(DB::raw("SUM(total_bayar) as y"), 'tmopds.n_opd as name', 'tmopds.n_opd as drilldown', 'id_opd')
             ->join('tmopds', 'tmopds.id', '=', 'tmtransaksi_opd.id_opd')
             ->groupBy('id_opd')
@@ -69,7 +80,7 @@ class HomeController extends Controller
             ->get();
 
         $parents = [];
-        $childs = [];
+        $childs  = [];
 
         foreach ($higherIncome as $key => $value) {
             $color = ['#26a69a', '#26c6da', '#42a5f5', '#ef5350', '#ff7043', '#5c6bc0', '#ffee58', '#bdbdbd', '#66bb6a ', '#ec407a'];
@@ -105,47 +116,65 @@ class HomeController extends Controller
         $parentJson = json_encode($parents);
         $childJson  = json_encode($childs);
 
-        // 
-        $dateNow   = Carbon::now()->format('Y-m-d');
-        $totalSKRD = TransaksiOPD::where('status_bayar', 0)->where('tgl_skrd_akhir', '>=', $date)->count();
-        $totalSTRD = TransaksiOPD::where('status_bayar', 0)->where('tgl_skrd_akhir', '<', $date)->count();
-        $totalSTS  = TransaksiOPD::where('status_bayar', 1)->count();
-        $totalWR   = DataWP::count();
 
-        $todayDatas = TransaksiOPD::orderBy('id', 'DESC')->whereDate('created_at', $day)->get();
 
-        $jenisPendapatan = JenisPendapatan::select(DB::raw("SUM(tmtransaksi_opd.total_bayar_bjb) as diterima"), 'jenis_pendapatan', 'target_pendapatan')
-            ->join('tmtransaksi_opd', 'tmtransaksi_opd.id_jenis_pendapatan', '=', 'tmjenis_pendapatan.id')
-            ->where('tmtransaksi_opd.total_bayar_bjb', '!=', 0)
-            ->groupBy('tmtransaksi_opd.id_jenis_pendapatan')
-            ->orderBy('diterima', 'DESC')
-            ->paginate(5);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // // Card 1
+        // $jenisOpdIn     = OPDJenisPendapatan::select('id_opd')->get()->toArray();
+        // $transaksiOPD   = OPD::whereIn('id', $jenisOpdIn)->withCount('transaksi_opd')->get();
+        // $transaksiTotal = TransaksiOPD::count();
+
+        // // Card 2 
+        // $sudahBayar = TransaksiOPD::select(DB::raw("SUM(total_bayar) as total_bayar"), DB::raw("COUNT(id) as total_data"))->where('status_bayar', 1)->where('id_opd', $opd_id)->groupBy('id_opd')->first();
+        // $belumBayar = TransaksiOPD::select(DB::raw("SUM(total_bayar) as total_bayar"), DB::raw("COUNT(id) as total_data"))->where('status_bayar', 0)->where('id_opd', $opd_id)->groupBy('id_opd')->first();
+        // // check
+        // $sudahBayarTotalData  = $sudahBayar != null ? $sudahBayar->total_data : 0;
+        // $sudahBayarTotalBayar = $sudahBayar != null ? $sudahBayar->total_bayar : 0;
+        // $belumBayarTotalData  = $belumBayar != null ? $belumBayar->total_data : 0;
+        // $belumBayarTotalBayar = $belumBayar != null ? $belumBayar->total_bayar : 0;
+
+
+        // $jenisPendapatanOpds = TransaksiOPD::select(DB::raw("SUM(total_bayar) as total_bayar"), DB::raw("COUNT(id_jenis_pendapatan) as jumlah"), 'id_jenis_pendapatan')
+        //     ->where('id_opd', $opd_id)
+        //     ->groupBy('id_jenis_pendapatan')
+        //     ->paginate(5);
+        // $jenisPendapatanTotal = TransaksiOPD::select(DB::raw("SUM(total_bayar) as total_bayar"), DB::raw("COUNT(id_jenis_pendapatan) as jumlah"))->where('id_opd', $opd_id)->first();
+        // $jenisPendapatanTotalSudahBayar = TransaksiOPD::select(DB::raw("SUM(total_bayar) as total_bayar"), DB::raw("COUNT(id_jenis_pendapatan) as jumlah"))->where('id_opd', $opd_id)->where('status_bayar', 1)->first();
+
+        // $todays     = TransaksiOPD::where('id_opd', $opd_id)->whereDate('created_at', $day)->orderBy('id', 'DESC')->get();
+        // $todaysskrd = TransaksiOPD::where('id_opd', $opd_id)->where('status_bayar', 0)->whereDate('created_at', $day)->count();
+        // $todayssts  = TransaksiOPD::where('id_opd', $opd_id)->where('status_bayar', 1)->whereDate('created_at', $day)->count();
+
+        // $months     = TransaksiOPD::where('id_opd', $opd_id)->whereRaw('extract(month from created_at) = ?', [$month])->orderBy('id', 'DESC')->get();
+        // $monthsskrd = TransaksiOPD::where('id_opd', $opd_id)->where('status_bayar', 0)->whereRaw('extract(month from created_at) = ?', [$month])->count();
+        // $monthssts  = TransaksiOPD::where('id_opd', $opd_id)->where('status_bayar', 1)->whereRaw('extract(month from created_at) = ?', [$month])->count();
+
+        // $todayDatas = TransaksiOPD::orderBy('id', 'DESC')->whereDate('created_at', $day)->get();
 
         return view('home', compact(
-            'transaksiOPD',
-            'transaksiTotal',
-            'sudahBayarTotalData',
-            'sudahBayarTotalBayar',
-            'belumBayarTotalData',
-            'belumBayarTotalBayar',
-            'jenisPendapatanOpds',
-            'jenisPendapatanTotal',
-            'todays',
-            'months',
-            'todaysskrd',
-            'todayssts',
-            'monthsskrd',
-            'monthssts',
-            'parentJson',
-            'higherIncome',
-            'childJson',
+            'targetPendapatan',
             'totalSKRD',
-            'totalSTS',
-            'todayDatas',
-            'jenisPendapatanTotalSudahBayar',
             'totalSTRD',
+            'totalSTS',
             'totalWR',
-            'jenisPendapatan'
+            'totalRetribusi',
+            'totalRetribusiOPD',
+            'parentJson',
+            'childJson',
         ));
     }
 }
