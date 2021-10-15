@@ -125,6 +125,10 @@ class VABJB
 
     public static function CheckVABJB($tokenBJB, $va_number)
     {
+        /* Check Virtual Account from Bank BJB
+         * INQUIRY BILLING REQUEST (GET /billing/<cin>/<va_number>)
+         */
+
         $url = config('app.ip_api_bjb');
         $key = config('app.key_bjb');
         $cin = config('app.cin_bjb');
