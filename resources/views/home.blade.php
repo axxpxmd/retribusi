@@ -73,7 +73,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="card no-b mr-n15">
-                                    <h6 class="card-header bg-white font-weight-bold text-black">Total SKRD</h6>
+                                    <h6 class="card-header font-weight-bold text-white" style="background: #FFCE3B">Total SKRD</h6>
                                     <div class="card-body">
                                         <div class="text-center">
                                             <i class="icon-taxes amber-text fs-40"></i>
@@ -84,7 +84,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="card no-b mr-n15">
-                                    <h6 class="card-header bg-white font-weight-bold text-black">Total STRD</h6>
+                                    <h6 class="card-header bg-danger font-weight-bold text-white">Total STRD</h6>
                                     <div class="card-body">
                                         <div class="text-center">
                                             <i class="icon-calendar-times-o text-danger fs-40"></i>
@@ -97,7 +97,7 @@
                         <div class="row my-3">
                             <div class="col-md-6">
                                 <div class="card no-b mr-n15">
-                                    <h6 class="card-header bg-white font-weight-bold text-black">Total STS</h6>
+                                    <h6 class="card-header bg-primary font-weight-bold text-white">Total STS</h6>
                                     <div class="card-body">
                                         <div class="text-center">
                                             <i class="icon-pay-point text-primary fs-40"></i>
@@ -108,7 +108,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="card no-b mr-n15">
-                                    <h6 class="card-header bg-white font-weight-bold text-black">Total Wajib Retribusi</h6>
+                                    <h6 class="card-header bg-success font-weight-bold text-white">Total Wajib Retribusi</h6>
                                     <div class="card-body">
                                         <div class="text-center">
                                             <i class="icon-user-circle text-success fs-40"></i>
