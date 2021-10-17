@@ -10,6 +10,7 @@
  * @author Asip Hamdi
  * Github : axxpxmd
  */
+
 namespace App\Http\Controllers;
 
 use Auth;
@@ -265,14 +266,7 @@ class STRDController extends Controller
         list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);
         $total_bayar = $data->total_bayar + $jumlahBunga;
 
-        //TODO: Create amount
-        if ($data->denda == 0) {
-            $total_amount = $total_bayar;
-        } else {
-            $total_amount = $data->denda + $data->total_bayar;
-        }
-
-        $amount = \strval((int) str_replace(['.', 'Rp', ' '], '', $total_amount));
+        $amount = \strval((int) str_replace(['.', 'Rp', ' '], '', $total_bayar));
         $expiredDate  = $tgl_jatuh_tempo . ' 23:59:59';
         $customerName = $data->nm_wajib_pajak;
         $va_number    = (int) $data->nomor_va_bjb;
