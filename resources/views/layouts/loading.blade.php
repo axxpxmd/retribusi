@@ -7,3 +7,9 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    function closeModal(){
+        $('#loading').modal('hide');
+        console.log('error');
+    }
+</script>

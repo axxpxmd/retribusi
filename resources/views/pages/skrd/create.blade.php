@@ -307,11 +307,6 @@
         }
         $(this).addClass('was-validated');
     });
-
-    function closeModal(){
-        $('#loading').modal('hide');
-        console.log('modal close');
-    }
     
 </script>
 @endsection
