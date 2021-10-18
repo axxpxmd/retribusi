@@ -292,6 +292,7 @@
                 },
                 error : function(data){
                     $('#loading').modal('hide');
+                    console.log('error');
                     err = '';
                     respon = data.responseJSON;
                     if(respon.errors){
