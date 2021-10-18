@@ -24,6 +24,9 @@ $template = App\Models\Template::select('id', 'logo', 'logo_title', 'logo_auth')
     <link rel="stylesheet" href="{{ asset('assets/css/jquery-fancybox.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/buttons.dataTables.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/myStyle.css') }}">
+
+    <!-- Animate CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
    
 </head>
 <body class="light">

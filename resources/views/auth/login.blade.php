@@ -18,6 +18,7 @@ $template = App\Models\Template::select('id', 'logo', 'logo_title', 'logo_auth')
     <link rel="stylesheet" href="{{ asset('css/myStyle.css') }}">
     <link rel="stylesheet" href="{{ asset('css/util.css') }}">
 
+    <!-- Animate CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 </head>
 <body class="light">
@@ -26,7 +27,7 @@ $template = App\Models\Template::select('id', 'logo', 'logo_title', 'logo_auth')
             <div class="col-md-9 height-full css-selector d-flex align-content-center flex-wrap">
                 <div class="col-md-6">
                     <div class="text-white p-l-80">
-                        <p class="fs-50 font-weight-light animate__animated animate__backInLeft">SKRD</p>
+                        <p id="title" class="fs-50 font-weight-light animate__animated animate__backInLeft">SKRD</p>
                         <p class="mt-4 mb-1 fs-25 font-weight-lighter">Surat Ketetapan Retribusi Daerah.</p>
                         <p class="mt-0 fs-25 font-weight-lighter">Kota Tangerang Selatan.</p>
                         <hr class="mt-2 bg-white" width="200%">

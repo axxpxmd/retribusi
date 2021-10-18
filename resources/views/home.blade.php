@@ -33,7 +33,7 @@
             <div class="tab-pane animated fadeInUpShort show p-0 active" id="v-pills-1">
                 <!-- Atas -->
                 <div class="row p-0 col-md-12 mt-3">
-                    <div class="col-md-7">
+                    <div class="col-md-7 animate__animated animate__backInDown">
                         <div class="card no-b" style="height: 374px !important">
                             <h6 class="card-header bg-white font-weight-bold text-black">Pendapatan</h6>
                             <div class="card-body">
@@ -69,7 +69,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="p-0 col-md-5">
+                    <div class="p-0 col-md-5 animate__animated animate__backInDown">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="card no-b mr-n15">
@@ -77,7 +77,7 @@
                                     <div class="card-body">
                                         <div class="text-center">
                                             <i class="icon-taxes amber-text fs-40"></i>
-                                            <p class="fs-32 mt-3 mb-0"><span class="badge badge-pill badge-light sc-counter">{{ $totalSKRD }}</span></p>
+                                            <p class="fs-32 mt-3 mb-0"><span class="badge badge-pill badge-light ">{{ $totalSKRD }}</span></p>
                                         </div>
                                     </div>
                                 </div>
@@ -88,7 +88,7 @@
                                     <div class="card-body">
                                         <div class="text-center">
                                             <i class="icon-calendar-times-o text-danger fs-40"></i>
-                                            <p class="fs-32 mt-3 mb-0"><span class="badge badge-pill badge-light sc-counter">{{ $totalSTRD }}</span></p>
+                                            <p class="fs-32 mt-3 mb-0"><span class="badge badge-pill badge-light ">{{ $totalSTRD }}</span></p>
                                         </div>
                                     </div>
                                 </div>
@@ -101,7 +101,7 @@
                                     <div class="card-body">
                                         <div class="text-center">
                                             <i class="icon-pay-point text-primary fs-40"></i>
-                                            <p class="fs-32 mt-3 mb-0"><span class="badge badge-pill badge-light sc-counter">{{ $totalSTS }}</span></p>
+                                            <p class="fs-32 mt-3 mb-0"><span class="badge badge-pill badge-light ">{{ $totalSTS }}</span></p>
                                         </div>
                                     </div>
                                 </div>
@@ -112,7 +112,7 @@
                                     <div class="card-body">
                                         <div class="text-center">
                                             <i class="icon-user-circle text-success fs-40"></i>
-                                            <p class="fs-32 mt-3 mb-0"><span class="badge badge-pill badge-light sc-counter">{{ $totalWR }}</span></p>
+                                            <p class="fs-32 mt-3 mb-0"><span class="badge badge-pill badge-light ">{{ $totalWR }}</span></p>
                                         </div>
                                     </div>
                                 </div>
@@ -127,10 +127,10 @@
                 <!-- Bawah -->
                 <div class="row p-0 col-md-12">
                     @role('super-admin|admin-bjb')
-                    <div class="col-md-8">
+                    <div class="col-md-8 animate__animated animate__backInUp">
                         @include('pages.dashboard.chartDiagram')
                     </div>
-                    <div class="p-0 col-md-4">
+                    <div class="p-0 col-md-4 animate__animated animate__backInUp">
                         @include('pages.dashboard.pieChart')
                     </div>
                     @endrole
