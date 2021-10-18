@@ -18,6 +18,7 @@ $template = App\Models\Template::select('id', 'logo', 'logo_title', 'logo_auth')
     <link rel="stylesheet" href="{{ asset('css/myStyle.css') }}">
     <link rel="stylesheet" href="{{ asset('css/util.css') }}">
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 </head>
 <body class="light">
     <div class="page parallel">
@@ -25,7 +26,7 @@ $template = App\Models\Template::select('id', 'logo', 'logo_title', 'logo_auth')
             <div class="col-md-9 height-full css-selector d-flex align-content-center flex-wrap">
                 <div class="col-md-6">
                     <div class="text-white p-l-80">
-                        <p class="fs-50 font-weight-light">SKRD</p>
+                        <p class="fs-50 font-weight-light animate__animated animate__backInLeft">SKRD</p>
                         <p class="mt-4 mb-1 fs-25 font-weight-lighter">Surat Ketetapan Retribusi Daerah.</p>
                         <p class="mt-0 fs-25 font-weight-lighter">Kota Tangerang Selatan.</p>
                         <hr class="mt-2 bg-white" width="200%">
@@ -35,7 +36,7 @@ $template = App\Models\Template::select('id', 'logo', 'logo_title', 'logo_auth')
             </div>
             <div class="col-md-3 white">
                 <div class="pl-5 pt-5 pr-5 m-t-90 pb-0">
-                    <img src="{{ asset('images/template/'.$template->logo) }}" class="mx-auto d-block" width="150" alt=""/>
+                    <img src="{{ asset('images/template/'.$template->logo) }}" class="mx-auto d-block animate__animated animate__backInDown" width="150" alt=""/>
                 </div>
                 <div class="p-5">
                     <h3 class="font-weight-normal">Selamat Datang</h3>
