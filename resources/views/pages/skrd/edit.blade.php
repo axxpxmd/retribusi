@@ -225,7 +225,7 @@
                 contentType: false,
                 processData: false,
                 success : function(data) {
-                    $('#loading').modal('hide');
+                    closeModal();
                     $.confirm({
                         title: 'Success',
                         content: data.message,
@@ -257,7 +257,7 @@
                     }
                     $('#alert').html("<div role='alert' class='alert alert-danger alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button><strong>Error!</strong> " + respon.message + "<ol class='pl-3 m-0'>" + err + "</ol></div>");
                     $('#action').removeAttr('disabled');
-                    $('#loading').modal('hide');
+                    closeModal();
                 }
             });
             return false;

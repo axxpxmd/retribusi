@@ -269,7 +269,7 @@
                 contentType: false,
                 processData: false,
                 success : function(data) {
-                    $('#loading').modal('hide');
+                    closeModal();
                     $.confirm({
                         title: 'Success',
                         content: data.message,
