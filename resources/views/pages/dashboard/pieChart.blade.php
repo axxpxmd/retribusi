@@ -55,17 +55,17 @@
             data: [{
                 name: 'SKRD',
                 y: {{ $totalSKRD }},
-                color: '#2196f3',
+                color: '#FFCE3C',
                 // sliced: true
             }, {
                 name: 'STS',
                 y: {{ $totalSTS }},
-                color: '#ffeb3b',
+                color: '#4385F4',
                 sliced: true
             }, {
                 name: 'STRD',
                 y: {{ $totalSTRD }},
-                color: '#4caf50',
+                color: '#ED5665',
                 // sliced: true
             }]
         }]

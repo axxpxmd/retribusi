@@ -10,6 +10,7 @@
  * @author Asip Hamdi
  * Github : axxpxmd
  */
+
 namespace App\Http\Controllers;
 
 use Auth;
@@ -285,7 +286,7 @@ class TandaTanganController extends Controller
         $id = $request->id;
         $dataSKRD = TransaksiOPD::find($id);
 
-        $fileName   =  str_replace(' ', '', $dataSKRD->nm_wajib_pajak) . '-' . $dataSKRD->no_skrd . ".pdf";
+        $fileName   = str_replace(' ', '', $dataSKRD->nm_wajib_pajak) . '-' . $dataSKRD->no_skrd . ".pdf";
         $path_local = 'app/public/';
         $path_sftp  = 'file_ttd_skrd/';
 
