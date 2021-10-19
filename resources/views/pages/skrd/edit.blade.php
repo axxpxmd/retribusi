@@ -165,6 +165,7 @@
 @section('script')
 <script type="text/javascript">
     $('#kode_rekening').val("{{ $data->rincian_jenis != null ? $data->rincian_jenis->nmr_rekening : '' }}");
+    $('#kd_jenis').val("{{ $data->rincian_jenis != null ? $data->rincian_jenis->kd_jenis : '' }}");
 
     $('#id_rincian_jenis_pendapatan').on('change', function(){
         val = $(this).val();
