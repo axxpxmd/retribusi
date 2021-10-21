@@ -65,7 +65,9 @@ class PenggunaController extends Controller
     {
         $opd_id = $request->opd_id;
 
-        $pengguna = Pengguna::whereNotIn('id', [7])->orderBy('id', 'DESC');
+        $pengguna = Pengguna::with(['user', 'role', 'opd', 'modelHasRole.role'])
+            ->whereNotIn('id', [7])
+            ->orderBy('id', 'DESC');
 
         if ($opd_id != 0) {
             $pengguna->where('opd_id', $opd_id)->whereNotIn('id', [7]);

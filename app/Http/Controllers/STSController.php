@@ -35,7 +35,7 @@ class STSController extends Controller
     protected $title = 'STS';
     protected $view  = 'pages.sts.';
 
-    //TODO: Check Permission
+   
     public function __construct()
     {
         $this->middleware(['permission:STS']);

@@ -42,9 +42,10 @@ class SKRDController extends Controller
     protected $title  = 'SKRD';
     protected $view   = 'pages.skrd.';
 
-    //TODO: Check Permission
-    public function __construct()
+    public function __construct(VABJB $vabjb)
     {
+        $this->vabjb = $vabjb;
+
         $this->middleware(['permission:SKRD']);
     }
 
@@ -327,7 +328,7 @@ class SKRDController extends Controller
             }
 
             //TODO: Create VA BJB
-            $resGetVABJB = VABJB::createVABJB($tokenBJB, $clientRefnum, $amount, $expiredDate, $customerName, $productCode);
+            $resGetVABJB = $this->vabjb->createVABJB($tokenBJB, $clientRefnum, $amount, $expiredDate, $customerName, $productCode);
             if ($resGetVABJB->successful()) {
                 $resJson = $resGetVABJB->json();
                 if (isset($resJson['rc']) != 0000)
