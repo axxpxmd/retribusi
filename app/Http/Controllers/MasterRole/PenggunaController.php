@@ -125,18 +125,9 @@ class PenggunaController extends Controller
             'email'   => 'required|max:100|email|unique:tmpenggunas,email',
             'opd_id'  => 'required',
             'role_id' => 'required',
-            'phone'   => 'required|max:20'
+            'phone'   => 'required|max:20',
+            'nik'     => 'required'
         ]);
-
-        // Get Data
-        $path = 'app\User';
-        $username  = $request->username;
-        $password  = $request->password;
-        $full_name = $request->full_name;
-        $email   = $request->email;
-        $phone   = $request->phone;
-        $opd_id  = $request->opd_id;
-        $role_id = $request->role_id;
 
         /* Tahapan : 
          * 1. tmusers
@@ -145,22 +136,31 @@ class PenggunaController extends Controller
          */
 
         // Tahap 1
+        $username  = $request->username;
+        $password  = $request->password;
+
         $user = new User();
         $user->username = $username;
         $user->password = Hash::make($password);
         $user->save();
 
         // Tahap 2
-        $pengguna = new Pengguna();
-        $pengguna->user_id   = $user->id;
-        $pengguna->opd_id    = $opd_id;
-        $pengguna->full_name = $full_name;
-        $pengguna->email = $email;
-        $pengguna->phone = $phone;
-        $pengguna->photo = 'default.png';
-        $pengguna->save();
+        $dataPengguna = [
+            'user_id' => $user->id,
+            'opd_id'  => $request->opd_id,
+            'full_name' => $request->full_name,
+            'email'     => $request->email,
+            'phone'     => $request->phone,
+            'photo'     => 'default.png',
+            'nik'       => $request->nik
+        ];
+
+        Pengguna::create($dataPengguna);
 
         // Tahap 3
+        $path = 'app\User';
+        $role_id = $request->role_id;
+
         $model_has_role = new ModelHasRoles();
         $model_has_role->role_id    = $role_id;
         $model_has_role->model_type = $path;
@@ -196,7 +196,7 @@ class PenggunaController extends Controller
     public function update(Request $request, $id)
     {
         $pengguna = Pengguna::find($id);
-        $user_id = $pengguna->user_id;
+        $user_id  = $pengguna->user_id;
 
         // Validation
         $request->validate([
@@ -205,7 +205,8 @@ class PenggunaController extends Controller
             'email' => 'required|max:100|email|unique:tmpenggunas,email,' . $id,
             'phone' => 'required|max:20',
             'opd_id'  => 'required',
-            'role_id' => 'required'
+            'role_id' => 'required',
+            'nik'     => 'required'
         ]);
 
         // Get Data
@@ -215,6 +216,7 @@ class PenggunaController extends Controller
         $phone   = $request->phone;
         $opd_id  = $request->opd_id;
         $role_id = $request->role_id;
+        $nik     = $request->nik;
 
         /* Tahapan : 
          * 1. tmusers
@@ -232,7 +234,8 @@ class PenggunaController extends Controller
             'full_name' => $full_name,
             'email'  => $email,
             'phone'  => $phone,
-            'opd_id' => $opd_id
+            'opd_id' => $opd_id,
+            'nik'    => $nik
         ]);
 
         // Tahap 3

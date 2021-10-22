@@ -52,6 +52,10 @@
                                         <label class="col-md-10 s-12">{{ $pengguna->full_name }}</label>
                                     </div>
                                     <div class="row">
+                                        <label class="col-md-2 text-right s-12"><strong>NIK:</strong></label>
+                                        <label class="col-md-10 s-12">{{ $pengguna->nik }}</label>
+                                    </div>
+                                    <div class="row">
                                         <label class="col-md-2 text-right s-12"><strong>OPD :</strong></label>
                                         <label class="col-md-10 s-12">{{ $pengguna->opd != null ? $pengguna->opd->n_opd : '' }}</label>
                                     </div>
@@ -104,6 +108,10 @@
                                             <div class="form-group m-0">
                                                 <label for="full_name" class="form-control label-input-custom col-md-2">Nama Lengkap<span class="text-danger ml-1">*</span></label>
                                                 <input type="text" name="full_name" id="full_name" class="form-control r-0 light s-12 col-md-6" value="{{ $pengguna->full_name }}" autocomplete="off" required/>
+                                            </div> 
+                                            <div class="form-group m-0">
+                                                <label for="nik" class="form-control label-input-custom col-md-2">NIK<span class="text-danger ml-1">*</span></label>
+                                                <input type="number" name="nik" id="nik" class="form-control r-0 light s-12 col-md-6" value="{{ $pengguna->nik }}" autocomplete="off" required/>
                                             </div> 
                                             <div class="form-group m-0" id="opd_display">
                                                 <label for="opd_id" class="form-control label-input-custom col-md-2">OPD<span class="text-danger ml-1">*</span></label>

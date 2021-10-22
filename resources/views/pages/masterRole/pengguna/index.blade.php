@@ -102,7 +102,11 @@
                                                 <label for="full_name" class="form-control label-input-custom col-md-2">Nama Lengkap<span class="text-danger ml-1">*</span></label>
                                                 <input type="text" name="full_name" id="full_name" class="form-control r-0 light s-12 col-md-6" autocomplete="off" required/>
                                             </div>
-                                            <div class="form-group m-0" id="opd_display">
+                                            <div class="form-group m-0">
+                                                <label for="nik" class="form-control label-input-custom col-md-2">NIK<span class="text-danger ml-1">*</span></label>
+                                                <input type="number" name="nik" id="nik" class="form-control r-0 light s-12 col-md-6" autocomplete="off" required/>
+                                            </div>
+                                            <div class="form-group mb-1" id="opd_display">
                                                 <label for="opd_id" class="form-control label-input-custom col-md-2">OPD<span class="text-danger ml-1">*</span></label>
                                                 <div class="col-md-6 p-0 bg-light">
                                                     <select class="select2 form-control r-0 light s-12" name="opd_id" id="opd_id" autocomplete="off">
@@ -113,7 +117,7 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="form-group mt-1">
+                                            <div class="form-group">
                                                 <label for="email" class="form-control label-input-custom col-md-2">Email<span class="text-danger ml-1">*</span></label>
                                                 <input type="email" name="email" id="email" class="form-control r-0 light s-12 col-md-6" autocomplete="off" required/>
                                             </div>
