@@ -10,6 +10,7 @@
  * @author Asip Hamdi
  * Github : axxpxmd
  */
+
 namespace App\Http\Controllers;
 
 use DataTables;
@@ -19,8 +20,10 @@ use App\Http\Controllers\Controller;
 
 // Models
 use App\Models\OPD;
+use App\Models\TtdOPD;
 use App\Models\JenisPendapatan;
 use App\Models\OPDJenisPendapatan;
+use App\Models\Pengguna;
 
 class OPDController extends Controller
 {
@@ -58,10 +61,14 @@ class OPDController extends Controller
             })
             ->editColumn('jenis_pendapatan', function ($p) {
                 $jenis_pendapatan = OPDJenisPendapatan::where('id_opd', $p->id)->count();
-                return $jenis_pendapatan . " <a href='" . route($this->route . 'editJenisPendapatan', $p->id) . "' class='text-success pull-right' title='Edit Jenis Pendapatan'><i class='icon-clipboard-list2 mr-1'></i></a>";
+                return $jenis_pendapatan . " <a href='" . route($this->route . 'editJenisPendapatan', $p->id) . "' class='text-success pull-right ml-1' title='Edit Jenis Pendapatan'><i class='icon-clipboard-list2 mr-1'></i></a>";
+            })
+            ->addColumn('penanda_tangan', function ($p) {
+                $penanda_tangan = TtdOPD::where('id_opd', $p->id)->count();
+                return $penanda_tangan . " <a href='" . route($this->route . 'penandaTangan', $p->id) . "' class='amber-text pull-right ml-1' title='Edit Jenis Pendapatan'><i class='icon-pencil mr-1'></i></a>";
             })
             ->addIndexColumn()
-            ->rawColumns(['action', 'n_opd', 'jenis_pendapatan'])
+            ->rawColumns(['action', 'n_opd', 'jenis_pendapatan', 'penanda_tangan'])
             ->toJson();
     }
 
@@ -73,12 +80,14 @@ class OPDController extends Controller
         $data = OPD::find($id);
 
         $jenis_pendaptans = OPDJenisPendapatan::where('id_opd', $id)->get();
+        $penanda_tangans = TtdOPD::where('id_opd', $id)->get();
 
         return view($this->view . 'show', compact(
             'route',
             'title',
             'data',
-            'jenis_pendaptans'
+            'jenis_pendaptans',
+            'penanda_tangans'
         ));
     }
 
@@ -101,9 +110,7 @@ class OPDController extends Controller
         $request->validate([
             'n_opd' => 'required|unique:tmopds,n_opd,' . $id,
             'kode'  => 'required|unique:tmopds,n_opd,' . $id,
-            'initial' => 'required',
-            'nm_ttd'  => 'required',
-            'nip_ttd' => 'required|numeric|digits:18'
+            'initial' => 'required'
         ]);
 
         $data = OPD::find($id);
@@ -164,6 +171,64 @@ class OPDController extends Controller
     public function destroyJenisPendapatan($id)
     {
         OPDJenisPendapatan::where('id', $id)->delete();
+
+        return response()->json([
+            'success' => true
+        ]);
+    }
+
+    public function penandaTangan($id)
+    {
+        $route = $this->route;
+        $title = $this->title;
+
+        $opd = OPD::where('id', $id)->first();
+        $exist_penanda_tangans = TtdOPD::select('user_id')->where('id_opd', $id)->get()->toArray();
+        $penanda_tangans = Pengguna::select('user_id', 'full_name', 'nik')
+            ->where('opd_id', $id)
+            ->whereNotIn('user_id', $exist_penanda_tangans)
+            ->whereNotNull('nik')
+            ->get();
+
+        return view($this->view . 'formPenandaTangan', compact(
+            'route',
+            'title',
+            'opd',
+            'penanda_tangans'
+        ));
+    }
+
+    public function getPenandaTangan($id)
+    {
+        $datas = TtdOPD::select('tr_ttd_opds.id as id', 'full_name', 'nik')
+            ->join('tmpenggunas', 'tmpenggunas.user_id', '=', 'tr_ttd_opds.user_id')
+            ->where('tr_ttd_opds.id_opd', $id)
+            ->get();
+
+        return $datas;
+    }
+
+    public function storePenandaTangan(Request $request)
+    {
+        $id_opd = $request->id;
+        $id_penanda_tangans = $request->penanda_tangans;
+        $id_penanda_tangans_length = count($id_penanda_tangans);
+
+        for ($i = 0; $i < $id_penanda_tangans_length; $i++) {
+            $data = new TtdOPD();
+            $data->id_opd = $id_opd;
+            $data->user_id = $id_penanda_tangans[$i];
+            $data->save();
+        }
+
+        return response()->json([
+            'message' => 'Data permission berhasil tersimpan.'
+        ]);
+    }
+
+    public function destroyPenandaTangan($id)
+    {
+        TtdOPD::where('id', $id)->delete();
 
         return response()->json([
             'success' => true

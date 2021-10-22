@@ -53,13 +53,23 @@
                                         <label class="col-md-2 text-right s-12"><strong>NPWPD:</strong></label>
                                         <label class="col-md-10 s-12">{{ $data->npwpd }}</label>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card mt-2">
+                            <div class="card-body">
+                                <div class="col-md-12">
                                     <div class="row">
-                                        <label class="col-md-2 text-right s-12"><strong>Nama TTD:</strong></label>
-                                        <label class="col-md-10 s-12">{{ $data->nm_ttd }}</label>
-                                    </div>
-                                    <div class="row">
-                                        <label class="col-md-2 text-right s-12"><strong>NIP TTD:</strong></label>
-                                        <label class="col-md-10 s-12">{{ $data->nip_ttd }}</label>
+                                        <label class="col-md-2 text-right s-12"><strong>Penanda Tangan :</strong></label>
+                                        <label class="col-md-10 p-0 s-12">
+                                            <ol style="margin-left: -15px ">
+                                                @forelse  ($penanda_tangans as $i)
+                                                <li class="mb-2 s-12">{{ $i->user->pengguna->full_name }} [ {{ $i->user->pengguna->nik }} ]</li>
+                                                @empty
+                                                <span>-</span>
+                                                @endforelse
+                                            </ol>
+                                        </label>
                                     </div>
                                 </div>
                             </div>

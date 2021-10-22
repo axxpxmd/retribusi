@@ -33,8 +33,9 @@
                                         <thead>
                                             <th width="5%">No</th>
                                             <th width="10%">Kode</th>
-                                            <th width="70%">Nama OPD</th>
+                                            <th width="60%">Nama OPD</th>
                                             <th width="10">Jenis Pendapatan</th>
+                                            <th width="10">Penanda Tangan</th>
                                             <th width="5%"></th>
                                         </thead>
                                         <tbody></tbody>
@@ -64,6 +65,7 @@
             {data: 'kode', name: 'kode'},
             {data: 'n_opd', name: 'n_opd'},
             {data: 'jenis_pendapatan', name: 'jenis_pendapatan', align: 'center', className: 'text-center'},
+            {data: 'penanda_tangan', name: 'penanda_tangan', align: 'center', className: 'text-center'},
             {data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center'}
         ]
     });

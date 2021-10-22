@@ -34,11 +34,11 @@
                                 <div class="form-row form-inline">
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <label for="jenis_pendatans" class="col-form-label col-md-3">Jenis Pendapatan :</label>
+                                            <label for="penanda_tangans" class="col-form-label col-md-3">Penanda Tangan :</label>
                                             <div class="col-md-9 p-0">
-                                                <select name="jenis_pendatans[]" id="jenis_pendatan" placeholder="" class="select2 form-control r-0 light s-12" multiple="multiple" required>
-                                                    @foreach($jenis_pendapatans as $key=>$i)
-                                                    <option value="{{ $i->id }}">{{ $i->jenis_pendapatan }}</option>
+                                                <select name="penanda_tangans[]" id="penanda_tangan" placeholder="" class="select2 form-control r-0 light s-12" multiple="multiple" required>
+                                                    @foreach($penanda_tangans as $key=>$i)
+                                                    <option value="{{ $i->user_id }}">{{ $i->full_name }} ( {{ $i->nik }} )</option>
                                                     @endforeach
                                                 <select>
                                             </div>
@@ -52,7 +52,7 @@
                             </form>
                         </div>
                         <div class="col-6 mt-2">
-                            <strong>List Jenis Pendapatan:</strong>
+                            <strong>List Penanda Tangan:</strong>
                             <ol id="viewPermission" class=""></ol>
                         </div>
                     </div>
@@ -73,7 +73,7 @@
         else{
             $('#alert').html('');
             $('#action').attr('disabled', true);
-            $.post("{{ route($route.'storeJenisPendapatan') }}", $(this).serialize(), function(data){
+            $.post("{{ route($route.'storePenandaTangan') }}", $(this).serialize(), function(data){
                 $('#alert').html("<div role='alert' class='alert alert-success alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button><strong>Success!</strong> " + data.message + "</div>");
                 getPermissions();
                 location.reload();
@@ -92,16 +92,16 @@
 
     function getPermissions(){
         $('#viewPermission').html("Loading...");
-        urlPermission = "{{ route($route.'getJenisPendapatan', ':id') }}".replace(':id', $('#id').val());
+        urlPermission = "{{ route($route.'getPenandaTangan', ':id') }}".replace(':id', $('#id').val());
         $.get(urlPermission, function(data){
             $('#viewPermission').html("");
             if(data.length > 0){
                 $.each(data, function(index, value){
                     val = "'" + value.id + "'";
-                    $('#viewPermission').append('<li>' + value.jenis_pendapatan + ' <a href="#" onclick="removePermission(' + val + ')" class="text-danger" title="Hapus Data"><i class="icon-remove"></i></a></li>');
+                    $('#viewPermission').append('<li>' + value.full_name + ' [ '+value.nik+' ] <a href="#" onclick="removePermission(' + val + ')" class="text-danger" title="Hapus Data"><i class="icon-remove"></i></a></li>');
                 });
             }else{
-                $('#viewPermission').html("<em>Jenis Pendapatan kosong.</em>");
+                $('#viewPermission').html("<em>Penanda Tangan kosong.</em>");
             }
         });
     }
@@ -121,7 +121,7 @@
                     btnClass: 'btn-primary',
                     keys: ['enter'],
                     action: function(){
-                        $.post("{{ route($route.'destoryJenisPendapatan', ':name') }}".replace(':name', name), {'_method' : 'DELETE', 'id' : $('#id').val()}, function(data){
+                        $.post("{{ route($route.'destroyPenandaTangan', ':name') }}".replace(':name', name), {'_method' : 'DELETE', 'id' : $('#id').val()}, function(data){
                             getPermissions();
                             location.reload();
                         }, "JSON").fail(function(){

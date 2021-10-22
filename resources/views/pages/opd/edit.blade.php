@@ -49,15 +49,7 @@
                                             <div class="form-group m-0">
                                                 <label for="initial" class="col-form-label s-12 col-md-2">Inisial<span class="text-danger ml-1">*</span></label>
                                                 <input type="text" name="initial" id="initial" readonly class="form-control r-0 light s-12 col-md-4" value="{{ $data->initial }}" autocomplete="off" required/>
-                                            </div> 
-                                            <div class="form-group m-0">
-                                                <label for="nm_ttd" class="col-form-label s-12 col-md-2">Nama TTD<span class="text-danger ml-1">*</span></label>
-                                                <input type="text" name="nm_ttd" id="nm_ttd" class="form-control r-0 light s-12 col-md-4" value="{{ $data->nm_ttd }}" autocomplete="off" required/>
-                                            </div> 
-                                            <div class="form-group m-0">
-                                                <label for="nip_ttd" class="col-form-label s-12 col-md-2">NIP TTD<span class="text-danger ml-1">*</span></label>
-                                                <input type="text" name="nip_ttd" id="nip_ttd" class="form-control r-0 light s-12 col-md-4" value="{{ $data->nip_ttd }}" autocomplete="off" required/>
-                                            </div> 
+                                            </div>  
                                             <div class="form-group m-0">
                                                 <label for="npwpd" class="col-form-label s-12 col-md-2">NPWPD</label>
                                                 <input type="text" name="npwpd" id="npwpd" class="form-control r-0 light s-12 col-md-4" value="{{ $data->npwpd }}" autocomplete="off"/>

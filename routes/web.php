@@ -53,6 +53,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('opd/store-jenis-pendapatan', 'OPDController@storeJenisPendapatan')->name('opd.storeJenisPendapatan');
     Route::get('opd/get-jenis-pendapatan/{id}', 'OPDController@getJenisPendapatan')->name('opd.getJenisPendapatan');
     Route::delete('opd/delete-jenis-pendapatan/{id}', 'OPDController@destroyJenisPendapatan')->name('opd.destoryJenisPendapatan');
+    Route::get('opd/edit-penanda-tangan/{id}', 'OPDController@penandaTangan')->name('opd.penandaTangan');
+    Route::get('opd/get-penanda-tangan/{id}', 'OPDController@getPenandaTangan')->name('opd.getPenandaTangan');
+    Route::post('opd/store-penanda-tangan', 'OPDController@storePenandaTangan')->name('opd.storePenandaTangan');
+    Route::delete('opd/delete-penanda-tangan/{id}', 'OPDController@destroyPenandaTangan')->name('opd.destroyPenandaTangan');
 
     // Jenis Pendapatan
     Route::resource('jenis-pendapatan', 'JenisPendapatanController');
