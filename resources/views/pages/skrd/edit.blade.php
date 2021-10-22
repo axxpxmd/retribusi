@@ -220,7 +220,7 @@
         else{
             $('#alert').html('');
             $('#action').attr('disabled', true);
-            $('#loading').modal('show');
+            // $('#loading').modal('show');
             url = "{{ route($route.'update', ':id') }}".replace(':id', $('#id').val());
             $.ajax({
                 url : url,
@@ -229,7 +229,7 @@
                 contentType: false,
                 processData: false,
                 success : function(data) {
-                    closeModal();
+                    // closeModal();
                     $.confirm({
                         title: 'Success',
                         content: data.message,
@@ -261,7 +261,7 @@
                     }
                     $('#alert').html("<div role='alert' class='alert alert-danger alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button><strong>Error!</strong> " + respon.message + "<ol class='pl-3 m-0'>" + err + "</ol></div>");
                     $('#action').removeAttr('disabled');
-                    closeModal();
+                    // closeModal();
                 }
             });
             return false;
