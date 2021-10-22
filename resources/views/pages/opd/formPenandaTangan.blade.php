@@ -38,7 +38,7 @@
                                             <div class="col-md-9 p-0">
                                                 <select name="penanda_tangans[]" id="penanda_tangan" placeholder="" class="select2 form-control r-0 light s-12" multiple="multiple" required>
                                                     @foreach($penanda_tangans as $key=>$i)
-                                                    <option value="{{ $i->user_id }}">{{ $i->full_name }} ( {{ $i->nik }} )</option>
+                                                    <option value="{{ $i->user_id }}">{{ $i->full_name }} [ NIP. {{ $i->nik }} ]</option>
                                                     @endforeach
                                                 <select>
                                             </div>
@@ -98,7 +98,7 @@
             if(data.length > 0){
                 $.each(data, function(index, value){
                     val = "'" + value.id + "'";
-                    $('#viewPermission').append('<li>' + value.full_name + ' [ '+value.nik+' ] <a href="#" onclick="removePermission(' + val + ')" class="text-danger" title="Hapus Data"><i class="icon-remove"></i></a></li>');
+                    $('#viewPermission').append('<li>' + value.full_name + ' [ NIP. '+value.nik+' ] <a href="#" onclick="removePermission(' + val + ')" class="text-danger" title="Hapus Data"><i class="icon-remove"></i></a></li>');
                 });
             }else{
                 $('#viewPermission').html("<em>Penanda Tangan kosong.</em>");
