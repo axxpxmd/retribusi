@@ -32,6 +32,21 @@
         <div class="tab-content pb-3" id="v-pills-tabContent">
             <div class="tab-pane animated fadeInUpShort show p-0 active" id="v-pills-1">
                 <!-- Atas -->
+                {{-- <div class="card my-3 no-b">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <p class="font-weight-bold text-black mb-0">Dashboard Aplikasi Retribusi</p>
+                            </div>
+                            <div class="col-md-2" style="margin-left: -60px !important">
+                                <select class="select2 form-control r-0 light s-12" id="id_rincian_jenis_pendapatan" name="id_rincian_jenis_pendapatan" autocomplete="off">
+                                    <option value="2021">2021</option>
+                                    <option value="2022">2022</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div> --}}
                 <div class="row p-0 col-md-12 mt-3">
                     <div class="col-md-7 animate__animated animate__backInDown">
                         <div class="card no-b" style="height: 374px !important">
