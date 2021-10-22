@@ -136,14 +136,17 @@
                                                         <input type="date" name="tgl_skrd_akhir" id="tgl_skrd_akhir" readonly class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
                                                     </div>
                                                     <div class="form-group m-0">
-                                                        <label for="nm_ttd" class="form-control label-input-custom col-md-4 font-weight-normal">Nama Penandatangan<span class="text-danger ml-1">*</span></label>
-                                                        <input type="text" name="nm_ttd" id="nm_ttd" readonly value="{{ $opd->nm_ttd }}" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
+                                                        <label class="form-control label-input-custom col-md-4 font-weight-normal">Penanda Tangan<span class="text-danger ml-1">*</span></label>
+                                                        <div class="col-md-8 p-0 bg-light">
+                                                            <select class="select2 form-control r-0 light s-12" id="penanda_tangan_id" name="penanda_tangan_id" autocomplete="off">
+                                                                <option value="0">Pilih</option>
+                                                                @foreach ($penanda_tangans as $i)
+                                                                    <option value="{{ $i->id }}">{{ $i->user->pengguna->full_name }} [ {{ $i->user->pengguna->nik }} ]</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
                                                     </div>
-                                                    <div class="form-group m-0">
-                                                        <label for="nip_ttd" class="form-control label-input-custom col-md-4 font-weight-normal">NIP Penandatangan<span class="text-danger ml-1">*</span></label>
-                                                        <input type="text" name="nip_ttd" id="nip_ttd" readonly value="{{ $opd->nip_ttd }}" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
-                                                    </div>
-                                                    <div class="form-group m-0">
+                                                    <div class="form-group mt-1">
                                                         <label for="tgl_ttd" class="form-control label-input-custom col-md-4 font-weight-normal">Tanggal TTD<span class="text-danger ml-1">*</span></label>
                                                         <input type="date" name="tgl_ttd" id="tgl_ttd" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
                                                     </div>

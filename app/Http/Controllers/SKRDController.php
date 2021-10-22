@@ -35,6 +35,7 @@ use App\Models\TransaksiOPD;
 use App\Models\JenisPendapatan;
 use App\Models\OPDJenisPendapatan;
 use App\Models\RincianJenisPendapatan;
+use App\Models\TtdOPD;
 
 class SKRDController extends Controller
 {
@@ -231,6 +232,7 @@ class SKRDController extends Controller
         $jenis_pendapatan = JenisPendapatan::find($jenis_pendapatan_id);
         $kecamatans = Kecamatan::select('id', 'n_kecamatan')->where('kabupaten_id', 40)->get();
         $rincian_jenis_pendapatans = RincianJenisPendapatan::where('id_jenis_pendapatan', $jenis_pendapatan_id)->get();
+        $penanda_tangans = TtdOPD::where('id_opd', $opd_id)->get();
 
         return view($this->view . 'create', compact(
             'route',
@@ -239,7 +241,8 @@ class SKRDController extends Controller
             'jenis_pendapatan',
             'kecamatans',
             'rincian_jenis_pendapatans',
-            'data_wp'
+            'data_wp',
+            'penanda_tangans'
         ));
     }
 
@@ -260,8 +263,7 @@ class SKRDController extends Controller
         $request->validate([
             'id_opd'  => 'required',
             'tgl_ttd' => 'required',
-            'nm_ttd'  => 'required',
-            'nip_ttd' => 'required',
+            'penanda_tangan_id' => 'required',
             'alamat_wp'      => 'required',
             'nmr_daftar'     => 'required|unique:tmtransaksi_opd,nmr_daftar',
             'kecamatan_id'   => 'required',
@@ -344,11 +346,13 @@ class SKRDController extends Controller
         }
 
         //* Tahap 3
+        $penanda_tangan = TtdOPD::where('id', $request->penanda_tangan_id)->first();
+
         $data = [
             'id_opd'  => $request->id_opd,
             'tgl_ttd' => $request->tgl_ttd,
-            'nm_ttd'  => $request->nm_ttd,
-            'nip_ttd' => $request->nip_ttd,
+            'nm_ttd'  => $penanda_tangan->user->pengguna->full_name,
+            'nip_ttd' => $penanda_tangan->user->pengguna->nik,
             'id_jenis_pendapatan'      => $request->id_jenis_pendapatan,
             'rincian_jenis_pendapatan' => $request->rincian_jenis_pendapatan,
             'id_rincian_jenis_pendapatan' => \Crypt::decrypt($request->id_rincian_jenis_pendapatan),
@@ -414,12 +418,14 @@ class SKRDController extends Controller
 
         $data = TransaksiOPD::find($id);
         $rincian_jenis_pendapatans = RincianJenisPendapatan::where('id_jenis_pendapatan', $data->id_jenis_pendapatan)->get();
+        $penanda_tangans = TtdOPD::where('id_opd', $data->id_opd)->get();
 
         return view($this->view . 'edit', compact(
             'route',
             'title',
             'data',
-            'rincian_jenis_pendapatans'
+            'rincian_jenis_pendapatans',
+            'penanda_tangans'
         ));
     }
 
@@ -449,8 +455,6 @@ class SKRDController extends Controller
         $data = TransaksiOPD::find($id);
         $request->validate([
             'tgl_ttd' => 'required',
-            'nm_ttd'  => 'required',
-            'nip_ttd' => 'required',
             'alamat_wp'      => 'required',
             'nmr_daftar'     => 'required|unique:tmtransaksi_opd,nmr_daftar,' . $id,
             'kode_rekening'  => 'required',
@@ -458,7 +462,8 @@ class SKRDController extends Controller
             'tgl_skrd_awal'  => 'required|date_format:Y-m-d',
             'tgl_skrd_akhir' => 'required|date_format:Y-m-d',
             'jumlah_bayar'   => 'required',
-            'uraian_retribusi' => 'required',
+            'uraian_retribusi'  => 'required',
+            'penanda_tangan_id' => 'required',
             'id_rincian_jenis_pendapatan' => 'required',
         ]);
 
@@ -533,10 +538,14 @@ class SKRDController extends Controller
         }
 
         //* Tahap 2
+        $penanda_tangan = TtdOPD::where('id', $request->penanda_tangan_id)->first();
+
         $input = $request->all();
-        $input = $request->except(['kode_rekening', 'kd_jenis']);
+        $input = $request->except(['kode_rekening', 'kd_jenis', 'penanda_tangan_id']);
         $data->update($input);
         $data->update([
+            'nm_ttd'  => $penanda_tangan->user->pengguna->full_name,
+            'nip_ttd' => $penanda_tangan->user->pengguna->nik,
             'nomor_va_bjb'  => $VABJB,
             'status_diskon' => 0,
             'diskon'        => 0,
