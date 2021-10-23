@@ -315,7 +315,7 @@ class SKRDController extends Controller
             $productCode  = $request->kd_jenis;
 
             //TODO: Get Token BJB
-            $resGetTokenBJB = VABJB::getTokenBJB();
+            $resGetTokenBJB = $this->vabjb->getTokenBJB();
             if ($resGetTokenBJB->successful()) {
                 $resJson = $resGetTokenBJB->json();
                 if ($resJson['rc'] != 0000)

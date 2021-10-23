@@ -45,6 +45,11 @@ class ProfileController extends Controller
         ));
     }
 
+    public function update()
+    {
+        // 
+    }
+
     public function editPassword($id)
     {
         $route  = $this->route;

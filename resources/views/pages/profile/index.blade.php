@@ -17,6 +17,9 @@
                     <li class="nav-item">
                         <a class="nav-link active show" id="tab1" data-toggle="tab" href="#profile" role="tab"><i class="icon icon-home2"></i>My Profile</a>
                     </li>
+                    {{-- <li class="nav-item">
+                        <a class="nav-link" id="tab2" data-toggle="tab" href="#edit-profile" role="tab"><i class="icon icon-pencil"></i>Edit Profile</a>
+                    </li> --}}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('profile.editPassword', Auth::user()->id) }}"><i class="icon-key4 mr-2"></i>Ganti Password</a>
                     </li>
@@ -61,6 +64,41 @@
                                     <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="btn btn-sm btn-danger"><i class="mr-2 icon-power-off"></i>Logout</a>
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">@csrf</form>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane animated fadeInUpShort" id="edit-profile" role="tabpanel">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="alert"></div>
+                        <div class="card mt-3">
+                            <h6 class="card-header"><strong>Edit Data</strong></h6>
+                            <div class="card-body">
+                                <form class="needs-validation" method="GET" action="" enctype="multipart/form-data" novalidate>
+                                    {{ method_field('GET') }}
+                                    <div class="form-row form-inline">
+                                        <div class="col-md-12">
+                                            <div class="form-group m-0">
+                                                <label for="full_name" class="form-control label-input-custom col-md-2">Nama Lengkap<span class="text-danger ml-1">*</span></label>
+                                                <input type="text" name="full_name" id="full_name" value="{{ $data->full_name }}" class="form-control r-0 light s-12 col-md-3" autocomplete="off" required/>
+                                            </div>
+                                            <div class="form-group m-0">
+                                                <label for="nik" class="form-control label-input-custom col-md-2">NIK<span class="text-danger ml-1">*</span></label>
+                                                <input type="number" name="nik" id="nik" value="{{ $data->nik }}" class="form-control r-0 light s-12 col-md-3" autocomplete="off" required/>
+                                            </div>
+                                            <div class="form-group m-0">
+                                                <label for="email" class="form-control label-input-custom col-md-2">Email<span class="text-danger ml-1">*</span></label>
+                                                <input type="text" name="email" id="email" value="{{ $data->email }}" class="form-control r-0 light s-12 col-md-3" autocomplete="off" required/>
+                                            </div>
+                                            <div class="form-group m-0">
+                                                <label for="phone" class="form-control label-input-custom col-md-2">No Telp<span class="text-danger ml-1">*</span></label>
+                                                <input type="text" name="phone" id="phone" value="{{ $data->phone }}" class="form-control r-0 light s-12 col-md-3" autocomplete="off" required/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
