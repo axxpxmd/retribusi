@@ -10,6 +10,7 @@
  * @author Asip Hamdi
  * Github : axxpxmd
  */
+
 namespace App\Http\Controllers;
 
 use Auth;
@@ -150,9 +151,9 @@ class ReportController extends Controller
             })
             ->editColumn('status_bayar', function ($p) {
                 if ($p->status_bayar == 1) {
-                    return 'Sudah Dibayar';
+                    return "<span class='badge badge-success'>Sudah bayar</span>";
                 } else {
-                    return 'Belum Dibayar';
+                    return  "<span class='badge badge-danger'>Belum bayar</span>";
                 }
             })
             ->addColumn('cetak_skrd', function ($p) {
@@ -162,16 +163,28 @@ class ReportController extends Controller
 
                 // SKRD
                 if ($p->tgl_skrd_akhir >= $dateNow) {
-                    return "<a href='" . route('print.skrd', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
+                    if ($p->status_ttd == 1) {
+                        return "<a href='" . config('app.sftp_src') . $path_sftp . $fileName . "' target='_blank' class='cyan-text' title='File TTD'><i class='icon-document-file-pdf2'></i></a>";
+                    } else {
+                        return  "<a href='" . route('print.skrd', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
+                    }
                 }
 
                 // STRD
                 if ($p->tgl_skrd_akhir < $dateNow) {
-                    return "<a href='" . route('print.strd', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
+                    if ($p->status_ttd == 3) {
+                        return "<a href='" . config('app.sftp_src') . $path_sftp . $fileName . "' target='_blank' class='cyan-text' title='File TTD'><i class='icon-document-file-pdf2'></i></a>";
+                    } else {
+                        return "<a href='" . route('print.strd', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
+                    }
                 }
             })
             ->addColumn('cetak_sts', function ($p) {
-                return "<a href='" . route('print.sts', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
+                if ($p->status_ttd == 1 || $p->status_ttd == 3) {
+                    return "<a href='" . route('sts.reportTTD', Crypt::encrypt($p->id)) . "' target='blank' class='cyan-text' title='File TTD'><i class='icon-document-file-pdf2'></i></a>";
+                } else {
+                    return "<a href='" . route('print.sts', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
+                }
             })
             ->addIndexColumn()
             ->rawColumns(['no_bayar', 'opd_id', 'id_jenis_pendapatan', 'tgl_skrd', 'masa_berlaku', 'status_bayar', 'diskon', 'cetak_skrd', 'cetak_sts'])
