@@ -29,13 +29,13 @@ use Illuminate\Support\Facades\Crypt;
 // Models
 use App\Models\OPD;
 use App\Models\DataWP;
+use App\Models\TtdOPD;
 use App\Models\Kecamatan;
 use App\Models\Kelurahan;
 use App\Models\TransaksiOPD;
 use App\Models\JenisPendapatan;
 use App\Models\OPDJenisPendapatan;
 use App\Models\RincianJenisPendapatan;
-use App\Models\TtdOPD;
 
 class SKRDController extends Controller
 {

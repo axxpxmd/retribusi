@@ -17,27 +17,17 @@ use Auth;
 use DateTime;
 use DataTables;
 use Carbon\Carbon;
-use Firebase\JWT\JWT;
 
 use App\Http\Services\VABJB;
-use App\Libraries\Html\Html_number;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\Storage;
 
 // Models
 use App\Models\OPD;
-use App\Models\DataWP;
-use App\Models\Kecamatan;
-use App\Models\Kelurahan;
 use App\Models\TransaksiOPD;
-use App\Models\JenisPendapatan;
 use App\Models\OPDJenisPendapatan;
-use App\Models\RincianJenisPendapatan;
 
 class STRDController extends Controller
 {

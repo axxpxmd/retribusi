@@ -21,9 +21,9 @@ use App\Http\Controllers\Controller;
 // Models
 use App\Models\OPD;
 use App\Models\TtdOPD;
+use App\Models\Pengguna;
 use App\Models\JenisPendapatan;
 use App\Models\OPDJenisPendapatan;
-use App\Models\Pengguna;
 
 class OPDController extends Controller
 {
