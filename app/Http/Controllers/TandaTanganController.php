@@ -190,6 +190,18 @@ class TandaTanganController extends Controller
         }
     }
 
+    public function getDiffDays($tgl_skrd_akhir)
+    {
+        $timeNow = Carbon::now();
+
+        $dateTimeNow = new DateTime($timeNow);
+        $expired     = new DateTime($tgl_skrd_akhir . ' 23:59:59');
+        $interval    = $dateTimeNow->diff($expired);
+        $daysDiff    = $interval->format('%r%a');
+
+        return $daysDiff;
+    }
+
     public function show($id)
     {
         $route = $this->route;
@@ -212,10 +224,19 @@ class TandaTanganController extends Controller
          * 2 = Proses
          */
         if ($data->status_ttd == 0 || $data->status_ttd == 2 || $data->status_ttd == 4) {
-            //* Bunga
+
             $tgl_skrd_akhir = $data->tgl_skrd_akhir;
             $total_bayar    = $data->jumlah_bayar;
-            list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);
+            $daysDiff = $this->getDiffDays($tgl_skrd_akhir);
+
+            //TODO: Check bunga (STRD)
+            if ($daysDiff > 0) {
+                $jumlahBunga = 0;
+                $kenaikan = 0;
+            } else {
+                //* Bunga
+                list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);
+            }
 
             //* Total Bayar + Bunga
             $total_bayar = $data->total_bayar + $jumlahBunga;
