@@ -148,7 +148,7 @@ class TransaksiOPD extends Model
         $now = Carbon::now();
         $date = $now->format('Y-m-d');
 
-        $data = TransaksiOPD::where('status_bayar', 0)->where('tgl_skrd_akhir', '>=', $date)->orderBy('id', 'DESC');
+        $data = TransaksiOPD::with('opd', 'jenis_pendapatan')->where('status_bayar', 0)->where('tgl_skrd_akhir', '>=', $date)->orderBy('id', 'DESC');
 
         if ($opd_id != 0) {
             $data->where('id_opd', $opd_id);
@@ -179,7 +179,7 @@ class TransaksiOPD extends Model
         $now = Carbon::now();
         $date = $now->format('Y-m-d');
 
-        $data = TransaksiOPD::where('status_bayar', 0)->where('tgl_skrd_akhir', '<', $date)->orderBy('id', 'DESC');
+        $data = TransaksiOPD::with('opd', 'jenis_pendapatan')->where('status_bayar', 0)->where('tgl_skrd_akhir', '<', $date)->orderBy('id', 'DESC');
 
         if ($opd_id != 0) {
             $data->where('id_opd', $opd_id);
@@ -207,7 +207,7 @@ class TransaksiOPD extends Model
     // 
     public static function querySTS($from, $to, $opd_id, $status_bayar, $jenis_tanggal, $no_bayar)
     {
-        $data = TransaksiOPD::orderBy('id', 'DESC');
+        $data = TransaksiOPD::with('opd', 'jenis_pendapatan')->orderBy('id', 'DESC');
 
         if ($opd_id != 0) {
             $data->where('id_opd', $opd_id);
