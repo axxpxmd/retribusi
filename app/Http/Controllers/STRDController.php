@@ -37,8 +37,10 @@ class STRDController extends Controller
     protected $path  = '';
 
     // Check Permission
-    public function __construct()
+    public function __construct(VABJB $vabjb)
     {
+        $this->vabjb = $vabjb;
+
         $this->middleware(['permission:STRD']);
     }
 
@@ -265,7 +267,7 @@ class STRDController extends Controller
         $productCode  = $data->rincian_jenis->kd_jenis;
 
         //TODO: Get Token BJB
-        $resGetTokenBJB = VABJB::getTokenBJB();
+        $resGetTokenBJB = $this->vabjb->getTokenBJB();
         if ($resGetTokenBJB->successful()) {
             $resJson = $resGetTokenBJB->json();
             if ($resJson['rc'] != 0000)
@@ -296,7 +298,7 @@ class STRDController extends Controller
             }
         } else {
             //TODO: Update VA BJB
-            $resUpdateVABJB = VABJB::updateVaBJB($tokenBJB, $amount, $expiredDate, $customerName, $va_number);
+            $resUpdateVABJB = $this->vabjb->updateVaBJB($tokenBJB, $amount, $expiredDate, $customerName, $va_number);
             if ($resUpdateVABJB->successful()) {
                 $resJson = $resUpdateVABJB->json();
                 if (isset($resJson['rc']) != 0000)

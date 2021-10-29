@@ -486,7 +486,7 @@ class SKRDController extends Controller
         //TODO: Check Expired Date (jika tgl_skrd_akhir kurang dari tanggal sekarang maka VA tidak terbuat)
         if ($daysDiff > 0) {
             //TODO: Get Token BJB
-            $resGetTokenBJB = VABJB::getTokenBJB();
+            $resGetTokenBJB = $this->vabjb->getTokenBJB();
             if ($resGetTokenBJB->successful()) {
                 $resJson = $resGetTokenBJB->json();
                 if ($resJson['rc'] != 0000)
@@ -502,7 +502,7 @@ class SKRDController extends Controller
 
             if ($VABJB == null) {
                 //TODO: Create VA BJB
-                $resGetVABJB = VABJB::createVABJB($tokenBJB, $clientRefnum, $amount, $expiredDate, $customerName, $productCode);
+                $resGetVABJB = $this->vabjb->createVABJB($tokenBJB, $clientRefnum, $amount, $expiredDate, $customerName, $productCode);
                 if ($resGetVABJB->successful()) {
                     $resJson = $resGetVABJB->json();
                     if (isset($resJson['rc']) != 0000)
@@ -518,7 +518,7 @@ class SKRDController extends Controller
             } else {
                 if ($amount != $data->total_bayar || $customerName != $data->nm_wajib_pajak || $data->tgl_skrd_akhir != $request->tgl_skrd_akhir) {
                     //TODO: Update VA BJB
-                    $resUpdateVABJB = VABJB::updateVaBJB($tokenBJB, $amount, $expiredDate, $customerName, $va_number);
+                    $resUpdateVABJB = $this->vabjb->updateVaBJB($tokenBJB, $amount, $expiredDate, $customerName, $va_number);
                     if ($resUpdateVABJB->successful()) {
                         $resJson = $resUpdateVABJB->json();
                         if (isset($resJson['rc']) != 0000)

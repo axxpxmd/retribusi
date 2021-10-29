@@ -35,9 +35,11 @@ class STSController extends Controller
     protected $title = 'STS';
     protected $view  = 'pages.sts.';
 
-   
-    public function __construct()
+
+    public function __construct(VABJB $vabjb)
     {
+        $this->vabjb = $vabjb;
+
         $this->middleware(['permission:STS']);
     }
 
@@ -166,7 +168,7 @@ class STSController extends Controller
         //* Check status pembayaran VA BJB
         if ($data->status_bayar == 0 && $data->nomor_va_bjb != null) {
             //TODO: Get Token BJB
-            $resGetTokenBJB = VABJB::getTokenBJB();
+            $resGetTokenBJB = $this->vabjb->getTokenBJB();
             if ($resGetTokenBJB->successful()) {
                 $resJson = $resGetTokenBJB->json();
                 if ($resJson['rc'] != 0000)
@@ -181,7 +183,7 @@ class STSController extends Controller
             }
 
             //TODO: Check VA BJB
-            $resCheckVABJB = VABJB::CheckVABJB($tokenBJB, $va_number);
+            $resCheckVABJB = $this->vabjb->CheckVABJB($tokenBJB, $va_number);
             if ($resCheckVABJB->successful()) {
                 $resJson = $resCheckVABJB->json();
                 if (isset($resJson['rc']) != 0000)
@@ -256,7 +258,7 @@ class STSController extends Controller
         //* Check status pembayaran VA BJB
         if ($data->status_bayar == 0 && $data->nomor_va_bjb != null) {
             //TODO: Get Token BJB
-            $resGetTokenBJB = VABJB::getTokenBJB();
+            $resGetTokenBJB = $this->vabjb->getTokenBJB();
             if ($resGetTokenBJB->successful()) {
                 $resJson = $resGetTokenBJB->json();
                 if ($resJson['rc'] != 0000)
@@ -271,7 +273,7 @@ class STSController extends Controller
             }
 
             //TODO: Check VA BJB
-            $resCheckVABJB = VABJB::CheckVABJB($tokenBJB, $va_number);
+            $resCheckVABJB = $this->vabjb->CheckVABJB($tokenBJB, $va_number);
             if ($resCheckVABJB->successful()) {
                 $resJson = $resCheckVABJB->json();
                 if (isset($resJson['rc']) != 0000)

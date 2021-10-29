@@ -10,6 +10,7 @@
  * @author Asip Hamdi
  * Github : axxpxmd
  */
+
 namespace App\Http\Controllers;
 
 use Auth;
@@ -32,8 +33,10 @@ class DiskonController extends Controller
     protected $view  = 'pages.diskon.';
 
     // Check Permission
-    public function __construct()
+    public function __construct(VABJB $vabjb)
     {
+        $this->vabjb = $vabjb;
+
         $this->middleware(['permission:Diskon']);
     }
 
@@ -162,7 +165,7 @@ class DiskonController extends Controller
                 ->withErrors('Tidak ada data yang diupdate, pastikan filter data sudah sesuai.');
 
         //TODO: Get Token BJB
-        $resGetTokenBJB = VABJB::getTokenBJB();
+        $resGetTokenBJB = $this->vabjb->getTokenBJB();
         if ($resGetTokenBJB->successful()) {
             $resJson = $resGetTokenBJB->json();
             if ($resJson['rc'] != 0000)
@@ -217,7 +220,7 @@ class DiskonController extends Controller
             $customerName = $datas[$i]->nm_wajib_pajak;
             $va_number    = (int) $datas[$i]->nomor_va_bjb;
 
-            $resUpdateVABJB = VABJB::updateVaBJB($tokenBJB, $amount, $expiredDate, $customerName, $va_number);
+            $resUpdateVABJB = $this->vabjb->updateVaBJB($tokenBJB, $amount, $expiredDate, $customerName, $va_number);
             if ($resUpdateVABJB->successful()) {
                 $resJson = $resUpdateVABJB->json();
                 if (isset($resJson['rc']) != 0000)
