@@ -103,7 +103,7 @@
                                                 <input type="text" name="full_name" id="full_name" class="form-control r-0 light s-12 col-md-6" autocomplete="off" required/>
                                             </div>
                                             <div class="form-group m-0">
-                                                <label for="nik" class="form-control label-input-custom col-md-2">NIK<span class="text-danger ml-1">*</span></label>
+                                                <label for="nik" class="form-control label-input-custom col-md-2">NIP<span class="text-danger ml-1">*</span></label>
                                                 <input type="number" name="nik" id="nik" class="form-control r-0 light s-12 col-md-6" autocomplete="off" required/>
                                             </div>
                                             <div class="form-group mb-1" id="opd_display">
