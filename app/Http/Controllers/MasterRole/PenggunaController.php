@@ -205,8 +205,7 @@ class PenggunaController extends Controller
             'email' => 'required|max:100|email|unique:tmpenggunas,email,' . $id,
             'phone' => 'required|max:20',
             'opd_id'  => 'required',
-            'role_id' => 'required',
-            'nik'     => 'required'
+            'role_id' => 'required'
         ]);
 
         // Get Data
