@@ -286,9 +286,9 @@
                                 text: "ok!",
                                 btnClass: 'btn-primary',
                                 keys: ['enter'],
-                                // action: function () {
-                                //     window.location.href = "{{ route('skrd.index')}}";
-                                // }
+                                action: function () {
+                                    window.location.href = "{{ route('skrd.index')}}";
+                                }
                             }
                         }
                     });
