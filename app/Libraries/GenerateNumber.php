@@ -22,10 +22,10 @@ class GenerateNumber
             ->where('id_jenis_pendapatan', $jenis_pendapatan_id)
             ->where(DB::raw('YEAR(created_at)'), '=', $time->year)
             ->orderBy('id', 'DESC')
-            ->get();
+            ->first();
 
-        if ($totalSKRD->count() != 0) {
-            $noUrutNoSKRD = substr($totalSKRD[0]->no_skrd, 9) + 1;
+        if ($totalSKRD != null) {
+            $noUrutNoSKRD = substr($totalSKRD->no_skrd, 9) + 1;
         } else {
             $noUrutNoSKRD = '1';
         }
@@ -45,10 +45,10 @@ class GenerateNumber
         $totalNoBayar = TransaksiOPD::where('id_opd', $opd_id)
             ->where(DB::raw('YEAR(created_at)'), '=', $time->year)
             ->orderBy('id', 'DESC')
-            ->get();
+            ->first();
 
-        if ($totalNoBayar->count() != 0) {
-            $noUrutNoBayar = substr($totalNoBayar[0]->no_bayar, 8) + 1;
+        if ($totalNoBayar != null) {
+            $noUrutNoBayar = substr($totalNoBayar->no_bayar, 8) + 1;
         } else {
             $noUrutNoBayar = '1';
         }
