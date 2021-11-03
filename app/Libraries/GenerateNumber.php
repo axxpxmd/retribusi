@@ -21,7 +21,7 @@ class GenerateNumber
         $totalSKRD = TransaksiOPD::where('id_opd', $opd_id)
             ->where('id_jenis_pendapatan', $jenis_pendapatan_id)
             ->where(DB::raw('YEAR(created_at)'), '=', $time->year)
-            ->latest()
+            ->orderBy('id', 'DESC')
             ->get();
 
         if ($totalSKRD->count() != 0) {
@@ -44,7 +44,7 @@ class GenerateNumber
         //TODO: Generate no_bayar
         $totalNoBayar = TransaksiOPD::where('id_opd', $opd_id)
             ->where(DB::raw('YEAR(created_at)'), '=', $time->year)
-            ->latest()
+            ->orderBy('id', 'DESC')
             ->get();
 
         if ($totalNoBayar->count() != 0) {
