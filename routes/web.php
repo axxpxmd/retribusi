@@ -112,6 +112,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('print/skrd/{id}', 'PrintController@printSKRD')->name('print.skrd');
     Route::get('print/sts/{id}', 'PrintController@printSTS')->name('print.sts');
     Route::get('print/strd/{id}', 'PrintController@printSTRD')->name('print.strd');
+    Route::get('print/download/{id}', 'PrintController@download')->name('print.download');
 
     // Report
     Route::get('report', 'ReportController@index')->name('report.index');

@@ -10,6 +10,7 @@
  * @author Asip Hamdi
  * Github : axxpxmd
  */
+
 namespace App\Http\Controllers;
 
 use DateTime;
@@ -17,6 +18,7 @@ use Carbon\Carbon;
 
 use App\Libraries\Html\Html_number;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 
 // Models
 use App\Models\TransaksiOPD;
@@ -149,5 +151,23 @@ class PrintController extends Controller
         }
 
         return $pdf->stream($data->nm_wajib_pajak . '-' . $data->no_skrd . ".pdf");
+    }
+
+    public function download($id)
+    {
+        $data = TransaksiOPD::find($id);
+
+        $path_sftp = 'file_ttd_skrd/';
+        $fileName  = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
+        $timeNow   = Carbon::now()->format('Y-m-d H:i:s');
+
+        //TODO: Update Jumlah Cetak
+        $jumlah_cetak = $data->jumlah_cetak + 1;
+        $data->update([
+            'jumlah_cetak'    => $jumlah_cetak,
+            'tgl_cetak_trkhr' => $timeNow
+        ]);
+
+        return Storage::disk('sftp')->download($path_sftp . $fileName);
     }
 }

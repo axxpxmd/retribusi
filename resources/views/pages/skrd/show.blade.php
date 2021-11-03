@@ -204,7 +204,10 @@
                                     <div class="row mt-2">
                                         <label class="col-md-2 text-right s-12"></label>
                                         <label class="col-md-3 s-12">
-                                            <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#preview-file"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</button> 
+                                            <button class="btn btn-sm btn-primary mr-1" data-toggle="modal" data-target="#preview-file"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</button> 
+                                            @if ($data->status_ttd == 1 || $data->status_ttd == 3)
+                                            <a href="{{ route('print.download', $data->id) }}" target="blank" class="btn btn-sm btn-secondary"><i class="icon-download mr-2"></i>Download File</a>
+                                            @endif
                                         </label>
                                     </div> 
                                 </div>
