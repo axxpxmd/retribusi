@@ -40,6 +40,17 @@
                                 </select>
                             </div>
                         </div>  
+                        <div class="form-group row" style="margin-top: -8px !important">
+                            <label for="role_filter" class="col-form-label s-12 col-md-4 text-right font-weight-bold">Role : </label>
+                            <div class="col-sm-4">
+                                <select name="role_filter" id="role_filter" class="select2 form-control r-0 light s-12" onchange="selectOnChange()">
+                                    <option value="0">Semua</option>
+                                    @foreach ($roles as $i)
+                                        <option value="{{ $i->id }}">{{ $i->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>  
                     </div>
                 </div>
                 <div class="row">
@@ -181,6 +192,7 @@
             method: 'POST',
             data: function (data) {
                 data.opd_id = $('#opd_filter').val();
+                data.role_id = $('#role_filter').val();
             }
         },
         columns: [

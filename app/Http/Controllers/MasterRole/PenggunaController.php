@@ -63,15 +63,20 @@ class PenggunaController extends Controller
 
     public function api(Request $request)
     {
-        $opd_id = $request->opd_id;
+        $opd_id  = $request->opd_id;
+        $role_id = $request->role_id;
 
-        $pengguna = Pengguna::with(['user', 'role', 'opd', 'modelHasRole.role'])
+        $pengguna = Pengguna::select('id', 'user_id', 'phone', 'full_name', 'opd_id', 'photo')
+            ->with(['user', 'role', 'opd', 'modelHasRole.role'])
+            ->join('model_has_roles', 'model_has_roles.model_id', '=', 'tmpenggunas.user_id')
             ->whereNotIn('id', [7])
             ->orderBy('id', 'DESC');
 
-        if ($opd_id != 0) {
+        if ($opd_id != 0)
             $pengguna->where('opd_id', $opd_id)->whereNotIn('id', [7]);
-        }
+
+        if ($role_id != 0)
+            $pengguna->where('model_has_roles.role_id', $role_id);
 
         $pengguna->get();
 
