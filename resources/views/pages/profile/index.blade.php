@@ -37,7 +37,7 @@
                             <div class="card-body">
                                 <img class="mx-auto d-block rounded-circle img-circular" src="{{ asset('images/ava/default.png') }}" width="100" height="100" alt="Foto Profil">
                                 <p class="text-center mt-2 font-weight-bold text-uppercase text-black-50">{{ $data->full_name }} <i class="icon-verified_user text-primary"></i> </p>
-                                <p class="text-center" style="margin-top: -25px !important">NIP. {{ $data->nip }}</p>
+                                <p class="text-center" style="margin-top: -25px !important">NIP. {{ $data->nip == null  ? '-' : $data->nip }}</p>
                                 <div class="col-md-12">
                                     <div class="row">
                                         <label class="col-md-2 text-right s-12"><strong>Username :</strong></label>
