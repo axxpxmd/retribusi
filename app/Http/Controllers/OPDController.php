@@ -185,6 +185,8 @@ class OPDController extends Controller
         $opd = OPD::where('id', $id)->first();
         $exist_penanda_tangans = TtdOPD::select('user_id')->where('id_opd', $id)->get()->toArray();
         $penanda_tangans = Pengguna::select('user_id', 'full_name', 'nip')
+            ->join('model_has_roles', 'model_has_roles.model_id', '=', 'tmpenggunas.user_id')
+            ->where('model_has_roles.role_id', 11)
             ->where('opd_id', $id)
             ->whereNotIn('user_id', $exist_penanda_tangans)
             ->whereNotNull('nip')

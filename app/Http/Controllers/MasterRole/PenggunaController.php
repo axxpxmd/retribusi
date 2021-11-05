@@ -135,7 +135,7 @@ class PenggunaController extends Controller
         //TODO: Validation Penanda Tangan
         if ($request->role_id == 11)
             $request->validate([
-                'nip'    => 'required|numeric|digits:18',
+                'nip'    => 'required|numeric|digits:18|unique:tmpenggunas,nip',
                 'opd_id' => 'required'
             ]);
 
@@ -234,7 +234,7 @@ class PenggunaController extends Controller
         //TODO: Validation Penanda Tangan
         if ($request->role_id == 11)
             $request->validate([
-                'nip'    => 'required|numeric|digits:18',
+                'nip'    => 'required|numeric|digits:18|unique:tmpenggunas,nip,' . $id,
                 'opd_id' => 'required'
             ]);
 
