@@ -126,7 +126,7 @@
                                                             <select class="select2 form-control r-0 light s-12" id="penanda_tangan_id" name="penanda_tangan_id" autocomplete="off">
                                                                 <option value="0">Pilih</option>
                                                                 @foreach ($penanda_tangans as $i)
-                                                                    <option value="{{ $i->id }}" {{ $i->user->pengguna->full_name == $data->nm_ttd ? 'selected' : '-' }}>{{ $i->user->pengguna->full_name }} [ NIP. {{ $i->user->pengguna->nik }} ]</option>
+                                                                    <option value="{{ $i->id }}" {{ $i->user->pengguna->full_name == $data->nm_ttd ? 'selected' : '-' }}>{{ $i->user->pengguna->full_name }} [ NIP. {{ $i->user->pengguna->nip }} ]</option>
                                                                 @endforeach
                                                             </select>
                                                         </div>

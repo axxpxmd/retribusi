@@ -184,10 +184,10 @@ class OPDController extends Controller
 
         $opd = OPD::where('id', $id)->first();
         $exist_penanda_tangans = TtdOPD::select('user_id')->where('id_opd', $id)->get()->toArray();
-        $penanda_tangans = Pengguna::select('user_id', 'full_name', 'nik')
+        $penanda_tangans = Pengguna::select('user_id', 'full_name', 'nip')
             ->where('opd_id', $id)
             ->whereNotIn('user_id', $exist_penanda_tangans)
-            ->whereNotNull('nik')
+            ->whereNotNull('nip')
             ->get();
 
         return view($this->view . 'formPenandaTangan', compact(
@@ -200,7 +200,7 @@ class OPDController extends Controller
 
     public function getPenandaTangan($id)
     {
-        $datas = TtdOPD::select('tr_ttd_opds.id as id', 'full_name', 'nik')
+        $datas = TtdOPD::select('tr_ttd_opds.id as id', 'full_name', 'nip')
             ->join('tmpenggunas', 'tmpenggunas.user_id', '=', 'tr_ttd_opds.user_id')
             ->where('tr_ttd_opds.id_opd', $id)
             ->get();

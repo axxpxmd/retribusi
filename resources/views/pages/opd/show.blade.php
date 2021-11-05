@@ -64,7 +64,7 @@
                                         <label class="col-md-10 p-0 s-12">
                                             <ol style="margin-left: -15px ">
                                                 @forelse  ($penanda_tangans as $i)
-                                                <li class="mb-2 s-12">{{ $i->user->pengguna->full_name }} [ {{ $i->user->pengguna->nik }} ]</li>
+                                                <li class="mb-2 s-12">{{ $i->user->pengguna->full_name }} [ {{ $i->user->pengguna->nip }} ]</li>
                                                 @empty
                                                 <span>-</span>
                                                 @endforelse

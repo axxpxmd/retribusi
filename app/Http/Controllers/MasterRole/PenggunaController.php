@@ -49,7 +49,7 @@ class PenggunaController extends Controller
         $path  = $this->path;
 
         $opdArray = OPDJenisPendapatan::select('id_opd')->get()->toArray();
-        $roles = Role::select('id', 'name')->get();
+        $roles = Role::select('id', 'name')->whereNotIn('id', [5])->get();
         $opds = OPD::select('id', 'n_opd')->whereIn('id', $opdArray)->get();
 
         return view($this->view . 'index', compact(
@@ -123,11 +123,29 @@ class PenggunaController extends Controller
             'password'  => 'required|min:8',
             'full_name' => 'required|max:100',
             'email'   => 'required|max:100|email|unique:tmpenggunas,email',
-            'opd_id'  => 'required',
             'role_id' => 'required',
             'phone'   => 'required|max:20',
-            'nik'     => 'required'
         ]);
+
+        //TODO: Validation Penanda Tangan
+        if ($request->role_id == 11)
+            $request->validate([
+                'nip'    => 'required|numeric|digits:18',
+                'opd_id' => 'required'
+            ]);
+
+        //TODO: Validation untuk akun OPD
+        if ($request->role_id != 7)
+            $request->validate([
+                'opd_id' => 'required'
+            ]);
+
+        //TODO: Check opd_id
+        if ($request->role_id == 7) {
+            $opd_id = 0;
+        } else {
+            $opd_id = $request->opd_id;
+        }
 
         /* Tahapan : 
          * 1. tmusers
@@ -147,12 +165,12 @@ class PenggunaController extends Controller
         // Tahap 2
         $dataPengguna = [
             'user_id' => $user->id,
-            'opd_id'  => $request->opd_id,
+            'opd_id'  => $opd_id,
             'full_name' => $request->full_name,
             'email'     => $request->email,
             'phone'     => $request->phone,
             'photo'     => 'default.png',
-            'nik'       => $request->nik
+            'nip'       => $request->nip
         ];
 
         Pengguna::create($dataPengguna);
@@ -180,7 +198,7 @@ class PenggunaController extends Controller
 
         $pengguna = Pengguna::find($id);
 
-        $roles = Role::select('id', 'name')->get();
+        $roles = Role::select('id', 'name')->whereNotIn('id', [5])->get();
         $opds  = OPD::select('id', 'n_opd')->get();
 
         return view($this->view . 'edit', compact(
@@ -208,14 +226,33 @@ class PenggunaController extends Controller
             'role_id' => 'required'
         ]);
 
+        //TODO: Validation Penanda Tangan
+        if ($request->role_id == 11)
+            $request->validate([
+                'nip'    => 'required|numeric|digits:18',
+                'opd_id' => 'required'
+            ]);
+
+        //TODO: Validation untuk akun OPD
+        if ($request->role_id != 7)
+            $request->validate([
+                'opd_id' => 'required'
+            ]);
+
+        //TODO: Check opd_id
+        if ($request->role_id == 7) {
+            $opd_id = 0;
+        } else {
+            $opd_id = $request->opd_id;
+        }
+
         // Get Data
         $username  = $request->username;
         $full_name = $request->full_name;
         $email   = $request->email;
         $phone   = $request->phone;
-        $opd_id  = $request->opd_id;
         $role_id = $request->role_id;
-        $nik     = $request->nik;
+        $nip     = $request->nip;
 
         /* Tahapan : 
          * 1. tmusers
@@ -234,7 +271,7 @@ class PenggunaController extends Controller
             'email'  => $email,
             'phone'  => $phone,
             'opd_id' => $opd_id,
-            'nik'    => $nik
+            'nip'    => $nip
         ]);
 
         // Tahap 3

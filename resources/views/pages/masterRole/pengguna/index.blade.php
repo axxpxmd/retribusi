@@ -81,7 +81,7 @@
                                                 <label for="role_id" class="form-control label-input-custom col-md-2">Role<span class="text-danger ml-1">*</span></label>
                                                 <div class="col-md-6 p-0 bg-light">
                                                     <select class="select2 form-control r-0 light s-12" name="role_id" id="role_id" autocomplete="off">
-                                                        <option value="0">Pilih</option>
+                                                        <option value="">Pilih</option>
                                                         @foreach ($roles as $i)
                                                             <option value="{{ $i->id }}">{{ $i->name }}</option>
                                                         @endforeach
@@ -102,15 +102,15 @@
                                                 <label for="full_name" class="form-control label-input-custom col-md-2">Nama Lengkap<span class="text-danger ml-1">*</span></label>
                                                 <input type="text" name="full_name" id="full_name" class="form-control r-0 light s-12 col-md-6" autocomplete="off" required/>
                                             </div>
-                                            <div class="form-group m-0">
-                                                <label for="nik" class="form-control label-input-custom col-md-2">NIP<span class="text-danger ml-1">*</span></label>
-                                                <input type="number" name="nik" id="nik" class="form-control r-0 light s-12 col-md-6" autocomplete="off" required/>
+                                            <div class="form-group m-0" id="nip_display">
+                                                <label for="nip" class="form-control label-input-custom col-md-2">NIP<span class="text-danger ml-1" id="nip_required"></span></label>
+                                                <input type="number" name="nip" id="nip" class="form-control r-0 light s-12 col-md-6" autocomplete="off"/>
                                             </div>
                                             <div class="form-group mb-1" id="opd_display">
                                                 <label for="opd_id" class="form-control label-input-custom col-md-2">OPD<span class="text-danger ml-1">*</span></label>
                                                 <div class="col-md-6 p-0 bg-light">
                                                     <select class="select2 form-control r-0 light s-12" name="opd_id" id="opd_id" autocomplete="off">
-                                                        <option value="0">Pilih</option>
+                                                        <option value="">Pilih</option>
                                                         @foreach ($opds as $i)
                                                             <option value="{{ $i->id }}">{{ $i->n_opd }}</option>
                                                         @endforeach
@@ -147,14 +147,28 @@
 <script type="text/javascript">
     $(function() {
         $('#opd_display').hide(); 
+        $('#nip_display').hide(); 
 
         $('#role_id').change(function(){
             var role_id = $('#role_id').val();
-            if(role_id === "5" || role_id === 7 || role_id === 0) {
+            if(role_id == 7 || role_id == 0) {
                 $('#opd_display').hide(); 
+                $('#nip_display').hide(); 
+                $('#nip').val(''); 
+                $('#opd_id').val("");
+                $('#opd_id').trigger('change.select2');
             } else {
                 $('#opd_display').show(); 
+                $('#nip_display').show(); 
             } 
+
+            if (role_id == 11) {
+                $('#nip_required').html('*'); 
+                $('#nip').prop('required', true); 
+            } else {
+                $('#nip_required').html(''); 
+                $('#nip').prop('required', false);
+            }
         });
     });
 
@@ -193,6 +207,8 @@
         $('#opd_id').val(0);
         $('#opd_id').trigger('change.select2');
         $('#username').focus();
+        $('#role_id').val("");
+        $('#role_id').trigger('change.select2');
     }
 
     function show(id) {

@@ -352,7 +352,7 @@ class SKRDController extends Controller
             'id_opd'  => $request->id_opd,
             'tgl_ttd' => $request->tgl_ttd,
             'nm_ttd'  => $penanda_tangan->user->pengguna->full_name,
-            'nip_ttd' => $penanda_tangan->user->pengguna->nik,
+            'nip_ttd' => $penanda_tangan->user->pengguna->nip,
             'id_jenis_pendapatan'      => $request->id_jenis_pendapatan,
             'rincian_jenis_pendapatan' => $request->rincian_jenis_pendapatan,
             'id_rincian_jenis_pendapatan' => \Crypt::decrypt($request->id_rincian_jenis_pendapatan),
@@ -545,7 +545,7 @@ class SKRDController extends Controller
         $data->update($input);
         $data->update([
             'nm_ttd'  => $penanda_tangan->user->pengguna->full_name,
-            'nip_ttd' => $penanda_tangan->user->pengguna->nik,
+            'nip_ttd' => $penanda_tangan->user->pengguna->nip,
             'nomor_va_bjb'  => $VABJB,
             'status_diskon' => 0,
             'diskon'        => 0,

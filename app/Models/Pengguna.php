@@ -11,7 +11,7 @@ use Spatie\Permission\Models\Role;
 class Pengguna extends Model
 {
     protected $table = 'tmpenggunas';
-    protected $fillable = ['id', 'user_id', 'opd_id', 'full_name', 'nik', 'email', 'phone', 'photo'];
+    protected $fillable = ['id', 'user_id', 'opd_id', 'full_name', 'nip', 'email', 'phone', 'photo'];
 
     public function user()
     {

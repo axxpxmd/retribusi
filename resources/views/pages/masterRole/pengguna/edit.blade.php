@@ -53,7 +53,7 @@
                                     </div>
                                     <div class="row">
                                         <label class="col-md-2 text-right s-12"><strong>NIP :</strong></label>
-                                        <label class="col-md-10 s-12">{{ $pengguna->nik }}</label>
+                                        <label class="col-md-10 s-12">{{ $pengguna->nip }}</label>
                                     </div>
                                     <div class="row">
                                         <label class="col-md-2 text-right s-12"><strong>OPD :</strong></label>
@@ -93,7 +93,7 @@
                                                 <label for="role_id" class="form-control label-input-custom col-md-2">Role<span class="text-danger ml-1">*</span></label>
                                                 <div class="col-md-6 p-0 bg-light">
                                                     <select class="select2 form-control r-0 light s-12" name="role_id" id="role_id" autocomplete="off">
-                                                        <option value="0">Pilih</option>
+                                                        <option value="">Pilih</option>
                                                         @foreach ($roles as $i)
                                                             <option value="{{ $i->id }}">{{ $i->name }}</option>
                                                         @endforeach
@@ -109,22 +109,22 @@
                                                 <label for="full_name" class="form-control label-input-custom col-md-2">Nama Lengkap<span class="text-danger ml-1">*</span></label>
                                                 <input type="text" name="full_name" id="full_name" class="form-control r-0 light s-12 col-md-6" value="{{ $pengguna->full_name }}" autocomplete="off" required/>
                                             </div> 
-                                            <div class="form-group m-0">
-                                                <label for="nik" class="form-control label-input-custom col-md-2">NIP</label>
-                                                <input type="number" name="nik" id="nik" class="form-control r-0 light s-12 col-md-6" value="{{ $pengguna->nik }}" autocomplete="off"/>
+                                            <div class="form-group m-0" id="nip_display">
+                                                <label for="nip" class="form-control label-input-custom col-md-2">NIP<span class="text-danger ml-1" id="nip_required"></span></label>
+                                                <input type="number" name="nip" id="nip" class="form-control r-0 light s-12 col-md-6" value="{{ $pengguna->nip }}" autocomplete="off"/>
                                             </div> 
                                             <div class="form-group mb-1" id="opd_display">
                                                 <label for="opd_id" class="form-control label-input-custom col-md-2">OPD<span class="text-danger ml-1">*</span></label>
                                                 <div class="col-md-6 p-0 bg-light">
                                                     <select class="select2 form-control r-0 light s-12" name="opd_id" id="opd_id" autocomplete="off">
-                                                        <option value="0">Pilih</option>
+                                                        <option value="">Pilih</option>
                                                         @foreach ($opds as $i)
                                                             <option value="{{ $i->id }}">{{ $i->n_opd }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="form-group mt-1">
+                                            <div class="form-group">
                                                 <label for="email" class="form-control label-input-custom col-md-2">Email<span class="text-danger ml-1">*</span></label>
                                                 <input type="text" name="email" id="email" class="form-control r-0 light s-12 col-md-6" value="{{ $pengguna->email }}" autocomplete="off" required/>
                                             </div> 
@@ -156,22 +156,46 @@
     $('#role_id').trigger('change.select2');
     
     $(function() {
-        $('#opd_display').hide(); 
-
         var role_id = $('#role_id').val();
-        if(role_id === "5" || role_id === "7") {
+        if(role_id == 7 || role_id == 0) {
             $('#opd_display').hide(); 
+            $('#nip_display').hide(); 
+            $('#nip').val(''); 
+            $('#opd_id').val("0");
+            $('#opd_id').trigger('change.select2');
         } else {
             $('#opd_display').show(); 
+            $('#nip_display').show(); 
         } 
 
+        if (role_id == 11) {
+            $('#nip_required').html('*'); 
+            $('#nip').prop('required', true); 
+        } else {
+            $('#nip_required').html(''); 
+            $('#nip').prop('required', false);
+        }
+       
         $('#role_id').change(function(){
             var role_id = $('#role_id').val();
-            if(role_id === "5" || role_id === "7") {
+            if(role_id == 7 || role_id == 0) {
                 $('#opd_display').hide(); 
+                $('#nip_display').hide(); 
+                $('#nip').val(''); 
+                $('#opd_id').val("");
+                $('#opd_id').trigger('change.select2');
             } else {
                 $('#opd_display').show(); 
+                $('#nip_display').show(); 
             } 
+
+            if (role_id == 11) {
+                $('#nip_required').html('*'); 
+                $('#nip').prop('required', true); 
+            } else {
+                $('#nip_required').html(''); 
+                $('#nip').prop('required', false);
+            }
         });
     });
 

@@ -37,7 +37,7 @@
                             <div class="card-body">
                                 <img class="mx-auto d-block rounded-circle img-circular" src="{{ asset('images/ava/default.png') }}" width="100" height="100" alt="Foto Profil">
                                 <p class="text-center mt-2 font-weight-bold text-uppercase text-black-50">{{ $data->full_name }} <i class="icon-verified_user text-primary"></i> </p>
-                                <p class="text-center" style="margin-top: -25px !important">NIP. {{ $data->nik }}</p>
+                                <p class="text-center" style="margin-top: -25px !important">NIP. {{ $data->nip }}</p>
                                 <div class="col-md-12">
                                     <div class="row">
                                         <label class="col-md-2 text-right s-12"><strong>Username :</strong></label>
@@ -86,8 +86,8 @@
                                                 <input type="text" name="full_name" id="full_name" value="{{ $data->full_name }}" class="form-control r-0 light s-12 col-md-3" autocomplete="off" required/>
                                             </div>
                                             <div class="form-group m-0">
-                                                <label for="nik" class="form-control label-input-custom col-md-2">NIK<span class="text-danger ml-1">*</span></label>
-                                                <input type="number" name="nik" id="nik" value="{{ $data->nik }}" class="form-control r-0 light s-12 col-md-3" autocomplete="off" required/>
+                                                <label for="nip" class="form-control label-input-custom col-md-2">NIK<span class="text-danger ml-1">*</span></label>
+                                                <input type="number" name="nip" id="nip" value="{{ $data->nip }}" class="form-control r-0 light s-12 col-md-3" autocomplete="off" required/>
                                             </div>
                                             <div class="form-group m-0">
                                                 <label for="email" class="form-control label-input-custom col-md-2">Email<span class="text-danger ml-1">*</span></label>
