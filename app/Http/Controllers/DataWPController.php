@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Crypt;
 // Models
 use App\Models\OPD;
 use App\Models\DataWP;
+use App\Models\TransaksiOPD;
 use App\Models\OPDJenisPendapatan;
 
 class DataWPController extends Controller
@@ -88,8 +89,19 @@ class DataWPController extends Controller
             ->editColumn('id_jenis_pendapatan', function ($p) {
                 return $p->jenis_pendapatan->jenis_pendapatan;
             })
+            // ->addColumn('jumlah_skrd', function ($p) {
+            //     $where = [
+            //         'id_opd' => $p->id_opd,
+            //         'nm_wajib_pajak' => $p->nm_wajib_pajak,
+            //         'id_jenis_pendapatan' => $p->id_jenis_pendapatan,
+            //         'id_rincian_jenis_pendapatan' => $p->id_rincian_jenis_pendapatan
+            //     ];
+            //     $totalSKRD = TransaksiOPD::where($where)->count();
+
+            //     return $totalSKRD;
+            // })
             ->addIndexColumn()
-            ->rawColumns(['action', 'nm_wajib_pajak'])
+            ->rawColumns(['action', 'nm_wajib_pajak', 'jumlah_skrd'])
             ->toJson();
     }
 

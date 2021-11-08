@@ -65,6 +65,7 @@
                                             <th>Nama Dinas</th>
                                             <th>Jenis Retribusi</th>
                                             <th>Alamat WP</th>
+                                            {{-- <th>Jumlah SKRD</th> --}}
                                             <th></th>
                                         </thead>
                                         <tbody></tbody>
@@ -107,6 +108,7 @@
             {data: 'id_opd', name: 'id_opd'},
             {data: 'id_jenis_pendapatan', name: 'id_jenis_pendapatan'},
             {data: 'alamat_wp', name: 'alamat_wp'},
+            // {data: 'jumlah_skrd', name: 'jumlah_skrd'},
             {data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center'}
         ]
     });

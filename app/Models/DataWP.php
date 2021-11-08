@@ -36,7 +36,7 @@ class DataWP extends Model
 
     public static function dataWP($opd_id, $jenis_pendapatan_id)
     {
-        $data = DataWP::orderBy('id', 'DESC');
+        $data = DataWP::with(['jenis_pendapatan', 'rincian_jenis', 'opd'])->orderBy('id', 'DESC');
 
         if ($opd_id != 0) {
             $data->where('id_opd', $opd_id);
