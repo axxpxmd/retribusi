@@ -227,7 +227,6 @@ class PenggunaController extends Controller
             'full_name' => 'required|max:100',
             'email' => 'required|max:100|email|unique:tmpenggunas,email,' . $id,
             'phone' => 'required|max:20',
-            'opd_id'  => 'required',
             'role_id' => 'required'
         ]);
 
