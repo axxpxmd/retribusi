@@ -260,7 +260,7 @@
                                                 <button class="btn btn-sm btn-dark mr-1" data-toggle="modal" data-target="#batal_bayar"><i class="icon-cancel mr-2"></i>Batal Bayar</button>
                                             @endif
                                             @if ($data->status_ttd == 1 || $data->status_ttd == 3)
-                                                <a href="{{ config('app.sftp_src').$path_sftp.$fileName }}" class="btn btn-primary btn-sm"><i class="icon-document-file-pdf2 mr-2"></i>File TTD SKRD</a>
+                                                <a href="{{ config('app.sftp_src').$path_sftp.$fileName }}" target="blank" class="btn btn-primary btn-sm"><i class="icon-document-file-pdf2 mr-2"></i>File TTD SKRD</a>
                                             @endif
                                         </label>
                                     </div> 
