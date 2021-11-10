@@ -90,10 +90,10 @@ class TandaTanganController extends Controller
                 $path_sftp = 'file_ttd_skrd/';
                 $fileName  = str_replace(' ', '', $p->nm_wajib_pajak) . '-' . $p->no_skrd . ".pdf";
 
-                if ($p->status_ttd != 3 || $p->status_ttd != 1) {
-                    return '-';
-                } else {
+                if ($p->status_ttd == 3 || $p->status_ttd == 1) {
                     return "<a href='" . config('app.sftp_src') . $path_sftp . $fileName . "' target='_blank' class='cyan-text'><i class='icon-document-file-pdf2'></i></a>";
+                } else {
+                    return '-';
                 }
             })
             ->editColumn('no_skrd', function ($p) {
@@ -115,10 +115,10 @@ class TandaTanganController extends Controller
                 return 'Rp. ' . number_format($p->jumlah_bayar);
             })
             ->addColumn('status_ttd', function ($p) {
-                if ($p->status_ttd != 3 || $p->status_ttd != 1) {
-                    return 'Belum TTD';
+                if ($p->status_ttd == 3 || $p->status_ttd == 1) {
+                    return 'Sudah TTD';
                 } else {
-                    return "Sudah TTD";
+                    return "Belum TTD";
                 }
             })
             ->addIndexColumn()
