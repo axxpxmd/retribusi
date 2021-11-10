@@ -248,7 +248,7 @@
                                                 <label class="col-md-8 s-12">{{ $data->created_by }}</label>
                                             </div>
                                             <div class="row">
-                                                <label class="col-md-4 text-right s-12"><strong>Diupdate Oleh :</strong></label>
+                                                <label class="col-md-4 text-right s-12"><strong>Diupdate Oleh:</strong></label>
                                                 <label class="col-md-8 s-12">{{ $data->updated_by }}</label>
                                             </div>
                                         </div>
@@ -257,7 +257,10 @@
                                         <label class="col-md-2 text-right s-12"></label>
                                         <label class="col-md-3 s-12">
                                             @if ($data->status_bayar == 1)
-                                                <button class="btn btn-sm btn-dark" data-toggle="modal" data-target="#batal_bayar"><i class="icon-cancel mr-2"></i>Batal Bayar</button>
+                                                <button class="btn btn-sm btn-dark mr-1" data-toggle="modal" data-target="#batal_bayar"><i class="icon-cancel mr-2"></i>Batal Bayar</button>
+                                            @endif
+                                            @if ($data->status_ttd == 1 || $data->status_ttd == 3)
+                                                <a href="{{ config('app.sftp_src').$path_sftp.$fileName }}" class="btn btn-primary btn-sm"><i class="icon-document-file-pdf2 mr-2"></i>File TTD SKRD</a>
                                             @endif
                                         </label>
                                     </div> 
