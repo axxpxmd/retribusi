@@ -419,7 +419,11 @@ class STSController extends Controller
         }
 
         //* Total Bayar + Bunga
-        $total_bayar = $total_bayar + $jumlahBunga;
+        if ($data->denda != null) {
+            $total_bayar = $total_bayar + $jumlahBunga + $data->denda;
+        } else {
+            $total_bayar = $total_bayar + $jumlahBunga;
+        }
         $terbilang   = Html_number::terbilang($total_bayar) . 'rupiah';
 
         //* Tanggal Jatuh Tempo STRD
