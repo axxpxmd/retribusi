@@ -14,6 +14,7 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use DateTime;
 use DataTables;
 use Carbon\Carbon;
 
@@ -387,15 +388,35 @@ class STSController extends Controller
         ]);
     }
 
+    public function getDiffDays($tgl_skrd_akhir)
+    {
+        $timeNow = Carbon::now();
+
+        $dateTimeNow = new DateTime($timeNow);
+        $expired     = new DateTime($tgl_skrd_akhir . ' 23:59:59');
+        $interval    = $dateTimeNow->diff($expired);
+        $daysDiff    = $interval->format('%r%a');
+
+        return $daysDiff;
+    }
+
     public function printDataTTD(Request $request, $id)
     {
         $id   = \Crypt::decrypt($id);
         $data = TransaksiOPD::find($id);
 
-        //* Bunga
         $tgl_skrd_akhir = $data->tgl_skrd_akhir;
         $total_bayar    = $data->jumlah_bayar;
-        list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);
+        $daysDiff = $this->getDiffDays($tgl_skrd_akhir);
+
+        //TODO: Check bunga (STRD)
+        if ($daysDiff > 0) {
+            $jumlahBunga = 0;
+            $kenaikan = 0;
+        } else {
+            //* Bunga
+            list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);
+        }
 
         //* Total Bayar + Bunga
         $total_bayar = $total_bayar + $jumlahBunga;
