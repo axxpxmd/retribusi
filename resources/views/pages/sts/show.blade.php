@@ -131,14 +131,10 @@
                                             </div> 
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>Denda  :</strong></label>
-                                                @if ($data->status_denda == 0)
-                                                    @if ($data->tgl_skrd_akhir < $dateNow)
-                                                    <label class="col-md-8 s-12"> ({{ $kenaikan }}%) &nbsp;@currency($jumlahBunga)</label>
-                                                    @else
+                                                @if ($data->status_bayar == 1)
                                                     <label class="col-md-8 s-12">@currency($data->denda)</label>
-                                                    @endif
                                                 @else
-                                                <label class="col-md-8 s-12">(Ya {{ $kenaikan }}%) @currency($data->denda)</label>
+                                                    <label class="col-md-8 s-12">({{ $kenaikan }}%) &nbsp;@currency($jumlahBunga)</label>
                                                 @endif
                                             </div> 
                                             <div class="row">
