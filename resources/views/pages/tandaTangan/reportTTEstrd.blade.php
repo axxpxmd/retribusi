@@ -272,7 +272,7 @@
                                 <td style="padding: 3px" width="92%" class="a">
                                     <p class="m-b-0 m-t-0 fs-10" style="font-style: italic">Telah ditandatangani secara elektronik oleh :</p>
                                     <p class="m-t-0 m-b-0 fs-10 t-blue">{{ $data->nm_ttd }}</p>
-                                    <p class="m-t-0 m-b-0 fs-10">Menggunakan Sertifikat Elektronik iOTENTIK - BPPT.</p>
+                                    <p class="m-t-0 m-b-0 fs-10">Menggunakan Sertifikat Elektronik.</p>
                                     <p class="m-t-0 m-b-0 fs-10">Verifikasi dokumen bisa dilakukan melalui :</p>
                                     <p class="m-t-0 m-b-0 fs-10 t-blue" style="font-style: italic">https://tte.kominfo.go.id/verifyPDF</p>
                                 </td>
