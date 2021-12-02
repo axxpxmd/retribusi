@@ -164,7 +164,15 @@ class STSController extends Controller
         //TODO: Get bunga
         $tgl_skrd_akhir = $data->tgl_skrd_akhir;
         $total_bayar    = $data->jumlah_bayar;
-        list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);
+        //TODO: Get bunga
+        $jumlahBunga = 0;
+        $kenaikan = 0;
+        $dateNow = Carbon::now()->format('Y-m-d');
+        if ($data->tgl_skrd_akhir < $dateNow) {
+            $tgl_skrd_akhir = $data->tgl_skrd_akhir;
+            $total_bayar    = $data->jumlah_bayar;
+            list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);
+        }
 
         //* Check status pembayaran VA BJB
         if ($data->status_bayar == 0 && $data->nomor_va_bjb != null) {
