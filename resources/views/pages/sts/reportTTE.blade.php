@@ -267,7 +267,7 @@
                         @else
                         <p>Serpong, </p>
                         @endif
-                        <table style="margin-left: 380px !important; margin-top: -8px; margin-bottom: -8px">
+                        <table style="margin-left: 410px !important; margin-top: -8px; margin-bottom: -8px">
                             <tr class="a">
                                 <td style="padding: 1px" width="8%" class="a"> {!! $img !!}</td>
                                 <td style="padding: 3px" width="92%" class="a">
