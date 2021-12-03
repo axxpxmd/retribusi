@@ -283,11 +283,11 @@ class TandaTanganController extends Controller
             // Save PDF to local storage
             Storage::put($path_local . $fileName, $content);
 
-            // Token Godem
-            $token_godem = $this->getTokenGodam($id, $nip_ttd);
+            // // Token Godem
+            // $token_godem = $this->getTokenGodam($id, $nip_ttd);
 
-            // Sertifikat 
-            $id_cert = $this->getListCert($id, $nip_ttd);
+            // // Sertifikat 
+            // $id_cert = $this->getListCert($id, $nip_ttd);
         }
 
         return view($this->view . 'show', compact(
@@ -301,6 +301,30 @@ class TandaTanganController extends Controller
             'path_sftp',
             'dateNow'
         ));
+    }
+
+    public function tteBackup(Request $request)
+    {
+        $id = $request->id;
+
+        $dataSKRD = TransaksiOPD::find($id);
+
+        // Update status TTD
+        if ($dataSKRD->status_ttd == 2) {
+            // SKRD
+            $dataSKRD->update([
+                'status_ttd' => 1,
+            ]);
+        } else {
+            // STRD
+            $dataSKRD->update([
+                'status_ttd' => 3,
+            ]);
+        }
+
+        return redirect()
+            ->route($this->route . 'show', \Crypt::encrypt($id))
+            ->withSuccess('Berhasil melakukan tandatangan digital.');
     }
 
     public function tte(Request $request)

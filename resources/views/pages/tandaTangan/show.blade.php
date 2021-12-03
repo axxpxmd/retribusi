@@ -259,9 +259,12 @@
                 <div class="card">
                     <h6 class="card-header font-weight-bold">Konfirmasi <b>Passphrase</b> Tandatangan Digital</h6>
                     <div class="card-body">
-                        <form class="needs-validation" method="POST" action="{{ route('tanda-tangan.tte') }}" enctype="multipart/form-data" novalidate>
+                        <form class="needs-validation" method="POST" action="{{ route('tanda-tangan.tteBackup') }}" enctype="multipart/form-data" novalidate>
                             {{ method_field('POST') }}
                             {{ csrf_field() }} 
+                        {{-- <form class="needs-validation" method="POST" action="{{ route('tanda-tangan.tte') }}" enctype="multipart/form-data" novalidate>
+                            {{ method_field('POST') }}
+                            {{ csrf_field() }}  --}}
                             <input type="hidden" name="id" value="{{ $id }}">
                             <input type="hidden" name="token_godem" value="{{ $token_godem }}">
                             <input type="hidden" name="id_cert" value="{{ $id_cert }}">
