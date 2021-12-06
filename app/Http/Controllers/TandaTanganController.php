@@ -283,11 +283,11 @@ class TandaTanganController extends Controller
             // Save PDF to local storage
             Storage::put($path_local . $fileName, $content);
 
-            // // Token Godem
-            // $token_godem = $this->getTokenGodam($id, $nip_ttd);
+            // Token Godem
+            $token_godem = $this->getTokenGodam($id, $nip_ttd);
 
-            // // Sertifikat 
-            // $id_cert = $this->getListCert($id, $nip_ttd);
+            // Sertifikat 
+            $id_cert = $this->getListCert($id, $nip_ttd);
         }
 
         return view($this->view . 'show', compact(
