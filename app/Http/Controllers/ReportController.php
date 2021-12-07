@@ -131,23 +131,7 @@ class ReportController extends Controller
             ->editColumn('denda', function ($p) {
                 $dateNow   = Carbon::now()->format('Y-m-d');
 
-                if ($p->status_denda == 0) {
-                    // SKRD
-                    if ($p->tgl_skrd_akhir >= $dateNow) {
-                        return 'Rp. ' . number_format($p->denda);
-                    }
-
-                    // STRD
-                    if ($p->tgl_skrd_akhir < $dateNow) {
-                        $tgl_skrd_akhir = $p->tgl_skrd_akhir;
-                        $total_bayar    = $p->jumlah_bayar;
-                        list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);;
-
-                        return 'Rp. ' . number_format($jumlahBunga);
-                    }
-                } else {
-                    return ' Rp. ' . number_format((int) $p->denda);
-                }
+                return $p->denda;
             })
             ->editColumn('status_bayar', function ($p) {
                 if ($p->status_bayar == 1) {
