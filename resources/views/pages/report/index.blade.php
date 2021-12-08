@@ -196,6 +196,7 @@
         }
     });
 
+    pressOnChange();
     function pressOnChange(){
         table.api().ajax.reload();
 
@@ -206,12 +207,15 @@
         var tgl_skrd1 = $('#tgl_skrd1').val();
         var jenis = $('#jenis').val();
 
-        url = "{{ route('report.getTotalBayar') }}?tgl_skrd=" + tgl_skrd + "&tgl_skrd1=" + tgl_skrd1 + "&opd_id=" + opd_id + "&jenis_pendapatan_id=" + jenis_pendapatan_id + "&status_bayar=" + status_bayar + "&jenis=" + jenis
+        params = tgl_skrd + "&tgl_skrd1=" + tgl_skrd1 + "&opd_id=" + opd_id + "&jenis_pendapatan_id=" + jenis_pendapatan_id + "&status_bayar=" + status_bayar + "&jenis=" + jenis;
+
+        url1 = "{{ route('report.cetakSKRD') }}?tgl_skrd=" + params
+        url2 = "{{ route('report.getTotalBayar') }}?tgl_skrd=" + params
         
-        $('#exportpdf').attr('href', url)
+        $('#exportpdf').attr('href', url1)
     
         // total bayar
-        $.get(url, function(data){
+        $.get(url2, function(data){
             $('#total_bayar').html(data.total_bayar)
         }, 'JSON');
     }

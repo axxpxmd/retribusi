@@ -28,7 +28,7 @@
     <div>
         <p class="text-center">Laporan {{ $title }}</p>
     </div>
-
+    <p>Tanggal : {{ Carbon\Carbon::createFromFormat('Y-m-d', $from)->format('d M Y') }} - {{ Carbon\Carbon::createFromFormat('Y-m-d', $to)->format('d M Y') }}</p>
     <table class="d">
         <thead>
             <tr class="d">
@@ -70,6 +70,12 @@
             </tr>
             @endforelse
         </tbody>
+        <tfoot>
+            <tr class="d">
+                <th class="d" colspan="11">Total</th>
+                <th class="d" colspan="2">@currency($totalBayar)</th>
+            </tr>
+        </tfoot>
     </table>
     <script type="text/php">
         if (isset($pdf)) {

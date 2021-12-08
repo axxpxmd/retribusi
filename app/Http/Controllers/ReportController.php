@@ -236,7 +236,7 @@ class ReportController extends Controller
         $jenis_pendapatan_id = $request->jenis_pendapatan_id;
 
         $data = TransaksiOPD::queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis);
-
+        $totalBayar = TransaksiOPD::queryReportGetTotalBayar($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis);
 
         if ($jenis == 1 || $jenis == 0) {
             $title = 'SKRD (Surat Ketetapan Retribusi Daerah)';
@@ -249,7 +249,10 @@ class ReportController extends Controller
         $pdf->loadView($this->view . 'report', compact(
             'data',
             'title',
-            'jenis'
+            'jenis',
+            'from',
+            'to',
+            'totalBayar'
         ))->setPaper('a3', 'landscape');
 
         return $pdf->download('Laporan ' . $title . ".pdf");
