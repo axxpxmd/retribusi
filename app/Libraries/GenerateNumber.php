@@ -17,7 +17,7 @@ class GenerateNumber
         $month = $time->month;
         $year  = substr($time->year, 2);
 
-        //TODO: Generate no_skrd
+        //TODO: Generate no_skrd (Data melanjutkan nomor terakhir)
         $totalSKRD = TransaksiOPD::where('id_opd', $opd_id)
             ->where('id_jenis_pendapatan', $jenis_pendapatan_id)
             ->where(DB::raw('YEAR(created_at)'), '=', $time->year)

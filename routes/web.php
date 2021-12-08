@@ -121,4 +121,5 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('report/api-skrd', 'ReportController@api')->name('report.api');
     Route::get('cetak-skrd', 'ReportController@cetakSKRD')->name('report.cetakSKRD');
     Route::get('report/get-jenis-pendapatan/{opd_id}', 'ReportController@getJenisPendapatanByOpd')->name('report.getJenisPendapatan');
+    Route::get('get-total-bayar', 'ReportController@getTotalBayar')->name('report.getTotalBayar');
 });

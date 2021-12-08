@@ -80,6 +80,9 @@
                                 <a target="_blank" href="{{ route('report.cetakSKRD') }}" class="btn btn-sm btn-primary ml-2" id="exportpdf"><i class="icon-print mr-2"></i>Print</a>
                             </div>
                         </div>
+                        <div>
+                            <p class="mb-0 font-weight-bold">Total Bayar : <span id="total_bayar"></span></p>
+                        </div>
                     </div>
                 </div>
                 <div class="row mt-2">
@@ -123,7 +126,7 @@
 
         $('#tgl_skrd_text').html('Tanggal SKRD :');
         $('#jenis').change(function(){
-            if($('#jenis').val() === "2") {
+            if($('#jenis').val() === "1") {
                 $('#status_bayar_display').hide(); 
                 $('#tgl_skrd_text').html('Tanggal SKRD :');
             } else {
@@ -203,7 +206,14 @@
         var tgl_skrd1 = $('#tgl_skrd1').val();
         var jenis = $('#jenis').val();
 
-        $('#exportpdf').attr('href', "{{ route('report.cetakSKRD') }}?tgl_skrd=" + tgl_skrd + "&tgl_skrd1=" + tgl_skrd1 + "&opd_id=" + opd_id + "&jenis_pendapatan_id=" + jenis_pendapatan_id + "&status_bayar=" + status_bayar + "&jenis=" + jenis)
+        url = "{{ route('report.getTotalBayar') }}?tgl_skrd=" + tgl_skrd + "&tgl_skrd1=" + tgl_skrd1 + "&opd_id=" + opd_id + "&jenis_pendapatan_id=" + jenis_pendapatan_id + "&status_bayar=" + status_bayar + "&jenis=" + jenis
+        
+        $('#exportpdf').attr('href', url)
+    
+        // total bayar
+        $.get(url, function(data){
+            $('#total_bayar').html(data.total_bayar)
+        }, 'JSON');
     }
 </script>
 @endsection

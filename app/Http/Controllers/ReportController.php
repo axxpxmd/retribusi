@@ -237,6 +237,7 @@ class ReportController extends Controller
 
         $data = TransaksiOPD::queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis);
 
+
         if ($jenis == 1 || $jenis == 0) {
             $title = 'SKRD (Surat Ketetapan Retribusi Daerah)';
         } else {
@@ -252,5 +253,34 @@ class ReportController extends Controller
         ))->setPaper('a3', 'landscape');
 
         return $pdf->download('Laporan ' . $title . ".pdf");
+    }
+
+    public function getTotalBayar(Request $request)
+    {
+        $checkOPD = Auth::user()->pengguna->opd_id;
+        if ($checkOPD == 0) {
+            $opd_id = $request->opd_id;
+        } else {
+            $opd_id = $checkOPD;
+        }
+
+        //* Get time now
+        $time = Carbon::now();
+        $today = $time->format('Y-m-d');
+
+        //TODO: Get params
+        $from  = $request->tgl_skrd != null ? $request->tgl_skrd : $today;
+        $to    = $request->tgl_skrd1 != null ? $request->tgl_skrd1 : $today;
+        $jenis = $request->jenis;
+        $status_bayar        = $request->status_bayar;
+        $jenis_pendapatan_id = $request->jenis_pendapatan_id;
+
+        $data = TransaksiOPD::queryReportGetTotalBayar($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis);
+
+        $dataJson = [
+            'total_bayar' => 'Rp. ' . number_format($data)
+        ];
+
+        return $dataJson;
     }
 }

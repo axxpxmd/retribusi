@@ -39,7 +39,7 @@ class TransaksiOPD extends Model
     // 
     public static function queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis)
     {
-        $data = TransaksiOPD::orderBy('id', 'DESC');
+        $data = TransaksiOPD::with(['jenis_pendapatan', 'opd', 'rincian_jenis'])->orderBy('id', 'DESC');
 
         if ($opd_id != 0) {
             $data->where('id_opd', $opd_id);
@@ -55,7 +55,7 @@ class TransaksiOPD extends Model
 
         if ($jenis == 1 || $jenis == 0) {
             if ($from != null || $to != null) {
-                if ($from != null && $to == null) {
+                if ($from != null && $to != null) {
                     $data->whereDate('tgl_skrd_awal', $from);
                 } else {
                     $data->whereBetween('tgl_skrd_awal', [$from, $to]);
@@ -63,7 +63,7 @@ class TransaksiOPD extends Model
             }
         } elseif ($jenis == 2) {
             if ($from != null || $to != null) {
-                if ($from != null && $to == null) {
+                if ($from != null && $to != null) {
                     $data->whereDate('tgl_bayar', $from);
                 } else {
                     $data->whereBetween('tgl_bayar', [$from, $to]);
@@ -75,9 +75,47 @@ class TransaksiOPD extends Model
     }
 
     // 
+    public static function queryReportGetTotalBayar($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis)
+    {
+        $data = TransaksiOPD::with(['jenis_pendapatan', 'opd', 'rincian_jenis'])->orderBy('id', 'DESC');
+
+        if ($opd_id != 0) {
+            $data->where('id_opd', $opd_id);
+        }
+
+        if ($jenis_pendapatan_id) {
+            $data->where('id_jenis_pendapatan', $jenis_pendapatan_id);
+        }
+
+        if ($status_bayar != null) {
+            $data->where('status_bayar', $status_bayar);
+        }
+
+        if ($jenis == 1 || $jenis == 0) {
+            if ($from != null || $to != null) {
+                if ($from != null && $to != null) {
+                    $data->whereDate('tgl_skrd_awal', $from);
+                } else {
+                    $data->whereBetween('tgl_skrd_awal', [$from, $to]);
+                }
+            }
+        } elseif ($jenis == 2) {
+            if ($from != null || $to != null) {
+                if ($from != null && $to != null) {
+                    $data->whereDate('tgl_bayar', $from);
+                } else {
+                    $data->whereBetween('tgl_bayar', [$from, $to]);
+                }
+            }
+        }
+
+        return $data->sum('total_bayar');
+    }
+
+    // 
     public static function queryDiskon($opd_id, $jenis_pendapatan_id, $from, $to, $status_diskon, $no_skrd)
     {
-        $data = TransaksiOPD::where('status_bayar', 0)
+        $data = TransaksiOPD::with(['jenis_pendapatan', 'opd', 'rincian_jenis'])->where('status_bayar', 0)
             ->where('status_ttd', 0)
             ->orderBy('id', 'DESC');
 
@@ -111,7 +149,7 @@ class TransaksiOPD extends Model
     // 
     public static function queryDenda($opd_id, $jenis_pendapatan_id, $from, $to, $status_denda_filter, $no_skrd)
     {
-        $data = TransaksiOPD::where('status_bayar', 0)
+        $data = TransaksiOPD::with(['jenis_pendapatan', 'opd', 'rincian_jenis'])->where('status_bayar', 0)
             ->where('status_ttd', 0)
             ->orderBy('id', 'DESC');
 
@@ -245,7 +283,7 @@ class TransaksiOPD extends Model
     // 
     public static function queryTandaTangan($from, $to, $opd_id, $no_skrd, $status_ttd)
     {
-        $data = TransaksiOPD::whereIn('status_ttd', [1, 2, 3, 4])
+        $data = TransaksiOPD::with(['jenis_pendapatan', 'opd', 'rincian_jenis'])->whereIn('status_ttd', [1, 2, 3, 4])
             ->orderBy('id', 'DESC');
 
         if ($opd_id != 0) {
