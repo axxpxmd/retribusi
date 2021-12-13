@@ -233,14 +233,10 @@
                                         <label class="col-md-2 text-right s-12"></label>
                                         <label class="col-md-3 s-12">
                                             @if ($data->status_ttd == 0 || $data->status_ttd == 2 || $data->status_ttd == 4)
-                                                <button class="btn btn-sm btn-success" data-toggle="modal" data-target="#preview-file"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</button> 
-                                                @if (count($errors) > 0)
-                                                <button class="btn btn-sm btn-primary" onclick="alertSend()"><i class="icon-pencil mr-2"></i>TandaTangani</button>
-                                                @else
+                                                <button class="btn btn-sm btn-success mr-2" data-toggle="modal" data-target="#preview-file"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</button> 
                                                 <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#tte"><i class="icon-pencil mr-2"></i>TandaTangani</button>
-                                                @endif
                                             @else
-                                            <button class="btn btn-sm btn-success" data-toggle="modal" data-target="#preview-file"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</button> 
+                                                <button class="btn btn-sm btn-success mr-2" data-toggle="modal" data-target="#preview-file"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</button> 
                                             @endif
                                         </label>
                                     </div> 
@@ -274,7 +270,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group m-0">
                                         <label class="col-form-label s-12 col-md-2">Di TTD Oleh</label>
-                                        <input type="text" class="form-control r-0 light s-12 col-md-9" value="{{ $data->nm_ttd }}" autocomplete="off" readonly required/>
+                                        <input type="text" class="form-control r-0 light s-12 col-md-9" value="{{ $data->nm_ttd }} &nbsp;&nbsp; [ {{ $data->nip_ttd }} ]" autocomplete="off" readonly required/>
                                     </div>
                                     <div class="form-group m-0">
                                         <label for="passphrase" class="col-form-label s-12 col-md-2">Passphrase</label>
@@ -287,8 +283,8 @@
                                     <div class="form-group m-0">
                                         <label for="passphrase" class="col-form-label s-12 col-md-2"></label>
                                         <div class="mt-2">
-                                            <button class="btn btn-sm btn-primary mr-2"><i class="icon-send mr-2"></i>Tandatangani</button>
-                                            <button class="btn btn-sm btn-secondary" data-dismiss="modal">Batalkan</button>
+                                            <button class="btn btn-sm btn-primary mr-2"><i class="icon-pencil mr-2"></i>Tandatangani</button>
+                                            <button class="btn btn-sm btn-danger" data-dismiss="modal"><i class="icon-times mr-2"></i>Batalkan</button>
                                         </div>
                                     </div>
                                 </div>
@@ -320,6 +316,7 @@
         </div>
     </div>
 </div>
+@include('layouts.loading')
 @endsection
 @section('script')
 <script type="text/javascript">
@@ -334,11 +331,14 @@
             .forEach(function (form) {
                 form.addEventListener('submit', function (event) {
                     if (!form.checkValidity()) {
-                    event.preventDefault()
-                    event.stopPropagation()
+                        event.preventDefault()
+                        event.stopPropagation()
                     }
 
                     form.classList.add('was-validated')
+                    if (form.checkValidity()) {
+                        $('#loading').modal('show');   
+                    }
                 }, false)
             })
     })()

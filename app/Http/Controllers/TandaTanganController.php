@@ -398,9 +398,15 @@ class TandaTanganController extends Controller
                     ->withErrors('Gagal melakukan tandatangan digital. Aplikasi tidak mendapatkan balikan data .pdf.');
             }
             if (isset($r))
-                return redirect()
-                    ->route($this->route . 'show', \Crypt::encrypt($id))
-                    ->withErrors('Gagal melakukan tandatangan digital, Silahkan refresh halaman ini. Error Code: ' .  $r['status'] . ' Message: ' . $r['message']);
+                if ($r['status'] == 201) {
+                    return redirect()
+                        ->route($this->route . 'show', \Crypt::encrypt($id))
+                        ->withErrors('Gagal melakukan tandatangan digital. Error Code: ' .  $r['status'] . ' Message: Passphrase Salah');
+                } else {
+                    return redirect()
+                        ->route($this->route . 'show', \Crypt::encrypt($id))
+                        ->withErrors('Gagal melakukan tandatangan digital, Silahkan refresh halaman ini. Error Code: ' .  $r['status'] . ' Message: ' . $r['message']);
+                }
         }
         return redirect()
             ->route($this->route . 'show', \Crypt::encrypt($id))
