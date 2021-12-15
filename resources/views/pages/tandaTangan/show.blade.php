@@ -233,8 +233,9 @@
                                         <label class="col-md-2 text-right s-12"></label>
                                         <label class="col-md-3 s-12">
                                             @if ($data->status_ttd == 0 || $data->status_ttd == 2 || $data->status_ttd == 4)
-                                                <button class="btn btn-sm btn-success mr-2" data-toggle="modal" data-target="#preview-file"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</button> 
-                                                <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#tte"><i class="icon-pencil mr-2"></i>TandaTangani</button>
+                                                <button class="btn btn-sm btn-success mr-1" data-toggle="modal" data-target="#preview-file"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</button>
+                                                <button class="btn btn-sm btn-primary mr-1" data-toggle="modal" data-target="#tte"><i class="icon-pencil mr-2"></i>TandaTangani</button>
+                                                <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#restore"><i class="icon-refresh2 mr-2"></i>Kembalikan</button> 
                                             @else
                                                 <button class="btn btn-sm btn-success mr-2" data-toggle="modal" data-target="#preview-file"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</button> 
                                             @endif
@@ -243,6 +244,23 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Kembalikan -->
+    <div class="modal fade" id="restore" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="">
+                        <p class="font-weight-bold text-black-50">Data akan dikembalikan pada pendataan ?</p>
+                    </div>
+                    <hr>
+                    <div class="text-right">
+                        <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="icon-times mr-2"></i>Batalkan</button>
+                        <a href="{{ route('tanda-tangan.restoreTTD', $id) }}" class="btn btn-sm btn-primary ml-2"><i class="icon-refresh2 mr-2"></i>Kembalikan</a>
                     </div>
                 </div>
             </div>

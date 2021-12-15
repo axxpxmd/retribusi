@@ -412,4 +412,15 @@ class TandaTanganController extends Controller
             ->route($this->route . 'show', \Crypt::encrypt($id))
             ->withErrors("Terjadi kegagalan dalam memuat tandatangan digital. Error Code " . $res->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator");
     }
+
+    public function restoreTTD($id)
+    {
+        TransaksiOPD::where('id', $id)->update([
+            'status_ttd' => 0
+        ]);
+
+        return redirect()
+            ->route('tanda-tangan.index')
+            ->withSuccess('Data berhasil dikembalikan.');
+    }
 }
