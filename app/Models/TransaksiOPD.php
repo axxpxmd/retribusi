@@ -55,15 +55,18 @@ class TransaksiOPD extends Model
 
         if ($jenis == 1 || $jenis == 0) {
             if ($from != null || $to != null) {
-                if ($from != null && $to != null) {
+                if ($from != null && $to == null) {
                     $data->whereDate('tgl_skrd_awal', $from);
                 } else {
                     $data->whereBetween('tgl_skrd_awal', [$from, $to]);
                 }
             }
         } elseif ($jenis == 2) {
+            $from = $from . ' ' . '00:00:01';
+            $to = $to . ' ' . '23:59:59';
+
             if ($from != null || $to != null) {
-                if ($from != null && $to != null) {
+                if ($from != null && $to == null) {
                     $data->whereDate('tgl_bayar', $from);
                 } else {
                     $data->whereBetween('tgl_bayar', [$from, $to]);
@@ -72,44 +75,6 @@ class TransaksiOPD extends Model
         }
 
         return $data->get();
-    }
-
-    // 
-    public static function queryReportGetTotalBayar($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis)
-    {
-        $data = TransaksiOPD::with(['jenis_pendapatan', 'opd', 'rincian_jenis'])->orderBy('id', 'DESC');
-
-        if ($opd_id != 0) {
-            $data->where('id_opd', $opd_id);
-        }
-
-        if ($jenis_pendapatan_id) {
-            $data->where('id_jenis_pendapatan', $jenis_pendapatan_id);
-        }
-
-        if ($status_bayar != null) {
-            $data->where('status_bayar', $status_bayar);
-        }
-
-        if ($jenis == 1 || $jenis == 0) {
-            if ($from != null || $to != null) {
-                if ($from != null && $to != null) {
-                    $data->whereDate('tgl_skrd_awal', $from);
-                } else {
-                    $data->whereBetween('tgl_skrd_awal', [$from, $to]);
-                }
-            }
-        } elseif ($jenis == 2) {
-            if ($from != null || $to != null) {
-                if ($from != null && $to != null) {
-                    $data->whereDate('tgl_bayar', $from);
-                } else {
-                    $data->whereBetween('tgl_bayar', [$from, $to]);
-                }
-            }
-        }
-
-        return $data->sum('total_bayar');
     }
 
     // 
@@ -268,6 +233,9 @@ class TransaksiOPD extends Model
                 }
             }
         } elseif ($jenis_tanggal == 2) {
+            $from = $from . ' ' . '00:00:01';
+            $to = $to . ' ' . '23:59:59';
+
             if ($from != null || $to != null) {
                 if ($from != null && $to == null) {
                     $data->whereDate('tgl_bayar', $from);

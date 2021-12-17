@@ -55,7 +55,7 @@
                                 </select>
                             </div>
                         </div> 
-                        <div id="status_bayar_display" class="form-group row" style="margin-top: -8px !important">
+                        <div id="status_bayar_display" class="form-group row d-none" style="margin-top: -8px !important">
                             <label for="status_bayar" class="col-form-label s-12 col-md-4 text-right font-weight-bolder">Status Bayar : </label>
                             <div class="col-sm-4">
                                 <select name="status_bayar" id="status_bayar" class="select2 form-control r-0 light s-12">

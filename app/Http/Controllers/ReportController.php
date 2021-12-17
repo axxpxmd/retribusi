@@ -224,19 +224,14 @@ class ReportController extends Controller
             $opd_id = $checkOPD;
         }
 
-        //* Get time now
-        $time = Carbon::now();
-        $today = $time->format('Y-m-d');
-
-        //TODO: Get params
-        $from  = $request->tgl_skrd != null ? $request->tgl_skrd : $today;
-        $to    = $request->tgl_skrd1 != null ? $request->tgl_skrd1 : $today;
-        $jenis = $request->jenis;
-        $status_bayar        = $request->status_bayar;
         $jenis_pendapatan_id = $request->jenis_pendapatan_id;
+        $status_bayar = $request->status_bayar;
+        $from = $request->tgl_skrd;
+        $to = $request->tgl_skrd1;
+        $jenis = $request->jenis;
 
         $data = TransaksiOPD::queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis);
-        $totalBayar = TransaksiOPD::queryReportGetTotalBayar($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis);
+        $totalBayar = $data->sum('total_bayar');
 
         if ($jenis == 1 || $jenis == 0) {
             $title = 'SKRD (Surat Ketetapan Retribusi Daerah)';
@@ -267,23 +262,19 @@ class ReportController extends Controller
             $opd_id = $checkOPD;
         }
 
-        //* Get time now
-        $time = Carbon::now();
-        $today = $time->format('Y-m-d');
-
-        //TODO: Get params
-        $from  = $request->tgl_skrd != null ? $request->tgl_skrd : $today;
-        $to    = $request->tgl_skrd1 != null ? $request->tgl_skrd1 : $today;
-        $jenis = $request->jenis;
-        $status_bayar        = $request->status_bayar;
         $jenis_pendapatan_id = $request->jenis_pendapatan_id;
+        $status_bayar = $request->status_bayar;
+        $from = $request->tgl_skrd;
+        $to = $request->tgl_skrd1;
+        $jenis = $request->jenis;
 
-        $data = TransaksiOPD::queryReportGetTotalBayar($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis);
+        $data = TransaksiOPD::queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis);
+        $totalBayar = $data->sum('total_bayar');
 
-        $dataJson = [
-            'total_bayar' => 'Rp. ' . number_format($data)
+        $totalBayarJson = [
+            'total_bayar' => 'Rp. ' . number_format($totalBayar)
         ];
 
-        return $dataJson;
+        return $totalBayarJson;
     }
 }
