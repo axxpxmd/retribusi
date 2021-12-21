@@ -121,11 +121,16 @@
             </th>
             <th width="40%" class="d">
                 <div style="margin: 0 auto">
+                    @if (isset($statusSTS))
+                    <p class="m-b-0" style="font-size: 13px">SURAT TANDA SETORAN</p>
+                    <p class="m-t-1" style="font-size: 13px">(STS)</p>
+                    @else
                     <p class="m-b-0" style="font-size: 13px">SURAT KETETAPAN RETRIBUSI DAERAH</p>
                     <p class="m-t-1" style="font-size: 13px">(SKRD)</p>
+                    @endif
                     <p>&nbsp;</p>
                     @if ($data->tgl_skrd_awal != null)
-                    <p class="text-left m-l-14 m-t-0 f-w-n">Tanggal SKRD : </p>
+                    <p class="text-left m-l-14 m-t-0 f-w-n">Tanggal SKRD : {{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_awal)->format('d F Y') }}</p>
                     @else
                     <p class="text-left m-l-14 m-t-0 f-w-n">Tanggal SKRD : - </p>
                     @endif
