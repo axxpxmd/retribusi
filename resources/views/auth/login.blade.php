@@ -45,7 +45,7 @@ $template = App\Models\Template::select('id', 'logo', 'logo_title', 'logo_auth')
                     <form class="needs-validation" novalidate method="POST" action="{{ route('login') }}" autocomplete="off">
                         @csrf
                         <div class="form-group has-icon"><i class="icon icon-user"></i>
-                            <input type="username" class="form-control form-control-lg @if ($errors->has('username')) is-invalid @endif" placeholder="username" name="username" autocomplete="off" value="{{ old('username') }}" required autofocus>
+                            <input type="text" class="form-control form-control-lg @if ($errors->has('username')) is-invalid @endif" placeholder="username" name="username" autocomplete="off" value="{{ old('username') }}" required autofocus>
                             @if ($errors->has('username'))
                             <div class="invalid-feedback" role="alert">
                                 <strong>{{ $errors->first('username') }}</strong>
