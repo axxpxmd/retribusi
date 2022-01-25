@@ -50,7 +50,7 @@
                 <div class="row p-0 col-md-12 mt-3">
                     <div class="col-md-7 animate__animated animate__backInDown">
                         <div class="card no-b" style="height: 374px !important">
-                            <h6 class="card-header bg-white font-weight-bold text-black">Pendapatan</h6>
+                            <h6 class="card-header bg-white font-weight-bold text-black">Pendapatan {{ $time->year }}</h6>
                             <div class="card-body">
                                 <div class="">
                                     <table class="table table-striped">

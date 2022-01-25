@@ -49,6 +49,7 @@ class HomeController extends Controller
         $targetPendapatan = JenisPendapatan::select(DB::raw("SUM(tmtransaksi_opd.total_bayar_bjb) as diterima"), 'jenis_pendapatan', 'target_pendapatan')
             ->join('tmtransaksi_opd', 'tmtransaksi_opd.id_jenis_pendapatan', '=', 'tmjenis_pendapatan.id')
             ->where('tmtransaksi_opd.total_bayar_bjb', '!=', 0)
+            ->where(DB::raw('YEAR(created_at)'), '=', $time->year)
             ->when($opd_id != 0, function ($q) use ($opd_id) {
                 $q->where('tmtransaksi_opd.id_opd', $opd_id);
             })
@@ -62,17 +63,20 @@ class HomeController extends Controller
             ->when($opd_id != 0, function ($q) use ($opd_id) {
                 $q->where('tmtransaksi_opd.id_opd', $opd_id);
             })
+            ->where(DB::raw('YEAR(tmtransaksi_opd.created_at)'), '=', $time->year)
             ->count();
         $totalSTRD = TransaksiOPD::where('status_bayar', 0)
             ->where('tgl_skrd_akhir', '<', $date)
             ->when($opd_id != 0, function ($q) use ($opd_id) {
                 $q->where('tmtransaksi_opd.id_opd', $opd_id);
             })
+            ->where(DB::raw('YEAR(tmtransaksi_opd.created_at)'), '=', $time->year)
             ->count();
         $totalSTS  = TransaksiOPD::where('status_bayar', 1)
             ->when($opd_id != 0, function ($q) use ($opd_id) {
                 $q->where('tmtransaksi_opd.id_opd', $opd_id);
             })
+            ->where(DB::raw('YEAR(tmtransaksi_opd.created_at)'), '=', $time->year)
             ->count();
         $totalWR   = DataWP::when($opd_id != 0, function ($q) use ($opd_id) {
             $q->where('tmdata_wp.id_opd', $opd_id);
@@ -86,6 +90,7 @@ class HomeController extends Controller
         //* Diagram Chart (Role: super-admin)
         $higherIncome = TransaksiOPD::select(DB::raw("SUM(total_bayar) as y"), 'tmopds.n_opd as name', 'tmopds.n_opd as drilldown', 'id_opd')
             ->join('tmopds', 'tmopds.id', '=', 'tmtransaksi_opd.id_opd')
+            ->where(DB::raw('YEAR(tmtransaksi_opd.created_at)'), '=', $time->year)
             ->groupBy('id_opd')
             ->orderBy('y', 'DESC')
             ->get();
@@ -106,6 +111,7 @@ class HomeController extends Controller
 
             $higherIncomeRetribution = TransaksiOPD::select(DB::raw("SUM(total_bayar) as y"), 'id_jenis_pendapatan', 'id_opd')
                 ->where('id_opd', $value->id_opd)
+                ->where(DB::raw('YEAR(tmtransaksi_opd.created_at)'), '=', $time->year)
                 ->groupBy('id_jenis_pendapatan')
                 ->orderBy('y', 'DESC')
                 ->get();
@@ -137,6 +143,7 @@ class HomeController extends Controller
             'totalRetribusiOPD',
             'parentJson',
             'childJson',
+            'time'
         ));
     }
 }
