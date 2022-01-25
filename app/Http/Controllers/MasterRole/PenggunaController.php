@@ -167,6 +167,13 @@ class PenggunaController extends Controller
         $user->password = Hash::make($password);
         $user->save();
 
+        //* Role User API
+        if ($request->role_id == 12) {
+            $api_key = md5($user->id . $username . $user->created_at . $opd_id);
+        } else {
+            $api_key = '';
+        }
+
         // Tahap 2
         $dataPengguna = [
             'user_id' => $user->id,
@@ -175,7 +182,8 @@ class PenggunaController extends Controller
             'email'     => $request->email,
             'phone'     => $request->phone,
             'photo'     => 'default.png',
-            'nip'       => $request->nip
+            'nip'       => $request->nip,
+            'api_key'   => $api_key
         ];
 
         Pengguna::create($dataPengguna);

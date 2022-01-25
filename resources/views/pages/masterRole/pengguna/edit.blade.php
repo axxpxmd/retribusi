@@ -68,6 +68,10 @@
                                         <label class="col-md-10 s-12">{{ $pengguna->phone }}</label>
                                     </div>
                                     <div class="row">
+                                        <label class="col-md-2 text-right s-12"><strong>API KEY :</strong></label>
+                                        <label class="col-md-10 s-12">{{ $pengguna->api_key }}</label>
+                                    </div>
+                                    <div class="row">
                                         <label class="col-md-2 text-right s-12"><strong>Foto :</strong></label>
                                         <img class="ml-2 m-t-7 img-circular rounded-circle" src="{{ asset($path.$pengguna->photo) }}" width="100" height="100" alt="icon">
                                     </div>

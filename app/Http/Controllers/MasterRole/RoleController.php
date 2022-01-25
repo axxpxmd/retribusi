@@ -67,21 +67,21 @@ class RoleController extends Controller
 
     public function store(Request $request)
     {
-        // $request->validate([
-        //     'name' => 'required|unique:roles,name',
-        //     'guard_name' => 'required'
-        // ]);
+        $request->validate([
+            'name' => 'required|unique:roles,name',
+            'guard_name' => 'required'
+        ]);
 
-        // $input = $request->all();
-        // Role::create($input);
-
-        // return response()->json([
-        //     'message' => 'Data ' . $this->title . ' berhasil tersimpan.'
-        // ]);
+        $input = $request->all();
+        Role::create($input);
 
         return response()->json([
-            'message' => 'Maaf tidak bisa menambah data'
-        ], 422);
+            'message' => 'Data ' . $this->title . ' berhasil tersimpan.'
+        ]);
+
+        // return response()->json([
+        //     'message' => 'Maaf tidak bisa menambah data'
+        // ], 422);
     }
 
     public function edit($id)
@@ -91,30 +91,34 @@ class RoleController extends Controller
 
     public function update(Request $request, $id)
     {
-        // $request->validate([
-        //     'name' => 'required|unique:roles,name,' . $id,
-        //     'guard_name' => 'required'
-        // ]);
+        $request->validate([
+            'name' => 'required|unique:roles,name,' . $id,
+            'guard_name' => 'required'
+        ]);
 
-        // $input = $request->all();
-        // $role  = Role::findOrFail($id);
-        // $role->update($input);
-
-        // return response()->json([
-        //     'message' => 'Data ' . $this->title . ' berhasil diperbaharui.'
-        // ]);
+        $input = $request->all();
+        $role  = Role::findOrFail($id);
+        $role->update($input);
 
         return response()->json([
-            'message' => 'Maaf tidak bisa memperbaharui data.'
+            'message' => 'Data ' . $this->title . ' berhasil diperbaharui.'
         ]);
+
+        // return response()->json([
+        //     'message' => 'Maaf tidak bisa memperbaharui data.'
+        // ]);
     }
 
     public function destroy($id)
     {
         Role::destroy($id);
 
+        // return response()->json([
+        //     'message' => 'Data ' . $this->title . ' berhasil dihapus.'
+        // ]);
+
         return response()->json([
-            'message' => 'Data ' . $this->title . ' berhasil dihapus.'
+            'message' => 'Maaf menghapus data.'
         ]);
     }
 
