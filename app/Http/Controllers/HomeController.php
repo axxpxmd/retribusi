@@ -80,7 +80,7 @@ class HomeController extends Controller
             ->count();
         $totalWR   = DataWP::when($opd_id != 0, function ($q) use ($opd_id) {
             $q->where('tmdata_wp.id_opd', $opd_id);
-        })->count();
+        })->where(DB::raw('YEAR(created_at)'), '=', $time->year)->count();
 
         //* Total Retribsui / Dinas
         $totalRetribusi = TransaksiOPD::count();
@@ -121,17 +121,18 @@ class HomeController extends Controller
                     'name' => $value1->jenis_pendapatan->jenis_pendapatan,
                     'y'    => $value1->y
                 ];
-            }
 
-            $childs[$key] = [
-                'name'  => 'Jenis Pendapatan',
-                'id'    => $value1->opd->n_opd,
-                'data'  => $dataChills,
-                'color' => $color[$key]
-            ];
+                $childs[$key] = [
+                    'name'  => 'Jenis Pendapatan',
+                    'id'    => $value1->opd->n_opd,
+                    'data'  => $dataChills,
+                    'color' => $color[$key]
+                ];
+            }
         }
         $parentJson = json_encode($parents);
         $childJson  = json_encode($childs);
+        // dd($childJson);
 
         return view('home', compact(
             'targetPendapatan',

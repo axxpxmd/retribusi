@@ -170,8 +170,10 @@ class PenggunaController extends Controller
         //* Role User API
         if ($request->role_id == 12) {
             $api_key = md5($user->id . $username . $user->created_at . $opd_id);
+            $url_callback = $request->url_callback;
         } else {
             $api_key = '';
+            $url_callback = '';
         }
 
         // Tahap 2
@@ -183,7 +185,8 @@ class PenggunaController extends Controller
             'phone'     => $request->phone,
             'photo'     => 'default.png',
             'nip'       => $request->nip,
-            'api_key'   => $api_key
+            'api_key'   => $api_key,
+            'url_callback' => $url_callback
         ];
 
         Pengguna::create($dataPengguna);

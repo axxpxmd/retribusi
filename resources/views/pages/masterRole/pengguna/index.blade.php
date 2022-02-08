@@ -136,6 +136,10 @@
                                                 <label for="phone" class="form-control label-input-custom col-md-2">No Telp<span class="text-danger ml-1">*</span></label>
                                                 <input type="text" name="phone" id="phone" class="form-control r-0 light s-12 col-md-6" autocomplete="off" required/>
                                             </div>
+                                            <div class="form-group"  id="url_callback_display">
+                                                <label for="url_callback" class="form-control label-input-custom col-md-2">URL Callback<span class="text-danger ml-1">*</span></label>
+                                                <input type="text" name="url_callback" id="url_callback" class="form-control r-0 light s-12 col-md-6" autocomplete="off" placeholder="http://{host}/"/>
+                                            </div>
                                             <div class="form-group mt-2">
                                                 <div class="col-md-2"></div>
                                                 <button type="submit" class="btn btn-primary btn-sm"><i class="icon-save mr-2"></i>Simpan</button>
@@ -159,6 +163,7 @@
     $(function() {
         $('#opd_display').hide(); 
         $('#nip_display').hide(); 
+        $('#url_callback_display').hide(); 
 
         $('#role_id').change(function(){
             var role_id = $('#role_id').val();
@@ -172,6 +177,15 @@
                 $('#opd_display').show(); 
                 $('#nip_display').show(); 
             } 
+
+            if (role_id == 12) {
+                $('#url_callback_display').show(); 
+                $('#url_callback').prop('required', true); 
+                $('#nip_display').hide(); 
+            }else{
+                $('#url_callback_display').hide(); 
+                $('#url_callback').prop('required', false);
+            }
 
             if (role_id == 11) {
                 $('#nip_required').html('*'); 
