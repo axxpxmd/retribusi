@@ -102,23 +102,25 @@ class ReportController extends Controller
             ->editColumn('total_bayar', function ($p) {
                 $dateNow   = Carbon::now()->format('Y-m-d');
 
-                if ($p->status_denda == 0) {
-                    // SKRD
-                    if ($p->tgl_skrd_akhir >= $dateNow) {
-                        return 'Rp. ' . number_format($p->total_bayar + $p->denda);
-                    }
+                // if ($p->status_denda == 0) {
+                //     // SKRD
+                //     if ($p->tgl_skrd_akhir >= $dateNow) {
+                //         return 'Rp. ' . number_format($p->total_bayar + $p->denda);
+                //     }
 
-                    // STRD
-                    if ($p->tgl_skrd_akhir < $dateNow) {
-                        $tgl_skrd_akhir = $p->tgl_skrd_akhir;
-                        $total_bayar    = $p->jumlah_bayar;
-                        list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);;
+                //     // STRD
+                //     if ($p->tgl_skrd_akhir < $dateNow) {
+                //         $tgl_skrd_akhir = $p->tgl_skrd_akhir;
+                //         $total_bayar    = $p->jumlah_bayar;
+                //         list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);;
 
-                        return 'Rp. ' . number_format($p->total_bayar + $jumlahBunga);
-                    }
-                } else {
-                    return 'Rp. ' . number_format($p->total_bayar + $p->denda);
-                }
+                //         return 'Rp. ' . number_format($p->total_bayar + $jumlahBunga);
+                //     }
+                // } else {
+                //     return 'Rp. ' . number_format($p->total_bayar + $p->denda);
+                // }
+
+                return 'Rp. ' . number_format($p->total_bayar);
             })
             ->editColumn('diskon', function ($p) {
                 $diskonHarga = ((int) $p->diskon / 100) * $p->jumlah_bayar;
@@ -250,7 +252,7 @@ class ReportController extends Controller
             'totalBayar'
         ))->setPaper('a3', 'landscape');
 
-        return $pdf->download('Laporan ' . $title . ".pdf");
+        return $pdf->download('Laporan ' . $title . ' ' . $from . ' - ' . $to . ".pdf");
     }
 
     public function getTotalBayar(Request $request)
