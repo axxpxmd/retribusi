@@ -14,7 +14,6 @@
 
 namespace App\Http\Controllers\MasterRole;
 
-use Auth;
 use DataTables;
 
 use Illuminate\Http\Request;
@@ -144,6 +143,15 @@ class PenggunaController extends Controller
             $request->validate([
                 'opd_id' => 'required'
             ]);
+
+        //TODO: Validation untuk User API
+        if ($request->role_id == 12) {
+            $request->validate([
+                'opd_id' => 'required|unique:tmpenggunas,opd_id'
+            ], [
+                'opd_id.unique' => 'OPD sudah memiliki API Key.'
+            ]);
+        }
 
         //TODO: Check opd_id
         if ($request->role_id == 7) {

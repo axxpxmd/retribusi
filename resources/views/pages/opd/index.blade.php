@@ -33,7 +33,8 @@
                                         <thead>
                                             <th width="5%">No</th>
                                             <th width="10%">Kode</th>
-                                            <th width="60%">Nama OPD</th>
+                                            <th width="40%">Nama OPD</th>
+                                            <th width="20%">API Key</th>
                                             <th width="10">Jenis Pendapatan</th>
                                             <th width="10">Penanda Tangan</th>
                                             <th width="5%"></th>
@@ -64,6 +65,7 @@
             {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false, align: 'center', className: 'text-center'},
             {data: 'kode', name: 'kode'},
             {data: 'n_opd', name: 'n_opd'},
+            {data: 'api_key', name: 'api_key'},
             {data: 'jenis_pendapatan', name: 'jenis_pendapatan', align: 'center', className: 'text-center'},
             {data: 'penanda_tangan', name: 'penanda_tangan', align: 'center', className: 'text-center'},
             {data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center'}

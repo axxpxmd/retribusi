@@ -13,4 +13,21 @@ class OPD extends Model
     {
         return $this->hasMany(TransaksiOPD::class, 'id_opd', 'id');
     }
+
+    public function getApiKey()
+    {
+        return $this->hasOne(Pengguna::class, 'opd_id', 'id')->whereNotNull('api_key')->withDefault([
+            'api_key' => ''
+        ]);
+    }
+
+    public function countJenisPendapatan()
+    {
+        return $this->hasMany(OPDJenisPendapatan::class, 'id_opd', 'id');
+    }
+
+    public function countPenandaTangan()
+    {
+        return $this->hasMany(TtdOPD::class, 'id_opd', 'id');
+    }
 }

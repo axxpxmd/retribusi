@@ -48,9 +48,9 @@ class OPDController extends Controller
         ));
     }
 
-    public function api(Request $request)
+    public function api()
     {
-        $data = OPD::all();
+        $data = OPD::with(['getApiKey', 'countJenisPendapatan', 'countPenandaTangan'])->get();
 
         return DataTables::of($data)
             ->addColumn('action', function ($p) {
@@ -60,12 +60,15 @@ class OPDController extends Controller
                 return "<a href='" . route($this->route . 'show', $p->id) . "' class='text-primary' title='Menampilkan Data'>" . $p->n_opd . "</a>";
             })
             ->editColumn('jenis_pendapatan', function ($p) {
-                $jenis_pendapatan = OPDJenisPendapatan::where('id_opd', $p->id)->count();
+                $jenis_pendapatan = $p->countJenisPendapatan->count();
                 return $jenis_pendapatan . " <a href='" . route($this->route . 'editJenisPendapatan', $p->id) . "' class='text-success pull-right ml-1' title='Edit Jenis Pendapatan'><i class='icon-clipboard-list2 mr-1'></i></a>";
             })
             ->addColumn('penanda_tangan', function ($p) {
-                $penanda_tangan = TtdOPD::where('id_opd', $p->id)->count();
+                $penanda_tangan = $p->countPenandaTangan->count();
                 return $penanda_tangan . " <a href='" . route($this->route . 'penandaTangan', $p->id) . "' class='amber-text pull-right ml-1' title='Edit Jenis Pendapatan'><i class='icon-pencil mr-1'></i></a>";
+            })
+            ->addColumn('api_key', function ($p) {
+                return $p->getApiKey->api_key;
             })
             ->addIndexColumn()
             ->rawColumns(['action', 'n_opd', 'jenis_pendapatan', 'penanda_tangan'])
