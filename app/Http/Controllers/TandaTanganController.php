@@ -284,10 +284,10 @@ class TandaTanganController extends Controller
             Storage::put($path_local . $fileName, $content);
 
             // Token Godem
-            $token_godem = $this->getTokenGodam($id, $nip_ttd);
+            // $token_godem = $this->getTokenGodam($id, $nip_ttd);
 
             // Sertifikat 
-            $id_cert = $this->getListCert($id, $nip_ttd);
+            // $id_cert = $this->getListCert($id, $nip_ttd);
         }
 
         return view($this->view . 'show', compact(
