@@ -158,10 +158,10 @@
                                             </div> 
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>Denda :</strong></label>
-                                                @if ($data->status_denda == 0)
-                                                <label class="col-md-8 s-12"> ({{ $kenaikan }}%) &nbsp;@currency($jumlahBunga)</label>
+                                                @if ($data->denda != null)
+                                                <label class="col-md-8 s-12">@currency($data->denda)</label>
                                                 @else
-                                                <label class="col-md-8 s-12">(Ya {{ $kenaikan }}%) @currency($data->denda)</label>
+                                                <label class="col-md-8 s-12">-</label>
                                                 @endif
                                             </div> 
                                             <div class="row">
