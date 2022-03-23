@@ -220,8 +220,10 @@ class TandaTanganController extends Controller
 
         /* Check Status TTD
          * 0 = Belum
-         * 1 = Sudah 
-         * 2 = Proses
+         * 1 = Sudah (SKRD)
+         * 2 = Proses (SKRD)
+         * 3 = sudah (STRd)
+         * 4 = Proses (STRD)
          */
         if ($data->status_ttd == 0 || $data->status_ttd == 2 || $data->status_ttd == 4) {
 
@@ -284,10 +286,10 @@ class TandaTanganController extends Controller
             Storage::put($path_local . $fileName, $content);
 
             // Token Godem
-            // $token_godem = $this->getTokenGodam($id, $nip_ttd);
+            $token_godem = $this->getTokenGodam($id, $nip_ttd);
 
             // Sertifikat 
-            // $id_cert = $this->getListCert($id, $nip_ttd);
+            $id_cert = $this->getListCert($id, $nip_ttd);
         }
 
         return view($this->view . 'show', compact(
@@ -299,7 +301,9 @@ class TandaTanganController extends Controller
             'id_cert',
             'fileName',
             'path_sftp',
-            'dateNow'
+            'dateNow',
+            'kenaikan',
+            'jumlahBunga'
         ));
     }
 

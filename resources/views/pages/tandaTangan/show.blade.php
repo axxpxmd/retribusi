@@ -158,10 +158,10 @@
                                             </div> 
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>Denda :</strong></label>
-                                                @if ($data->denda != null)
-                                                <label class="col-md-8 s-12">@currency($data->denda)</label>
+                                                @if ($data->status_denda == 0)
+                                                <label class="col-md-8 s-12"> ({{ $kenaikan }}%) &nbsp;@currency($jumlahBunga)</label>
                                                 @else
-                                                <label class="col-md-8 s-12">-</label>
+                                                <label class="col-md-8 s-12">(Ya {{ $kenaikan }}%) @currency($data->denda)</label>
                                                 @endif
                                             </div> 
                                             <div class="row">
@@ -273,12 +273,12 @@
                 <div class="card">
                     <h6 class="card-header font-weight-bold">Konfirmasi <b>Passphrase</b> Tandatangan Digital</h6>
                     <div class="card-body">
-                        <form class="needs-validation" method="POST" action="{{ route('tanda-tangan.tteBackup') }}" enctype="multipart/form-data" novalidate>
-                            {{ method_field('POST') }}
-                            {{ csrf_field() }} 
-                        {{-- <form class="needs-validation" method="POST" action="{{ route('tanda-tangan.tte') }}" enctype="multipart/form-data" novalidate>
+                        {{-- <form class="needs-validation" method="POST" action="{{ route('tanda-tangan.tteBackup') }}" enctype="multipart/form-data" novalidate>
                             {{ method_field('POST') }}
                             {{ csrf_field() }}  --}}
+                        <form class="needs-validation" method="POST" action="{{ route('tanda-tangan.tte') }}" enctype="multipart/form-data" novalidate>
+                            {{ method_field('POST') }}
+                            {{ csrf_field() }} 
                             <input type="hidden" name="id" value="{{ $id }}">
                             <input type="hidden" name="token_godem" value="{{ $token_godem }}">
                             <input type="hidden" name="id_cert" value="{{ $id_cert }}">
