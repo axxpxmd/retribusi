@@ -88,7 +88,7 @@ class STRDController extends Controller
 
         return DataTables::of($data)
             ->addColumn('action', function ($p) {
-                $path_sftp = 'file_ttd_skrd/';
+                $path_sftp = 'file_ttd_strd/';
                 $fileName  = str_replace(' ', '', $p->nm_wajib_pajak) . '-' . $p->no_skrd . ".pdf";
 
                 if ($p->tgl_strd_akhir == null) {
