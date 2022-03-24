@@ -88,8 +88,8 @@ class STRDController extends Controller
 
         return DataTables::of($data)
             ->addColumn('action', function ($p) {
-                $path_sftp = 'file_ttd_skrd/';
                 $fileName  = str_replace(' ', '', $p->nm_wajib_pajak) . '-' . $p->no_skrd . ".pdf";
+                $path_sftp = 'file_ttd_skrd/';
 
                 if ($p->tgl_strd_akhir == null) {
                     $tgl_jatuh_tempo = $p->tgl_skrd_akhir;

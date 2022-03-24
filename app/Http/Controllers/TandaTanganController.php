@@ -223,31 +223,32 @@ class TandaTanganController extends Controller
          * 1 = Sudah 
          * 2 = Proses
          */
+
+        $tgl_skrd_akhir = $data->tgl_skrd_akhir;
+        $total_bayar    = $data->jumlah_bayar;
+        $daysDiff = $this->getDiffDays($tgl_skrd_akhir);
+
+        //TODO: Check bunga (STRD)
+        if ($daysDiff > 0) {
+            $jumlahBunga = 0;
+            $kenaikan = 0;
+        } else {
+            //* Bunga
+            list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);
+        }
+
+        //* Total Bayar + Bunga
+        $total_bayar = $data->total_bayar + $jumlahBunga;
+        $terbilang   = Html_number::terbilang($total_bayar) . 'rupiah';
+
+        //* Tanggal Jatuh Tempo STRD
+        if ($data->tgl_strd_akhir == null) {
+            $tgl_jatuh_tempo = $data->tgl_skrd_akhir;
+        } else {
+            $tgl_jatuh_tempo = $data->tgl_strd_akhir;
+        }
+
         if ($data->status_ttd == 0 || $data->status_ttd == 2 || $data->status_ttd == 4) {
-
-            $tgl_skrd_akhir = $data->tgl_skrd_akhir;
-            $total_bayar    = $data->jumlah_bayar;
-            $daysDiff = $this->getDiffDays($tgl_skrd_akhir);
-
-            //TODO: Check bunga (STRD)
-            if ($daysDiff > 0) {
-                $jumlahBunga = 0;
-                $kenaikan = 0;
-            } else {
-                //* Bunga
-                list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);
-            }
-
-            //* Total Bayar + Bunga
-            $total_bayar = $data->total_bayar + $jumlahBunga;
-            $terbilang   = Html_number::terbilang($total_bayar) . 'rupiah';
-
-            //* Tanggal Jatuh Tempo STRD
-            if ($data->tgl_strd_akhir == null) {
-                $tgl_jatuh_tempo = $data->tgl_skrd_akhir;
-            } else {
-                $tgl_jatuh_tempo = $data->tgl_strd_akhir;
-            }
 
             //TODO: generate QR Code
             $fileName = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
@@ -299,7 +300,9 @@ class TandaTanganController extends Controller
             'id_cert',
             'fileName',
             'path_sftp',
-            'dateNow'
+            'dateNow',
+            'kenaikan',
+            'jumlahBunga'
         ));
     }
 
