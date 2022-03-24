@@ -174,7 +174,7 @@
                                             </div> 
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>Total Bayar :</strong></label>
-                                                <label class="col-md-8 s-12">@currency($data->total_bayar)</label>
+                                                <label class="col-md-8 s-12">@currency($data->total_bayar + $jumlahBunga)</label>
                                             </div> 
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>Total Bayar BJB:</strong></label>
