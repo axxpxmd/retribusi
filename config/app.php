@@ -132,11 +132,16 @@ return [
     'signapi_ipserver' => env('SIGNAPI_IPSERVER'),
     'signapi_bearer' => env('SIGNAPI_BEARER'),
 
-    // BJB
+    // Virtual Account BJB
     'cin_bjb' => env('CIN_BJB'),
     'ip_api_bjb' => env('IP_API_BJB'),
     'key_bjb' => env('KEY_BJB'),
     'client_id_bjb' => env('CLIENT_ID_BJB'),
+
+    // QRIS BJB
+    'msisdn_bjb' => env('MSISDN_BJB'),
+    'password_bjb' => env('PASSWORD_BJB'),
+    'ip_qris' => env('IP_QRIS'),
 
     /*
     |--------------------------------------------------------------------------

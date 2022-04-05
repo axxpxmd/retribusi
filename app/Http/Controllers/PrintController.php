@@ -33,11 +33,18 @@ class PrintController extends Controller
         $data = TransaksiOPD::find($id);
         $terbilang = Html_number::terbilang($data->total_bayar) . 'rupiah';
 
+        //TODO: generate QR Code
+        $fileName = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
+        $file_url = config('app.sftp_src') . 'file_ttd_skrd/' . $fileName;
+        $b   = base64_encode(\SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')->size(1000)->errorCorrection('H')->margin(0)->generate($data->text_qris));
+        $img = '<img width="200" src="data:image/png;base64, ' . $b . '" alt="qr code" />';
+
         $pdf = app('dompdf.wrapper');
         $pdf->getDomPDF()->set_option("enable_php", true);
         $pdf->loadView('pages.print.skrd', compact(
             'data',
-            'terbilang'
+            'terbilang',
+            'img'
         ));
 
         return $pdf->stream($data->nm_wajib_pajak . '-' . $data->no_skrd . ".pdf");

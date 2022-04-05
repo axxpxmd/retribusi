@@ -284,3 +284,7 @@ div.table-responsive>div.data-tables_wrapper>div.row>div[class^=col-]:last-child
     background-color: #f7f1cc;
     border-radius: .25rem .25rem 0 0
 }
+
+.material-switch>label::after{
+    margin-top: -12px !important;
+}

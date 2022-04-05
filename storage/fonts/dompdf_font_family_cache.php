@@ -97,4 +97,7 @@
   'nunito' => array(
     'normal' => $fontDir . '/nunito_normal_7173294b894229c46ad1835001660d90',
   ),
+  'open sans' => array(
+    'normal' => $fontDir . '/open_sans_normal_f7da35cf72ee81e3360a5e75271a3d42',
+  ),
 ) ?>

@@ -20,6 +20,7 @@ use DataTables;
 use Carbon\Carbon;
 
 use App\Http\Services\VABJB;
+use App\Http\Services\QRISBJB;
 use App\Libraries\GenerateNumber;
 use App\Http\Controllers\Controller;
 
@@ -43,9 +44,10 @@ class SKRDController extends Controller
     protected $title  = 'SKRD';
     protected $view   = 'pages.skrd.';
 
-    public function __construct(VABJB $vabjb)
+    public function __construct(VABJB $vabjb, QRISBJB $qrisbjb)
     {
         $this->vabjb = $vabjb;
+        $this->qrisbjb = $qrisbjb;
 
         $this->middleware(['permission:SKRD']);
     }
@@ -315,6 +317,12 @@ class SKRDController extends Controller
         $VABJB   = '';
         if ($daysDiff > 0) {
             if ($amount != 0) {
+                /* Tahapan : 
+                * 1. Virtual Account (VA) BJB
+                * 2. QRIS BJB
+                */
+
+                //* Tahap 1
                 //TODO: Get Token BJB
                 $resGetTokenBJB = $this->vabjb->getTokenBJB();
                 if ($resGetTokenBJB->successful()) {
@@ -344,6 +352,39 @@ class SKRDController extends Controller
                         'message' => "Terjadi kegagalan saat membuat Virtual Account. Error Code " . $resGetVABJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator"
                     ], 422);
                 }
+
+                //* Tahap 2
+                //TODO: Get Token QRIS BJB
+                $resGetTokenQRISBJB = $this->qrisbjb->getToken();
+                if ($resGetTokenQRISBJB->successful()) {
+                    $resJsonQRIS = $resGetTokenQRISBJB->json();
+                    if ($resJsonQRIS["status"]["code"] != 200)
+                        return response()->json([
+                            'message' => 'Terjadi kegagalan saat mengambil token QRIS BJB. Error Code : ' . $resJsonQRIS["status"]["code"] . '. Message : ' . $resJsonQRIS["status"]["description"] . ''
+                        ], 422);
+                    $tokenQRISBJB = $resGetTokenQRISBJB->header('X-AUTH-TOKEN');
+                } else {
+                    return response()->json([
+                        'message' => "Terjadi kegagalan saat mengambil token QRIS BJB. Error Code. Silahkan laporkan masalah ini pada administrator"
+                    ], 422);
+                }
+
+                //TODO: Create QRIS BJB
+                $resCreateQRISBJB = $this->qrisbjb->createQRIS($tokenQRISBJB, $amount);
+                if ($resCreateQRISBJB->successful()) {
+                    $resJsonQRIS = $resCreateQRISBJB->json();
+                    if ($resJsonQRIS["status"]["code"] != 200)
+                        return response()->json([
+                            'message' => 'Terjadi kegagalan saat mengambil token QRIS BJB. Error Code : ' . $resJsonQRIS["status"]["code"] . '. Message : ' . $resJsonQRIS["status"]["description"] . ''
+                        ], 422);
+                    $respondBody = $resJsonQRIS["body"]["CreateInvoiceQRISDinamisExtResponse"];
+                    $invoiceId = $respondBody["invoiceId"]["_text"];
+                    $textQRIS = $respondBody["stringQR"]["_text"];
+                } else {
+                    return response()->json([
+                        'message' => "Terjadi kegagalan saat mengambil token QRIS BJB. Error Code. Silahkan laporkan masalah ini pada administrator"
+                    ], 422);
+                }
             }
         }
 
@@ -370,6 +411,8 @@ class SKRDController extends Controller
             'diskon'           => 0,
             'total_bayar'      => (int) str_replace(['.', 'Rp', ' '], '', $request->jumlah_bayar),
             'nomor_va_bjb'     => $VABJB,
+            'invoice_id'       => $invoiceId,
+            'text_qris'        => $textQRIS,
             'status_bayar'     => 0,
             'status_denda'     => 0,
             'status_diskon'    => 0,
