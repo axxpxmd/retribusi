@@ -4,56 +4,43 @@
     <title>{{ $data->nm_wajib_pajak }} - {{ $data->no_skrd }}</title>
     <link rel="stylesheet" href="{{ asset('css/util.css') }}">
 
-    <!-- Font -->
-    <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
-
     <style type="text/css">
-
         html{
             margin: 30px
         }
-
 		table.d {
             border-collapse: collapse;
             width: 100%
         } 
-
         table.d tr.d,th.d,td.d{
             table-layout: fixed;
             border: 1px solid black;
             font-size: 12px;
             height: 100;
         }
-
         table.a tr.a,th.a,td.a{
             table-layout: fixed;
             border: 1px solid black;
             font-size: 12px;
         }
-
         table.c{
             font-size: 15px 
         }
-
         .t-bold {
             font-weight: bold
         }
-
         .m-b-0{
             margin-bottom: 0px;
         }
         .m-r-10{
             margin-right: 10px;
         }
-
         .m-t-0{
             margin-top: 0px;
         }
-
         .m-l-5{
             margin-left: 5px;
         }
-
         .text-right{
             text-align: right
         }
@@ -63,26 +50,21 @@
         .m-t-100{
             margin-top: 100px
         }
-
         .text-left{
             text-align: left
         }
-
         .m-l-14{
             margin-left: 25px
         }
-
         .m-r-20{
             margin-right: 20px
         }
-
         .f-w-n{
             font-weight: normal
         }
         .m-t-1{
             margin-top: 1px
         }
-
         .m-l-50{
             margin-left: 50px;
         }
@@ -256,18 +238,11 @@
                 </td>
             </tr>
             <tr class="a">
-                <td colspan="4" class="a" style="border-bottom: none !important; border-top: none !important">
-                    <div class="m-t-10 m-l-60">
-                        <img width="100" src="{{ asset('images/qr-logo.png') }}" alt="">
-                    </div>
+                <td colspan="1" class="a" style="border-right: none !important; margin-left: 10px !important">
+                    {{--  --}}
                 </td>
-            </tr>
-            <tr class="a">
-                <td colspan="1" class="a" style="border-right: none !important; margin-left: 10px !important; border-top: none !important; border-bottom: none !important">
-                    {!! $img !!}
-                </td>
-                <td colspan="3" class="a" style="border-left: none !important; border-top: none !important; border-bottom: none">
-                    <div style="text-align:center; margin-right: -500px !important; margin-top: -80px !important">
+                <td colspan="3" class="a" style="border-left: none !important">
+                    <div style="text-align:center; margin-right: -500px !important">
                         @if ($data->tgl_ttd != null)
                         <p>Tangerang Selatan, {{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_ttd)->format('d F Y') }}</p>
                         @else
@@ -289,15 +264,9 @@
                     </div>
                 </td>
             </tr>
-            <tr class="a">
-                <td colspan="4" class="a" style="border-top: none !important">
-                    <div style="margin-left: 16px !important; margin-top: -12px !important">
-                        <p style="font-weight: 400; font-size: 14px; font-family: 'Open Sans'">NMID: IDXXXXXXXXXX</p>
-                    </div>
-                </td>
-            </tr>
         </table>
     </div>
+
     @if (isset($statusSTS))
     <div class="">
         <table class="c">

@@ -154,7 +154,7 @@
                                                         <label for="jumlah_bayar" class="form-control label-input-custom col-md-4 font-weight-normal">Ketetapan<span class="text-danger ml-1">*</span></label>
                                                         <input type="text" name="jumlah_bayar" id="rupiah" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
                                                     </div>
-                                                    <div class="form-group mt-2">
+                                                    {{-- <div class="form-group mt-2">
                                                         <label for="jumlah_bayar" class="form-control label-input-custom col-md-4 font-weight-normal">Virtual Account</label>
                                                         <div class="mt-2 col-md-8">
                                                             <div class="material-switch">
@@ -171,7 +171,7 @@
                                                                 <label for="qris_bjb" class="bg-primary"></label>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    </div> --}}
                                                 </div>
                                             </div> 
 
@@ -280,7 +280,7 @@
             $("#kecamatan_id").prop("disabled", false);
             $("#kelurahan_id").prop("disabled", false);
             $("#id_rincian_jenis_pendapatan").prop("disabled", false);
-            // $('#action').attr('disabled', true);
+            $('#action').attr('disabled', true);
             // $('#loading').modal('show');
             url = "{{ route($route.'store') }}";
             $.ajax({
@@ -305,7 +305,7 @@
                                 btnClass: 'btn-primary',
                                 keys: ['enter'],
                                 action: function () {
-                                    // window.location.href = "{{ route('skrd.index')}}";
+                                    window.location.href = "{{ route('skrd.index')}}";
                                 }
                             }
                         }
