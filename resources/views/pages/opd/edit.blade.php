@@ -40,15 +40,15 @@
                                         <div class="col-md-12">
                                             <div class="form-group m-0">
                                                 <label for="kode" class="col-form-label s-12 col-md-2">Kode<span class="text-danger ml-1">*</span></label>
-                                                <input type="text" name="kode" id="kode" readonly class="form-control r-0 light s-12 col-md-4" value="{{ $data->kode }}" autocomplete="off" required/>
+                                                <input type="text" name="kode" id="kode" class="form-control r-0 light s-12 col-md-4" value="{{ $data->kode }}" autocomplete="off" required/>
                                             </div> 
                                             <div class="form-group m-0">
                                                 <label for="n_opd" class="col-form-label s-12 col-md-2">Nama OPD<span class="text-danger ml-1">*</span></label>
-                                                <input type="text" name="n_opd" id="n_opd" readonly class="form-control r-0 light s-12 col-md-4" value="{{ $data->n_opd }}" autocomplete="off" required/>
+                                                <input type="text" name="n_opd" id="n_opd" class="form-control r-0 light s-12 col-md-4" value="{{ $data->n_opd }}" autocomplete="off" required/>
                                             </div> 
                                             <div class="form-group m-0">
                                                 <label for="initial" class="col-form-label s-12 col-md-2">Inisial<span class="text-danger ml-1">*</span></label>
-                                                <input type="text" name="initial" id="initial" readonly class="form-control r-0 light s-12 col-md-4" value="{{ $data->initial }}" autocomplete="off" required/>
+                                                <input type="text" name="initial" id="initial" class="form-control r-0 light s-12 col-md-4" value="{{ $data->initial }}" autocomplete="off" required/>
                                             </div>  
                                             <div class="form-group m-0">
                                                 <label for="npwpd" class="col-form-label s-12 col-md-2">NPWPD</label>
