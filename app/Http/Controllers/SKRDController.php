@@ -20,7 +20,7 @@ use DataTables;
 use Carbon\Carbon;
 
 use App\Http\Services\VABJB;
-use App\Http\Services\QRISBJB;
+// use App\Http\Services\QRISBJB;
 use App\Libraries\GenerateNumber;
 use App\Http\Controllers\Controller;
 
