@@ -4,6 +4,9 @@
     <title>{{ $data->nm_wajib_pajak }} - {{ $data->no_skrd }}</title>
     <link rel="stylesheet" href="{{ asset('css/util.css') }}">
 
+    <!-- Font -->
+    <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
+
     <style type="text/css">
 
         html{
@@ -243,7 +246,7 @@
             </tr>
             <tr class="a">
                 <td colspan="4" class="a">
-                    <p class="m-l-5">Dengan Huruf : <span class="t-bold" style="text-transform: uppercase">{{ $terbilang }}</span></p>
+                    <p class="m-l-5">Dengan Huruf : <span class="t-bold" style="text-transform: uppercase">{{ $data->jumlah_bayar == 0 ? '0 Rupiah' : $terbilang }}</span></p>
                     <p class="fs-14 t-bold m-l-5"><u>PERHATIAN :</u></p>
                     <ol>
                         <li>Penyetoran dilakukan menggunakan Bank Jabar Banten (BJB) melalui Teller/ATM BJB dengan menggunakan <b>{{ $data->no_bayar }}</b></li>
@@ -254,7 +257,14 @@
             </tr>
             <tr class="a">
                 <td colspan="1" class="a" style="border-right: none !important; margin-left: 10px !important">
-                    {{--  --}}
+                    @if ($data->text_qris)
+                         <div class="m-t-10 m-b-5">
+                        <img width="80" class="m-l-37 m-b-5" src="{{ asset('images/qr-logo.png') }}" alt=""><br>
+                        {!! $img !!}
+                        <br style="margin-top: -30px !important">
+                        <span class="m-l-5" style="font-weight: 400; font-size: 12px; font-family: 'Open Sans'">NMID:IDXXXXXXXXXX</span>
+                    </div>
+                    @endif
                 </td>
                 <td colspan="3" class="a" style="border-left: none !important">
                     <div style="text-align:center; margin-right: -500px !important">

@@ -25,34 +25,6 @@ use App\Models\TransaksiOPD;
 
 class PrintController extends Controller
 {
-    //* SKRD
-    public function printSKRD($id)
-    {
-        $id = \Crypt::decrypt($id);
-
-        $data = TransaksiOPD::find($id);
-        $terbilang = Html_number::terbilang($data->total_bayar) . 'rupiah';
-
-        //TODO: generate QR Code
-        $img = '';
-        if ($data->text_qris) {
-            $fileName = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
-            $file_url = config('app.sftp_src') . 'file_ttd_skrd/' . $fileName;
-            $b   = base64_encode(\SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')->size(1000)->errorCorrection('H')->margin(0)->generate($data->text_qris));
-            $img = '<img width="200" src="data:image/png;base64, ' . $b . '" alt="qr code" />';
-        }
-
-        $pdf = app('dompdf.wrapper');
-        $pdf->getDomPDF()->set_option("enable_php", true);
-        $pdf->loadView('pages.print.skrd', compact(
-            'data',
-            'terbilang',
-            'img'
-        ));
-
-        return $pdf->stream($data->nm_wajib_pajak . '-' . $data->no_skrd . ".pdf");
-    }
-
     //* Create Bunga
     public static function createBunga($tgl_skrd_akhir, $total_bayar)
     {
@@ -68,6 +40,34 @@ class PrintController extends Controller
         $jumlahBunga = $total_bayar * $bunga;
 
         return [$jumlahBunga, $kenaikan];
+    }
+
+    //* SKRD
+    public function printSKRD($id)
+    {
+        $id = \Crypt::decrypt($id);
+
+        $data = TransaksiOPD::find($id);
+        $terbilang = Html_number::terbilang($data->total_bayar) . 'rupiah';
+
+        //TODO: generate QR Code
+        $img = '';
+        if ($data->text_qris) {
+            $fileName = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
+            $file_url = config('app.sftp_src') . 'file_ttd_skrd/' . $fileName;
+            $b   = base64_encode(\SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')->size(1000)->errorCorrection('H')->margin(0)->generate($data->text_qris));
+            $img = '<img width="150" src="data:image/png;base64, ' . $b . '" alt="qr code" />';
+        }
+
+        $pdf = app('dompdf.wrapper');
+        $pdf->getDomPDF()->set_option("enable_php", true);
+        $pdf->loadView('pages.print.skrd', compact(
+            'data',
+            'terbilang',
+            'img'
+        ));
+
+        return $pdf->stream($data->nm_wajib_pajak . '-' . $data->no_skrd . ".pdf");
     }
 
     //* STRD
@@ -86,6 +86,15 @@ class PrintController extends Controller
         $total_bayar = $data->total_bayar + $jumlahBunga;
         $terbilang   = Html_number::terbilang($total_bayar) . 'rupiah';
 
+        //TODO: generate QR Code
+        $img = '';
+        if ($data->text_qris) {
+            $fileName = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
+            $file_url = config('app.sftp_src') . 'file_ttd_skrd/' . $fileName;
+            $b   = base64_encode(\SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')->size(1000)->errorCorrection('H')->margin(0)->generate($data->text_qris));
+            $img = '<img width="150" src="data:image/png;base64, ' . $b . '" alt="qr code" />';
+        }
+
         //* Tanggal Jatuh Tempo STRD
         if ($data->tgl_strd_akhir == null) {
             $tgl_jatuh_tempo = $data->tgl_skrd_akhir;
@@ -96,6 +105,7 @@ class PrintController extends Controller
         $pdf = app('dompdf.wrapper');
         $pdf->getDomPDF()->set_option("enable_php", true);
         $pdf->loadView('pages.print.strd', compact(
+            'img',
             'data',
             'terbilang',
             'jumlahBunga',
@@ -120,9 +130,19 @@ class PrintController extends Controller
         if ($data->tgl_skrd_akhir >= $dateNow) {
             $terbilang = Html_number::terbilang($data->total_bayar) . 'rupiah';
 
+            //TODO: generate QR Code
+            $img = '';
+            if ($data->text_qris) {
+                $fileName = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
+                $file_url = config('app.sftp_src') . 'file_ttd_skrd/' . $fileName;
+                $b   = base64_encode(\SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')->size(1000)->errorCorrection('H')->margin(0)->generate($data->text_qris));
+                $img = '<img width="150" src="data:image/png;base64, ' . $b . '" alt="qr code" />';
+            }
+
             $pdf = app('dompdf.wrapper');
             $pdf->getDomPDF()->set_option("enable_php", true);
             $pdf->loadView('pages.print.skrd', compact(
+                'img',
                 'data',
                 'terbilang',
                 'statusSTS'
@@ -140,6 +160,15 @@ class PrintController extends Controller
             $total_bayar = $data->total_bayar + $jumlahBunga;
             $terbilang   = Html_number::terbilang($total_bayar) . 'rupiah';
 
+            //TODO: generate QR Code
+            $img = '';
+            if ($data->text_qris) {
+                $fileName = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
+                $file_url = config('app.sftp_src') . 'file_ttd_skrd/' . $fileName;
+                $b   = base64_encode(\SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')->size(1000)->errorCorrection('H')->margin(0)->generate($data->text_qris));
+                $img = '<img width="150" src="data:image/png;base64, ' . $b . '" alt="qr code" />';
+            }
+
             //* Tanggal Jatuh Tempo STRD
             if ($data->tgl_strd_akhir == null) {
                 $tgl_jatuh_tempo = $data->tgl_skrd_akhir;
@@ -150,6 +179,7 @@ class PrintController extends Controller
             $pdf = app('dompdf.wrapper');
             $pdf->getDomPDF()->set_option("enable_php", true);
             $pdf->loadView('pages.print.strd', compact(
+                'img',
                 'data',
                 'terbilang',
                 'jumlahBunga',
