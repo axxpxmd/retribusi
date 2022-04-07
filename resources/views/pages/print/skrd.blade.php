@@ -244,7 +244,7 @@
                 <td colspan="1" class="a" style="border-right: none !important; margin-left: 10px !important">
                     @if ($data->text_qris)
                         <div class="m-t-10 m-b-5">
-                        <img width="80" class="m-l-37 m-b-5" src="{{ asset('images/qr-logo.png') }}" alt="qris"><br>
+                        <img width="80" class="m-l-37 m-b-5" src="{{ public_path('images/qr-logo.png') }}" alt="qris"><br>
                         {!! $img !!}
                         <br style="margin-top: -30px !important">
                         <span class="m-l-5" style="font-weight: 400; font-size: 12px; font-family: 'Open Sans'">NMID:IDXXXXXXXXXX</span>
