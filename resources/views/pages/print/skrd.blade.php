@@ -243,7 +243,7 @@
             <tr class="a">
                 <td colspan="1" class="a" style="border-right: none !important; margin-left: 10px !important">
                     @if ($data->text_qris)
-                        <div class="m-t-10 m-b-5">
+                    <div style="margin-top: 10px !important; margin-bottom: 5px !important">
                         <img width="80" class="m-b-5" style="margin-left: 37px !important" src="{{ public_path('images/qr-logo.png') }}" alt="qris"><br>
                         {!! $img !!}
                         <br style="margin-top: -30px !important">
