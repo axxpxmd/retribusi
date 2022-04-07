@@ -256,6 +256,15 @@ class TandaTanganController extends Controller
             $b   = base64_encode(\SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')->merge(public_path('images/logo-png.png'), 0.2, true)->size(900)->errorCorrection('H')->margin(0)->generate($file_url));
             $img = '<img width="60" height="61" src="data:image/png;base64, ' . $b . '" alt="qr code" />';
 
+            //TODO: generate QR Code QRIS
+            $imgQRIS = '';
+            if ($data->text_qris) {
+                $fileName = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
+                $file_url = config('app.sftp_src') . 'file_ttd_skrd/' . $fileName;
+                $b   = base64_encode(\SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')->size(1000)->errorCorrection('H')->margin(0)->generate($data->text_qris));
+                $imgQRIS = '<img width="150" src="data:image/png;base64, ' . $b . '" alt="qr code" />';
+            }
+
             //TODO: Check status TTD
             if ($data->status_ttd == 2) {
                 $file = 'pages.tandaTangan.reportTTEskrd';
@@ -272,7 +281,8 @@ class TandaTanganController extends Controller
                 'total_bayar',
                 'kenaikan',
                 'tgl_jatuh_tempo',
-                'img'
+                'img',
+                'imgQRIS'
             ));
 
             // get content PDF
