@@ -259,7 +259,16 @@
                 </td>
             </tr>
             <tr class="a">
-                <td colspan="1" class="a" style="border-right: none !important; margin-left: 10px !important"></td>
+                <td colspan="1" class="a" style="border-right: none !important; margin-left: 10px !important">
+                    @if ($data->text_qris)
+                    <div style="margin-top: 10px !important; margin-bottom: 5px !important">
+                        <img width="80" class="m-b-5" style="margin-left: 37px !important" src="{{ public_path('images/qr-logo.png') }}" alt="qris"><br>
+                        {!! $imgQRIS !!}
+                        <br style="margin-top: -30px !important">
+                        <span class="m-l-5" style="font-weight: 400; font-size: 12px; font-family: 'Open Sans'">NMID:IDXXXXXXXXXX</span>
+                    </div>
+                    @endif
+                </td>
                 <td colspan="3" class="a" style="border-left: none !important">
                     <div style="text-align:center; margin-right: -400px !important">
                         @if ($data->tgl_ttd != null)
