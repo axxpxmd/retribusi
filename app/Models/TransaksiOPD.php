@@ -151,7 +151,7 @@ class TransaksiOPD extends Model
         $now = Carbon::now();
         $date = $now->format('Y-m-d');
 
-        $data = TransaksiOPD::with('opd', 'jenis_pendapatan')->where('status_bayar', 0)->where('tgl_skrd_akhir', '>=', $date)->orderBy('id', 'DESC');
+        $data = TransaksiOPD::with('opd', 'jenis_pendapatan')->where('status_bayar', 0)->where('tgl_skrd_akhir', '>=', $date);
 
         if ($opd_id != 0) {
             $data->where('id_opd', $opd_id);
@@ -173,7 +173,7 @@ class TransaksiOPD extends Model
             }
         }
 
-        return $data->get();
+        return $data->orderBy('id', 'DESC')->get();
     }
 
     // 
@@ -182,7 +182,7 @@ class TransaksiOPD extends Model
         $now = Carbon::now();
         $date = $now->format('Y-m-d');
 
-        $data = TransaksiOPD::with('opd', 'jenis_pendapatan')->where('status_bayar', 0)->where('tgl_skrd_akhir', '<', $date)->orderBy('id', 'DESC');
+        $data = TransaksiOPD::with('opd', 'jenis_pendapatan')->where('status_bayar', 0)->where('tgl_skrd_akhir', '<', $date);
 
         if ($opd_id != 0) {
             $data->where('id_opd', $opd_id);
@@ -204,7 +204,7 @@ class TransaksiOPD extends Model
             }
         }
 
-        return $data->get();
+        return $data->orderBy('id', 'DESC')->get();
     }
 
     // 
