@@ -83,8 +83,9 @@ class HomeController extends Controller
         })->where(DB::raw('YEAR(created_at)'), '=', $time->year)->count();
 
         //* Total Retribsui / Dinas
-        $totalRetribusi = TransaksiOPD::count();
+        $totalRetribusi = TransaksiOPD::whereYear('created_at', $time->year)->count();
         $existedOPD     = OPDJenisPendapatan::select('id_opd')->get()->toArray();
+        $totalRetribusiOPD = TransaksiOPD::whereIn('id_opd', $existedOPD)->groupBy('id_opd')->get();
         $totalRetribusiOPD = OPD::whereIn('id', $existedOPD)->withCount('transaksi_opd')->get();
 
         //* Diagram Chart (Role: super-admin)
@@ -132,7 +133,6 @@ class HomeController extends Controller
         }
         $parentJson = json_encode($parents);
         $childJson  = json_encode($childs);
-        // dd($childJson);
 
         return view('home', compact(
             'targetPendapatan',

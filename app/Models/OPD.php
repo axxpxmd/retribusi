@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class OPD extends Model
@@ -11,7 +12,7 @@ class OPD extends Model
 
     public function transaksi_opd()
     {
-        return $this->hasMany(TransaksiOPD::class, 'id_opd', 'id');
+        return $this->hasMany(TransaksiOPD::class, 'id_opd', 'id')->whereYear('created_at', Carbon::now()->format('Y'));
     }
 
     public function getApiKey()
