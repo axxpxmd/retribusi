@@ -236,9 +236,9 @@
                                                 <button class="btn btn-sm btn-success mr-1" data-toggle="modal" data-target="#preview-file"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</button>
                                                 <button class="btn btn-sm btn-primary mr-1" data-toggle="modal" data-target="#tte"><i class="icon-pencil mr-2"></i>TandaTangani</button>
                                             @else
-                                                <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#restore"><i class="icon-refresh2 mr-2"></i>Kembalikan</button> 
                                                 <button class="btn btn-sm btn-success mr-2" data-toggle="modal" data-target="#preview-file"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</button> 
                                             @endif
+                                            <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#restore"><i class="icon-refresh2 mr-2"></i>Kembalikan</button> 
                                         </label>
                                     </div> 
                                 </div>
