@@ -637,7 +637,7 @@ class SKRDController extends Controller
             'nm_ttd'  => $penanda_tangan->user->pengguna->full_name,
             'nip_ttd' => $penanda_tangan->user->pengguna->nip,
             'nomor_va_bjb'  => $VABJB,
-            'invoice_id'    => $invoiceId,
+            // 'invoice_id'    => $invoiceId,
             'text_qris'     => $textQRIS,
             'status_diskon' => 0,
             'diskon'        => 0,
