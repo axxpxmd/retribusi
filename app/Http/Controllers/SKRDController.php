@@ -638,7 +638,7 @@ class SKRDController extends Controller
             'nip_ttd' => $penanda_tangan->user->pengguna->nip,
             'nomor_va_bjb'  => $VABJB,
             // 'invoice_id'    => $invoiceId,
-            'text_qris'     => $textQRIS,
+            // 'text_qris'     => $textQRIS,
             'status_diskon' => 0,
             'diskon'        => 0,
             'total_bayar'   => (int) str_replace(['.', 'Rp', ' '], '', $request->jumlah_bayar),
