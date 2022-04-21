@@ -65,7 +65,7 @@ class SKRDController extends Controller
                 return $q->where('id', $opd_id);
             })->get();
 
-        //TODO: Set filters to date now
+        //TODO: Set filter to date now
         $time  = Carbon::now();
         $today = $time->format('Y-m-d');
 
