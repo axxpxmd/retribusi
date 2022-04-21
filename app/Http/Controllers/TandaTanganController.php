@@ -229,12 +229,16 @@ class TandaTanganController extends Controller
         $daysDiff = $this->getDiffDays($tgl_skrd_akhir);
 
         //TODO: Check bunga (STRD)
-        if ($daysDiff > 0) {
-            $jumlahBunga = 0;
-            $kenaikan = 0;
-        } else {
-            //* Bunga
-            list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);
+        $jumlahBunga = 0;
+        $kenaikan = 0;
+        if ($data->status_bayar == 0) {
+            if ($daysDiff > 0) {
+                $jumlahBunga = 0;
+                $kenaikan = 0;
+            } else {
+                //* Bunga
+                list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);
+            }
         }
 
         //* Total Bayar + Bunga
