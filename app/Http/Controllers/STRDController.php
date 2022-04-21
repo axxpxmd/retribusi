@@ -53,11 +53,10 @@ class STRDController extends Controller
         $opd_id = Auth::user()->pengguna->opd_id;
         $opdArray = OPDJenisPendapatan::select('id_opd')->get()->toArray();
 
-        if ($opd_id == 0) {
-            $opds = OPD::select('id', 'n_opd')->whereIn('id', $opdArray)->get();
-        } else {
-            $opds = OPD::where('id', $opd_id)->whereIn('id', $opdArray)->get();
-        }
+        $opds = OPD::select('id', 'n_opd')->whereIn('id', $opdArray)
+            ->when($opd_id != 0, function ($q) use ($opd_id) {
+                return $q->where('id', $opd_id);
+            })->get();
 
         $time = Carbon::yesterday();
         $today = $time->format('Y-m-d');
