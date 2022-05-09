@@ -25,6 +25,7 @@ use App\Libraries\GenerateNumber;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Crypt;
 
 // Models
@@ -422,6 +423,9 @@ class SKRDController extends Controller
             'created_by'       => Auth::user()->pengguna->full_name
         ];
         TransaksiOPD::create($data);
+
+        //TODO: LOG
+        Log::info('Create SKRD', $data);
 
         //* Tahap 5
         $data = [
