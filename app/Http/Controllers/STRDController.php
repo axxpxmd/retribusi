@@ -166,8 +166,10 @@ class STRDController extends Controller
                 $berlaku    = "<span class='badge badge-success' style='font-size: 10.5px !important'>Berlaku</span>";
                 $perbarui   = "<a href='#' onclick='perbaruiSTRD(" . $p->id . ")' class='text-primary mr-2' title='Perbarui STRD'><i class='icon-refresh'></i></a>";
 
+                $check = strpos($daysDiff, '-');
+
                 if ($p->tgl_strd_akhir != null) {
-                    if ($daysDiff < 0) {
+                    if ($check !== false) {
                         return $kadaluarsa . ' &nbsp; ' . $perbarui;
                     } else {
                         return $berlaku;
@@ -241,15 +243,18 @@ class STRDController extends Controller
          * 2. tmtransaksi_opd
          */
 
-        if ($data->tgl_strd_akhir == null) {
-            $tgl_jatuh_tempo = $data->tgl_skrd_akhir;
-        } else {
-            $tgl_jatuh_tempo = $data->tgl_strd_akhir;
-        }
-
         //TODO: Generate new tgl_jatuh_tempo (+30 day from last jatuh tempo)
         $daysDiff = $this->getDiffDays($data->tgl_skrd_akhir);
         $days = (int) abs($daysDiff) + 30;
+
+        if ($data->tgl_strd_akhir == null) {
+            $tgl_jatuh_tempo = $data->tgl_skrd_akhir;
+            $days = (int) abs($daysDiff) + 30;
+        } else {
+            $tgl_jatuh_tempo = $data->tgl_strd_akhir;
+            $days = 30;
+        }
+
         $tgl_jatuh_tempo = Carbon::createFromFormat('Y-m-d', $tgl_jatuh_tempo)->addDays($days)->format('Y-m-d');
 
         //* Bunga
@@ -360,6 +365,7 @@ class STRDController extends Controller
             'nomor_va_bjb'   => $VABJB,
             'invoice_id' => $invoiceId,
             'text_qris'  => $textQRIS,
+            'updated_by'  => Auth::user()->pengguna->full_name . ' | Perbarui SKRD'
         ]);
 
         return redirect()
