@@ -146,7 +146,6 @@ class STRDController extends Controller
                 return 'Rp. ' . number_format($jumlahBunga) . ' (' . $kenaikan . '%)';
             })
             ->addColumn('status_ttd', function ($p) {
-
                 if ($p->tgl_strd_akhir == null) {
                     $tgl_jatuh_tempo = $p->tgl_skrd_akhir;
                 } else {
@@ -156,6 +155,8 @@ class STRDController extends Controller
                 $check = strpos($daysDiff, '-');
 
                 if ($check !== false) {
+                    return "<span class='badge badge-danger'>Belum</span>";
+                } else {
                     if ($p->status_ttd == 0 || $p->status_ttd == 1 || $p->status_ttd == 2) {
                         return "<span class='badge badge-danger'>Belum</span>";
                     } elseif ($p->status_ttd == 3) {
@@ -163,8 +164,6 @@ class STRDController extends Controller
                     } elseif ($p->status_ttd == 4) {
                         return "<span class='badge badge-warning'>Proses</span>";
                     }
-                } else {
-                    return "<span class='badge badge-danger'>Belum</span>";
                 }
             })
             ->addColumn('status_strd', function ($p) {
