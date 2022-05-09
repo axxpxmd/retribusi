@@ -97,22 +97,24 @@ class STRDController extends Controller
                     $tgl_jatuh_tempo = $p->tgl_strd_akhir;
                 }
                 $daysDiff = $this->getDiffDays($tgl_jatuh_tempo);
+                $check = strpos($daysDiff, '-');
 
                 $filettd = "<a href='" . config('app.sftp_src') . $path_sftp . $fileName . "' target='_blank' class='cyan-text' title='File TTD'><i class='icon-document-file-pdf2'></i></a>";
                 $sendttd = "<a href='#' onclick='updateStatusTTD(" . $p->id . ")' class='amber-text' title='Kirim Untuk TTD'><i class='icon icon-send'></i></a>";
                 $delete  = "<a href='#' onclick='remove(" . $p->id . ")' class='text-danger mr-2' title='Hapus Data'><i class='icon icon-remove'></i></a>";
                 $edit    = "<a href='" . route($this->route . 'edit', Crypt::encrypt($p->id)) . "' class='text-primary mr-2' title='Edit Data'><i class='icon icon-edit'></i></a>";
 
-                if ($p->status_ttd == 3) {
-                    return $filettd;
+                if ($check !== false) {
+                    return $delete . $sendttd;
                 } else {
+                    if ($p->status_ttd == 3) {
+                        return $filettd;
+                    }
                     if ($p->status_ttd == 4) {
                         return '-';
                     }
-                    if ($daysDiff < 0) {
-                        return $delete;
-                    } else {
-                        return $delete . $sendttd;
+                    if ($p->status_ttd == 0) {
+                        return $sendttd;
                     }
                 }
             })
@@ -377,6 +379,7 @@ class STRDController extends Controller
             'nomor_va_bjb'   => $VABJB,
             'invoice_id' => $invoiceId,
             'text_qris'  => $textQRIS,
+            'status_ttd' => 0,
             'updated_by'  => Auth::user()->pengguna->full_name . ' | Perbarui SKRD'
         ]);
 
