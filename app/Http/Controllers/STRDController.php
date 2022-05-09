@@ -146,12 +146,25 @@ class STRDController extends Controller
                 return 'Rp. ' . number_format($jumlahBunga) . ' (' . $kenaikan . '%)';
             })
             ->addColumn('status_ttd', function ($p) {
-                if ($p->status_ttd == 0 || $p->status_ttd == 1 || $p->status_ttd == 2) {
+
+                if ($p->tgl_strd_akhir == null) {
+                    $tgl_jatuh_tempo = $p->tgl_skrd_akhir;
+                } else {
+                    $tgl_jatuh_tempo = $p->tgl_strd_akhir;
+                }
+                $daysDiff = $this->getDiffDays($tgl_jatuh_tempo);
+                $check = strpos($daysDiff, '-');
+
+                if ($check !== false) {
+                    if ($p->status_ttd == 0 || $p->status_ttd == 1 || $p->status_ttd == 2) {
+                        return "<span class='badge badge-danger'>Belum</span>";
+                    } elseif ($p->status_ttd == 3) {
+                        return "<span class='badge badge-success'>Sudah</span>";
+                    } elseif ($p->status_ttd == 4) {
+                        return "<span class='badge badge-warning'>Proses</span>";
+                    }
+                } else {
                     return "<span class='badge badge-danger'>Belum</span>";
-                } elseif ($p->status_ttd == 3) {
-                    return "<span class='badge badge-success'>Sudah</span>";
-                } elseif ($p->status_ttd == 4) {
-                    return "<span class='badge badge-warning'>Proses</span>";
                 }
             })
             ->addColumn('status_strd', function ($p) {
