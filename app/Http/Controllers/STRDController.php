@@ -266,95 +266,90 @@ class STRDController extends Controller
         $clientRefnum = $data->no_bayar;
         $productCode  = $data->rincian_jenis->kd_jenis;
 
-        if ($daysDiff > 0) {
+        //* Tahap 1
+        //TODO: Get Token BJB
+        $resGetTokenBJB = $this->vabjb->getTokenBJB();
+        if ($resGetTokenBJB->successful()) {
+            $resJson = $resGetTokenBJB->json();
+            if ($resJson['rc'] != 0000)
+                return redirect()
+                    ->route($this->route . 'index')
+                    ->withErrors('Terjadi kegagalan saat mengambil token. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . '');
+            $tokenBJB = $resJson['data'];
+        } else {
+            return redirect()
+                ->route($this->route . 'index')
+                ->withErrors("Terjadi kegagalan saat mengambil token. Error Code " . $resGetTokenBJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator");
+        }
 
-            //* Tahap 1
-            //TODO: Get Token BJB
-            $resGetTokenBJB = $this->vabjb->getTokenBJB();
-            if ($resGetTokenBJB->successful()) {
-                $resJson = $resGetTokenBJB->json();
-                if ($resJson['rc'] != 0000)
+        if ($VABJB == null) {
+            //TODO: Create VA BJB
+            $resGetVABJB = VABJB::createVABJB($tokenBJB, $clientRefnum, $amount, $expiredDate, $customerName, $productCode);
+            if ($resGetVABJB->successful()) {
+                $resJson = $resGetVABJB->json();
+                if (isset($resJson['rc']) != 0000)
                     return redirect()
                         ->route($this->route . 'index')
-                        ->withErrors('Terjadi kegagalan saat mengambil token. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . '');
-                $tokenBJB = $resJson['data'];
+                        ->withErrors('Terjadi kegagalan saat membuat Virtual Account. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . '');
+                $VABJB = $resJson['va_number'];
             } else {
                 return redirect()
                     ->route($this->route . 'index')
-                    ->withErrors("Terjadi kegagalan saat mengambil token. Error Code " . $resGetTokenBJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator");
-            }
-
-            if ($VABJB == null) {
-                //TODO: Create VA BJB
-                $resGetVABJB = VABJB::createVABJB($tokenBJB, $clientRefnum, $amount, $expiredDate, $customerName, $productCode);
-                if ($resGetVABJB->successful()) {
-                    $resJson = $resGetVABJB->json();
-                    if (isset($resJson['rc']) != 0000)
-                        return redirect()
-                            ->route($this->route . 'index')
-                            ->withErrors('Terjadi kegagalan saat membuat Virtual Account. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . '');
-                    $VABJB = $resJson['va_number'];
-                } else {
-                    return redirect()
-                        ->route($this->route . 'index')
-                        ->withErrors("Terjadi kegagalan saat membuat Virtual Account. Error Code " . $resGetVABJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator");
-                }
-            } else {
-                //TODO: Update VA BJB
-                $resUpdateVABJB = $this->vabjb->updateVaBJB($tokenBJB, $amount, $expiredDate, $customerName, $va_number);
-                if ($resUpdateVABJB->successful()) {
-                    $resJson = $resUpdateVABJB->json();
-                    if (isset($resJson['rc']) != 0000)
-                        return redirect()
-                            ->route($this->route . 'index')
-                            ->withErrors('Terjadi kegagalan saat memperbarui Virtual Account. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . '');
-                    $VABJB = $resJson['va_number'];
-                } else {
-                    return redirect()
-                        ->route($this->route . 'index')
-                        ->withErrors("Terjadi kegagalan saat memperbarui Virtual Account. Error Code " . $resUpdateVABJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator");
-                }
-            }
-
-            //* Tahap 2
-            if ($amount <= 10000000) { //* Nominal QRIS maksimal 10 juta, jika lebih maka tidak terbuat
-                //TODO: Get Token QRIS
-                // $resGetTokenQRISBJB = $this->qrisbjb->getToken();
-                // if ($resGetTokenQRISBJB->successful()) {
-                //     $resJsonQRIS = $resGetTokenQRISBJB->json();
-                //     if ($resJsonQRIS["status"]["code"] != 200)
-                //         return response()->json([
-                //             'message' => 'Terjadi kegagalan saat mengambil token QRIS BJB. Error Code : ' . $resJsonQRIS["status"]["code"] . '. Message : ' . $resJsonQRIS["status"]["description"] . ''
-                //         ], 422);
-                //     $tokenQRISBJB = $resGetTokenQRISBJB->header('X-AUTH-TOKEN');
-                // } else {
-                //     return response()->json([
-                //         'message' => "Terjadi kegagalan saat mengambil token QRIS BJB. Error Code. Silahkan laporkan masalah ini pada administrator"
-                //     ], 422);
-                // }
-
-                // //TODO: Create QRIS
-                // $resCreateQRISBJB = $this->qrisbjb->createQRIS($tokenQRISBJB, $amount);
-                // if ($resCreateQRISBJB->successful()) {
-                //     $resJsonQRIS = $resCreateQRISBJB->json();
-                //     if ($resJsonQRIS["status"]["code"] != 200)
-                //         return response()->json([
-                //             'message' => 'Terjadi kegagalan saat mengambil token QRIS BJB. Error Code : ' . $resJsonQRIS["status"]["code"] . '. Message : ' . $resJsonQRIS["status"]["description"] . ''
-                //         ], 422);
-                //     $respondBody = $resJsonQRIS["body"]["CreateInvoiceQRISDinamisExtResponse"];
-                //     $invoiceId = $respondBody["invoiceId"]["_text"];
-                //     $textQRIS = $respondBody["stringQR"]["_text"];
-                // } else {
-                //     return response()->json([
-                //         'message' => "Terjadi kegagalan saat mengambil token QRIS BJB. Error Code. Silahkan laporkan masalah ini pada administrator"
-                //     ], 422);
-                // }
-            } else {
-                $invoiceId = null;
-                $textQRIS = null;
+                    ->withErrors("Terjadi kegagalan saat membuat Virtual Account. Error Code " . $resGetVABJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator");
             }
         } else {
-            $VABJB = null;
+            //TODO: Update VA BJB
+            $resUpdateVABJB = $this->vabjb->updateVaBJB($tokenBJB, $amount, $expiredDate, $customerName, $va_number);
+            if ($resUpdateVABJB->successful()) {
+                $resJson = $resUpdateVABJB->json();
+                if (isset($resJson['rc']) != 0000)
+                    return redirect()
+                        ->route($this->route . 'index')
+                        ->withErrors('Terjadi kegagalan saat memperbarui Virtual Account. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . '');
+                $VABJB = $resJson['va_number'];
+            } else {
+                return redirect()
+                    ->route($this->route . 'index')
+                    ->withErrors("Terjadi kegagalan saat memperbarui Virtual Account. Error Code " . $resUpdateVABJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator");
+            }
+        }
+
+        //* Tahap 2
+        $invoiceId = null;
+        $textQRIS = null;
+        if ($amount <= 10000000) { //* Nominal QRIS maksimal 10 juta, jika lebih maka tidak terbuat
+            //TODO: Get Token QRIS
+            // $resGetTokenQRISBJB = $this->qrisbjb->getToken();
+            // if ($resGetTokenQRISBJB->successful()) {
+            //     $resJsonQRIS = $resGetTokenQRISBJB->json();
+            //     if ($resJsonQRIS["status"]["code"] != 200)
+            //         return response()->json([
+            //             'message' => 'Terjadi kegagalan saat mengambil token QRIS BJB. Error Code : ' . $resJsonQRIS["status"]["code"] . '. Message : ' . $resJsonQRIS["status"]["description"] . ''
+            //         ], 422);
+            //     $tokenQRISBJB = $resGetTokenQRISBJB->header('X-AUTH-TOKEN');
+            // } else {
+            //     return response()->json([
+            //         'message' => "Terjadi kegagalan saat mengambil token QRIS BJB. Error Code. Silahkan laporkan masalah ini pada administrator"
+            //     ], 422);
+            // }
+
+            // //TODO: Create QRIS
+            // $resCreateQRISBJB = $this->qrisbjb->createQRIS($tokenQRISBJB, $amount);
+            // if ($resCreateQRISBJB->successful()) {
+            //     $resJsonQRIS = $resCreateQRISBJB->json();
+            //     if ($resJsonQRIS["status"]["code"] != 200)
+            //         return response()->json([
+            //             'message' => 'Terjadi kegagalan saat mengambil token QRIS BJB. Error Code : ' . $resJsonQRIS["status"]["code"] . '. Message : ' . $resJsonQRIS["status"]["description"] . ''
+            //         ], 422);
+            //     $respondBody = $resJsonQRIS["body"]["CreateInvoiceQRISDinamisExtResponse"];
+            //     $invoiceId = $respondBody["invoiceId"]["_text"];
+            //     $textQRIS = $respondBody["stringQR"]["_text"];
+            // } else {
+            //     return response()->json([
+            //         'message' => "Terjadi kegagalan saat mengambil token QRIS BJB. Error Code. Silahkan laporkan masalah ini pada administrator"
+            //     ], 422);
+            // }
+        } else {
             $invoiceId = null;
             $textQRIS = null;
         }
