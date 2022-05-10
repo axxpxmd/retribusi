@@ -30,7 +30,7 @@ return [
     |
     | Available Drivers: "single", "daily", "slack", "syslog",
     |                    "errorlog", "monolog",
-    |                    "custom", "stack", "retribusi"
+    |                    "custom", "stack", "skrd"
     |
     */
 
@@ -41,9 +41,9 @@ return [
             'ignore_exceptions' => false,
         ],
 
-        'retribusi' => [
+        'skrd' => [
             'driver' => 'daily',
-            'path' => storage_path('logs/retribusi.log'),
+            'path' => storage_path('logs/skrd.log'),
             'level' => 'info',
         ],
 

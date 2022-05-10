@@ -425,7 +425,7 @@ class SKRDController extends Controller
         TransaksiOPD::create($data);
 
         //TODO: LOG
-        Log::channel('retribusi')->info('Create Data SKRD', $data);
+        Log::channel('skrd')->info('Create Data SKRD', $data);
 
         //* Tahap 5
         $data = [
@@ -525,6 +525,8 @@ class SKRDController extends Controller
         $customerName = $request->nm_wajib_pajak;
         $va_number    = (int) $data->nomor_va_bjb;
         $VABJB        = $data->nomor_va_bjb;
+        $invoiceId    = $data->invoice_id;
+        $textQRIS     = $data->text_qris;
         $clientRefnum = $data->no_bayar;
         $productCode  = $request->kd_jenis;
 
@@ -641,8 +643,8 @@ class SKRDController extends Controller
             'nm_ttd'  => $penanda_tangan->user->pengguna->full_name,
             'nip_ttd' => $penanda_tangan->user->pengguna->nip,
             'nomor_va_bjb'  => $VABJB,
-            // 'invoice_id'    => $invoiceId,
-            // 'text_qris'     => $textQRIS,
+            'invoice_id'    => $invoiceId,
+            'text_qris'     => $textQRIS,
             'status_diskon' => 0,
             'diskon'        => 0,
             'total_bayar'   => (int) str_replace(['.', 'Rp', ' '], '', $request->jumlah_bayar),
@@ -651,6 +653,9 @@ class SKRDController extends Controller
             'id_rincian_jenis_pendapatan' => \Crypt::decrypt($request->id_rincian_jenis_pendapatan)
         ]);
 
+        //TODO: LOG
+        Log::channel('skrd')->info('Edit Data SKRD | ' . 'VA:' . $VABJB . ' | Invoice ID:' . $invoiceId . ' | Text QRIS:' . $invoiceId . ' | NO SKRD:' . $data->no_skrd, $input);
+
         return response()->json([
             'message' => 'Data ' . $this->title . ' berhasil diperbaharui.'
         ]);
@@ -658,7 +663,13 @@ class SKRDController extends Controller
 
     public function destroy($id)
     {
-        TransaksiOPD::where('id', $id)->delete();
+
+        $data = TransaksiOPD::where('id', $id)->first();
+
+        //TODO: LOG
+        Log::channel('skrd')->info('Hapus Data SRKD | ' . 'Oleh:' . Auth::user()->pengguna->full_name, $data->toArray());
+
+        $data->delete();
 
         return response()->json([
             'message' => 'Data ' . $this->title . ' berhasil dihapus.'
