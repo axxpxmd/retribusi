@@ -251,9 +251,16 @@
                     <p class="m-l-5">Dengan Huruf : <span class="t-bold" style="text-transform: uppercase">{{ $data->jumlah_bayar == 0 ? '0 Rupiah' : $terbilang }}</span></p>
                     <p class="fs-14 t-bold m-l-5"><u>PERHATIAN :</u></p>
                     <ol>
-                        <li>Penyetoran dilakukan menggunakan Bank Jabar Banten (BJB) melalui Teller/ATM BJB dengan menggunakan <b>{{ $data->no_bayar }}</b></li>
-                        <li>Penyetoran melalaui transfer dapat melalui Virtual Account BJB dengan nomor <b>( {{ $data->nomor_va_bjb }} )</b>, Berlaku sampai {{ Carbon\Carbon::createFromFormat('Y-m-d', $tgl_jatuh_tempo)->format('d F Y') }}</li>
-                        <li>Apabila STRD ini tidak atau kurang dibayar lewat waktu paling lama 30 hari setelah STRD diterima atau (tanggal jatuh tempo) sanksi administrasi bunga sebesar 2% per bulan</li>
+                        <li>
+                            PEMBAYARAN DILAKUKAN DI BANK JABAR BANTEN (BJB) MELALUI :
+                            <ul style="margin-left: -28px !important;">
+                                <li>TELLER DENGAN MENGGUNAKAN KODE BAYAR {{ $data->no_bayar }}</li>
+                                <li>ATM/APLIKASI BJB DIGI (DIGINET& DIGIMOBILE) KHUSUS NASABAH BANK BJB DENGAN MENGIKUTI KETENTUAN LIMIT TRANSAKSI YANG BERLAKU MENGGUNAKAN KODE BAYAR <b>{{ $data->no_bayar }}</b></li>
+                            </ul>
+                        </li>
+                        <li>PEMBAYARAN DILAKUKAN MELALUI TRANSFER VA (VIRTUAL ACCOUNT) BANK BJB ATAU TRANSFER ANTAR BANK ONLINE MENGGUNAKAN NOMOR VIRTUAL ACCOUNT BANK BJB <b>{{ $data->nomor_va_bjb }}</b>. (MENGIKUTI KETENTUAN LIMIT TRANSAKSI TRANSFER YANG BERLAKU, DAN TIDAK BERLAKU UNTUK TRANSAKSI SKN & RTGS) ,BERLAKU SAMPAI <b>{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_akhir)->format('d F Y') }}</b>.</li>
+                        <li>UNTUK PEMBAYARAN MELALUI SKN DAN RTGS ATAU YANG MELEBIHI LIMIT TRANSAKSI TRANSFER ONLINE DAPAT MENGHUBUNGI PERANGKAT DAERAH PENERBIT SKRD.</li>
+                        <li>APABILA SKRD INI TIDAK ATAU KURANG DIBAYAR LEWAT WAKTU PALING LAMA 30 HARI SETELAH SKRD DITERIMA ATAU (TANGGAL JATUH TEMPO) SANKSI ADMINISTRASI BUNGA SEBESAR 2% PER BULAN</li>
                     </ol>
                 </td>
             </tr>
