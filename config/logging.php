@@ -30,7 +30,7 @@ return [
     |
     | Available Drivers: "single", "daily", "slack", "syslog",
     |                    "errorlog", "monolog",
-    |                    "custom", "stack"
+    |                    "custom", "stack", "retribusi"
     |
     */
 
@@ -39,6 +39,12 @@ return [
             'driver' => 'stack',
             'channels' => ['single'],
             'ignore_exceptions' => false,
+        ],
+
+        'retribusi' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/retribusi.log'),
+            'level' => 'info',
         ],
 
         'single' => [

@@ -425,7 +425,7 @@ class SKRDController extends Controller
         TransaksiOPD::create($data);
 
         //TODO: LOG
-        Log::info('Create SKRD', $data);
+        Log::channel('retribusi')->info('Create Data SKRD', $data);
 
         //* Tahap 5
         $data = [
