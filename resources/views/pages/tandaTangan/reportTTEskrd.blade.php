@@ -255,17 +255,17 @@
                 <td colspan="4" class="a">
                     <p class="m-l-5">Dengan Huruf : <span class="t-bold" style="text-transform: uppercase">{{ $data->jumlah_bayar == 0 ? '0 Rupiah' : $terbilang }}</span></p>
                     <p class="fs-12 t-bold m-l-5"><u>PERHATIAN :</u></p>
-                    <ol style="text-transform: lowercase">
+                    <ol>
                         <li>
-                            PEMBAYARAN DILAKUKAN DI BANK JABAR BANTEN (BJB) MELALUI :
-                            <ul style="margin-left: -28px !important; text-transform: lowercase; list-style-type: armenian">
-                                <li>TELLER DENGAN MENGGUNAKAN KODE BAYAR <b>{{ $data->no_bayar }}</b></li>
-                                <li>ATM/APLIKASI BJB DIGI (DIGINET& DIGIMOBILE) KHUSUS NASABAH BANK BJB DENGAN MENGIKUTI KETENTUAN LIMIT TRANSAKSI YANG BERLAKU MENGGUNAKAN KODE BAYAR <b>{{ $data->no_bayar }}</b></li>
+                            Pembayaran dilakukan di Bank Jabar Banten (BJB) melalui :
+                            <ul style="margin-left: -28px !important; list-style-type: armenian">
+                                <li>Teller dengan menggunakan kode bayar <b>{{ $data->no_bayar }}</b></li>
+                                <li>ATM/Aplikasi BJB DIGI (diginet & digimobile) khusus nasabah bank BJB dengan mengikuti ketentuan limit transaksi yang berlaku menggunakan kode bayar <b>{{ $data->no_bayar }}</b></li>
                             </ul>
                         </li>
-                        <li>PEMBAYARAN DILAKUKAN MELALUI TRANSFER VA (VIRTUAL ACCOUNT) BANK BJB ATAU TRANSFER ANTAR BANK ONLINE MENGGUNAKAN NOMOR VIRTUAL ACCOUNT BANK BJB <b>{{ $data->nomor_va_bjb }}</b>. (MENGIKUTI KETENTUAN LIMIT TRANSAKSI TRANSFER YANG BERLAKU, DAN TIDAK BERLAKU UNTUK TRANSAKSI SKN & RTGS) ,BERLAKU SAMPAI <b>{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_akhir)->format('d F Y') }}</b>.</li>
-                        <li>UNTUK PEMBAYARAN MELALUI SKN DAN RTGS ATAU YANG MELEBIHI LIMIT TRANSAKSI TRANSFER ONLINE DAPAT MENGHUBUNGI PERANGKAT DAERAH PENERBIT SKRD.</li>
-                        <li>APABILA SKRD INI TIDAK ATAU KURANG DIBAYAR LEWAT WAKTU PALING LAMA 30 HARI SETELAH SKRD DITERIMA ATAU (TANGGAL JATUH TEMPO) SANKSI ADMINISTRASI BUNGA SEBESAR 2% PER BULAN</li>
+                        <li>Pembayaran dilakukan melalui transfer VA (virtual account) bank BJB atau transfer antar bank online menggunakan nomor virtual account bank BJB <b>{{ $data->nomor_va_bjb }}</b>. (mengikuti ketentuan limit transaksi transfer yang berlaku, dan tidak berlaku untuk transaksi SKN & RTGS) ,berlaku sampai <b>{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_akhir)->format('d F Y') }}</b>.</li>
+                        <li>Untuk pembayaran melalui SKN dan RTGS atau yang melebihi limit transaksi transfer online dapat menghubungi perangkat daerah penerbit SKRD.</li>
+                        <li>Apabila SKRD ini tidak atau kurang dibayar lewat waktu paling lama 30 hari setelah SKRD diterima atau (tanggal jatuh tempo) sanksi administrasi bunga sebesar 2% per bulan</li>
                     </ol>
                 </td>
             </tr>
