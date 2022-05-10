@@ -253,7 +253,7 @@
                     <ol style="text-transform: lowercase">
                         <li>
                             PEMBAYARAN DILAKUKAN DI BANK JABAR BANTEN (BJB) MELALUI :
-                            <ul style="margin-left: -28px !important; text-transform: lowercase">
+                            <ul style="margin-left: -28px !important; text-transform: lowercase; list-style-type: armenian">
                                 <li>TELLER DENGAN MENGGUNAKAN KODE BAYAR {{ $data->no_bayar }}</li>
                                 <li>ATM/APLIKASI BJB DIGI (DIGINET& DIGIMOBILE) KHUSUS NASABAH BANK BJB DENGAN MENGIKUTI KETENTUAN LIMIT TRANSAKSI YANG BERLAKU MENGGUNAKAN KODE BAYAR <b>{{ $data->no_bayar }}</b></li>
                             </ul>
