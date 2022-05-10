@@ -250,10 +250,10 @@
                 <td colspan="4" class="a">
                     <p class="m-l-5">Dengan Huruf : <span class="t-bold" style="text-transform: uppercase">{{ $data->jumlah_bayar == 0 ? '0 Rupiah' : $terbilang }}</span></p>
                     <p class="fs-14 t-bold m-l-5"><u>PERHATIAN :</u></p>
-                    <ol>
+                    <ol style="text-transform: lowercase">
                         <li>
                             PEMBAYARAN DILAKUKAN DI BANK JABAR BANTEN (BJB) MELALUI :
-                            <ul style="margin-left: -28px !important;">
+                            <ul style="margin-left: -28px !important; text-transform: lowercase">
                                 <li>TELLER DENGAN MENGGUNAKAN KODE BAYAR {{ $data->no_bayar }}</li>
                                 <li>ATM/APLIKASI BJB DIGI (DIGINET& DIGIMOBILE) KHUSUS NASABAH BANK BJB DENGAN MENGIKUTI KETENTUAN LIMIT TRANSAKSI YANG BERLAKU MENGGUNAKAN KODE BAYAR <b>{{ $data->no_bayar }}</b></li>
                             </ul>
