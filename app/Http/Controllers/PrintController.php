@@ -181,6 +181,7 @@ class PrintController extends Controller
 
             $pdf = app('dompdf.wrapper');
             $pdf->getDomPDF()->set_option("enable_php", true);
+            $pdf->setPaper('legal', 'portrait');
             $pdf->loadView('pages.print.strd', compact(
                 'img',
                 'data',
