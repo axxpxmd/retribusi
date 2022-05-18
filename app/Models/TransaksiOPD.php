@@ -265,7 +265,7 @@ class TransaksiOPD extends Model
         }
 
         if ($status_ttd != null) {
-            $data->where('status_ttd', $status_ttd);
+            $data->where('status_ttd', [1, 3]);
         } else {
             $data->whereIn('status_ttd', [0, 2, 4]);
         }
