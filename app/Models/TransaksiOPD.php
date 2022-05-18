@@ -264,9 +264,15 @@ class TransaksiOPD extends Model
             $data->where('no_skrd', 'like', '%' . $no_skrd . '%');
         }
 
-        if ($status_ttd != null) {
-            $data->where('status_ttd', [1, 3]);
-        } else {
+        if ($status_ttd == 2) {
+            $data->whereIn('status_ttd', [0, 2, 4]);
+        }
+
+        if ($status_ttd == 1) {
+            $data->whereIn('status_ttd', [1, 3]);
+        }
+
+        if ($status_ttd == null) {
             $data->whereIn('status_ttd', [0, 2, 4]);
         }
 
