@@ -458,6 +458,7 @@ class STSController extends Controller
 
         $pdf = app('dompdf.wrapper');
         $pdf->getDomPDF()->set_option("enable_php", true);
+        $pdf->setPaper('legal', 'portrait');
 
         //TODO: Check status TTD
         if ($data->status_ttd == 1) {
