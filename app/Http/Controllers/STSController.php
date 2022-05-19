@@ -174,7 +174,7 @@ class STSController extends Controller
         }
 
         //* Check status pembayaran VA BJB
-        if ($data->status_bayar != 0 && $data->nomor_va_bjb != null) {
+        if ($data->status_bayar == 0 && $data->nomor_va_bjb != null) {
             //TODO: Get Token BJB
             $resGetTokenBJB = $this->vabjb->getTokenBJB();
             if ($resGetTokenBJB->successful()) {
