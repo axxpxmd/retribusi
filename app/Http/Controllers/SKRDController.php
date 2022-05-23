@@ -375,10 +375,12 @@ class SKRDController extends Controller
             $resGetVABJB = $this->vabjb->createVABJB($tokenBJB, $clientRefnum, $amount, $expiredDate, $customerName, $productCode);
             if ($resGetVABJB->successful()) {
                 $resJson = $resGetVABJB->json();
-                if (isset($resJson['rc']) != 0000)
+                if (isset($resJson['rc']) != 0000) {
+                    DB::rollback(); //* DB Transaction Failed
                     return response()->json([
                         'message' => 'Terjadi kegagalan saat membuat Virtual Account. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . ''
                     ], 422);
+                }
                 $VABJB = $resJson['va_number'];
 
                 //* Update data SKRD
@@ -386,6 +388,7 @@ class SKRDController extends Controller
                     'nomor_va_bjb' => $VABJB
                 ]);
             } else {
+                DB::rollback(); //* DB Transaction Failed
                 return response()->json([
                     'message' => "Terjadi kegagalan saat membuat Virtual Account. Error Code " . $resGetVABJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator"
                 ], 422);
@@ -426,6 +429,7 @@ class SKRDController extends Controller
                 //         'text_qris' => $textQRIS
                 //     ]);
                 // } else {
+                //     DB::rollback(); //* DB Transaction Failed
                 //     return response()->json([
                 //         'message' => "Terjadi kegagalan saat mengambil token QRIS BJB. Error Code. Silahkan laporkan masalah ini pada administrator"
                 //     ], 422);
