@@ -396,7 +396,7 @@ class SKRDController extends Controller
 
             //* Tahap 4
             if ($amount <= 10000000) { //* Nominal QRIS maksimal 10 juta, jika lebih maka tidak terbuat
-                //TODO: Get Token QRIS
+                // //TODO: Get Token QRIS
                 // $resGetTokenQRISBJB = $this->qrisbjb->getToken();
                 // if ($resGetTokenQRISBJB->successful()) {
                 //     $resJsonQRIS = $resGetTokenQRISBJB->json();
@@ -415,10 +415,12 @@ class SKRDController extends Controller
                 // $resCreateQRISBJB = $this->qrisbjb->createQRIS($tokenQRISBJB, $amount);
                 // if ($resCreateQRISBJB->successful()) {
                 //     $resJsonQRIS = $resCreateQRISBJB->json();
-                //     if ($resJsonQRIS["status"]["code"] != 200)
+                //     if ($resJsonQRIS["status"]["code"] != 200) {
+                //         DB::rollback(); //* DB Transaction Failed
                 //         return response()->json([
                 //             'message' => 'Terjadi kegagalan saat mengambil token QRIS BJB. Error Code : ' . $resJsonQRIS["status"]["code"] . '. Message : ' . $resJsonQRIS["status"]["description"] . ''
                 //         ], 422);
+                //     }
                 //     $respondBody = $resJsonQRIS["body"]["CreateInvoiceQRISDinamisExtResponse"];
                 //     $invoiceId = $respondBody["invoiceId"]["_text"];
                 //     $textQRIS = $respondBody["stringQR"]["_text"];
