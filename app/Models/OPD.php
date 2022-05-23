@@ -31,4 +31,14 @@ class OPD extends Model
     {
         return $this->hasMany(TtdOPD::class, 'id_opd', 'id');
     }
+
+    public static function getAll($opdArray, $opd_id)
+    {
+        $data = OPD::select('id', 'n_opd')->whereIn('id', $opdArray)
+            ->when($opd_id != 0, function ($q) use ($opd_id) {
+                return $q->where('id', $opd_id);
+            })->get();
+
+        return $data;
+    }
 }

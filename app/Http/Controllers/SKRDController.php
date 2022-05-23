@@ -61,11 +61,7 @@ class SKRDController extends Controller
 
         $opd_id   = Auth::user()->pengguna->opd_id;
         $opdArray = OPDJenisPendapatan::select('id_opd')->get()->toArray();
-
-        $opds = OPD::select('id', 'n_opd')->whereIn('id', $opdArray)
-            ->when($opd_id != 0, function ($q) use ($opd_id) {
-                return $q->where('id', $opd_id);
-            })->get();
+        $opds     = OPD::getAll($opdArray, $opd_id);
 
         //TODO: Set filter to date now
         $time  = Carbon::now();

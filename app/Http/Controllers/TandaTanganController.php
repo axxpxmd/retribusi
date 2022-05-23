@@ -48,14 +48,9 @@ class TandaTanganController extends Controller
         $route = $this->route;
         $title = $this->title;
 
-        $opd_id = Auth::user()->pengguna->opd_id;
+        $opd_id   = Auth::user()->pengguna->opd_id;
         $opdArray = OPDJenisPendapatan::select('id_opd')->get()->toArray();
-
-        if ($opd_id == 0) {
-            $opds = OPD::select('id', 'n_opd')->whereIn('id', $opdArray)->get();
-        } else {
-            $opds = OPD::where('id', $opd_id)->whereIn('id', $opdArray)->get();
-        }
+        $opds     = OPD::getAll($opdArray, $opd_id);
 
         $time = Carbon::now();
         $today = $time->format('Y-m-d');
