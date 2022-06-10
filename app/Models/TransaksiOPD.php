@@ -211,10 +211,6 @@ class TransaksiOPD extends Model
     // 
     public static function querySTS($from, $to, $opd_id, $status_bayar, $jenis_tanggal, $no_bayar, $channel_bayar)
     {
-        $VA = 'BJB Virtual Account';
-        $ATM = 'ATM BJB';
-        $Qris = '';
-
         $data = TransaksiOPD::select('id', 'id_opd', 'no_skrd', 'no_bayar', 'nm_wajib_pajak', 'id_jenis_pendapatan', 'tgl_skrd_awal', 'status_ttd', 'ntb', 'tgl_bayar', 'total_bayar_bjb', 'status_bayar', 'chanel_bayar')
             ->with('opd', 'jenis_pendapatan');
 
@@ -228,17 +224,21 @@ class TransaksiOPD extends Model
 
         if ($channel_bayar != 0) {
             switch ($channel_bayar) {
-                case '1':
-                    $data->where('chanel_bayar', $VA);
+                case "1":
+                    $metode_bayar = 'BJB Virtual Account';
                     break;
-                case '2':
-                    $data->where('chanel_bayar', $ATM);
-                case '3';
-                    $data->where('chanel_bayar', $Qris);
+                case 2:
+                    $metode_bayar = 'ATM BJB';
+                    break;
+                case 3;
+                    $metode_bayar = '';
+                    break;
                 default:
-                    # code...
+                    // 
                     break;
             }
+
+            $data->where('chanel_bayar', $metode_bayar);
         }
 
         if ($no_bayar != null) {
