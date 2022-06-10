@@ -156,11 +156,15 @@ class PrintController extends Controller
         if ($data->tgl_skrd_akhir < $dateNow) {
             //* Bunga
             $tgl_skrd_akhir = $data->tgl_skrd_akhir;
-            $total_bayar    = $data->jumlah_bayar;
+            $total_bayar = $data->jumlah_bayar;
             list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);
 
             //* Total Bayar + Bunga
-            $total_bayar = $data->total_bayar + $jumlahBunga;
+            if ($data->status_bayar == 1) {
+                $total_bayar = $data->total_bayar_bjb;
+            } else {
+                $total_bayar = $data->total_bayar + $jumlahBunga;
+            }
             $terbilang   = Html_number::terbilang($total_bayar) . 'rupiah';
 
             //TODO: generate QR Code
