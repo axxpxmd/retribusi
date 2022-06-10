@@ -50,6 +50,17 @@
                                 </select>
                             </div>
                         </div> 
+                        <div id="display_channel_bayar" class="form-group row" style="margin-top: -8px !important">
+                            <label for="channel_bayar" class="col-form-label s-12 col-md-4 text-right font-weight-bolder">Metode Bayar : </label>
+                            <div class="col-sm-4">
+                                <select name="channel_bayar" id="channel_bayar" class="select2 form-control r-0 light s-12">
+                                    <option value="0">Semua</option>
+                                    <option value="1">Virtual Account</option>
+                                    <option value="2">ATM / Teller</option>
+                                    <option value="3">Qris</option>
+                                </select>
+                            </div>
+                        </div> 
                         <div class="form-group row" style="margin-top: -8px !important">
                             <label for="no_bayar" class="col-form-label s-12 col-md-4 text-right font-weight-bolder">NO Bayar : </label>
                             <div class="col-sm-4">
@@ -120,6 +131,19 @@
         });
     });
 
+    $(function() {
+        $('#display_channel_bayar').hide(); 
+
+        $('#status_bayar').change(function(){
+            if($('#status_bayar').val() === "1") {
+                $('#display_channel_bayar').show(); 
+            } else {
+                $('#display_channel_bayar').hide(); 
+                $('#channel_bayar').val("0").change();
+            } 
+        });
+    });
+
     var table = $('#dataTable').dataTable({
         scrollX: true,
         processing: true,
@@ -136,6 +160,7 @@
                 data.status_bayar = $('#status_bayar').val();
                 data.jenis_tanggal = $('#jenis_tanggal').val();
                 data.no_bayar = $('#no_bayar').val();
+                data.channel_bayar = $('#channel_bayar').val();
             }
         },
         columns: [
