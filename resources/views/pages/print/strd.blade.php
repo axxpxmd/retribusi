@@ -218,11 +218,7 @@
                     <p class="m-l-5 m-t-0">{{ $data->uraian_retribusi }}</p>
                 </td>
                 <td class="a">
-                    @if ($data->status_bayar == 1)
-                    <p class="m-l-5 text-right m-r-10">@currency($data->total_bayar_bjb)</p>
-                    @else
                     <p class="m-l-5 text-right m-r-10">@currency($data->jumlah_bayar)</p>
-                    @endif
                     @if ($data->status_diskon == 1)
                     <p class="m-l-5 text-right m-r-10">(Diskon {{(int) $data->diskon }}%)&nbsp;&nbsp; @currency(($data->diskon / 100) * $data->jumlah_bayar),-</p>
                     @endif
