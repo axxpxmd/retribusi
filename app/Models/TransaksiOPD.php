@@ -215,8 +215,8 @@ class TransaksiOPD extends Model
         $date = $now->format('Y-m-d');
 
         $data = TransaksiOPD::select('id', 'id_opd', 'no_skrd', 'no_bayar', 'nm_wajib_pajak', 'id_jenis_pendapatan', 'tgl_skrd_awal', 'status_ttd', 'ntb', 'tgl_bayar', 'total_bayar_bjb', 'status_bayar', 'chanel_bayar')
-            ->with('opd', 'jenis_pendapatan')
-            ->where('tgl_skrd_akhir', '>=', $date);
+            // ->where('tgl_skrd_akhir', '>=', $date)
+            ->with('opd', 'jenis_pendapatan');
 
         if ($opd_id != 0) {
             $data->where('id_opd', $opd_id);
