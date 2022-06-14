@@ -138,8 +138,6 @@ class VABJB
         $signature = 'path=/billing/' . $cin . '/' . $va_number . '&method=GET&token=' . $tokenBJB . '&timestamp=' . $timestamp_now . '&body=';
         $sha256    = hash_hmac('sha256', $signature, $key);
 
-        dd($tokenBJB . ' - ' . $timestamp_now . ' - ' . $sha256);
-
         $path = 'billing/' . $cin . '/' . $va_number . '';
         $res  = Http::withHeaders([
             'Authorization' => 'Bearer ' . $tokenBJB,
