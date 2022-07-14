@@ -90,7 +90,8 @@ class RincianJenisController extends Controller
             'rincian_pendapatan'  => 'required',
             'nmr_rekening'        => 'required',
             'nmr_rekening_denda'  => 'required',
-            'kd_jenis'            => 'required|numeric|max:99|unique:tmrincian_jenis_pendapatans,kd_jenis'
+            'kd_jenis'            => 'required|numeric|max:99|unique:tmrincian_jenis_pendapatans,kd_jenis',
+            'no_hp' => 'required|numeric|unique:tmrincian_jenis_pendapatans,no_hp'
         ]);
 
         $id_jenis_pendapatan = $request->id_jenis_pendapatan;
@@ -151,7 +152,8 @@ class RincianJenisController extends Controller
             'rincian_pendapatan'  => 'required',
             'nmr_rekening'        => 'required',
             'nmr_rekening_denda'  => 'required',
-            'kd_jenis'            => 'required|numeric|max:99|unique:tmrincian_jenis_pendapatans,kd_jenis,' . $id
+            'kd_jenis'            => 'required|numeric|max:99|unique:tmrincian_jenis_pendapatans,kd_jenis,' . $id,
+            'no_hp' => 'required|numeric|unique:tmrincian_jenis_pendapatans,no_hp,' . $id
         ]);
 
         // get params

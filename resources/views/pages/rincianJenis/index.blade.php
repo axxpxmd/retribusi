@@ -61,7 +61,7 @@
                                         <thead>
                                             <th>No</th>
                                             <th>Rincian Jenis Pendapatan</th>
-                                            <th>Jenis Pendapatan</th>
+                                            <th>No HP</th>
                                             <th>Kode Jenis</th>
                                             <th>Nomor Rekening</th>
                                             <th>Nomor Rekening Denda</th>
@@ -106,6 +106,10 @@
                                                 <input type="text" name="kd_jenis" id="kd_jenis" class="form-control r-0 light s-12 col-md-2" autocomplete="off" required/>
                                             </div>
                                             <div class="row m-0">
+                                                <label for="no_hp" class="form-control label-input-custom col-md-2">No HP<span class="text-danger ml-1">*</span></label>
+                                                <input type="number" name="no_hp" id="no_hp" class="form-control r-0 light s-12 col-md-2" autocomplete="off" required/>
+                                            </div>
+                                            <div class="row m-0">
                                                 <label for="nmr_rekening" class="form-control label-input-custom col-md-2">Nomor Rekening<span class="text-danger ml-1">*</span></label>
                                                 <input type="text" name="nmr_rekening" id="nmr_rekening" class="form-control r-0 light s-12 col-md-2" autocomplete="off" required/>
                                             </div>
@@ -147,7 +151,7 @@
         columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false, align: 'center', className: 'text-center'},
             {data: 'rincian_pendapatan', name: 'rincian_pendapatan'},
-            {data: 'id_jenis_pendapatan', name: 'id_jenis_pendapatan'},
+            {data: 'no_hp', name: 'no_hp'},
             {data: 'kd_jenis', name: 'kd_jenis'},
             {data: 'nmr_rekening', name: 'nmr_rekening'},
             {data: 'nmr_rekening_denda', name: 'nmr_rekening_denda'},

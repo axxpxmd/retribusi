@@ -68,6 +68,10 @@
                                                 <input type="text" name="kd_jenis" id="kd_jenis" class="form-control r-0 light s-12 col-md-2" value="{{ $data->kd_jenis }}" autocomplete="off" required/>
                                             </div>  
                                             <div class="form-group m-0">
+                                                <label for="no_hp" class="form-control label-input-custom col-md-2">No HP<span class="text-danger ml-1">*</span></label>
+                                                <input type="text" name="no_hp" id="no_hp" class="form-control r-0 light s-12 col-md-2" value="{{ $data->no_hp }}" autocomplete="off" required/>
+                                            </div>  
+                                            <div class="form-group m-0">
                                                 <label for="nmr_rekening" class="form-control label-input-custom col-md-2">Nomor Rekening<span class="text-danger ml-1">*</span></label>
                                                 <input type="text" name="nmr_rekening" id="nmr_rekening" class="form-control r-0 light s-12 col-md-2" value="{{ $data->nmr_rekening }}" autocomplete="off" required/>
                                             </div>  
