@@ -47,6 +47,7 @@
                                     {{ method_field('PATCH') }}
                                     <input type="hidden" id="id" name="id" value="{{ $data->id }}"/>
                                     <input type="hidden" name="kd_jenis" id="kd_jenis">
+                                    <input type="hidden" name="no_hp" id="no_hp">
                                     <div class="form-row form-inline">
                                         <div class="col-md-12">
                                             <div class="row">
@@ -169,6 +170,7 @@
 <script type="text/javascript">
     $('#kode_rekening').val("{{ $data->rincian_jenis != null ? $data->rincian_jenis->nmr_rekening : '' }}");
     $('#kd_jenis').val("{{ $data->rincian_jenis != null ? $data->rincian_jenis->kd_jenis : '' }}");
+    $('#no_hp').val("{{ $data->rincian_jenis != null ? $data->rincian_jenis->no_hp : '' }}");
 
     $('#id_rincian_jenis_pendapatan').on('change', function(){
         val = $(this).val();
@@ -176,6 +178,7 @@
         $.get(url, function(data){
             $('#kode_rekening').val(data.nmr_rekening);
             $('#kd_jenis').val(data.kd_jenis);
+            $('#no_hp').val(data.no_hp);
         }, 'JSON');
     });
 
