@@ -8,14 +8,14 @@ use Illuminate\Support\Facades\Http;
 
 class QRISBJB
 {
-    public static function getToken()
+    public static function getToken($no_hp)
     {
         $time = Carbon::now();
         $date = $time->format('Y-m-d');
         $hour = $time->format('H:m:i');
 
         $url  = config('app.ip_qris');
-        $msisdn   = config('app.msisdn_bjb');
+        $msisdn   = $no_hp;
         $password = config('app.password_bjb');
 
         // Body / Payload
@@ -46,14 +46,14 @@ class QRISBJB
         return $res;
     }
 
-    public static function createQRIS($tokenQRISBJB, $amount)
+    public static function createQRIS($tokenQRISBJB, $amount, $no_hp)
     {
         $time = Carbon::now();
         $date = $time->format('Y-m-d');
         $hour = $time->format('H:m:i');
 
         $url  = config('app.ip_qris');
-        $msisdn = config('app.msisdn_bjb');
+        $msisdn = $no_hp;
 
         // Body / Payload
         $metadata = [

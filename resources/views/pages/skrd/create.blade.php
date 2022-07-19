@@ -48,6 +48,7 @@
                                     <input type="hidden" name="id_opd" value="{{ $opd->id }}">
                                     <input type="hidden" name="id_jenis_pendapatan" value="{{ $jenis_pendapatan->id }}">
                                     <input type="hidden" name="kd_jenis" id="kd_jenis" value="{{ $data_wp != null ? $data_wp->rincian_jenis->kd_jenis : '' }}">
+                                    <input type="hidden" name="no_hp" id="no_hp" value="{{ $data_wp != null ? $data_wp->rincian_jenis->no_hp : '' }}">
                                     <div class="form-row form-inline">
                                         <div class="col-md-12">
                                             <div class="row">
@@ -219,6 +220,7 @@
         $.get(url, function(data){
             $('#kode_rekening').val(data.nmr_rekening);
             $('#kd_jenis').val(data.kd_jenis);
+            $('#no_hp').val(data.no_hp);
         }, 'JSON');    
     });
 
