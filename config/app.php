@@ -142,6 +142,7 @@ return [
     'msisdn_bjb' => env('MSISDN_BJB'),
     'password_bjb' => env('PASSWORD_BJB'),
     'ip_qris' => env('IP_QRIS'),
+    'app_id_qris' => env('APP_ID_QRIS'),
 
     /*
     |--------------------------------------------------------------------------

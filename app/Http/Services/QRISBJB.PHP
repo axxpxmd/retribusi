@@ -8,15 +8,16 @@ use Illuminate\Support\Facades\Http;
 
 class QRISBJB
 {
-    public static function getToken($no_hp)
+    public static function getToken()
     {
         $time = Carbon::now();
         $date = $time->format('Y-m-d');
         $hour = $time->format('H:m:i');
 
         $url  = config('app.ip_qris');
-        $msisdn   = $no_hp;
+        $msisdn   = config('app.msisdn_bjb');
         $password = config('app.password_bjb');
+        $app_id = config('app.app_id_qris');
 
         // Body / Payload
         $metadata = [
@@ -27,7 +28,7 @@ class QRISBJB
             "deviceType" => "",
             "latitude" => "",
             "longitude" => "",
-            "appId" => "20",
+            "appId" => $app_id,
             "appVersion" => "1.0"
         ];
 
@@ -54,6 +55,7 @@ class QRISBJB
 
         $url  = config('app.ip_qris');
         $msisdn = $no_hp;
+        $app_id = config('app.app_id_qris');
 
         // Body / Payload
         $metadata = [
@@ -64,7 +66,7 @@ class QRISBJB
             "deviceType" => "",
             "latitude" => "",
             "longitude" => "",
-            "appId" => "20",
+            "appId" => $app_id,
             "appVersion" => "1.0"
         ];
 
