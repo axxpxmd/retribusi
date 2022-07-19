@@ -670,7 +670,7 @@ class SKRDController extends Controller
             'id_rincian_jenis_pendapatan' => \Crypt::decrypt($request->id_rincian_jenis_pendapatan)
         ]);
 
-        //TODO: LOG
+        //TODO: LOG SKRD
         Log::channel('skrd')->info('Edit Data SKRD | ' . 'VA:' . $VABJB . ' | Invoice ID:' . $invoiceId . ' | Text QRIS:' . $invoiceId . ' | NO SKRD:' . $data->no_skrd, $input);
 
         return response()->json([
