@@ -177,11 +177,12 @@ class SKRDController extends Controller
         $id_rincian_jenis_pendapatan = \Crypt::decrypt($id_rincian_jenis_pendapatan);
 
         if ($id_rincian_jenis_pendapatan != 0) {
-            $data = RincianJenisPendapatan::select('nmr_rekening', 'kd_jenis')->where('id', $id_rincian_jenis_pendapatan)->first();
+            $data = RincianJenisPendapatan::select('nmr_rekening', 'kd_jenis', 'no_hp')->where('id', $id_rincian_jenis_pendapatan)->first();
         } else {
             $data = [
                 'nmr_rekening' => "",
-                'kd_jenis' => ""
+                'kd_jenis' => "",
+                'no_hp' => ""
             ];
 
             $data = json_encode($data);
@@ -346,6 +347,7 @@ class SKRDController extends Controller
         $expiredDate  = $request->tgl_skrd_akhir . ' 23:59:59';
         $customerName = $request->nm_wajib_pajak;
         $productCode  = $request->kd_jenis;
+        $no_hp        = $request->no_hp;
 
         //*: Check Expired Date (jika tgl_skrd_akhir kurang dari tanggal sekarang maka VA dan QRIS tidak terbuat)
         //*: Check Amount (jika nominal 0 rupiah makan VA dan QRIS tidak terbuat)
@@ -396,9 +398,8 @@ class SKRDController extends Controller
 
             //* Tahap 4
             if ($amount <= 10000000) { //* Nominal QRIS maksimal 10 juta, jika lebih maka tidak terbuat
-<<<<<<< HEAD
                 //TODO: Get Token QRIS
-                $resGetTokenQRISBJB = $this->qrisbjb->getToken();
+                $resGetTokenQRISBJB = $this->qrisbjb->getToken($no_hp);
                 if ($resGetTokenQRISBJB->successful()) {
                     $resJsonQRIS = $resGetTokenQRISBJB->json();
                     if ($resJsonQRIS["status"]["code"] != 200)
@@ -412,64 +413,31 @@ class SKRDController extends Controller
                     ], 422);
                 }
 
-                // //TODO: Create QRIS
-                $resCreateQRISBJB = $this->qrisbjb->createQRIS($tokenQRISBJB, $amount);
+                //TODO: Create QRIS
+                $resCreateQRISBJB = $this->qrisbjb->createQRIS($tokenQRISBJB, $amount, $no_hp);
                 if ($resCreateQRISBJB->successful()) {
                     $resJsonQRIS = $resCreateQRISBJB->json();
-                    if ($resJsonQRIS["status"]["code"] != 200)
+                    if ($resJsonQRIS["status"]["code"] != 200) {
+                        DB::rollback(); //* DB Transaction Failed
                         return response()->json([
                             'message' => 'Terjadi kegagalan saat mengambil token QRIS BJB. Error Code : ' . $resJsonQRIS["status"]["code"] . '. Message : ' . $resJsonQRIS["status"]["description"] . ''
                         ], 422);
+                    }
                     $respondBody = $resJsonQRIS["body"]["CreateInvoiceQRISDinamisExtResponse"];
                     $invoiceId = $respondBody["invoiceId"]["_text"];
                     $textQRIS = $respondBody["stringQR"]["_text"];
+
+                    //* Update data SKRD
+                    $dataSKRD->update([
+                        'invoice_id' => $invoiceId,
+                        'text_qris' => $textQRIS
+                    ]);
                 } else {
+                    DB::rollback(); //* DB Transaction Failed
                     return response()->json([
                         'message' => "Terjadi kegagalan saat mengambil token QRIS BJB. Error Code. Silahkan laporkan masalah ini pada administrator"
                     ], 422);
                 }
-=======
-                // //TODO: Get Token QRIS
-                // $resGetTokenQRISBJB = $this->qrisbjb->getToken();
-                // if ($resGetTokenQRISBJB->successful()) {
-                //     $resJsonQRIS = $resGetTokenQRISBJB->json();
-                //     if ($resJsonQRIS["status"]["code"] != 200)
-                //         return response()->json([
-                //             'message' => 'Terjadi kegagalan saat mengambil token QRIS BJB. Error Code : ' . $resJsonQRIS["status"]["code"] . '. Message : ' . $resJsonQRIS["status"]["description"] . ''
-                //         ], 422);
-                //     $tokenQRISBJB = $resGetTokenQRISBJB->header('X-AUTH-TOKEN');
-                // } else {
-                //     return response()->json([
-                //         'message' => "Terjadi kegagalan saat mengambil token QRIS BJB. Error Code. Silahkan laporkan masalah ini pada administrator"
-                //     ], 422);
-                // }
-
-                // //TODO: Create QRIS
-                // $resCreateQRISBJB = $this->qrisbjb->createQRIS($tokenQRISBJB, $amount);
-                // if ($resCreateQRISBJB->successful()) {
-                //     $resJsonQRIS = $resCreateQRISBJB->json();
-                //     if ($resJsonQRIS["status"]["code"] != 200) {
-                //         DB::rollback(); //* DB Transaction Failed
-                //         return response()->json([
-                //             'message' => 'Terjadi kegagalan saat mengambil token QRIS BJB. Error Code : ' . $resJsonQRIS["status"]["code"] . '. Message : ' . $resJsonQRIS["status"]["description"] . ''
-                //         ], 422);
-                //     }
-                //     $respondBody = $resJsonQRIS["body"]["CreateInvoiceQRISDinamisExtResponse"];
-                //     $invoiceId = $respondBody["invoiceId"]["_text"];
-                //     $textQRIS = $respondBody["stringQR"]["_text"];
-
-                //     //* Update data SKRD
-                //     $dataSKRD->update([
-                //         'invoice_id' => $invoiceId,
-                //         'text_qris' => $textQRIS
-                //     ]);
-                // } else {
-                //     DB::rollback(); //* DB Transaction Failed
-                //     return response()->json([
-                //         'message' => "Terjadi kegagalan saat mengambil token QRIS BJB. Error Code. Silahkan laporkan masalah ini pada administrator"
-                //     ], 422);
-                // }
->>>>>>> fe00a4e9414c613c033c832a4c577faea06da32c
             }
         }
 
@@ -639,41 +607,41 @@ class SKRDController extends Controller
             //* Tahap 2
             if ($amount <= 10000000) { //* Nominal QRIS maksimal 10 juta, jika lebih maka tidak terbuat
                 // //TODO: Get Token QRIS
-                $resGetTokenQRISBJB = $this->qrisbjb->getToken();
-                if ($resGetTokenQRISBJB->successful()) {
-                    $resJsonQRIS = $resGetTokenQRISBJB->json();
-                    if ($resJsonQRIS["status"]["code"] != 200)
-                        return response()->json([
-                            'message' => 'Terjadi kegagalan saat mengambil token QRIS BJB. Error Code : ' . $resJsonQRIS["status"]["code"] . '. Message : ' . $resJsonQRIS["status"]["description"] . ''
-                        ], 422);
-                    $tokenQRISBJB = $resGetTokenQRISBJB->header('X-AUTH-TOKEN');
-                } else {
-                    return response()->json([
-                        'message' => "Terjadi kegagalan saat mengambil token QRIS BJB. Error Code. Silahkan laporkan masalah ini pada administrator"
-                    ], 422);
-                }
+                // $resGetTokenQRISBJB = $this->qrisbjb->getToken();
+                // if ($resGetTokenQRISBJB->successful()) {
+                //     $resJsonQRIS = $resGetTokenQRISBJB->json();
+                //     if ($resJsonQRIS["status"]["code"] != 200)
+                //         return response()->json([
+                //             'message' => 'Terjadi kegagalan saat mengambil token QRIS BJB. Error Code : ' . $resJsonQRIS["status"]["code"] . '. Message : ' . $resJsonQRIS["status"]["description"] . ''
+                //         ], 422);
+                //     $tokenQRISBJB = $resGetTokenQRISBJB->header('X-AUTH-TOKEN');
+                // } else {
+                //     return response()->json([
+                //         'message' => "Terjadi kegagalan saat mengambil token QRIS BJB. Error Code. Silahkan laporkan masalah ini pada administrator"
+                //     ], 422);
+                // }
 
                 //TODO: Create QRIS
-                if ($data->total_bayar != $amount) {
-                    $resCreateQRISBJB = $this->qrisbjb->createQRIS($tokenQRISBJB, $amount);
-                    if ($resCreateQRISBJB->successful()) {
-                        $resJsonQRIS = $resCreateQRISBJB->json();
-                        if ($resJsonQRIS["status"]["code"] != 200)
-                            return response()->json([
-                                'message' => 'Terjadi kegagalan saat mengambil token QRIS BJB. Error Code : ' . $resJsonQRIS["status"]["code"] . '. Message : ' . $resJsonQRIS["status"]["description"] . ''
-                            ], 422);
-                        $respondBody = $resJsonQRIS["body"]["CreateInvoiceQRISDinamisExtResponse"];
-                        $invoiceId = $respondBody["invoiceId"]["_text"];
-                        $textQRIS = $respondBody["stringQR"]["_text"];
-                    } else {
-                        return response()->json([
-                            'message' => "Terjadi kegagalan saat mengambil token QRIS BJB. Error Code. Silahkan laporkan masalah ini pada administrator"
-                        ], 422);
-                    }
-                } else {
-                    $invoiceId = $data->invoice_id;
-                    $textQRIS = $data->text_qris;
-                }
+                // if ($data->total_bayar != $amount) {
+                //     $resCreateQRISBJB = $this->qrisbjb->createQRIS($tokenQRISBJB, $amount);
+                //     if ($resCreateQRISBJB->successful()) {
+                //         $resJsonQRIS = $resCreateQRISBJB->json();
+                //         if ($resJsonQRIS["status"]["code"] != 200)
+                //             return response()->json([
+                //                 'message' => 'Terjadi kegagalan saat mengambil token QRIS BJB. Error Code : ' . $resJsonQRIS["status"]["code"] . '. Message : ' . $resJsonQRIS["status"]["description"] . ''
+                //             ], 422);
+                //         $respondBody = $resJsonQRIS["body"]["CreateInvoiceQRISDinamisExtResponse"];
+                //         $invoiceId = $respondBody["invoiceId"]["_text"];
+                //         $textQRIS = $respondBody["stringQR"]["_text"];
+                //     } else {
+                //         return response()->json([
+                //             'message' => "Terjadi kegagalan saat mengambil token QRIS BJB. Error Code. Silahkan laporkan masalah ini pada administrator"
+                //         ], 422);
+                //     }
+                // } else {
+                //     $invoiceId = $data->invoice_id;
+                //     $textQRIS = $data->text_qris;
+                // }
             } else {
                 $invoiceId = null;
                 $textQRIS = null;
