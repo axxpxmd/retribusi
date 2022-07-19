@@ -209,9 +209,13 @@ class TransaksiOPD extends Model
     }
 
     // 
-    public static function querySTS($from, $to, $opd_id, $status_bayar, $jenis_tanggal, $no_bayar)
+    public static function querySTS($from, $to, $opd_id, $status_bayar, $jenis_tanggal, $no_bayar, $channel_bayar)
     {
-        $data = TransaksiOPD::select('id', 'id_opd', 'no_skrd', 'no_bayar', 'nm_wajib_pajak', 'id_jenis_pendapatan', 'tgl_skrd_awal', 'status_ttd', 'ntb', 'tgl_bayar', 'total_bayar_bjb', 'status_bayar')
+        $now = Carbon::now();
+        $date = $now->format('Y-m-d');
+
+        $data = TransaksiOPD::select('id', 'id_opd', 'no_skrd', 'no_bayar', 'nm_wajib_pajak', 'id_jenis_pendapatan', 'tgl_skrd_awal', 'status_ttd', 'ntb', 'tgl_bayar', 'total_bayar_bjb', 'status_bayar', 'chanel_bayar')
+            // ->where('tgl_skrd_akhir', '>=', $date)
             ->with('opd', 'jenis_pendapatan');
 
         if ($opd_id != 0) {
@@ -220,6 +224,25 @@ class TransaksiOPD extends Model
 
         if ($status_bayar != null) {
             $data->where('status_bayar', $status_bayar);
+        }
+
+        if ($channel_bayar != 0) {
+            switch ($channel_bayar) {
+                case "1":
+                    $metode_bayar = 'BJB Virtual Account';
+                    break;
+                case 2:
+                    $metode_bayar = 'ATM BJB';
+                    break;
+                case 3;
+                    $metode_bayar = '';
+                    break;
+                default:
+                    // 
+                    break;
+            }
+
+            $data->where('chanel_bayar', $metode_bayar);
         }
 
         if ($no_bayar != null) {
@@ -264,9 +287,15 @@ class TransaksiOPD extends Model
             $data->where('no_skrd', 'like', '%' . $no_skrd . '%');
         }
 
-        if ($status_ttd != null) {
-            $data->where('status_ttd', $status_ttd);
-        } else {
+        if ($status_ttd == 2) {
+            $data->whereIn('status_ttd', [0, 2, 4]);
+        }
+
+        if ($status_ttd == 1) {
+            $data->whereIn('status_ttd', [1, 3]);
+        }
+
+        if ($status_ttd == null) {
             $data->whereIn('status_ttd', [0, 2, 4]);
         }
 

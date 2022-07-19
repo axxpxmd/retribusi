@@ -218,7 +218,7 @@
                     <p class="m-l-5 m-t-0">{{ $data->uraian_retribusi }}</p>
                 </td>
                 <td class="a">
-                    <p class="m-l-5 text-right m-r-10">@currency($data->jumlah_bayar),-</p>
+                    <p class="m-l-5 text-right m-r-10">@currency($data->jumlah_bayar)</p>
                     @if ($data->status_diskon == 1)
                     <p class="m-l-5 text-right m-r-10">(Diskon {{(int) $data->diskon }}%)&nbsp;&nbsp; @currency(($data->diskon / 100) * $data->jumlah_bayar),-</p>
                     @endif
@@ -236,8 +236,10 @@
                 <td class="a">
                     <p class="m-l-5 m-b-0 m-r-10 text-right">&nbsp;</p>
                     <p class="m-l-5 m-t-1 m-b-0">&nbsp;</p>
+                    @if ($data->status_bayar == 0)
                     <p class="m-l-5 m-t-1 m-b-0 text-right m-r-10">@currency($jumlahBunga),-</p>
                     <p class="m-l-5 m-t-1 text-right m-r-10">{{ $kenaikan }}%</p>
+                    @endif
                 </td>
             </tr>
             <tr>
@@ -256,7 +258,7 @@
                                 <li>ATM/Aplikasi BJB DIGI (diginet & digimobile) khusus nasabah bank BJB dengan mengikuti ketentuan limit transaksi yang berlaku menggunakan kode bayar <b>{{ $data->no_bayar }}</b></li>
                             </ul>
                         </li>
-                        <li>Pembayaran dilakukan melalui transfer VA (virtual account) bank BJB atau transfer antar bank online menggunakan nomor virtual account bank BJB <b>{{ $data->nomor_va_bjb }}</b>. (mengikuti ketentuan limit transaksi transfer yang berlaku, dan tidak berlaku untuk transaksi SKN & RTGS) ,berlaku sampai <b>{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_akhir)->format('d F Y') }}</b>.</li>
+                        <li>Pembayaran dilakukan melalui transfer VA (virtual account) bank BJB atau transfer antar bank online menggunakan nomor virtual account bank BJB <b>{{ $data->nomor_va_bjb }}</b>. (mengikuti ketentuan limit transaksi transfer yang berlaku, dan tidak berlaku untuk transaksi SKN & RTGS) ,berlaku sampai <b>{{ Carbon\Carbon::createFromFormat('Y-m-d', $tgl_jatuh_tempo)->format('d F Y') }}</b>.</li>
                         <li>Untuk pembayaran melalui SKN dan RTGS atau yang melebihi limit transaksi transfer online dapat menghubungi perangkat daerah penerbit SKRD.</li>
                         <li>Apabila SKRD ini tidak atau kurang dibayar lewat waktu paling lama 30 hari setelah SKRD diterima atau (tanggal jatuh tempo) sanksi administrasi bunga sebesar 2% per bulan</li>
                     </ol>

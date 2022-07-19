@@ -25,6 +25,7 @@ use App\Libraries\GenerateNumber;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Crypt;
 
@@ -60,11 +61,7 @@ class SKRDController extends Controller
 
         $opd_id   = Auth::user()->pengguna->opd_id;
         $opdArray = OPDJenisPendapatan::select('id_opd')->get()->toArray();
-
-        $opds = OPD::select('id', 'n_opd')->whereIn('id', $opdArray)
-            ->when($opd_id != 0, function ($q) use ($opd_id) {
-                return $q->where('id', $opd_id);
-            })->get();
+        $opds     = OPD::getAll($opdArray, $opd_id);
 
         //TODO: Set filter to date now
         $time  = Carbon::now();
@@ -282,9 +279,9 @@ class SKRDController extends Controller
 
         /* Tahapan : 
          * 1. Generate Nomor (no_skrd & no_bayar)
-         * 2. Create Virtual Account
-         * 3. Create QRIS
-         * 4. tmtransaksi_opd
+         * 2. tmtransaksi_opd 
+         * 3. Create Virtual Account
+         * 4. Create QRIS
          * 5. tmdata_wp
          */
 
@@ -305,32 +302,70 @@ class SKRDController extends Controller
             'no_bayar' => 'required|unique:tmtransaksi_opd,no_bayar',
         ])->validate();
 
+        //* Tahap 2
+        DB::beginTransaction(); //* DB Transaction Begin
+
+        $penanda_tangan = TtdOPD::where('id', $request->penanda_tangan_id)->first();
+
+        $data = [
+            'id_opd'  => $request->id_opd,
+            'tgl_ttd' => $request->tgl_ttd,
+            'nm_ttd'  => $penanda_tangan->user->pengguna->full_name,
+            'nip_ttd' => $penanda_tangan->user->pengguna->nip,
+            'id_jenis_pendapatan'      => $request->id_jenis_pendapatan,
+            'rincian_jenis_pendapatan' => $request->rincian_jenis_pendapatan,
+            'id_rincian_jenis_pendapatan' => \Crypt::decrypt($request->id_rincian_jenis_pendapatan),
+            'nmr_daftar'       => $request->nmr_daftar,
+            'nm_wajib_pajak'   => $request->nm_wajib_pajak,
+            'alamat_wp'        => $request->alamat_wp,
+            'lokasi'           => $request->lokasi,
+            'kelurahan_id'     => $request->kelurahan_id,
+            'kecamatan_id'     => $request->kecamatan_id,
+            'uraian_retribusi' => $request->uraian_retribusi,
+            'jumlah_bayar'     => (int) str_replace(['.', 'Rp', ' '], '', $request->jumlah_bayar),
+            'denda'            => 0,
+            'diskon'           => 0,
+            'total_bayar'      => (int) str_replace(['.', 'Rp', ' '], '', $request->jumlah_bayar),
+            'nomor_va_bjb'     => null,
+            'invoice_id'       => null,
+            'text_qris'        => null,
+            'status_bayar'     => 0,
+            'status_denda'     => 0,
+            'status_diskon'    => 0,
+            'status_ttd'       => 0,
+            'no_skrd'          => $no_skrd,
+            'tgl_skrd_awal'    => $request->tgl_skrd_awal,
+            'tgl_skrd_akhir'   => $request->tgl_skrd_akhir,
+            'no_bayar'         => $no_bayar,
+            'created_by'       => Auth::user()->pengguna->full_name
+        ];
+        $dataSKRD = TransaksiOPD::create($data);
+
         $clientRefnum = $no_bayar;
         $amount       = \strval((int) str_replace(['.', 'Rp', ' '], '', $request->jumlah_bayar));
         $expiredDate  = $request->tgl_skrd_akhir . ' 23:59:59';
         $customerName = $request->nm_wajib_pajak;
         $productCode  = $request->kd_jenis;
 
-        $VABJB = null;
-        $invoiceId = null;
-        $textQRIS = null;
-
         //*: Check Expired Date (jika tgl_skrd_akhir kurang dari tanggal sekarang maka VA dan QRIS tidak terbuat)
         //*: Check Amount (jika nominal 0 rupiah makan VA dan QRIS tidak terbuat)
         $daysDiff = $this->getDiffDays($request->tgl_skrd_akhir);
         if ($daysDiff > 0 && $amount != 0) {
 
-            //* Tahap 2
+            //* Tahap 3
             //TODO: Get Token VA
             $resGetTokenBJB = $this->vabjb->getTokenBJB();
             if ($resGetTokenBJB->successful()) {
                 $resJson = $resGetTokenBJB->json();
-                if ($resJson['rc'] != 0000)
+                if ($resJson['rc'] != 0000) {
+                    DB::rollback(); //* DB Transaction Failed
                     return response()->json([
                         'message' => 'Terjadi kegagalan saat mengambil token. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . ''
                     ], 422);
+                }
                 $tokenBJB = $resJson['data'];
             } else {
+                DB::rollback(); //* DB Transaction Failed
                 return response()->json([
                     'message' => "Terjadi kegagalan saat mengambil token. Error Code " . $resGetTokenBJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator"
                 ], 422);
@@ -340,19 +375,28 @@ class SKRDController extends Controller
             $resGetVABJB = $this->vabjb->createVABJB($tokenBJB, $clientRefnum, $amount, $expiredDate, $customerName, $productCode);
             if ($resGetVABJB->successful()) {
                 $resJson = $resGetVABJB->json();
-                if (isset($resJson['rc']) != 0000)
+                if (isset($resJson['rc']) != 0000) {
+                    DB::rollback(); //* DB Transaction Failed
                     return response()->json([
                         'message' => 'Terjadi kegagalan saat membuat Virtual Account. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . ''
                     ], 422);
+                }
                 $VABJB = $resJson['va_number'];
+
+                //* Update data SKRD
+                $dataSKRD->update([
+                    'nomor_va_bjb' => $VABJB
+                ]);
             } else {
+                DB::rollback(); //* DB Transaction Failed
                 return response()->json([
                     'message' => "Terjadi kegagalan saat membuat Virtual Account. Error Code " . $resGetVABJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator"
                 ], 422);
             }
 
-            //* Tahap 3
+            //* Tahap 4
             if ($amount <= 10000000) { //* Nominal QRIS maksimal 10 juta, jika lebih maka tidak terbuat
+<<<<<<< HEAD
                 //TODO: Get Token QRIS
                 $resGetTokenQRISBJB = $this->qrisbjb->getToken();
                 if ($resGetTokenQRISBJB->successful()) {
@@ -384,45 +428,52 @@ class SKRDController extends Controller
                         'message' => "Terjadi kegagalan saat mengambil token QRIS BJB. Error Code. Silahkan laporkan masalah ini pada administrator"
                     ], 422);
                 }
+=======
+                // //TODO: Get Token QRIS
+                // $resGetTokenQRISBJB = $this->qrisbjb->getToken();
+                // if ($resGetTokenQRISBJB->successful()) {
+                //     $resJsonQRIS = $resGetTokenQRISBJB->json();
+                //     if ($resJsonQRIS["status"]["code"] != 200)
+                //         return response()->json([
+                //             'message' => 'Terjadi kegagalan saat mengambil token QRIS BJB. Error Code : ' . $resJsonQRIS["status"]["code"] . '. Message : ' . $resJsonQRIS["status"]["description"] . ''
+                //         ], 422);
+                //     $tokenQRISBJB = $resGetTokenQRISBJB->header('X-AUTH-TOKEN');
+                // } else {
+                //     return response()->json([
+                //         'message' => "Terjadi kegagalan saat mengambil token QRIS BJB. Error Code. Silahkan laporkan masalah ini pada administrator"
+                //     ], 422);
+                // }
+
+                // //TODO: Create QRIS
+                // $resCreateQRISBJB = $this->qrisbjb->createQRIS($tokenQRISBJB, $amount);
+                // if ($resCreateQRISBJB->successful()) {
+                //     $resJsonQRIS = $resCreateQRISBJB->json();
+                //     if ($resJsonQRIS["status"]["code"] != 200) {
+                //         DB::rollback(); //* DB Transaction Failed
+                //         return response()->json([
+                //             'message' => 'Terjadi kegagalan saat mengambil token QRIS BJB. Error Code : ' . $resJsonQRIS["status"]["code"] . '. Message : ' . $resJsonQRIS["status"]["description"] . ''
+                //         ], 422);
+                //     }
+                //     $respondBody = $resJsonQRIS["body"]["CreateInvoiceQRISDinamisExtResponse"];
+                //     $invoiceId = $respondBody["invoiceId"]["_text"];
+                //     $textQRIS = $respondBody["stringQR"]["_text"];
+
+                //     //* Update data SKRD
+                //     $dataSKRD->update([
+                //         'invoice_id' => $invoiceId,
+                //         'text_qris' => $textQRIS
+                //     ]);
+                // } else {
+                //     DB::rollback(); //* DB Transaction Failed
+                //     return response()->json([
+                //         'message' => "Terjadi kegagalan saat mengambil token QRIS BJB. Error Code. Silahkan laporkan masalah ini pada administrator"
+                //     ], 422);
+                // }
+>>>>>>> fe00a4e9414c613c033c832a4c577faea06da32c
             }
         }
 
-        //* Tahap 4
-        $penanda_tangan = TtdOPD::where('id', $request->penanda_tangan_id)->first();
-
-        $data = [
-            'id_opd'  => $request->id_opd,
-            'tgl_ttd' => $request->tgl_ttd,
-            'nm_ttd'  => $penanda_tangan->user->pengguna->full_name,
-            'nip_ttd' => $penanda_tangan->user->pengguna->nip,
-            'id_jenis_pendapatan'      => $request->id_jenis_pendapatan,
-            'rincian_jenis_pendapatan' => $request->rincian_jenis_pendapatan,
-            'id_rincian_jenis_pendapatan' => \Crypt::decrypt($request->id_rincian_jenis_pendapatan),
-            'nmr_daftar'       => $request->nmr_daftar,
-            'nm_wajib_pajak'   => $request->nm_wajib_pajak,
-            'alamat_wp'        => $request->alamat_wp,
-            'lokasi'           => $request->lokasi,
-            'kelurahan_id'     => $request->kelurahan_id,
-            'kecamatan_id'     => $request->kecamatan_id,
-            'uraian_retribusi' => $request->uraian_retribusi,
-            'jumlah_bayar'     => (int) str_replace(['.', 'Rp', ' '], '', $request->jumlah_bayar),
-            'denda'            => 0,
-            'diskon'           => 0,
-            'total_bayar'      => (int) str_replace(['.', 'Rp', ' '], '', $request->jumlah_bayar),
-            'nomor_va_bjb'     => $VABJB,
-            'invoice_id'       => $invoiceId,
-            'text_qris'        => $textQRIS,
-            'status_bayar'     => 0,
-            'status_denda'     => 0,
-            'status_diskon'    => 0,
-            'status_ttd'       => 0,
-            'no_skrd'          => $no_skrd,
-            'tgl_skrd_awal'    => $request->tgl_skrd_awal,
-            'tgl_skrd_akhir'   => $request->tgl_skrd_akhir,
-            'no_bayar'         => $no_bayar,
-            'created_by'       => Auth::user()->pengguna->full_name
-        ];
-        TransaksiOPD::create($data);
+        DB::commit(); //* DB Transaction Success
 
         //TODO: LOG
         Log::channel('skrd')->info('Create Data SKRD', $data);

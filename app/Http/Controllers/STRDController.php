@@ -50,13 +50,9 @@ class STRDController extends Controller
         $route = $this->route;
         $title = $this->title;
 
-        $opd_id = Auth::user()->pengguna->opd_id;
+        $opd_id   = Auth::user()->pengguna->opd_id;
         $opdArray = OPDJenisPendapatan::select('id_opd')->get()->toArray();
-
-        $opds = OPD::select('id', 'n_opd')->whereIn('id', $opdArray)
-            ->when($opd_id != 0, function ($q) use ($opd_id) {
-                return $q->where('id', $opd_id);
-            })->get();
+        $opds     = OPD::getAll($opdArray, $opd_id);
 
         $time = Carbon::yesterday();
         $today = $time->format('Y-m-d');
@@ -301,37 +297,37 @@ class STRDController extends Controller
                 ->withErrors("Terjadi kegagalan saat mengambil token. Error Code " . $resGetTokenBJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator");
         }
 
-        if ($VABJB == null) {
-            //TODO: Create VA BJB
-            $resGetVABJB = VABJB::createVABJB($tokenBJB, $clientRefnum, $amount, $expiredDate, $customerName, $productCode);
-            if ($resGetVABJB->successful()) {
-                $resJson = $resGetVABJB->json();
-                if (isset($resJson['rc']) != 0000)
-                    return redirect()
-                        ->route($this->route . 'index')
-                        ->withErrors('Terjadi kegagalan saat membuat Virtual Account. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . '');
-                $VABJB = $resJson['va_number'];
-            } else {
+        // if ($VABJB == null) {
+        //TODO: Create VA BJB
+        $resGetVABJB = VABJB::createVABJB($tokenBJB, $clientRefnum, $amount, $expiredDate, $customerName, $productCode);
+        if ($resGetVABJB->successful()) {
+            $resJson = $resGetVABJB->json();
+            if (isset($resJson['rc']) != 0000)
                 return redirect()
                     ->route($this->route . 'index')
-                    ->withErrors("Terjadi kegagalan saat membuat Virtual Account. Error Code " . $resGetVABJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator");
-            }
+                    ->withErrors('Terjadi kegagalan saat membuat Virtual Account. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . '');
+            $VABJB = $resJson['va_number'];
         } else {
-            //TODO: Update VA BJB
-            $resUpdateVABJB = $this->vabjb->updateVaBJB($tokenBJB, $amount, $expiredDate, $customerName, $va_number);
-            if ($resUpdateVABJB->successful()) {
-                $resJson = $resUpdateVABJB->json();
-                if (isset($resJson['rc']) != 0000)
-                    return redirect()
-                        ->route($this->route . 'index')
-                        ->withErrors('Terjadi kegagalan saat memperbarui Virtual Account. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . '');
-                $VABJB = $resJson['va_number'];
-            } else {
-                return redirect()
-                    ->route($this->route . 'index')
-                    ->withErrors("Terjadi kegagalan saat memperbarui Virtual Account. Error Code " . $resUpdateVABJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator");
-            }
+            return redirect()
+                ->route($this->route . 'index')
+                ->withErrors("Terjadi kegagalan saat membuat Virtual Account. Error Code " . $resGetVABJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator");
         }
+        // } else {
+        //     //TODO: Update VA BJB
+        //     $resUpdateVABJB = $this->vabjb->updateVaBJB($tokenBJB, $amount, $expiredDate, $customerName, $va_number);
+        //     if ($resUpdateVABJB->successful()) {
+        //         $resJson = $resUpdateVABJB->json();
+        //         if (isset($resJson['rc']) != 0000)
+        //             return redirect()
+        //                 ->route($this->route . 'index')
+        //                 ->withErrors('Terjadi kegagalan saat memperbarui Virtual Account. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . '');
+        //         $VABJB = $resJson['va_number'];
+        //     } else {
+        //         return redirect()
+        //             ->route($this->route . 'index')
+        //             ->withErrors("Terjadi kegagalan saat memperbarui Virtual Account. Error Code " . $resUpdateVABJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator");
+        //     }
+        // }
 
         //* Tahap 2
         $invoiceId = null;

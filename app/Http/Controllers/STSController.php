@@ -49,13 +49,9 @@ class STSController extends Controller
         $route = $this->route;
         $title = $this->title;
 
-        $opd_id = Auth::user()->pengguna->opd_id;
+        $opd_id   = Auth::user()->pengguna->opd_id;
         $opdArray = OPDJenisPendapatan::select('id_opd')->get()->toArray();
-
-        $opds = OPD::select('id', 'n_opd')->whereIn('id', $opdArray)
-            ->when($opd_id != 0, function ($q) use ($opd_id) {
-                return $q->where('id', $opd_id);
-            })->get();
+        $opds     = OPD::getAll($opdArray, $opd_id);
 
         //TODO: Set filters to date now
         $time = Carbon::now();
@@ -77,6 +73,7 @@ class STSController extends Controller
         $status_bayar  = $request->status_bayar;
         $jenis_tanggal = $request->jenis_tanggal;
         $no_bayar = $request->no_bayar;
+        $channel_bayar = $request->channel_bayar;
 
         $checkOPD = Auth::user()->pengguna->opd_id;
         if ($checkOPD == 0) {
@@ -85,7 +82,7 @@ class STSController extends Controller
             $opd_id = $checkOPD;
         }
 
-        $data = TransaksiOPD::querySTS($from, $to, $opd_id, $status_bayar, $jenis_tanggal, $no_bayar);
+        $data = TransaksiOPD::querySTS($from, $to, $opd_id, $status_bayar, $jenis_tanggal, $no_bayar, $channel_bayar);
 
         return DataTables::of($data)
             ->addColumn('action', function ($p) {
@@ -458,6 +455,7 @@ class STSController extends Controller
 
         $pdf = app('dompdf.wrapper');
         $pdf->getDomPDF()->set_option("enable_php", true);
+        $pdf->setPaper('legal', 'portrait');
 
         //TODO: Check status TTD
         if ($data->status_ttd == 1) {
