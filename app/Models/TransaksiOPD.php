@@ -78,19 +78,20 @@ class TransaksiOPD extends Model
             switch ($channel_bayar) {
                 case "1":
                     $metode_bayar = 'BJB Virtual Account';
+                    $data->where('chanel_bayar', $metode_bayar);
                     break;
                 case 2:
                     $metode_bayar = 'ATM BJB';
+                    $data->where('chanel_bayar', $metode_bayar);
                     break;
                 case 3;
                     $metode_bayar = '';
+                    $data->where('chanel_bayar', 'like', '%QRIS%');
                     break;
                 default:
                     // 
                     break;
             }
-
-            $data->where('chanel_bayar', $metode_bayar);
         }
 
         return $data->get();
@@ -249,19 +250,20 @@ class TransaksiOPD extends Model
             switch ($channel_bayar) {
                 case "1":
                     $metode_bayar = 'BJB Virtual Account';
+                    $data->where('chanel_bayar', $metode_bayar);
                     break;
                 case 2:
                     $metode_bayar = 'ATM BJB';
+                    $data->where('chanel_bayar', $metode_bayar);
                     break;
                 case 3;
                     $metode_bayar = '';
+                    $data->where('chanel_bayar', 'like', '%QRIS%');
                     break;
                 default:
                     // 
                     break;
             }
-
-            $data->where('chanel_bayar', $metode_bayar);
         }
 
         if ($no_bayar != null) {
