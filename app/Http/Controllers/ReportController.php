@@ -72,8 +72,9 @@ class ReportController extends Controller
         $from = $request->tgl_skrd;
         $to = $request->tgl_skrd1;
         $jenis = $request->jenis;
+        $channel_bayar = $request->channel_bayar;
 
-        $data = TransaksiOPD::queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis);
+        $data = TransaksiOPD::queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar);
 
         return DataTables::of($data)
             ->editColumn('no_bayar', function ($p) {
@@ -227,8 +228,9 @@ class ReportController extends Controller
         $from = $request->tgl_skrd;
         $to = $request->tgl_skrd1;
         $jenis = $request->jenis;
+        $channel_bayar = 0;
 
-        $data = TransaksiOPD::queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis);
+        $data = TransaksiOPD::queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar);
         $totalBayar = $data->sum('total_bayar');
 
         if ($jenis == 1 || $jenis == 0) {
@@ -265,8 +267,9 @@ class ReportController extends Controller
         $from = $request->tgl_skrd;
         $to = $request->tgl_skrd1;
         $jenis = $request->jenis;
+        $channel_bayar = 0;
 
-        $data = TransaksiOPD::queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis);
+        $data = TransaksiOPD::queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar);
         $totalBayar = $data->sum('total_bayar');
 
         $totalBayarJson = [

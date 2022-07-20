@@ -37,7 +37,7 @@ class TransaksiOPD extends Model
     }
 
     // 
-    public static function queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis)
+    public static function queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar)
     {
         $data = TransaksiOPD::with(['jenis_pendapatan', 'opd', 'rincian_jenis'])->orderBy('id', 'DESC');
 
@@ -72,6 +72,25 @@ class TransaksiOPD extends Model
                     $data->whereBetween('tgl_bayar', [$from, $to]);
                 }
             }
+        }
+
+        if ($channel_bayar != 0) {
+            switch ($channel_bayar) {
+                case "1":
+                    $metode_bayar = 'BJB Virtual Account';
+                    break;
+                case 2:
+                    $metode_bayar = 'ATM BJB';
+                    break;
+                case 3;
+                    $metode_bayar = '';
+                    break;
+                default:
+                    // 
+                    break;
+            }
+
+            $data->where('chanel_bayar', $metode_bayar);
         }
 
         return $data->get();

@@ -55,13 +55,24 @@
                                 </select>
                             </div>
                         </div> 
-                        <div id="status_bayar_display" class="form-group row d-none" style="margin-top: -8px !important">
+                        <div id="status_bayar_display" class="form-group row" style="margin-top: -8px !important">
                             <label for="status_bayar" class="col-form-label s-12 col-md-4 text-right font-weight-bolder">Status Bayar : </label>
                             <div class="col-sm-4">
                                 <select name="status_bayar" id="status_bayar" class="select2 form-control r-0 light s-12">
                                     <option value=""></option>
                                     <option value="0">Belum</option>
                                     <option value="1">Sudah</option>
+                                </select>
+                            </div>
+                        </div> 
+                        <div id="display_channel_bayar" class="form-group row" style="margin-top: -8px !important">
+                            <label for="channel_bayar" class="col-form-label s-12 col-md-4 text-right font-weight-bolder">Metode Bayar : </label>
+                            <div class="col-sm-4">
+                                <select name="channel_bayar" id="channel_bayar" class="select2 form-control r-0 light s-12">
+                                    <option value="0">Semua</option>
+                                    <option value="1">Virtual Account</option>
+                                    <option value="2">ATM / Teller</option>
+                                    <option value="3">Qris</option>
                                 </select>
                             </div>
                         </div> 
@@ -123,17 +134,28 @@
 <script type="text/javascript">
     $(function() {
         $('#status_bayar_display').hide(); 
+        $('#display_channel_bayar').hide(); 
 
         $('#tgl_skrd_text').html('Tanggal SKRD :');
         $('#jenis').change(function(){
             if($('#jenis').val() === "1") {
-                $('#status_bayar_display').hide(); 
+                $('#status_bayar_display').show(); 
+                $('#display_channel_bayar').hide(); 
                 $('#tgl_skrd_text').html('Tanggal SKRD :');
             } else {
-                $('#status_bayar_display').show(); 
+                $('#status_bayar_display').hide(); 
+                $('#display_channel_bayar').show(); 
                 $('#tgl_skrd_text').html('Tanggal Bayar :');
             } 
         });
+    });
+
+    $('#status_bayar').change(function(){
+        if($('#status_bayar').val() === "1") {
+            $('#display_channel_bayar').show(); 
+        } else {
+            $('#display_channel_bayar').hide(); 
+        } 
     });
 
     var table = $('#dataTable').dataTable({
@@ -152,6 +174,7 @@
                 data.jenis_pendapatan_id = $('#jenis_pendapatan_id').val();
                 data.status_bayar = $('#status_bayar').val();
                 data.jenis = $('#jenis').val();
+                data.channel_bayar = $('#channel_bayar').val();
             }
         },
         columns: [
