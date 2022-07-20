@@ -90,7 +90,7 @@
                             </div>
                         </div>
                         <div>
-                            <p class="mb-0 font-weight-bold">Total Bayar : <span id="total_bayar"></span></p>
+                            {{-- <p class="mb-0 font-weight-bold">Total Bayar : <span id="total_bayar"></span></p> --}}
                         </div>
                     </div>
                 </div>
