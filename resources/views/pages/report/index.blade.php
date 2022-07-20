@@ -141,9 +141,11 @@
             if($('#jenis').val() === "1") {
                 $('#status_bayar_display').show(); 
                 $('#display_channel_bayar').hide(); 
+                $("#channel_bayar").val(0).trigger("change.select2");
                 $('#tgl_skrd_text').html('Tanggal SKRD :');
             } else {
                 $('#status_bayar_display').hide(); 
+                $("#status_bayar").val(0).trigger("change.select2");
                 $('#display_channel_bayar').show(); 
                 $('#tgl_skrd_text').html('Tanggal Bayar :');
             } 
@@ -155,6 +157,7 @@
             $('#display_channel_bayar').show(); 
         } else {
             $('#display_channel_bayar').hide(); 
+            $("#channel_bayar").val(0).trigger("change.select2");
         } 
     });
 
