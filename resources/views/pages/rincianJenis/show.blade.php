@@ -49,6 +49,18 @@
                                         <label class="col-md-2 text-right s-12"><strong>Nomor Rekening :</strong></label>
                                         <label class="col-md-10 s-12">{{ $data->nmr_rekening }}</label>
                                     </div>
+                                    <div class="row">
+                                        <label class="col-md-2 text-right s-12"><strong>Nomor Rekening Denda :</strong></label>
+                                        <label class="col-md-10 s-12">{{ $data->nmr_rekening_denda }}</label>
+                                    </div>
+                                    <div class="row">
+                                        <label class="col-md-2 text-right s-12"><strong>No HP :</strong></label>
+                                        <label class="col-md-10 s-12">{{ $data->no_hp }}</label>
+                                    </div>
+                                    <div class="row">
+                                        <label class="col-md-2 text-right s-12"><strong>NMID :</strong></label>
+                                        <label class="col-md-10 s-12">{{ $data->nmid }}</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>

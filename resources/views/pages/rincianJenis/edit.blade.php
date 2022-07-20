@@ -70,6 +70,10 @@
                                             <div class="form-group m-0">
                                                 <label for="no_hp" class="form-control label-input-custom col-md-2">No HP<span class="text-danger ml-1">*</span></label>
                                                 <input type="text" name="no_hp" id="no_hp" class="form-control r-0 light s-12 col-md-2" value="{{ $data->no_hp }}" autocomplete="off" required/>
+                                            </div> 
+                                            <div class="form-group m-0">
+                                                <label for="nmid" class="form-control label-input-custom col-md-2">NMID<span class="text-danger ml-1">*</span></label>
+                                                <input type="text" name="nmid" id="nmid" class="form-control r-0 light s-12 col-md-2" value="{{ $data->nmid }}" autocomplete="off" required/>
                                             </div>  
                                             <div class="form-group m-0">
                                                 <label for="nmr_rekening" class="form-control label-input-custom col-md-2">Nomor Rekening<span class="text-danger ml-1">*</span></label>
