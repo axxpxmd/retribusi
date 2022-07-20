@@ -89,6 +89,9 @@
                                 <button class="btn btn-success btn-sm ml-3" onclick="pressOnChange()"><i class="icon-filter mr-2"></i>Filter</button>
                             </div>
                         </div>
+                        <div>
+                            <p class="mb-0 font-weight-bold">Total Bayar : <span id="total_bayar"></span></p>
+                        </div>
                     </div>
                 </div>
                 <div class="row mt-2">
@@ -178,8 +181,28 @@
         ]
     });
 
+    pressOnChange();
     function pressOnChange(){
         table.api().ajax.reload();
+
+        var opd_id = $('#opd_id').val();
+        var jenis_pendapatan_id = $('#jenis_pendapatan_id').val();
+        var status_bayar = $('#status_bayar').val();
+        var tgl_skrd = $('#tgl_skrd').val();
+        var tgl_skrd1 = $('#tgl_skrd1').val();
+        var jenis = $('#jenis').val();
+
+        params = tgl_skrd + "&tgl_skrd1=" + tgl_skrd1 + "&opd_id=" + opd_id + "&jenis_pendapatan_id=" + jenis_pendapatan_id + "&status_bayar=" + status_bayar + "&jenis=" + jenis;
+
+        url1 = "{{ route('report.cetakSKRD') }}?tgl_skrd=" + params
+        url2 = "{{ route('report.getTotalBayar') }}?tgl_skrd=" + params
+        
+        $('#exportpdf').attr('href', url1)
+    
+        // total bayar
+        $.get(url2, function(data){
+            $('#total_bayar').html(data.total_bayar)
+        }, 'JSON');
     }
 
     function remove(id){
