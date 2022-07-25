@@ -254,7 +254,7 @@
                         <img width="80" class="m-b-5" style="margin-left: 37px !important" src="{{ public_path('images/qr-logo.png') }}" alt="qris"><br>
                         {!! $img !!}
                         <br style="margin-top: -30px !important">
-                        <span class="m-l-5" style="font-weight: 400; font-size: 12px; font-family: 'Open Sans'">NMID:IDXXXXXXXXXX</span>
+                        <span class="m-l-5" style="font-weight: 400; font-size: 12px; font-family: 'Open Sans'">NIMD:{{ $data->rincian_jenis->nmid }}</span>
                     </div>
                     @endif
                 </td>
