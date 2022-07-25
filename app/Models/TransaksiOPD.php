@@ -41,15 +41,17 @@ class TransaksiOPD extends Model
     {
         $data = TransaksiOPD::with(['jenis_pendapatan', 'opd', 'rincian_jenis'])->orderBy('id', 'DESC');
 
+        // dd($channel_bayar);
+
         if ($opd_id != 0) {
             $data->where('id_opd', $opd_id);
         }
 
-        if ($jenis_pendapatan_id) {
+        if ($jenis_pendapatan_id != 0) {
             $data->where('id_jenis_pendapatan', $jenis_pendapatan_id);
         }
 
-        if ($status_bayar != null) {
+        if ($status_bayar != 0 || $status_bayar == null) {
             $data->where('status_bayar', $status_bayar);
         }
 
@@ -85,7 +87,6 @@ class TransaksiOPD extends Model
                     $data->where('chanel_bayar', $metode_bayar);
                     break;
                 case 3;
-                    $metode_bayar = '';
                     $data->where('chanel_bayar', 'like', '%QRIS%');
                     break;
                 default:
