@@ -40,9 +40,7 @@ class TransaksiOPD extends Model
     public static function queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar)
     {
         $data = TransaksiOPD::with(['jenis_pendapatan', 'opd', 'rincian_jenis'])->orderBy('id', 'DESC');
-
-        // dd($channel_bayar);
-
+ 
         if ($opd_id != 0) {
             $data->where('id_opd', $opd_id);
         }
