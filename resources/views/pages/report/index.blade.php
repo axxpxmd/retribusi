@@ -26,7 +26,6 @@
             <div class="tab-pane animated fadeInUpShort show active" id="semua-data" role="tabpanel">
                 <div class="card no-b mb-2">
                     <div class="card-body">
-
                         <div class="container col-md-6">
                             <div class="row mb-2">
                                 <label for="jenis" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">Jenis </label>
@@ -237,14 +236,13 @@
     function pressOnChange(){
         table.api().ajax.reload();
 
-        var opd_id = $('#opd_id').val();
-        var jenis_pendapatan_id = $('#jenis_pendapatan_id').val();
-        var status_bayar = $('#status_bayar').val();
-        var tgl_skrd = $('#tgl_skrd').val();
-        var tgl_skrd1 = $('#tgl_skrd1').val();
-        var jenis = $('#jenis').val();
-        var channel_bayar = $('#channel_bayar').val();
-        console.log(channel_bayar);
+        opd_id = $('#opd_id').val();
+        jenis_pendapatan_id = $('#jenis_pendapatan_id').val();
+        status_bayar = $('#status_bayar').val();
+        tgl_skrd = $('#tgl_skrd').val();
+        tgl_skrd1 = $('#tgl_skrd1').val();
+        jenis = $('#jenis').val();
+        channel_bayar = $('#channel_bayar').val();
 
         params = tgl_skrd + "&tgl_skrd1=" + tgl_skrd1 + "&opd_id=" + opd_id + "&jenis_pendapatan_id=" + jenis_pendapatan_id + "&status_bayar=" + status_bayar + "&jenis=" + jenis + "&channel_bayar=" + channel_bayar;
 
