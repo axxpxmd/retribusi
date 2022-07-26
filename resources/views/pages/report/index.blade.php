@@ -26,73 +26,84 @@
             <div class="tab-pane animated fadeInUpShort show active" id="semua-data" role="tabpanel">
                 <div class="card no-b mb-2">
                     <div class="card-body">
-                        <div class="form-group row" style="margin-top: -8px !important">
-                            <label for="jenis" class="col-form-label s-12 col-md-4 text-right font-weight-bolder">Jenis : </label>
-                            <div class="col-sm-4">
-                                <select name="jenis" id="jenis" class="select2 form-control r-0 light s-12">
-                                    <option value="0">Pilih</option>
-                                    <option value="1">SKRD</option>
-                                    <option value="2">STS</option>
-                                </select>
+
+                        <div class="container col-md-6">
+                            <div class="row mb-2">
+                                <label for="jenis" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">Jenis </label>
+                                <div class="col-sm-8">
+                                    <select class="select2 form-control r-0 light s-12" id="jenis" name="jenis">
+                                        <option value="0">Pilih</option>
+                                        <option value="1">SKRD</option>
+                                        <option value="2">STS</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div> 
-                        <div class="form-group row" style="margin-top: -8px !important">
-                            <label for="opd_id" class="col-form-label s-12 col-md-4 text-right font-weight-bolder">OPD : </label>
-                            <div class="col-sm-4">
-                                <select name="opd_id" id="opd_id" class="select2 form-control r-0 light s-12">
-                                    <option value="0">Semua</option>
-                                    @foreach ($opds as $i)
-                                        <option value="{{ $i->id }}">{{ $i->n_opd }}</option>
-                                    @endforeach
-                                </select>
+                            <div class="row mb-2">
+                                <label for="opd_id" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">OPD </label>
+                                <div class="col-sm-8">
+                                    <select class="select2 form-control r-0 light s-12" id="opd_id" name="opd_id">
+                                        <option value="0">Semua</option>
+                                        @foreach ($opds as $i)
+                                            <option value="{{ $i->id }}">{{ $i->n_opd }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
-                        </div> 
-                        <div class="form-group row" style="margin-top: -8px !important">
-                            <label for="jenis_pendapatan_id" class="col-form-label s-12 col-md-4 text-right font-weight-bolder">Jenis Pendapatan : </label>
-                            <div class="col-sm-4">
-                                <select name="jenis_pendapatan_id" id="jenis_pendapatan_id" class="select2 form-control r-0 light s-12">
-                                    <option value="0"></option>
-                                </select>
+                            <div class="row mb-2">
+                                <label for="jenis_pendapatan_id" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">Jenis Pendapatan </label>
+                                <div class="col-sm-8">
+                                    <select class="select2 form-control r-0 light s-12" id="jenis_pendapatan_id" name="jenis_pendapatan_id">
+                                        <option value="0"></option>
+                                    </select>
+                                </div>
                             </div>
-                        </div> 
-                        <div id="status_bayar_display" class="form-group row" style="margin-top: -8px !important">
-                            <label for="status_bayar" class="col-form-label s-12 col-md-4 text-right font-weight-bolder">Status Bayar : </label>
-                            <div class="col-sm-4">
-                                <select name="status_bayar" id="status_bayar" class="select2 form-control r-0 light s-12">
-                                    <option value=""></option>
-                                    <option value="0">Belum</option>
-                                    <option value="1">Sudah</option>
-                                </select>
+                            <div id="status_bayar_display" class="row mb-2">
+                                <label for="status_bayar" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">Status Bayar </label>
+                                <div class="col-sm-8">
+                                    <select class="select2 form-control r-0 light s-12" id="status_bayar" name="status_bayar">
+                                        <option value=""></option>
+                                        <option value="0">Belum</option>
+                                        <option value="1">Sudah</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div> 
-                        <div id="display_channel_bayar" class="form-group row" style="margin-top: -8px !important">
-                            <label for="channel_bayar" class="col-form-label s-12 col-md-4 text-right font-weight-bolder">Metode Bayar : </label>
-                            <div class="col-sm-4">
-                                <select name="channel_bayar" id="channel_bayar" class="select2 form-control r-0 light s-12">
-                                    <option value="0">Semua</option>
-                                    <option value="1">Virtual Account</option>
-                                    <option value="2">ATM / Teller</option>
-                                    <option value="3">Qris</option>
-                                </select>
+                            <div id="display_channel_bayar" class="row mb-2">
+                                <label for="channel_bayar" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">Metode Bayar </label>
+                                <div class="col-sm-8">
+                                    <select class="select2 form-control r-0 light s-12" id="channel_bayar" name="channel_bayar">
+                                        <option value="0">Semua</option>
+                                        <option value="1">Virtual Account</option>
+                                        <option value="2">ATM / Teller</option>
+                                        <option value="3">Qris</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div> 
-                        <div class="form-group row" style="margin-top: -8px !important">
-                            <label class="col-form-label s-12 col-md-4 text-right font-weight-bolder" id="tgl_skrd_text"> :</label>
-                            <div class="col-sm-5 row">
-                                <input type="date" placeholder="MM/DD/YYYY" value="{{ $today }}" name="tgl_skrd" id="tgl_skrd" class="form-control r-0 light s-12 col-md-4 ml-3" autocomplete="off"/>
-                                <span class="mt-1 ml-2 mr-2"> - </span>
-                                <input type="date" placeholder="MM/DD/YYYY" value="{{ $today }}" name="tgl_skrd1" id="tgl_skrd1" class="form-control r-0 light s-12 col-md-4" autocomplete="off"/>
+                            <div class="row mb-2">
+                                <label for="channel_bayar" class="col-form-label s-12 col-md-2 text-right font-weight-bolder" id="tgl_skrd_text"> </label>
+                                <div class="col-sm-8">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <input type="date" placeholder="MM/DD/YYYY" value="{{ $today }}" name="tgl_skrd" id="tgl_skrd" class="form-control r-0 light s-12 mb-5-m" autocomplete="off"/>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="date" placeholder="MM/DD/YYYY" value="{{ $today }}" name="tgl_skrd1" id="tgl_skrd1" class="form-control r-0 light s-12" autocomplete="off"/>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group row" style="margin-top: -8px !important"kr>
-                            <label class="col-form-label s-12 col-md-4 text-right font-weight-bolder"></label>
-                            <div class="col-sm-5 row">
-                                <button class="btn btn-success btn-sm ml-3" onclick="pressOnChange()"><i class="icon-filter mr-2"></i>Filter</button>
-                                <a target="_blank" href="{{ route('report.cetakSKRD') }}" class="btn btn-sm btn-primary ml-2" id="exportpdf"><i class="icon-print mr-2"></i>Print</a>
+                            <div class="row mb-4">
+                                <div class="col-sm-2"></div>
+                                <div class="col-sm-8">
+                                    <button class="btn btn-success btn-sm" onclick="pressOnChange()"><i class="icon-filter mr-2"></i>Filter</button>
+                                    <a target="_blank" href="{{ route('report.cetakSKRD') }}" class="btn btn-sm btn-primary ml-2" id="exportpdf"><i class="icon-print mr-2"></i>Print</a>
+                                </div> 
                             </div>
-                        </div>
-                        <div>
-                            <p class="mb-0 font-weight-bold">Total Bayar : <span id="total_bayar"></span></p>
+                            <div class="row">
+                                <div class="col-sm-2"></div>
+                                <div class="col-sm-8">
+                                    <p class="mb-0 font-weight-bold">Total Bayar : <span id="total_bayar"></span></p>
+                                </div> 
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -133,7 +133,11 @@
         margin-bottom: 8px;
     }
 
-    .text-end{
+    .text-right{
         text-align: left !important;
+    }
+
+    .mb-5-m{
+        margin-bottom: 10px !important;
     }
 }  
