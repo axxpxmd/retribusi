@@ -232,8 +232,10 @@
         var tgl_skrd = $('#tgl_skrd').val();
         var tgl_skrd1 = $('#tgl_skrd1').val();
         var jenis = $('#jenis').val();
+        var channel_bayar = $('#channel_bayar').val();
+        console.log(channel_bayar);
 
-        params = tgl_skrd + "&tgl_skrd1=" + tgl_skrd1 + "&opd_id=" + opd_id + "&jenis_pendapatan_id=" + jenis_pendapatan_id + "&status_bayar=" + status_bayar + "&jenis=" + jenis;
+        params = tgl_skrd + "&tgl_skrd1=" + tgl_skrd1 + "&opd_id=" + opd_id + "&jenis_pendapatan_id=" + jenis_pendapatan_id + "&status_bayar=" + status_bayar + "&jenis=" + jenis + "&channel_bayar=" + channel_bayar;
 
         url1 = "{{ route('report.cetakSKRD') }}?tgl_skrd=" + params
         url2 = "{{ route('report.getTotalBayar') }}?tgl_skrd=" + params

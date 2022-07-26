@@ -99,24 +99,6 @@ class ReportController extends Controller
             ->editColumn('total_bayar', function ($p) {
                 $dateNow   = Carbon::now()->format('Y-m-d');
 
-                // if ($p->status_denda == 0) {
-                //     // SKRD
-                //     if ($p->tgl_skrd_akhir >= $dateNow) {
-                //         return 'Rp. ' . number_format($p->total_bayar + $p->denda);
-                //     }
-
-                //     // STRD
-                //     if ($p->tgl_skrd_akhir < $dateNow) {
-                //         $tgl_skrd_akhir = $p->tgl_skrd_akhir;
-                //         $total_bayar    = $p->jumlah_bayar;
-                //         list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);;
-
-                //         return 'Rp. ' . number_format($p->total_bayar + $jumlahBunga);
-                //     }
-                // } else {
-                //     return 'Rp. ' . number_format($p->total_bayar + $p->denda);
-                // }
-
                 return 'Rp. ' . number_format($p->total_bayar);
             })
             ->editColumn('diskon', function ($p) {
@@ -228,11 +210,11 @@ class ReportController extends Controller
         $from = $request->tgl_skrd;
         $to = $request->tgl_skrd1;
         $jenis = $request->jenis;
-        $channel_bayar = 0;
+        $channel_bayar = $request->channel_bayar;
 
         $data = TransaksiOPD::queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar);
         $totalBayar = $data->sum('total_bayar');
-
+        
         if ($jenis == 1 || $jenis == 0) {
             $title = 'SKRD (Surat Ketetapan Retribusi Daerah)';
         } else {
@@ -267,8 +249,8 @@ class ReportController extends Controller
         $from = $request->tgl_skrd;
         $to = $request->tgl_skrd1;
         $jenis = $request->jenis;
-        $channel_bayar = 0;
-
+        $channel_bayar = $request->channel_bayar;
+       
         $data = TransaksiOPD::queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar);
         $totalBayar = $data->sum('total_bayar');
 

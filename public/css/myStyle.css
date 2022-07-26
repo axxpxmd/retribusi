@@ -123,3 +123,17 @@
     color: #86939E !important;
     font-weight: 400 !important
 }
+
+@media (max-width: 768px) {
+    .img-dynamic{
+        display: none;
+    } 
+
+    .mb-5-m {
+        margin-bottom: 8px;
+    }
+
+    .text-end{
+        text-align: left !important;
+    }
+}  

@@ -39,8 +39,9 @@ class TransaksiOPD extends Model
     // 
     public static function queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar)
     {
-        $data = TransaksiOPD::with(['jenis_pendapatan', 'opd', 'rincian_jenis'])->orderBy('id', 'DESC');
- 
+        $data = TransaksiOPD::select('id', 'id_opd', 'no_skrd', 'no_bayar', 'nm_wajib_pajak', 'id_jenis_pendapatan', 'tgl_skrd_awal', 'status_ttd', 'ntb', 'tgl_bayar','total_bayar', 'total_bayar_bjb','jumlah_bayar', 'status_bayar', 'chanel_bayar')
+            ->with(['jenis_pendapatan', 'opd', 'rincian_jenis'])->orderBy('id', 'DESC');
+
         if ($opd_id != 0) {
             $data->where('id_opd', $opd_id);
         }
@@ -49,11 +50,11 @@ class TransaksiOPD extends Model
             $data->where('id_jenis_pendapatan', $jenis_pendapatan_id);
         }
 
-        if ($status_bayar != 0 || $status_bayar == null) {
-            $data->where('status_bayar', $status_bayar);
-        }
-
         if ($jenis == 1 || $jenis == 0) {
+            if ($status_bayar != 0 || $status_bayar != null) {
+                $data->where('status_bayar', $status_bayar);
+            }
+
             if ($from != null || $to != null) {
                 if ($from != null && $to == null) {
                     $data->whereDate('tgl_skrd_awal', $from);
@@ -234,7 +235,6 @@ class TransaksiOPD extends Model
         $date = $now->format('Y-m-d');
 
         $data = TransaksiOPD::select('id', 'id_opd', 'no_skrd', 'no_bayar', 'nm_wajib_pajak', 'id_jenis_pendapatan', 'tgl_skrd_awal', 'status_ttd', 'ntb', 'tgl_bayar', 'total_bayar_bjb', 'status_bayar', 'chanel_bayar')
-            // ->where('tgl_skrd_akhir', '>=', $date)
             ->with('opd', 'jenis_pendapatan');
 
         if ($opd_id != 0) {
