@@ -26,7 +26,7 @@
             <div class="tab-pane animated fadeInUpShort show active" id="semua-data" role="tabpanel">
                 <div class="card no-b mb-2">
                     <div class="card-body">
-                        <div class="container col-md-6">
+                        <div class="container col-md-8">
                             <div class="row mb-2">
                                 <label for="jenis" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">Jenis </label>
                                 <div class="col-sm-8">
@@ -78,7 +78,7 @@
                                 </div>
                             </div>
                             <div class="row mb-2">
-                                <label for="channel_bayar" class="col-form-label s-12 col-md-2 text-right font-weight-bolder" id="tgl_skrd_text"> </label>
+                                <label for="channel_bayar" class="col-form-label s-12 col-md-2 text-right font-weight-bolder" id="tgl_skrd_text"></label>
                                 <div class="col-sm-8">
                                     <div class="row">
                                         <div class="col-md-6">
@@ -142,24 +142,23 @@
 @endsection
 @section('script')
 <script type="text/javascript">
-    $(function() {
-        $('#status_bayar_display').hide(); 
-        $('#display_channel_bayar').hide(); 
+ 
+    $('#status_bayar_display').hide(); 
+    $('#display_channel_bayar').hide(); 
 
-        $('#tgl_skrd_text').html('Tanggal SKRD :');
-        $('#jenis').change(function(){
-            if($('#jenis').val() === "1") {
-                $('#status_bayar_display').show(); 
-                $('#display_channel_bayar').hide(); 
-                $("#channel_bayar").val(0).trigger("change.select2");
-                $('#tgl_skrd_text').html('Tanggal SKRD :');
-            } else {
-                $('#status_bayar_display').hide(); 
-                $("#status_bayar").val(0).trigger("change.select2");
-                $('#display_channel_bayar').show(); 
-                $('#tgl_skrd_text').html('Tanggal Bayar :');
-            } 
-        });
+    $('#tgl_skrd_text').html('Tanggal SKRD');
+    $('#jenis').change(function(){
+        if($('#jenis').val() === "1") {
+            $('#status_bayar_display').show(); 
+            $('#display_channel_bayar').hide(); 
+            $("#channel_bayar").val(0).trigger("change.select2");
+            $('#tgl_skrd_text').html('Tanggal SKRD');
+        } else {
+            $('#status_bayar_display').hide(); 
+            $("#status_bayar").val(0).trigger("change.select2");
+            $('#display_channel_bayar').show(); 
+            $('#tgl_skrd_text').html('Tanggal Bayar');
+        } 
     });
 
     $('#status_bayar').change(function(){

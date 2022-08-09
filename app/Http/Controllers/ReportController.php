@@ -32,7 +32,7 @@ class ReportController extends Controller
     protected $title = 'Laporan';
     protected $view = 'pages.report.';
 
-    // Check Permission
+    //* Check Permission
     public function __construct()
     {
         $this->middleware(['permission:Laporan']);
@@ -61,11 +61,7 @@ class ReportController extends Controller
     public function api(Request $request)
     {
         $checkOPD = Auth::user()->pengguna->opd_id;
-        if ($checkOPD == 0) {
-            $opd_id = $request->opd_id;
-        } else {
-            $opd_id = $checkOPD;
-        }
+        $opd_id = $checkOPD == 0 ? $request->opd_id : $checkOPD;
 
         $jenis_pendapatan_id = $request->jenis_pendapatan_id;
         $status_bayar = $request->status_bayar;
@@ -97,8 +93,6 @@ class ReportController extends Controller
                 return Carbon::createFromFormat('Y-m-d', $p->tgl_skrd_awal)->format('d M Y');
             })
             ->editColumn('total_bayar', function ($p) {
-                $dateNow   = Carbon::now()->format('Y-m-d');
-
                 return 'Rp. ' . number_format($p->total_bayar);
             })
             ->editColumn('diskon', function ($p) {
@@ -110,8 +104,6 @@ class ReportController extends Controller
                 }
             })
             ->editColumn('denda', function ($p) {
-                $dateNow   = Carbon::now()->format('Y-m-d');
-
                 return $p->denda;
             })
             ->editColumn('status_bayar', function ($p) {
@@ -125,20 +117,21 @@ class ReportController extends Controller
                 $path_sftp = 'file_ttd_skrd/';
                 $fileName  = str_replace(' ', '', $p->nm_wajib_pajak) . '-' . $p->no_skrd . ".pdf";
                 $dateNow   = Carbon::now()->format('Y-m-d');
+                $belumTTD ="<a href='" . config('app.sftp_src') . $path_sftp . $fileName . "' target='_blank' class='cyan-text' title='File TTD'><i class='icon-document-file-pdf2'></i></a>";
 
-                // SKRD
+                //* SKRD
                 if ($p->tgl_skrd_akhir >= $dateNow) {
                     if ($p->status_ttd == 1) {
-                        return "<a href='" . config('app.sftp_src') . $path_sftp . $fileName . "' target='_blank' class='cyan-text' title='File TTD'><i class='icon-document-file-pdf2'></i></a>";
+                        return $belumTTD;
                     } else {
                         return  "<a href='" . route('print.skrd', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
                     }
                 }
 
-                // STRD
+                //* STRD
                 if ($p->tgl_skrd_akhir < $dateNow) {
                     if ($p->status_ttd == 3) {
-                        return "<a href='" . config('app.sftp_src') . $path_sftp . $fileName . "' target='_blank' class='cyan-text' title='File TTD'><i class='icon-document-file-pdf2'></i></a>";
+                        return $belumTTD;
                     } else {
                         return "<a href='" . route('print.strd', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
                     }
@@ -214,7 +207,7 @@ class ReportController extends Controller
 
         $data = TransaksiOPD::queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar);
         $totalBayar = $data->sum('total_bayar');
-        
+
         if ($jenis == 1 || $jenis == 0) {
             $title = 'SKRD (Surat Ketetapan Retribusi Daerah)';
         } else {
@@ -250,7 +243,7 @@ class ReportController extends Controller
         $to = $request->tgl_skrd1;
         $jenis = $request->jenis;
         $channel_bayar = $request->channel_bayar;
-       
+
         $data = TransaksiOPD::queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar);
         $totalBayar = $data->sum('total_bayar');
 
