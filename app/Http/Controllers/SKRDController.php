@@ -427,11 +427,22 @@ class SKRDController extends Controller
                     $invoiceId = $respondBody["invoiceId"]["_text"];
                     $textQRIS = $respondBody["stringQR"]["_text"];
 
-                    //* Update data SKRD
-                    $dataSKRD->update([
+                    $dataQris = [
+                        'status_code' => $resJsonQRIS["status"]["code"],
                         'invoice_id' => $invoiceId,
                         'text_qris' => $textQRIS
-                    ]);
+                    ];
+
+                    //* Check text qris
+                    if ($textQRIS == null) {
+                        Log::channel('skrd')->error('Error Respon Qris', $dataQris);
+                    } else {
+                        //* Update data SKRD
+                        $dataSKRD->update([
+                            'invoice_id' => $invoiceId,
+                            'text_qris' => $textQRIS
+                        ]);
+                    }
                 } else {
                     DB::rollback(); //* DB Transaction Failed
                     return response()->json([
@@ -444,7 +455,7 @@ class SKRDController extends Controller
         DB::commit(); //* DB Transaction Success
 
         //TODO: LOG
-        Log::channel('skrd')->info('Create Data SKRD', $data);
+        Log::channel('skrd')->info('Create Data SKRD', $data + ['textQris' => $textQRIS, 'invoiceId' => $invoiceId]);
 
         //* Tahap 5
         $data = [
