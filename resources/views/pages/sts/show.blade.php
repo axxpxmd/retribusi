@@ -162,7 +162,11 @@
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>Virtual Account BJB :</strong></label>
                                                 <label class="col-md-8 s-12">{{ $data->nomor_va_bjb }}</label>
-                                            </div> 
+                                            </div>
+                                            <div class="row">
+                                                <label class="col-md-4 text-right s-12"><strong>Invoice ID QRIS  :</strong></label>
+                                                <label class="col-md-8 s-12">{{ $data->invoice_id }}</label>
+                                            </div>  
                                         </div>
                                     </div>
                                     <hr>
