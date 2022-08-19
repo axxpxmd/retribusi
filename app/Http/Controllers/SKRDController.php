@@ -78,6 +78,7 @@ class SKRDController extends Controller
 
     public function api(Request $request)
     {
+        //* Get params
         $from  = $request->tgl_skrd;
         $to    = $request->tgl_skrd1;
         $no_skrd    = $request->no_skrd;
@@ -94,21 +95,18 @@ class SKRDController extends Controller
 
         return DataTables::of($data)
             ->addColumn('action', function ($p) {
-                $path_sftp = 'file_ttd_skrd/';
-                $fileName  = str_replace(' ', '', $p->nm_wajib_pajak) . '-' . $p->no_skrd . ".pdf";
-
-                $report  = "<a href='" . route('print.skrd', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
                 $filettd = "<a href='" . route('print.download', $p->id) . "' target='_blank' class='cyan-text' title='File TTD'><i class='icon-document-file-pdf2'></i></a>";
                 $sendttd = "<a href='#' onclick='updateStatusTTD(" . $p->id . ")' class='amber-text' title='Kirim Untuk TTD'><i class='icon icon-send'></i></a>";
                 $edit    = "<a href='" . route($this->route . 'edit', Crypt::encrypt($p->id)) . "' class='text-primary mr-2' title='Edit Data'><i class='icon icon-edit'></i></a>";
                 $delete  = "<a href='#' onclick='remove(" . $p->id . ")' class='text-danger mr-2' title='Hapus Data'><i class='icon icon-remove'></i></a>";
 
+                //* Sudah TTD
                 if ($p->status_ttd == 1) {
                     return $filettd;
                 } else {
-                    if ($p->status_ttd != 2) {
+                    //* Proses TTD
+                    if ($p->status_ttd != 2)
                         return $edit . $delete . $sendttd;
-                    }
                     return '-';
                 }
             })
@@ -144,6 +142,7 @@ class SKRDController extends Controller
             ->toJson();
     }
 
+    //* Get data SKRD for detail TTD
     public function getDataSKRD($id)
     {
         $data = TransaksiOPD::select('no_skrd', 'nm_wajib_pajak', 'jumlah_bayar')->where('id', $id)->first();
@@ -193,7 +192,7 @@ class SKRDController extends Controller
 
     public function kelurahanByKecamatan($id)
     {
-        $data = Kelurahan::where('kecamatan_id', $id)->get();
+        $data = Kelurahan::select('id', 'kecamatan_id', 'n_kelurahan')->where('kecamatan_id', $id)->get();
 
         return $data;
     }
@@ -428,9 +427,9 @@ class SKRDController extends Controller
                     $textQRIS = $respondBody["stringQR"]["_text"];
 
                     $dataQris = [
-                        'status_code' => $resJsonQRIS["status"]["code"],
-                        'invoice_id' => $invoiceId,
-                        'text_qris' => $textQRIS
+                        'no_bayar' => $no_bayar,
+                        'status_code' => $resJsonQRIS["status"],
+                        'data' => $respondBody
                     ];
 
                     //* Update data SKRD
@@ -438,6 +437,9 @@ class SKRDController extends Controller
                         'invoice_id' => $invoiceId,
                         'text_qris' => $textQRIS
                     ]);
+
+                    //TODO: LOG
+                    Log::channel('skrd_create_qris')->info('Create Qris SKRD', $dataQris);
                 } else {
                     DB::rollback(); //* DB Transaction Failed
                     return response()->json([
@@ -450,7 +452,7 @@ class SKRDController extends Controller
         DB::commit(); //* DB Transaction Success
 
         //TODO: LOG
-        Log::channel('skrd')->info('Create Data SKRD', $data + $dataQris);
+        Log::channel('skrd_create')->info('Create Data SKRD', $dataSKRD->toArray());
 
         //* Tahap 5
         $data = [

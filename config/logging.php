@@ -41,10 +41,18 @@ return [
             'ignore_exceptions' => false,
         ],
 
-        'skrd' => [
+        'skrd_create' => [
             'driver' => 'daily',
-            'path' => storage_path('logs/skrd.log'),
+            'path' => storage_path('logs/skrd/create.log'),
             'level' => 'info',
+            'days' => 30,
+        ],
+
+        'skrd_create_qris' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/skrd/create_qris.log'),
+            'level' => 'info',
+            'days' => 30,
         ],
 
         'single' => [

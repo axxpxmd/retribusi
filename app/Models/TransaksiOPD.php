@@ -39,7 +39,7 @@ class TransaksiOPD extends Model
     // 
     public static function queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar)
     {
-        $data = TransaksiOPD::select('id', 'id_opd', 'no_skrd', 'no_bayar', 'nm_wajib_pajak', 'id_jenis_pendapatan', 'tgl_skrd_awal', 'status_ttd', 'ntb', 'tgl_bayar','total_bayar', 'total_bayar_bjb','jumlah_bayar', 'status_bayar', 'chanel_bayar')
+        $data = TransaksiOPD::select('id', 'id_opd', 'no_skrd', 'no_bayar', 'nm_wajib_pajak', 'id_jenis_pendapatan', 'tgl_skrd_awal', 'status_ttd', 'ntb', 'tgl_bayar', 'total_bayar', 'total_bayar_bjb', 'jumlah_bayar', 'status_bayar', 'chanel_bayar')
             ->with(['jenis_pendapatan', 'opd', 'rincian_jenis'])->orderBy('id', 'DESC');
 
         if ($opd_id != 0) {
@@ -165,26 +165,25 @@ class TransaksiOPD extends Model
         return $data->get();
     }
 
-    // 
+    //* Query get data SKRD
     public static function querySKRD($from, $to, $opd_id, $no_skrd, $status_ttd)
     {
         $now = Carbon::now();
         $date = $now->format('Y-m-d');
 
         $data = TransaksiOPD::select('id', 'id_opd', 'no_skrd', 'no_bayar', 'nm_wajib_pajak', 'id_jenis_pendapatan', 'tgl_skrd_awal', 'tgl_skrd_akhir', 'status_ttd', 'jumlah_bayar')
-            ->with('opd', 'jenis_pendapatan')->where('status_bayar', 0)->where('tgl_skrd_akhir', '>=', $date);
-
-        if ($opd_id != 0) {
-            $data->where('id_opd', $opd_id);
-        }
-
-        if ($no_skrd != null) {
-            $data->where('no_skrd', 'like', '%' . $no_skrd . '%');
-        }
-
-        if ($status_ttd != null) {
-            $data->where('status_ttd', $status_ttd);
-        }
+            ->with('opd', 'jenis_pendapatan')
+            ->where('status_bayar', 0)
+            ->where('tgl_skrd_akhir', '>=', $date)
+            ->when($opd_id != 0, function ($q) use ($opd_id) {
+                return $q->where('id_opd', $opd_id);
+            })
+            ->when($no_skrd != null, function ($q) use ($no_skrd) {
+                return $q->where('no_skrd', 'like', '%' . $no_skrd . '%');
+            })
+            ->when($status_ttd != null, function ($q) use ($status_ttd) {
+                return $q->where('status_ttd', $status_ttd);
+            });
 
         if ($from != null ||  $to != null) {
             if ($from != null && $to == null) {

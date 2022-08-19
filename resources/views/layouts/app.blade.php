@@ -11,7 +11,7 @@ $template = App\Models\Template::select('id', 'logo', 'logo_title', 'logo_auth')
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Title --> 
-    <link rel="icon" href="{{ asset('images/template/'.$template->logo_title) }}" type="image/x-icon">
+    <link rel="icon" href="{{ asset('images/logo-png.png') }}" type="image/x-icon">
     <title>RETRIBUSI @yield('title')</title>
 
     <!-- CSS -->
@@ -55,9 +55,6 @@ $template = App\Models\Template::select('id', 'logo', 'logo_title', 'logo_auth')
                             <a href="{{ route('profile.index') }}" class="list-group-item list-group-item-action ">
                                 <i class="mr-2 icon-user text-blue"></i>Profile
                             </a>
-                            {{-- <a href="#" class="list-group-item list-group-item-action">
-                                <i class="mr-2 icon-cogs"></i>Settings
-                            </a> --}}
                             <a href="{{ route('profile.editPassword', Auth::user()->id) }}" class="list-group-item list-group-item-action">
                                 <i class="mr-2 icon-key4 orange-text"></i>Ganti Password
                             </a>

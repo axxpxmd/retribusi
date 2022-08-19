@@ -40,48 +40,55 @@
             <div class="tab-pane animated fadeInUpShort show active" id="semua-data" role="tabpanel">
                 <div class="card no-b mb-2">
                     <div class="card-body">
-                        @if ($opd_id == 0)
-                        <div class="form-group row" style="margin-top: -8px !important">
-                            <label for="opd" class="col-form-label s-12 col-md-4 text-right font-weight-bolder">OPD : </label>
-                            <div class="col-sm-4">
-                                <select name="opd" id="opd" class="select2 form-control r-0 light s-12">
-                                    <option value="0">Semua</option>
-                                    @foreach ($opds as $i)
-                                        <option value="{{ $i->id }}">{{ $i->n_opd }}</option>
-                                    @endforeach
-                                </select>
+                        <div class="col-md-8 container">
+                            @if ($opd_id == 0)
+                            <div class="row mb-2">
+                                <label for="opd" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">OPD</label>
+                                <div class="col-sm-8">
+                                    <select name="opd" id="opd" class="select2 form-control r-0 light s-12">
+                                        <option value="0">Semua</option>
+                                        @foreach ($opds as $i)
+                                            <option value="{{ $i->id }}">{{ $i->n_opd }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
-                        </div> 
-                        @endif
-                        <div class="form-group row" style="margin-top: -8px !important">
-                            <label for="no_skrd" class="col-form-label s-12 col-md-4 text-right font-weight-bolder">NO SKRD : </label>
-                            <div class="col-sm-4">
-                                <input type="text" name="no_skrd" id="no_skrd" class="form-control r-0 s-12 col-md-12" autocomplete="off" required/>
+                            @endif
+                            <div class="row mb-2">
+                                <label for="no_skrd" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">NO SKRD</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="no_skrd" id="no_skrd" class="form-control r-0 s-12 col-md-12" autocomplete="off" required/>
+                                </div>
                             </div>
-                        </div> 
-                        <div class="form-group row" style="margin-top: -8px !important">
-                            <label for="status_ttd" class="col-form-label s-12 col-md-4 text-right font-weight-bolder">Status TTD : </label>
-                            <div class="col-sm-4">
-                                <select name="status_ttd" id="status_ttd" class="select2 form-control r-0 light s-12">
-                                    <option value=""></option>
-                                    <option value="0">Belum diTTD</option>
-                                    <option value="1">Sudah diTTD</option>
-                                </select>
+                            <div class="row mb-2">
+                                <label for="status_ttd" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">Status TTD</label>
+                                <div class="col-sm-8">
+                                    <select name="status_ttd" id="status_ttd" class="select2 form-control r-0 light s-12">
+                                        <option value=""></option>
+                                        <option value="0">Belum TTD</option>
+                                        <option value="1">Sudah TTD</option>
+                                        <option value="2">Proses TTD</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group row" style="margin-top: -8px !important">
-                            <label class="col-form-label s-12 col-md-4 text-right font-weight-bolder">Tanggal SKRD :</label>
-                            <div class="col-sm-5 row">
-                                <input type="date" placeholder="MM/DD/YYYY" value="{{ $today }}" name="tgl_skrd" id="tgl_skrd" class="form-control r-0 light s-12 col-md-4 ml-3" autocomplete="off"/>
-                                <span class="mt-1 ml-2 mr-2">-</span>
-                                <input type="date" placeholder="MM/DD/YYYY" value="{{ $today }}" name="tgl_skrd1" id="tgl_skrd1" class="form-control r-0 light s-12 col-md-4" autocomplete="off"/>
+                            <div class="row mb-2">
+                                <label class="col-form-label s-12 col-md-2 text-right font-weight-bolder">Tanggal SKRD</label>
+                                <div class="col-sm-8">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <input type="date" placeholder="MM/DD/YYYY" value="{{ $today }}" name="tgl_skrd" id="tgl_skrd" class="form-control r-0 s-12 mb-5-m" autocomplete="off"/>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="date" placeholder="MM/DD/YYYY" value="{{ $today }}" name="tgl_skrd1" id="tgl_skrd1" class="form-control r-0 s-12" autocomplete="off"/>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group row" style="margin-top: -8px !important">
-                            <label class="col-form-label s-12 col-md-4 text-right font-weight-bolder"></label>
-                            <div class="col-sm-5 row">
-                                <button class="btn btn-success btn-sm ml-3" onclick="pressOnChange()"><i class="icon-filter mr-2"></i>Filter</button>
-                                {{-- <a href="#" data-toggle="modal" onclick="createRoute()" data-target="#updateStatusTTDs" class="btn btn-sm btn-primary ml-2"><i class="icon-pencil mr-2"></i>Kirim untuk TTD</a> --}}
+                            <div class="row mb-4">
+                                <div class="col-sm-2"></div>
+                                <div class="col-sm-8">
+                                    <button class="btn btn-success btn-sm" onclick="pressOnChange()"><i class="icon-filter mr-2"></i>Filter</button>
+                                </div> 
                             </div>
                         </div>
                     </div>
@@ -97,7 +104,6 @@
                                             <th>Nomor SKRD</th>
                                             <th>Nomor Bayar</th>
                                             <th>Nama WP</th>
-                                            {{-- <th width="21%">Nama Dinas</th> --}}
                                             <th>Jenis Retribusi</th>
                                             <th>Tanggal SKRD</th>
                                             <th>Masa Berlaku SKRD</th>
@@ -114,43 +120,39 @@
                 </div>
             </div>
             <div class="tab-pane animated fadeInUpShort" id="tambah-data" role="tabpanel">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div id="alert"></div>
-                        <div class="card">
-                            <h6 class="card-header"><strong>Tambah Data</strong></h6>
-                            <div class="card-body">
-                                <form class="needs-validation" method="GET" action="{{ route('skrd.create') }}" enctype="multipart/form-data" novalidate>
-                                    {{ method_field('GET') }}
-                                    <div class="form-row form-inline">
-                                        <div class="col-md-12">
-                                            <div class="form-group m-0">
-                                                <label class="form-control label-input-custom col-md-2 font-weight-normal">OPD<span class="text-danger ml-1">*</span></label>
-                                                <div class="col-md-4 p-0 bg-light">
-                                                    <select class="select2 form-control r-0 light s-12" id="opd_id" name="opd_id" autocomplete="off">
-                                                        <option value="0">Pilih</option>
-                                                        @foreach ($opds as $i)
-                                                            <option value="{{ \Crypt::encrypt($i->id) }}">{{ $i->n_opd }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="form-group mt-1">
-                                                <label class="form-control label-input-custom col-md-2 font-weight-normal">Jenis Pendapatan<span class="text-danger ml-1">*</span></label>
-                                                <div class="col-md-4 p-0 bg-light">
-                                                    <select class="select2 form-control r-0 light s-12" id="jenis_pendapatan_id" name="jenis_pendapatan_id" autocomplete="off">
-                                                        <option value="">Pilih</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="form-group mt-2">
-                                                <div class="col-md-2"></div>
-                                                <button type="submit" class="btn btn-primary btn-sm"><i class="icon-arrow_forward mr-2"></i>Selanjutnya</button>
-                                            </div>
-                                        </div>
+                <div class="col-md-12 p-0">
+                    <div id="alert"></div>
+                    <div class="card">
+                        <h6 class="card-header"><strong>Tambah Data</strong></h6>
+                        <div class="card-body">
+                            <form class="needs-validation col-md-6" method="GET" action="{{ route('skrd.create') }}" enctype="multipart/form-data" novalidate>
+                                {{ method_field('GET') }}
+                                <div class="row mb-2">
+                                    <label class="col-form-label s-12 col-sm-4 text-right">OPD<span class="text-danger ml-1">*</span></label>
+                                    <div class="col-sm-8">
+                                        <select class="select2 form-control r-0 light s-12" id="opd_id" name="opd_id" autocomplete="off">
+                                            <option value="0">Pilih</option>
+                                            @foreach ($opds as $i)
+                                                <option value="{{ \Crypt::encrypt($i->id) }}">{{ $i->n_opd }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
-                                </form>
-                            </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <label class="col-form-label s-12 col-sm-4 text-right">Jenis Pendapatan<span class="text-danger ml-1">*</span></label>
+                                    <div class="col-sm-8">
+                                        <select class="select2 form-control r-0 light s-12" id="jenis_pendapatan_id" name="jenis_pendapatan_id" autocomplete="off">
+                                            <option value="">Pilih</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-sm-4"></div>
+                                    <div class="col-sm-8">
+                                        <button type="submit" class="btn btn-primary btn-sm"><i class="icon-arrow_forward mr-2"></i>Selanjutnya</button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -158,23 +160,23 @@
         </div>
     </div>
 </div>
-<!-- Single TTD -->
+<!-- Send TTD -->
 <div class="modal fade" id="updateStatusTTD" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-body">
-                <div class="">
+                <div class="col-md-12">
                     <div class="row">
-                        <label class="col-md-2 s-12 font-weight-bold text-black-50"><strong>Nama </strong></label>
-                        <label class="col-md-9 s-12 font-weight-bold text-black-50" id="nm_wajib_pajak_ttd">:</label>
+                        <label class="col-form-label col-sm-3 s-12 font-weight-bold"><strong>Nama </strong></label>
+                        <label class="col-form-label col-sm-9 font-weight-normal s-12" id="nm_wajib_pajak_ttd"></label>
                     </div>
                     <div class="row" style="margin-top: -5px !important">
-                        <label class="col-md-2 s-12 font-weight-bold text-black-50"><strong>No SKRD </strong></label>
-                        <label class="col-md-9 s-12 font-weight-bold text-black-50" id="no_skrd_ttd">:</label>
+                        <label class="col-form-label col-sm-3 s-12 font-weight-bold"><strong>No SKRD </strong></label>
+                        <label class="col-form-label col-sm-9 font-weight-normal s-12" id="no_skrd_ttd"></label>
                     </div>
                     <div class="row" style="margin-top: -5px !important">
-                        <label class="col-md-2 s-12 font-weight-bold text-black-50"><strong>Ketetapan </strong></label>
-                        <label class="col-md-9 s-12 font-weight-bold text-black-50" id="ketetapan">:</label>
+                        <label class="col-form-label col-sm-3 s-12 font-weight-bold"><strong>Ketetapan </strong></label>
+                        <label class="col-form-label col-sm-9 font-weight-normal s-12" id="ketetapan"></label>
                     </div>
                     <p class="font-weight-bold text-black-50">Apakah sudah yakin mengirim data ini untuk ditandatangi ?</p>
                 </div>
@@ -182,20 +184,6 @@
                 <div class="text-right">
                     <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="icon-times mr-2"></i>Batalkan</button>
                     <a href="" class="btn btn-sm btn-primary ml-2" id="kirimTTD"><i class="icon-pencil mr-2"></i>Kirim untuk TTD</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Bisa langsung banyak kirim TTD (lagi dihide) -->
-<div class="modal fade" id="updateStatusTTDs" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-body">
-                <p class="font-weight-bold">Apakah sudah yakin mengirim data ini untuk ditandatangi ?</p>
-                <div class="text-right">
-                    <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="icon-times mr-2"></i>Batalkan</button>
-                    <a href="{{ route('skrd.updateStatusKirimTTDs') }}" class="btn btn-sm btn-primary ml-2" id="kirimTTDs"><i class="icon-pencil mr-2"></i>Kirim untuk TTD</a>
                 </div>
             </div>
         </div>
@@ -232,7 +220,6 @@
             {data: 'no_skrd', name: 'no_skrd'},
             {data: 'no_bayar', name: 'no_bayar'},
             {data: 'nm_wajib_pajak', name: 'nm_wajib_pajak'},
-            // {data: 'id_opd', name: 'id_opd'},
             {data: 'id_jenis_pendapatan', name: 'id_jenis_pendapatan'},
             {data: 'tgl_skrd', name: 'tgl_skrd'},
             {data: 'masa_berlaku', name: 'masa_berlaku'},
@@ -321,8 +308,8 @@
         // get detail data
         url = "{{ route('skrd.getDataSKRD', ':id') }}".replace(':id', id);
         $.get(url, function(data){
-            $('#no_skrd_ttd').html(': '+data.no_skrd)
-            $('#nm_wajib_pajak_ttd').html(': '+data.nm_wajib_pajak)
+            $('#no_skrd_ttd').html(data.no_skrd)
+            $('#nm_wajib_pajak_ttd').html(data.nm_wajib_pajak)
 
             var bilangan = data.jumlah_bayar;
             var	number_string = bilangan.toString(),
@@ -334,21 +321,10 @@
                 separator = sisa ? '.' : '';
                 rupiah += separator + ribuan.join('.');
             }
-            $('#ketetapan').html(': Rp. '+ rupiah)
+            $('#ketetapan').html(' Rp. '+ rupiah)
         }, 'JSON');
 
         $('#kirimTTD').attr('href', "{{ route('skrd.updateStatusKirimTTD', ':id') }}".replace(':id', id));
-    }
-
-    // Bisa langsung banyak kirim TTD (lagi dihide)
-    function createRoute(){
-        var tgl_skrd   = $('#tgl_skrd').val();
-        var tgl_skrd1  = $('#tgl_skrd1').val();
-        var opd_id     = $('#opd').val();
-        var no_skrd    = $('#no_skrd').val();
-        var status_ttd = $('#status_ttd').val();
-
-        $('#kirimTTDs').attr('href', "{{ route('skrd.updateStatusKirimTTDs') }}?tgl_skrd=" + tgl_skrd + "&tgl_skrd1=" + tgl_skrd1 + "&opd_id=" + opd_id + "&status_ttd=" + status_ttd + "&no_skrd=" + no_skrd);
     }
 </script>
 @endsection

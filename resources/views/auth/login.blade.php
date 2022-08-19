@@ -34,7 +34,7 @@
             </div>
             <div class="col-md-3 white m-mt-login">
                 <div class="pl-5 pt-5 pr-5 m-t-90 pb-0">
-                    <img src="{{ asset('images/logo-png.png') }}" class="mx-auto d-block animate__animated animate__backInDown" width="150" alt=""/>
+                    <img src="{{ asset('images/template/logo.png') }}" class="mx-auto d-block animate__animated animate__backInDown" width="150" alt=""/>
                 </div>
                 <div class="p-5">
                     <h3 class="font-weight-normal">Selamat Datang</h3>

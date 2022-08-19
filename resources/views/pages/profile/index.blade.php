@@ -40,24 +40,24 @@
                                 <p class="text-center" style="margin-top: -25px !important">NIP. {{ $data->nip == null  ? '-' : $data->nip }}</p>
                                 <div class="col-md-12">
                                     <div class="row">
-                                        <label class="col-md-2 text-right s-12"><strong>Username :</strong></label>
+                                        <label class="col-md-2 font-weight-bold text-right s-12"><strong>Username</strong></label>
                                         <label class="col-md-10 s-12">{{ $data->user->username }}</label>
                                     </div>
                                     <div class="row">
-                                        <label class="col-md-2 text-right s-12"><strong>Role :</strong></label>
+                                        <label class="col-md-2 font-weight-bold text-right s-12"><strong>Role</strong></label>
                                         <label class="col-md-10 s-12">{{ $data->modelHasRole->role->name }}</label>
                                     </div>
                                     <hr>
                                     <div class="row">
-                                        <label class="col-md-2 text-right s-12"><strong>OPD :</strong></label>
+                                        <label class="col-md-2 font-weight-bold text-right s-12"><strong>OPD</strong></label>
                                         <label class="col-md-10 s-12">{{ $data->opd != null ? $data->opd->n_opd : '-' }}</label>
                                     </div>
                                     <div class="row">
-                                        <label class="col-md-2 text-right s-12"><strong>Email :</strong></label>
+                                        <label class="col-md-2 font-weight-bold text-right s-12"><strong>Email</strong></label>
                                         <label class="col-md-10 s-12">{{ $data->email }}</label>
                                     </div>
                                     <div class="row">
-                                        <label class="col-md-2 text-right s-12"><strong>No Telfon :</strong></label>
+                                        <label class="col-md-2 font-weight-bold text-right s-12"><strong>No Telfon</strong></label>
                                         <label class="col-md-10 s-12">{{ $data->phone }}</label>
                                     </div>
                                 </div>
