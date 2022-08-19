@@ -1,6 +1,3 @@
-@php
-$template = App\Models\Template::select('id', 'logo', 'logo_title', 'logo_auth')->first();
-@endphp
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +7,7 @@ $template = App\Models\Template::select('id', 'logo', 'logo_title', 'logo_auth')
     <meta name="author" content="">
 
     <!-- Title -->
-    <link rel="icon" href="{{ asset('images/template/'.$template->logo_title) }}" type="image/x-icon">
+    <link rel="icon" href="{{ asset('images/logo-png.png') }}" type="image/x-icon">
     <title>{{ config('app.name') }} | Form Login</title>
 
     <!-- CSS -->
@@ -24,7 +21,7 @@ $template = App\Models\Template::select('id', 'logo', 'logo_title', 'logo_auth')
 <body class="light">
     <div class="page parallel">
         <div class="d-flex row">
-            <div class="col-md-9 height-full css-selector d-flex align-content-center flex-wrap">
+            <div class="col-md-9 height-full css-selector m-none d-flex align-content-center flex-wrap">
                 <div class="col-md-6">
                     <div class="text-white p-l-80">
                         <p id="title" class="fs-50 font-weight-light animate__animated animate__backInLeft">SKRD</p>
@@ -33,11 +30,11 @@ $template = App\Models\Template::select('id', 'logo', 'logo_title', 'logo_auth')
                         <hr class="mt-2 bg-white" width="200%">
                     </div>
                 </div>
-                <div class="absolute bottom-0 text-white p-l-85 mb-5">COPYRIGHT © 2021.</div>
+                <div class="absolute bottom-0 text-white p-l-85 mb-5">COPYRIGHT © 2022.</div>
             </div>
-            <div class="col-md-3 white">
+            <div class="col-md-3 white m-mt-login">
                 <div class="pl-5 pt-5 pr-5 m-t-90 pb-0">
-                    <img src="{{ asset('images/template/'.$template->logo) }}" class="mx-auto d-block animate__animated animate__backInDown" width="150" alt=""/>
+                    <img src="{{ asset('images/logo-png.png') }}" class="mx-auto d-block animate__animated animate__backInDown" width="150" alt=""/>
                 </div>
                 <div class="p-5">
                     <h3 class="font-weight-normal">Selamat Datang</h3>

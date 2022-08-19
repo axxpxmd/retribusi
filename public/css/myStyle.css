@@ -129,6 +129,14 @@
         display: none;
     } 
 
+    .m-none{
+        display: none !important;
+    }
+
+    .m-mt-login{
+        margin-top: -50px !important;
+    }
+
     .mb-5-m {
         margin-bottom: 8px;
     }
