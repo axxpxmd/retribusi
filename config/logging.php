@@ -48,6 +48,20 @@ return [
             'days' => 30,
         ],
 
+        'skrd_edit' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/skrd/edit.log'),
+            'level' => 'info',
+            'days' => 30,
+        ],
+
+        'skrd_delete' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/skrd/delete.log'),
+            'level' => 'info',
+            'days' => 30,
+        ],
+
         'skrd_create_qris' => [
             'driver' => 'daily',
             'path' => storage_path('logs/skrd/create_qris.log'),

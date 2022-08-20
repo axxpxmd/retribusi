@@ -527,6 +527,7 @@ class SKRDController extends Controller
     public function update(Request $request, $id)
     {
         $data = TransaksiOPD::find($id);
+
         $request->validate([
             'tgl_ttd' => 'required',
             'alamat_wp'      => 'required',
@@ -615,23 +616,23 @@ class SKRDController extends Controller
 
             //* Tahap 2
             if ($amount <= 10000000 && env('STATUS_QRIS') == 1) { //* Nominal QRIS maksimal 10 juta, jika lebih maka tidak terbuat
-                //TODO: Get Token QRIS
-                $resGetTokenQRISBJB = $this->qrisbjb->getToken();
-                if ($resGetTokenQRISBJB->successful()) {
-                    $resJsonQRIS = $resGetTokenQRISBJB->json();
-                    if ($resJsonQRIS["status"]["code"] != 200)
-                        return response()->json([
-                            'message' => 'Terjadi kegagalan saat mengambil token QRIS BJB. Error Code : ' . $resJsonQRIS["status"]["code"] . '. Message : ' . $resJsonQRIS["status"]["description"] . ''
-                        ], 422);
-                    $tokenQRISBJB = $resGetTokenQRISBJB->header('X-AUTH-TOKEN');
-                } else {
-                    return response()->json([
-                        'message' => "Terjadi kegagalan saat mengambil token QRIS BJB. Error Code. Silahkan laporkan masalah ini pada administrator"
-                    ], 422);
-                }
-
-                // TODO: Create QRIS
                 if ($data->total_bayar != $amount) {
+                    //TODO: Get Token QRIS
+                    $resGetTokenQRISBJB = $this->qrisbjb->getToken();
+                    if ($resGetTokenQRISBJB->successful()) {
+                        $resJsonQRIS = $resGetTokenQRISBJB->json();
+                        if ($resJsonQRIS["status"]["code"] != 200)
+                            return response()->json([
+                                'message' => 'Terjadi kegagalan saat mengambil token QRIS BJB. Error Code : ' . $resJsonQRIS["status"]["code"] . '. Message : ' . $resJsonQRIS["status"]["description"] . ''
+                            ], 422);
+                        $tokenQRISBJB = $resGetTokenQRISBJB->header('X-AUTH-TOKEN');
+                    } else {
+                        return response()->json([
+                            'message' => "Terjadi kegagalan saat mengambil token QRIS BJB. Error Code. Silahkan laporkan masalah ini pada administrator"
+                        ], 422);
+                    }
+
+                    // TODO: Create QRIS
                     $resCreateQRISBJB = $this->qrisbjb->createQRIS($tokenQRISBJB, $amount, $no_hp);
                     if ($resCreateQRISBJB->successful()) {
                         $resJsonQRIS = $resCreateQRISBJB->json();
@@ -642,6 +643,15 @@ class SKRDController extends Controller
                         $respondBody = $resJsonQRIS["body"]["CreateInvoiceQRISDinamisExtResponse"];
                         $invoiceId = $respondBody["invoiceId"]["_text"];
                         $textQRIS = $respondBody["stringQR"]["_text"];
+
+                        $dataQris = [
+                            'no_bayar' => $data->no_bayar,
+                            'status_code' => $resJsonQRIS["status"],
+                            'data' => $respondBody
+                        ];
+
+                        //TODO: LOG
+                        Log::channel('skrd_create_qris')->info('Create Qris SKRD', $dataQris);
                     } else {
                         return response()->json([
                             'message' => "Terjadi kegagalan saat mengambil token QRIS BJB. Error Code. Silahkan laporkan masalah ini pada administrator"
@@ -682,7 +692,7 @@ class SKRDController extends Controller
         ]);
 
         //TODO: LOG
-        Log::channel('skrd')->info('Edit Data SKRD | ' . 'VA:' . $VABJB . ' | Invoice ID:' . $invoiceId . ' | Text QRIS:' . $invoiceId . ' | NO SKRD:' . $data->no_skrd, $input);
+        Log::channel('skrd_edit')->info('Edit Data SRKD | ' . 'Oleh:' . Auth::user()->pengguna->full_name, $data->toArray());
 
         return response()->json([
             'message' => 'Data ' . $this->title . ' berhasil diperbaharui.'
@@ -691,13 +701,54 @@ class SKRDController extends Controller
 
     public function destroy($id)
     {
+        /* Tahapan :
+         * 1. tmtransaksi_opd
+         * 2. VA (make va expired)
+         */
 
+        //* Tahap 1
         $data = TransaksiOPD::where('id', $id)->first();
+        $data->delete();
+
+        //* Tahap 2
+        $amount       = $data->total_bayar;
+        $customerName = $data->nm_wajib_pajak;
+        $va_number    = (int) $data->nomor_va_bjb;
+
+        $expiredDateAddMinute = Carbon::now()->addMinutes(1)->format('Y-m-d H:i:s');
+        $expiredDate = $expiredDateAddMinute;
+
+        //TODO: Get Token BJB
+        $resGetTokenBJB = $this->vabjb->getTokenBJB();
+        if ($resGetTokenBJB->successful()) {
+            $resJson = $resGetTokenBJB->json();
+            if ($resJson['rc'] != 0000)
+                return response()->json([
+                    'message' => 'Terjadi kegagalan saat mengambil token. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . ''
+                ], 422);
+            $tokenBJB = $resJson['data'];
+        } else {
+            return response()->json([
+                'message' => "Terjadi kegagalan saat mengambil token. Error Code " . $resGetTokenBJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator"
+            ], 422);
+        }
+        
+        //TODO: Update VA BJB
+        $resUpdateVABJB = $this->vabjb->updateVaBJB($tokenBJB, $amount, $expiredDate, $customerName, $va_number);
+        if ($resUpdateVABJB->successful()) {
+            $resJson = $resUpdateVABJB->json();
+            if (isset($resJson['rc']) != 0000)
+                return response()->json([
+                    'message' => 'Terjadi kegagalan saat memperbarui Virtual Account. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . ''
+                ], 422);
+        } else {
+            return response()->json([
+                'message' => "Terjadi kegagalan saat memperbarui Virtual Account. Error Code " . $resUpdateVABJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator"
+            ], 422);
+        }
 
         //TODO: LOG
-        Log::channel('skrd')->info('Hapus Data SRKD | ' . 'Oleh:' . Auth::user()->pengguna->full_name, $data->toArray());
-
-        $data->delete();
+        Log::channel('skrd_delete')->info('Hapus Data SRKD | ' . 'Oleh:' . Auth::user()->pengguna->full_name, $data->toArray());
 
         return response()->json([
             'message' => 'Data ' . $this->title . ' berhasil dihapus.'
@@ -714,42 +765,5 @@ class SKRDController extends Controller
         return redirect()
             ->route($this->route . 'index')
             ->withSuccess('Selamat! Data berhasil dikirim untuk ditandatangan.');
-    }
-
-    //* Sedang dihide
-    public function updateStatusKirimTTDs(Request $request)
-    {
-        $checkOPD = Auth::user()->pengguna->opd_id;
-        if ($checkOPD == 0) {
-            $opd_id = $request->opd_id;
-        } else {
-            $opd_id = $checkOPD;
-        }
-
-        // For Filter
-        $from = $request->tgl_skrd;
-        $to   = $request->tgl_skrd1;
-        $no_skrd    = $request->no_skrd;
-        $status_ttd = $request->status_ttd;
-
-        $datas = TransaksiOPD::querySKRD($from, $to, $opd_id, $no_skrd, $status_ttd);
-        $dataLength = count($datas);
-
-        // check data if empty
-        if ($dataLength == 0)
-            return redirect()
-                ->route($this->route . 'index')
-                ->withErrors('Tidak ada data yang dikirim, pastikan filter data sudah sesuai.');
-
-        // process kirim TTD
-        for ($i = 0; $i < $dataLength; $i++) {
-            $datas[$i]->update([
-                'status_ttd' => 2
-            ]);
-        }
-
-        return redirect()
-            ->route($this->route . 'index')
-            ->withSuccess('Selamat! ' . $dataLength . ' Data berhasil dikirim untuk ditandatangan.');
     }
 }
