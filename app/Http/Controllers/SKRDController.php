@@ -711,41 +711,41 @@ class SKRDController extends Controller
         $data->delete();
 
         //* Tahap 2
-        $amount       = $data->total_bayar;
-        $customerName = $data->nm_wajib_pajak;
-        $va_number    = (int) $data->nomor_va_bjb;
+        // $amount       = $data->total_bayar;
+        // $customerName = $data->nm_wajib_pajak;
+        // $va_number    = (int) $data->nomor_va_bjb;
 
-        $expiredDateAddMinute = Carbon::now()->addMinutes(1)->format('Y-m-d H:i:s');
-        $expiredDate = $expiredDateAddMinute;
+        // $expiredDateAddMinute = Carbon::now()->addMinutes(1)->format('Y-m-d H:i:s');
+        // $expiredDate = $expiredDateAddMinute;
 
-        //TODO: Get Token BJB
-        $resGetTokenBJB = $this->vabjb->getTokenBJB();
-        if ($resGetTokenBJB->successful()) {
-            $resJson = $resGetTokenBJB->json();
-            if ($resJson['rc'] != 0000)
-                return response()->json([
-                    'message' => 'Terjadi kegagalan saat mengambil token. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . ''
-                ], 422);
-            $tokenBJB = $resJson['data'];
-        } else {
-            return response()->json([
-                'message' => "Terjadi kegagalan saat mengambil token. Error Code " . $resGetTokenBJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator"
-            ], 422);
-        }
+        // //TODO: Get Token BJB
+        // $resGetTokenBJB = $this->vabjb->getTokenBJB();
+        // if ($resGetTokenBJB->successful()) {
+        //     $resJson = $resGetTokenBJB->json();
+        //     if ($resJson['rc'] != 0000)
+        //         return response()->json([
+        //             'message' => 'Terjadi kegagalan saat mengambil token. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . ''
+        //         ], 422);
+        //     $tokenBJB = $resJson['data'];
+        // } else {
+        //     return response()->json([
+        //         'message' => "Terjadi kegagalan saat mengambil token. Error Code " . $resGetTokenBJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator"
+        //     ], 422);
+        // }
         
-        //TODO: Update VA BJB
-        $resUpdateVABJB = $this->vabjb->updateVaBJB($tokenBJB, $amount, $expiredDate, $customerName, $va_number);
-        if ($resUpdateVABJB->successful()) {
-            $resJson = $resUpdateVABJB->json();
-            if (isset($resJson['rc']) != 0000)
-                return response()->json([
-                    'message' => 'Terjadi kegagalan saat memperbarui Virtual Account. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . ''
-                ], 422);
-        } else {
-            return response()->json([
-                'message' => "Terjadi kegagalan saat memperbarui Virtual Account. Error Code " . $resUpdateVABJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator"
-            ], 422);
-        }
+        // //TODO: Update VA BJB
+        // $resUpdateVABJB = $this->vabjb->updateVaBJB($tokenBJB, $amount, $expiredDate, $customerName, $va_number);
+        // if ($resUpdateVABJB->successful()) {
+        //     $resJson = $resUpdateVABJB->json();
+        //     if (isset($resJson['rc']) != 0000)
+        //         return response()->json([
+        //             'message' => 'Terjadi kegagalan saat memperbarui Virtual Account. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . ''
+        //         ], 422);
+        // } else {
+        //     return response()->json([
+        //         'message' => "Terjadi kegagalan saat memperbarui Virtual Account. Error Code " . $resUpdateVABJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator"
+        //     ], 422);
+        // }
 
         //TODO: LOG
         Log::channel('skrd_delete')->info('Hapus Data SRKD | ' . 'Oleh:' . Auth::user()->pengguna->full_name, $data->toArray());
