@@ -261,3 +261,11 @@
 #47 E:\\xampp\\htdocs\\2021\etribusi\\public\\index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #48 {main}
 "} 
+[2022-08-20 12:25:58] development.ERROR: Maximum execution time of 30 seconds exceeded {"userId":5,"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Maximum execution time of 30 seconds exceeded at E:\\xampp\\htdocs\\2021\etribusi\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connectors\\Connector.php:46)
+[stacktrace]
+#0 {main}
+"} 
+[2022-08-20 12:26:08] development.ERROR: Maximum execution time of 30 seconds exceeded {"userId":5,"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Maximum execution time of 30 seconds exceeded at E:\\xampp\\htdocs\\2021\etribusi\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connectors\\Connector.php:46)
+[stacktrace]
+#0 {main}
+"} 

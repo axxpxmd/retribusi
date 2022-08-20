@@ -18,7 +18,7 @@
                         <a class="nav-link" href="{{ route($route.'index') }}"><i class="icon icon-arrow_back"></i>Semua Data</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active show" id="tab1" data-toggle="tab" href="#semua-data" role="tab"><i class="icon icon-document-list"></i>STS</a>
+                        <a class="nav-link active show" id="tab1" data-toggle="tab" href="#semua-data" role="tab"><i class="icon icon-document-list"></i>Laporan</a>
                     </li>
                 </ul>
             </div>
@@ -31,7 +31,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card mt-2">
-                            <h6 class="card-header"><strong>Data STS</strong></h6>
+                            <h6 class="card-header"><strong>Data Laporan</strong></h6>
                             <div class="card-body">
                                 <div class="col-md-12">
                                     <div class="row">

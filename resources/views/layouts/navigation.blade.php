@@ -73,7 +73,7 @@
     <li class="no-b">
         <a href="{{ route('datawp.index') }}">
             <i class="icon icon-document-list purple-text s-18"></i> 
-            <span>Data WP</span>
+            <span>Data WR</span>
         </a>
     </li>
     @endcan
