@@ -710,7 +710,7 @@ class SKRDController extends Controller
         $data = TransaksiOPD::where('id', $id)->first();
         $data->delete();
 
-        //* Tahap 2
+        //* Tahap 2 
         // $amount       = $data->total_bayar;
         // $customerName = $data->nm_wajib_pajak;
         // $va_number    = (int) $data->nomor_va_bjb;

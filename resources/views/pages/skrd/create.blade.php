@@ -274,7 +274,7 @@
             $("#kelurahan_id").prop("disabled", false);
             $("#id_rincian_jenis_pendapatan").prop("disabled", false);
             $('#action').attr('disabled', true);
-            $('#loading').modal('show');
+            // $('#loading').modal('show');
             url = "{{ route($route.'store') }}";
             $.ajax({
                 url : url,
@@ -283,7 +283,7 @@
                 contentType: false,
                 processData: false,
                 success : function(data) {
-                    closeModal();
+                    // closeModal();
                     $.confirm({
                         title: 'Success',
                         content: data.message,
@@ -305,7 +305,7 @@
                     });
                 },
                 error : function(data){
-                    closeModal();
+                    // closeModal();
                     err = '';
                     respon = data.responseJSON;
                     if(respon.errors){
