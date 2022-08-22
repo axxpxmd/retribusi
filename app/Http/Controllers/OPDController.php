@@ -163,8 +163,8 @@ class OPDController extends Controller
 
     public function getJenisPendapatan($id)
     {
-        $datas = OPDJenisPendapatan::select('jenis_pendapatan', 'tmopd_jenis_pendapatan.id')
-            ->join('tmjenis_pendapatan', 'tmjenis_pendapatan.id', '=', 'tmopd_jenis_pendapatan.id_jenis_pendapatan')
+        $datas = OPDJenisPendapatan::select('jenis_pendapatan', 'tr_opd_jenis_pendapatans.id')
+            ->join('tmjenis_pendapatan', 'tmjenis_pendapatan.id', '=', 'tr_opd_jenis_pendapatans.id_jenis_pendapatan')
             ->where('id_opd', $id)
             ->get();
 

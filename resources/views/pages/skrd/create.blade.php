@@ -1,16 +1,6 @@
 @extends('layouts.app')
 @section('title', '| '.$title.'')
 @section('content')
-<style>
-    .label-input-custom{
-        font-size: 12px !important;
-        text-align: right !important;
-        border: none !important;
-        padding-right: 1.5rem !important;
-        color: #86939E !important;
-        font-weight: 400 !important
-    }
-</style>
 <div class="page has-sidebar-left height-full">
     <header class="blue accent-3 relative nav-sticky">
         <div class="container-fluid text-white">
@@ -274,7 +264,7 @@
             $("#kelurahan_id").prop("disabled", false);
             $("#id_rincian_jenis_pendapatan").prop("disabled", false);
             $('#action').attr('disabled', true);
-            // $('#loading').modal('show');
+            $('#loading').modal('show');
             url = "{{ route($route.'store') }}";
             $.ajax({
                 url : url,
@@ -283,7 +273,7 @@
                 contentType: false,
                 processData: false,
                 success : function(data) {
-                    // closeModal();
+                    $('#loading').modal('toggle');
                     $.confirm({
                         title: 'Success',
                         content: data.message,
@@ -305,7 +295,7 @@
                     });
                 },
                 error : function(data){
-                    // closeModal();
+                    $('#loading').modal('toggle');
                     err = '';
                     respon = data.responseJSON;
                     if(respon.errors){

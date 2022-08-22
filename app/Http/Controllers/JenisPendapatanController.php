@@ -50,20 +50,22 @@ class JenisPendapatanController extends Controller
 
     public function api()
     {
-        $jenisPendapatans = JenisPendapatan::orderBy('id', 'DESC')->get();
+        $jenisPendapatans = JenisPendapatan::queryTable();
 
         return DataTables::of($jenisPendapatans)
             ->addColumn('action', function ($p) {
+                $edit = "<a href='#' onclick='edit(" . $p->id . ")' title='Edit Permission'><i class='icon-edit mr-1'></i></a>";
+                $delete = "<a href='#' onclick='remove(" . $p->id . ")' class='text-danger' title='Hapus Role'><i class='icon-remove'></i></a>";
+
                 // Check
-                $check  = OPDJenisPendapatan::where('id_jenis_pendapatan', $p->id)->count();
-                $check1 = TransaksiOPD::where('id_jenis_pendapatan', $p->id)->count();
-                $check2 = RincianJenisPendapatan::where('id_jenis_pendapatan', $p->id)->count();
+                $check  = $p->opdJenisPendapatans->count();
+                $check1 = $p->transaksiOPDs->count();
+                $check2 = $p->rincianJenisPendapatans->count();
 
                 if ($check != 0 || $check1 != 0 || $check2 != 0) {
-                    return "<a href='#' onclick='edit(" . $p->id . ")' title='Edit Permission'><i class='icon-edit mr-1'></i></a>";
+                    return $edit;
                 } else {
-                    return "<a href='#' onclick='edit(" . $p->id . ")' title='Edit Permission'><i class='icon-edit mr-1'></i></a>
-                            <a href='#' onclick='remove(" . $p->id . ")' class='text-danger' title='Hapus Role'><i class='icon-remove'></i></a>";
+                    return $edit . $delete;
                 }
             })
             ->editColumn('target_pendapatan', function ($p) {

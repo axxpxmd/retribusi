@@ -16,11 +16,11 @@
     </header>
     <div class="container-fluid my-3">
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-8 mb-5-m">
                 <div class="card no-b">
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="dataTable" class="table table-striped table-bordered" style="width:100%">
+                            <table id="dataTable" class="table display nowrap table-striped table-bordered" style="width:100%">
                                 <thead>
                                     <th width="5%">No</th>
                                     <th width="55%">Jenis Pendapatan</th>
@@ -41,20 +41,26 @@
                             {{ method_field('POST') }}
                             <input type="hidden" id="id" name="id"/>
                             <h4 id="formTitle">Tambah Data</h4><hr>
-                            <div class="form-row form-inline">
+                            <div class="">
                                 <div class="col-md-12">
-                                    <div class="form-group m-0">
-                                        <label for="jenis_pendapatan" class="form-control label-input-custom col-md-4">Nama</label>
-                                        <textarea type="text" rows="5" name="jenis_pendapatan" id="jenis_pendapatan" placeholder="" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required></textarea>
+                                    <div class="row mb-2">
+                                        <label for="jenis_pendapatan" class="col-form-label col-md-4 s-12 text-right">Nama</label>
+                                        <div class="col-md-8">
+                                            <textarea type="text" rows="5" name="jenis_pendapatan" id="jenis_pendapatan" placeholder="" class="form-control r-0 s-12" autocomplete="off" required></textarea>
+                                        </div>
                                     </div>
-                                    <div class="form-group m-0">
-                                        <label for="target_pendapatan" class="form-control label-input-custom col-md-4">Target Pendapatan</label>
-                                        <input type="text" name="target_pendapatan" id="rupiah" placeholder="" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
+                                    <div class="row mb-2">
+                                        <label for="target_pendapatan" class="col-form-label col-md-4 s-12 text-right">Target Pendapatan</label>
+                                        <div class="col-md-8">
+                                            <input type="text" name="target_pendapatan" id="rupiah" placeholder="" class="form-control r-0 s-12" autocomplete="off"/>
+                                        </div>
                                     </div>
-                                    <div class="form-group mt-2">
+                                    <div class="row mb-2">
                                         <div class="col-md-4"></div>
-                                        <button type="submit" class="btn btn-primary btn-sm" id="action"><i class="icon-save mr-2"></i>Simpan<span id="txtAction"></span></button>
-                                        <a class="btn btn-sm" onclick="add()" id="reset">Reset</a>
+                                        <div class="col-md-8">
+                                            <button type="submit" class="btn btn-primary btn-sm" id="action"><i class="icon-save mr-2"></i>Simpan<span id="txtAction"></span></button>
+                                            <a class="btn btn-sm" onclick="add()" id="reset">Reset</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -108,6 +114,7 @@
                 $('#alert').html("<div role='alert' class='alert alert-success alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button><strong>Success!</strong> " + data.message + "</div>");
                 table.api().ajax.reload();
                 if(save_method == 'add') add();
+                $('#form').removeClass('was-validated');
             }, "JSON").fail(function(data){
                 err = ''; respon = data.responseJSON;
                 $.each(respon.errors, function(index, value){
@@ -119,7 +126,6 @@
             });
             return false;
         }
-        $(this).addClass('was-validated');
     });
 
     function edit(id) {
