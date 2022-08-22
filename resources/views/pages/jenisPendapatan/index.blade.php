@@ -41,26 +41,24 @@
                             {{ method_field('POST') }}
                             <input type="hidden" id="id" name="id"/>
                             <h4 id="formTitle">Tambah Data</h4><hr>
-                            <div class="">
-                                <div class="col-md-12">
-                                    <div class="row mb-2">
-                                        <label for="jenis_pendapatan" class="col-form-label col-md-4 s-12 text-right">Nama</label>
-                                        <div class="col-md-8">
-                                            <textarea type="text" rows="5" name="jenis_pendapatan" id="jenis_pendapatan" placeholder="" class="form-control r-0 s-12" autocomplete="off" required></textarea>
-                                        </div>
+                            <div class="col-md-12">
+                                <div class="row mb-2">
+                                    <label for="jenis_pendapatan" class="col-form-label col-md-4 s-12 text-right">Nama</label>
+                                    <div class="col-md-8">
+                                        <textarea type="text" rows="5" name="jenis_pendapatan" id="jenis_pendapatan" placeholder="" class="form-control r-0 s-12" autocomplete="off" required></textarea>
                                     </div>
-                                    <div class="row mb-2">
-                                        <label for="target_pendapatan" class="col-form-label col-md-4 s-12 text-right">Target Pendapatan</label>
-                                        <div class="col-md-8">
-                                            <input type="text" name="target_pendapatan" id="rupiah" placeholder="" class="form-control r-0 s-12" autocomplete="off"/>
-                                        </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <label for="target_pendapatan" class="col-form-label col-md-4 s-12 text-right">Target Pendapatan</label>
+                                    <div class="col-md-8">
+                                        <input type="text" name="target_pendapatan" id="rupiah" placeholder="" class="form-control r-0 s-12" autocomplete="off"/>
                                     </div>
-                                    <div class="row mb-2">
-                                        <div class="col-md-4"></div>
-                                        <div class="col-md-8">
-                                            <button type="submit" class="btn btn-primary btn-sm" id="action"><i class="icon-save mr-2"></i>Simpan<span id="txtAction"></span></button>
-                                            <a class="btn btn-sm" onclick="add()" id="reset">Reset</a>
-                                        </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-md-4"></div>
+                                    <div class="col-md-8">
+                                        <button type="submit" class="btn btn-primary btn-sm" id="action"><i class="icon-save mr-2"></i>Simpan<span id="txtAction"></span></button>
+                                        <a class="btn btn-sm" onclick="add()" id="reset">Reset</a>
                                     </div>
                                 </div>
                             </div>

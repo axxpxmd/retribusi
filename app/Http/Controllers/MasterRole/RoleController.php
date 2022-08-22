@@ -55,10 +55,12 @@ class RoleController extends Controller
                 return count($p->permissions) . " <a href='" . route($this->route . 'addPermissions', $p->id) . "' class='text-success pull-right' title='Edit Permissions'><i class='icon-clipboard-list2 mr-1'></i></a>";
             })
             ->addColumn('action', function ($p) {
-                // return "
-                //     <a href='#' onclick='edit(" . $p->id . ")' title='Edit Role'><i class='icon-pencil mr-1'></i></a>
-                //     <a href='#' onclick='remove(" . $p->id . ")' class='text-danger' title='Hapus Role'><i class='icon-remove'></i></a>";
-                return "<a href='#' onclick='edit(" . $p->id . ")' title='Edit Role'><i class='icon-pencil mr-1'></i></a>";
+                // $edit = "<a href='#' onclick='edit(" . $p->id . ")' title='Edit Role'><i class='icon-pencil mr-1'></i></a>";
+                // $delete = " <a href='#' onclick='remove(" . $p->id . ")' class='text-danger' title='Hapus Role'><i class='icon-remove'></i></a>";
+
+                // return $edit . $delete;
+
+                return '-';
             })
             ->addIndexColumn()
             ->rawColumns(['action', 'permissions'])
@@ -67,21 +69,21 @@ class RoleController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|unique:roles,name',
-            'guard_name' => 'required'
-        ]);
+        // $request->validate([
+        //     'name' => 'required|unique:roles,name',
+        //     'guard_name' => 'required'
+        // ]);
 
-        $input = $request->all();
-        Role::create($input);
-
-        return response()->json([
-            'message' => 'Data ' . $this->title . ' berhasil tersimpan.'
-        ]);
+        // $input = $request->all();
+        // Role::create($input);
 
         // return response()->json([
-        //     'message' => 'Maaf tidak bisa menambah data'
-        // ], 422);
+        //     'message' => 'Data ' . $this->title . ' berhasil tersimpan.'
+        // ]);
+
+        return response()->json([
+            'message' => 'Maaf tidak bisa menambah data'
+        ], 422);
     }
 
     public function edit($id)
@@ -91,34 +93,30 @@ class RoleController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'name' => 'required|unique:roles,name,' . $id,
-            'guard_name' => 'required'
-        ]);
+        // $request->validate([
+        //     'name' => 'required|unique:roles,name,' . $id,
+        //     'guard_name' => 'required'
+        // ]);
 
-        $input = $request->all();
-        $role  = Role::findOrFail($id);
-        $role->update($input);
-
-        return response()->json([
-            'message' => 'Data ' . $this->title . ' berhasil diperbaharui.'
-        ]);
+        // $input = $request->all();
+        // $role  = Role::findOrFail($id);
+        // $role->update($input);
 
         // return response()->json([
-        //     'message' => 'Maaf tidak bisa memperbaharui data.'
+        //     'message' => 'Data ' . $this->title . ' berhasil diperbaharui.'
         // ]);
+
+        return response()->json([
+            'message' => 'Maaf tidak bisa memperbaharui data.'
+        ]);
     }
 
     public function destroy($id)
     {
         Role::destroy($id);
 
-        // return response()->json([
-        //     'message' => 'Data ' . $this->title . ' berhasil dihapus.'
-        // ]);
-
         return response()->json([
-            'message' => 'Maaf menghapus data.'
+            'message' => 'Data ' . $this->title . ' berhasil dihapus.'
         ]);
     }
 

@@ -26,31 +26,31 @@
                 <div id="formPermission">
                     <div id="alert"></div>
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-md-6">
                             <form class="needs-validation" id="form" method="POST" novalidate>
                                 {{ method_field('POST') }}
                                 <input type="hidden" id="id" name="id" value="{{ $role->id }}"/>
-                                <div class="form-row form-inline">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <label for="permission" class="col-form-label col-md-3">Permission :</label>
-                                            <div class="col-md-9 p-0">
-                                                <select name="permissions[]" id="permission" placeholder="" class="select2 form-control r-0 light s-12" multiple="multiple" required>
-                                                    @foreach($permissions as $key=>$permission)
-                                                    <option value="{{ $permission->name }}">{{ $permission->name }}</option>
-                                                    @endforeach
-                                                <select>
-                                            </div>
+                                <div class="col-md-12">
+                                    <div class="row mb-2">
+                                        <label for="permission" class="col-form-label text-right s-12 col-md-4">Permission :</label>
+                                        <div class="col-md-8">
+                                            <select name="permissions[]" id="permission" placeholder="" class="select2 form-control r-0 light s-12" multiple="multiple" required>
+                                                @foreach($permissions as $key=>$permission)
+                                                <option value="{{ $permission->name }}">{{ $permission->name }}</option>
+                                                @endforeach
+                                            <select>
                                         </div>
-                                        <div class="form-group mt-2">
-                                            <div class="col-md-3"></div>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <div class="col-md-4"></div>
+                                        <div class="col-md-8">
                                             <button type="submit" class="btn btn-primary btn-sm" id="action2"><i class="icon-save mr-2"></i>Simpan</button>
                                         </div>
                                     </div>
                                 </div>
                             </form>
                         </div>
-                        <div class="col-6 mt-2">
+                        <div class="col-md-6 mt-2">
                             <strong>List Permission:</strong>
                             <ol id="viewPermission" class=""></ol>
                         </div>

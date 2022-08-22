@@ -11,19 +11,19 @@
     @canany(['Role','Permission','Pengguna'])
     <li class="header light"><strong>MASTER ROLES</strong></li>
     @endcanany
-    @can('Role')
-    <li>
-        <a href="{{ route('master-role.role.index') }}">
-            <i class="icon icon-key3 amber-text s-18"></i> 
-            <span>Role</span>
-        </a>
-    </li>
-    @endcan
     @can('Permission')
     <li class="no-b">
         <a href="{{ route('master-role.permission.index') }}">
             <i class="icon icon-clipboard-list text-success s-18"></i> 
             <span>Permission</span>
+        </a>
+    </li>
+    @endcan
+    @can('Role')
+    <li>
+        <a href="{{ route('master-role.role.index') }}">
+            <i class="icon icon-key3 amber-text s-18"></i> 
+            <span>Role</span>
         </a>
     </li>
     @endcan

@@ -1,16 +1,6 @@
 @extends('layouts.app')
 @section('title', '| '.$title.'')
 @section('content')
-<style>
-    .label-input-custom{
-        font-size: 12px !important;
-        text-align: right !important;
-        border: none !important;
-        padding-right: 1.5rem !important;
-        color: #86939E !important;
-        font-weight: 400 !important
-    }
-</style>
 <div class="page has-sidebar-left height-full">
     <header class="blue accent-3 relative nav-sticky">
         <div class="container-fluid text-white">
@@ -26,7 +16,7 @@
     </header>
     <div class="container-fluid my-3">
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-8 mb-5-m">
                 <div class="card no-b">
                     <div class="card-body">
                         <div class="table-responsive">
@@ -52,18 +42,22 @@
                             {{ method_field('POST') }}
                             <input type="hidden" id="id" name="id"/>
                             <h4 id="formTitle">Tambah Data</h4><hr>
-                            <div class="form-row form-inline">
-                                <div class="col-md-12">
-                                    <div class="form-group m-0">
-                                        <label for="name" class="form-control label-input-custom col-md-4">Nama</label>
-                                        <input type="text" name="name" id="name" placeholder="" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
+                            <div class="col-md-12">
+                                <div class="row mb-2">
+                                    <label for="name" class="col-form-label s-12 col-md-4 text-right">Nama</label>
+                                    <div class="col-md-8">
+                                        <input type="text" name="name" id="name" placeholder="" class="form-control r-0 s-12" autocomplete="off" required/>
                                     </div>
-                                    <div class="form-group m-0">
-                                        <label for="guard_name" class="form-control label-input-custom col-md-4">Guard Name</label>
-                                        <input type="text" name="guard_name" id="guard_name" placeholder="" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
+                                </div>
+                                <div class="row mb-2">
+                                    <label for="guard_name" class="col-form-label s-12 col-md-4 text-right">Guard Name</label>
+                                    <div class="col-md-8">
+                                        <input type="text" name="guard_name" id="guard_name" placeholder="" class="form-control r-0 s-12" autocomplete="off" required/>
                                     </div>
-                                    <div class="form-group mt-2">
-                                        <div class="col-md-4"></div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-md-4"></div>
+                                    <div class="col-md-8">
                                         <button type="submit" class="btn btn-primary btn-sm" id="action"><i class="icon-save mr-2"></i>Simpan<span id="txtAction"></span></button>
                                         <a class="btn btn-sm" onclick="add()" id="reset">Reset</a>
                                     </div>
@@ -120,6 +114,7 @@
                 $('#alert').html("<div role='alert' class='alert alert-success alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button><strong>Success!</strong> " + data.message + "</div>");
                 table.api().ajax.reload();
                 if(save_method == 'add') add();
+                $('#form').removeClass('was-validated');
             }, "JSON").fail(function(data){
                 err = ''; respon = data.responseJSON;
                 $.each(respon.errors, function(index, value){
@@ -131,7 +126,6 @@
             });
             return false;
         }
-        $(this).addClass('was-validated');
     });
 
     function edit(id) {
