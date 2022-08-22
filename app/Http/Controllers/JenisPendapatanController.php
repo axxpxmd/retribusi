@@ -58,9 +58,9 @@ class JenisPendapatanController extends Controller
                 $delete = "<a href='#' onclick='remove(" . $p->id . ")' class='text-danger' title='Hapus Role'><i class='icon-remove'></i></a>";
 
                 // Check
-                $check  = $p->opdJenisPendapatans->count();
-                $check1 = $p->transaksiOPDs->count();
-                $check2 = $p->rincianJenisPendapatans->count();
+                $check  = OPDJenisPendapatan::where('id_jenis_pendapatan', $p->id)->count();
+                $check1 = TransaksiOPD::where('id_jenis_pendapatan', $p->id)->count();
+                $check2 = RincianJenisPendapatan::where('id_jenis_pendapatan', $p->id)->count();
 
                 if ($check != 0 || $check1 != 0 || $check2 != 0) {
                     return $edit;
