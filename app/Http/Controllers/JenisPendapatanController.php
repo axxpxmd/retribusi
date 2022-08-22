@@ -50,7 +50,7 @@ class JenisPendapatanController extends Controller
 
     public function api()
     {
-        $jenisPendapatans = JenisPendapatan::queryTable();
+        $jenisPendapatans = JenisPendapatan::orderBy('id', 'DESC')->get();
        
         return DataTables::of($jenisPendapatans)
             ->addColumn('action', function ($p) {
