@@ -429,7 +429,7 @@ class SKRDController extends Controller
                     $dataQris = [
                         'no_bayar' => $no_bayar,
                         'status_code' => $resJsonQRIS["status"],
-                        'data' => $respondBody
+                        'data' => $resJsonQRIS["body"]
                     ];
 
                     //* Update data SKRD

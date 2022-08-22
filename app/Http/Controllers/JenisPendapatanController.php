@@ -51,7 +51,7 @@ class JenisPendapatanController extends Controller
     public function api()
     {
         $jenisPendapatans = JenisPendapatan::queryTable();
-
+       
         return DataTables::of($jenisPendapatans)
             ->addColumn('action', function ($p) {
                 $edit = "<a href='#' onclick='edit(" . $p->id . ")' title='Edit Permission'><i class='icon-edit mr-1'></i></a>";
