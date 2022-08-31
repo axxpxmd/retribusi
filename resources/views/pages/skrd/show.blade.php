@@ -214,7 +214,7 @@
                                                 <a href="{{ route('print.download', $data->id) }}" target="blank" class="btn btn-sm btn-secondary mr-1"><i class="icon-download mr-2"></i>Download File</a>
                                                 <!-- Send Email -->
                                                 @if ($data->email)
-                                                    <a href="#" onclick="sendEmailConfirm({{ $data->id }})" class="btn btn-sm btn-success"><i class="icon-envelope mr-2"></i>Kirim Email</a>
+                                                    {{-- <a href="#" onclick="sendEmailConfirm({{ $data->id }})" class="btn btn-sm btn-success"><i class="icon-envelope mr-2"></i>Kirim Email</a> --}}
                                                 @endif
                                             @endif
                                         </label>
