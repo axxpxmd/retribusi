@@ -87,11 +87,19 @@
                                                 <label class="col-md-8 s-12">{{ $data->nmr_daftar }}</label>
                                             </div>
                                             <div class="row">
-                                                <label class="col-md-4 font-weight-bold text-right s-12"><strong>Nama Wajib Retribusi :</strong></label>
+                                                <label class="col-md-4 font-weight-bold text-right s-12"><strong>Nama :</strong></label>
                                                 <label class="col-md-8 s-12">{{ $data->nm_wajib_pajak }}</label>
                                             </div>
                                             <div class="row">
-                                                <label class="col-md-4 font-weight-bold text-right s-12"><strong>Alamat Wajib Retribusi  :</strong></label>
+                                                <label class="col-md-4 font-weight-bold text-right s-12"><strong>Email :</strong></label>
+                                                <label class="col-md-8 s-12">{{ $data->email }}</label>
+                                            </div>
+                                            <div class="row">
+                                                <label class="col-md-4 font-weight-bold text-right s-12"><strong>No Telp :</strong></label>
+                                                <label class="col-md-8 s-12">{{ $data->no_telp }}</label>
+                                            </div>
+                                            <div class="row">
+                                                <label class="col-md-4 font-weight-bold text-right s-12"><strong>Alamat :</strong></label>
                                                 <label class="col-md-8 s-12">{{ $data->alamat_wp }}</label>
                                             </div>
                                             <div class="row">

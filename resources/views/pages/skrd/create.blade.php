@@ -90,13 +90,25 @@
                                             </div>
                                         </div>
                                         <div class="row mb-2">
-                                            <label for="nm_wajib_pajak" class="col-form-label s-12 col-sm-4 text-right">Nama Wajib Retribusi<span class="text-danger ml-1">*</span></label>
+                                            <label for="nm_wajib_pajak" class="col-form-label s-12 col-sm-4 text-right">Nama<span class="text-danger ml-1">*</span></label>
                                             <div class="col-sm-8">
                                                 <input type="text" name="nm_wajib_pajak" id="nm_wajib_pajak" value="{{ $data_wp != null ? $data_wp->nm_wajib_pajak : '' }}" class="form-control r-0 s-12" autocomplete="off" required onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode==32)"/>
                                             </div>
                                         </div>
+                                        <div class="row mb-2">
+                                            <label for="email" class="col-form-label s-12 col-sm-4 text-right">Email<span class="text-danger ml-1">*</span></label>
+                                            <div class="col-sm-8">
+                                                <input type="email" name="email" id="email" value="{{ $data_wp != null ? $data_wp->email : '' }}" class="form-control r-0 s-12" autocomplete="off" required/>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <label for="no_telp" class="col-form-label s-12 col-sm-4 text-right">No Telp<span class="text-danger ml-1">*</span></label>
+                                            <div class="col-sm-8">
+                                                <input type="number" name="no_telp" id="no_telp" value="{{ $data_wp != null ? $data_wp->no_telp : '' }}" class="form-control r-0 s-12" autocomplete="off" required/>
+                                            </div>
+                                        </div>
                                         <div class="row mb-1">
-                                            <label for="alamat_wp" class="col-form-label s-12 col-sm-4 text-right">Alamat Wajib Retribusi<span class="text-danger ml-1">*</span></label>
+                                            <label for="alamat_wp" class="col-form-label s-12 col-sm-4 text-right">Alamat<span class="text-danger ml-1">*</span></label>
                                             <div class="col-md-8">
                                                 <textarea type="text" rows="3" name="alamat_wp" id="alamat_wp" class="form-control r-0 s-12" autocomplete="off" required>{{ $data_wp != null ? $data_wp->alamat_wp : '' }}</textarea>
                                             </div>

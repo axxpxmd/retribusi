@@ -275,6 +275,8 @@ class SKRDController extends Controller
             'uraian_retribusi'    => 'required',
             'id_jenis_pendapatan' => 'required',
             'id_rincian_jenis_pendapatan' => 'required',
+            'email' => 'required',
+            'no_telp' => 'required'
         ]);
 
         /* Tahapan : 
@@ -337,7 +339,9 @@ class SKRDController extends Controller
             'tgl_skrd_awal'    => $request->tgl_skrd_awal,
             'tgl_skrd_akhir'   => $request->tgl_skrd_akhir,
             'no_bayar'         => $no_bayar,
-            'created_by'       => Auth::user()->pengguna->full_name
+            'created_by'       => Auth::user()->pengguna->full_name,
+            'email'            => $request->email,
+            'no_telp'          => $request->no_telp
         ];
         $dataSKRD = TransaksiOPD::create($data);
 
@@ -463,7 +467,9 @@ class SKRDController extends Controller
             'alamat_wp'        => $request->alamat_wp,
             'lokasi'           => $request->lokasi,
             'kelurahan_id'     => $request->kelurahan_id,
-            'kecamatan_id'     => $request->kecamatan_id
+            'kecamatan_id'     => $request->kecamatan_id,
+            'email' => $request->email,
+            'no_telp' => $request->no_telp
         ];
 
         $where = [
