@@ -211,9 +211,12 @@
                                         <label class="col-md-3 s-12">
                                             <button class="btn btn-sm btn-primary mr-1" data-toggle="modal" data-target="#preview-file"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</button> 
                                             @if ($data->status_ttd == 1 || $data->status_ttd == 3)
-                                            <a href="{{ route('print.download', $data->id) }}" target="blank" class="btn btn-sm btn-secondary mr-1"><i class="icon-download mr-2"></i>Download File</a>
+                                                <a href="{{ route('print.download', $data->id) }}" target="blank" class="btn btn-sm btn-secondary mr-1"><i class="icon-download mr-2"></i>Download File</a>
+                                                <!-- Send Email -->
+                                                @if ($data->email)
+                                                    <a href="#" onclick="sendEmailConfirm({{ $data->id }})" class="btn btn-sm btn-success"><i class="icon-envelope mr-2"></i>Kirim Email</a>
+                                                @endif
                                             @endif
-                                            <a href="#" onclick="sendEmailConfirm({{ $data->id }})" class="btn btn-sm btn-success"><i class="icon-envelope mr-2"></i>Kirim Email</a>
                                         </label>
                                     </div> 
                                 </div>

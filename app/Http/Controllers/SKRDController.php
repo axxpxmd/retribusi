@@ -274,9 +274,7 @@ class SKRDController extends Controller
             'jumlah_bayar'   => 'required',
             'uraian_retribusi'    => 'required',
             'id_jenis_pendapatan' => 'required',
-            'id_rincian_jenis_pendapatan' => 'required',
-            'email' => 'required',
-            'no_telp' => 'required'
+            'id_rincian_jenis_pendapatan' => 'required'
         ]);
 
         /* Tahapan : 
