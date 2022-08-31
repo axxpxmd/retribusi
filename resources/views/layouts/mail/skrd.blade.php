@@ -373,8 +373,11 @@
                                     <tr>
                                         <td>
                                             <p>Kepada, {{ $nama }} </p>
-                                            <p>Request anda untuk mengunjungi ruang data center pada tanggal</p>
-                                            <p>Keterangan : </p>
+                                            <p>Dengan ini kami kirimkan Surat Ketetapan Retribusi Daerah (SKRD) dengan data sebagai berikut :</p>
+                                            <p>Nama : {{ $nama }}</p>
+                                            <p>Nomor Bayar : {{ $nomor_bayar }}</p>
+                                            <p>Jumlah Bayar : @currency($data->jumlah_bayar),-</p>
+                                            <p>Tanggal Jatuh Tempo : {{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_akhir)->format('d F Y') }}</p>
                                         </td>
                                     </tr>
                                 </table>

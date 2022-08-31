@@ -32,7 +32,10 @@ class EmailController extends Controller
 
             $dataEmail = array(
                 'nama' => $data->nm_wajib_pajak,
-                'file' => $file
+                'file' => $file,
+                'jumlah_bayar' => $data->jumlah_bayar,
+                'tgl_jatuh_tempo' => $data->tgl_skrd_akhir,
+                'nomor_bayar' => $data->nomor_bayar
             );
 
             //* Send email
