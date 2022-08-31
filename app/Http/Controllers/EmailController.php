@@ -42,6 +42,7 @@ class EmailController extends Controller
                 $message->from($mailFrom, $mailName);
             });
         } catch (\Throwable $th) {
+            dd($th);
             return response()->json([
                 'status' => 500,
                 'message' => "Terjadi kesalahan saat mengirim email"
