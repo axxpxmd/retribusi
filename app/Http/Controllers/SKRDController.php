@@ -718,7 +718,6 @@ class SKRDController extends Controller
 
         $expiredDateAddMinute = Carbon::now()->addMinutes(5)->format('Y-m-d H:i:s');
         $expiredDate = $expiredDateAddMinute;
-        dd($expiredDate);
 
         //TODO: Get Token BJB
         $resGetTokenBJB = $this->vabjb->getTokenBJB();
