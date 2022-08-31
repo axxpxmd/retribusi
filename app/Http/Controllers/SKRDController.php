@@ -712,7 +712,7 @@ class SKRDController extends Controller
         $data = TransaksiOPD::where('id', $id)->first();
 
         //* Tahap 2 
-        $amount       = $data->total_bayar;
+        $amount = \strval((int) str_replace(['.', 'Rp', ' '], '', $data->jumlah_bayar));
         $customerName = $data->nm_wajib_pajak;
         $va_number    = (int) $data->nomor_va_bjb;
 
