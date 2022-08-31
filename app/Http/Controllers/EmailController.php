@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 
 // Models
 use App\Models\TransaksiOPD;
+use Illuminate\Support\Facades\Storage;
 
 class EmailController extends Controller
 {
@@ -25,10 +26,9 @@ class EmailController extends Controller
             $mailName = config('app.mail_name');
 
             //* File
-            $fileName  = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
+            $fileName  = "AsipHamdi-17.14.22.00001.pdf";
             $path_sftp = 'file_ttd_skrd/';
-            $file      = config('app.sftp_src') . $path_sftp . $fileName;
-            $file      = file_get_contents($file);
+            $file = Storage::disk('sftp')->get($path_sftp . $fileName);
 
             $dataEmail = array(
                 'nama' => $data->nm_wajib_pajak,
