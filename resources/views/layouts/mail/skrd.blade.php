@@ -67,7 +67,7 @@
             box-sizing: border-box;
             display: block;
             margin: 0 auto;
-            max-width: 580px;
+            max-width: 100% !important;
             padding: 10px;
         }
 
@@ -374,10 +374,9 @@
                                         <td>
                                             <p>Kepada, {{ $nama }} </p>
                                             <p>Dengan ini kami kirimkan Surat Ketetapan Retribusi Daerah (SKRD) dengan data sebagai berikut :</p>
-                                            <p>Nama : {{ $nama }}</p>
-                                            <p>Nomor Bayar : {{ $nomor_bayar }}</p>
-                                            <p>Jumlah Bayar : @currency($data->jumlah_bayar),-</p>
-                                            <p>Tanggal Jatuh Tempo : {{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_akhir)->format('d F Y') }}</p>
+                                            <p>Jumlah Bayar : {{ $jumlah_bayar }}</p>
+                                            <p>No Bayar : {{ $no_bayar }}</p>
+                                            <p>Tanggal Jatuh Tempo : {{ $tgl_jatuh_tempo }}</p>
                                         </td>
                                     </tr>
                                 </table>

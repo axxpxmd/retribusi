@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use PDF;
 use Mail;
 
-use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 use App\Http\Controllers\Controller;
 
 // Models
 use App\Models\TransaksiOPD;
-use Illuminate\Support\Facades\Storage;
 
 class EmailController extends Controller
 {
@@ -32,10 +31,9 @@ class EmailController extends Controller
 
             $dataEmail = array(
                 'nama' => $data->nm_wajib_pajak,
-                'file' => $file,
-                'jumlah_bayar' => $data->jumlah_bayar,
-                'tgl_jatuh_tempo' => $data->tgl_skrd_akhir,
-                'nomor_bayar' => $data->nomor_bayar
+                'jumlah_bayar' => 'Rp. ' . number_format($data->jumlah_bayar),
+                'tgl_jatuh_tempo' => Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_akhir)->format('d M Y'),
+                'no_bayar' => $data->no_bayar
             );
 
             //* Send email
