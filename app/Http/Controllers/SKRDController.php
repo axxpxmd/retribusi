@@ -418,8 +418,16 @@ class SKRDController extends Controller
 
                 //TODO: Create QRIS
                 $resCreateQRISBJB = $this->qrisbjb->createQRIS($tokenQRISBJB, $amount, $no_hp);
+                $resJsonQRIS      = $resCreateQRISBJB->json();
+                
+                //* LOG
+                $dataQris = [
+                    'no_bayar' => $no_bayar,
+                    'data' => $resJsonQRIS
+                ];
+                Log::channel('skrd_create_qris')->info('Create Qris SKRD', $dataQris);
+                
                 if ($resCreateQRISBJB->successful()) {
-                    $resJsonQRIS = $resCreateQRISBJB->json();
                     if ($resJsonQRIS["status"]["code"] != 200) {
                         DB::rollback(); //* DB Transaction Failed
                         return response()->json([
@@ -430,20 +438,11 @@ class SKRDController extends Controller
                     $invoiceId = $respondBody["invoiceId"]["_text"];
                     $textQRIS = $respondBody["stringQR"]["_text"];
 
-                    $dataQris = [
-                        'no_bayar' => $no_bayar,
-                        'status_code' => $resJsonQRIS["status"],
-                        'data' => $resJsonQRIS["body"]
-                    ];
-
                     //* Update data SKRD
                     $dataSKRD->update([
                         'invoice_id' => $invoiceId,
                         'text_qris' => $textQRIS
                     ]);
-
-                    //TODO: LOG
-                    Log::channel('skrd_create_qris')->info('Create Qris SKRD', $dataQris);
                 } else {
                     DB::rollback(); //* DB Transaction Failed
                     return response()->json([
@@ -455,7 +454,7 @@ class SKRDController extends Controller
 
         DB::commit(); //* DB Transaction Success
 
-        //TODO: LOG
+        //* LOG
         Log::channel('skrd_create')->info('Create Data SKRD', $dataSKRD->toArray());
 
         //* Tahap 5
@@ -640,6 +639,14 @@ class SKRDController extends Controller
 
                     // TODO: Create QRIS
                     $resCreateQRISBJB = $this->qrisbjb->createQRIS($tokenQRISBJB, $amount, $no_hp);
+                    $resJsonQRIS      = $resCreateQRISBJB->json();
+                    
+                    //* LOG
+                    $dataQris = [
+                        'no_bayar' => $data->no_bayar,
+                        'data' => $resJsonQRIS
+                    ];
+                    Log::channel('skrd_create_qris')->info('Create Qris SKRD', $dataQris);
                     if ($resCreateQRISBJB->successful()) {
                         $resJsonQRIS = $resCreateQRISBJB->json();
                         if ($resJsonQRIS["status"]["code"] != 200)
@@ -649,15 +656,6 @@ class SKRDController extends Controller
                         $respondBody = $resJsonQRIS["body"]["CreateInvoiceQRISDinamisExtResponse"];
                         $invoiceId = $respondBody["invoiceId"]["_text"];
                         $textQRIS = $respondBody["stringQR"]["_text"];
-
-                        $dataQris = [
-                            'no_bayar' => $data->no_bayar,
-                            'status_code' => $resJsonQRIS["status"],
-                            'data' => $respondBody
-                        ];
-
-                        //TODO: LOG
-                        Log::channel('skrd_create_qris')->info('Create Qris SKRD', $dataQris);
                     } else {
                         return response()->json([
                             'message' => "Terjadi kegagalan saat mengambil token QRIS BJB. Error Code. Silahkan laporkan masalah ini pada administrator"
@@ -697,7 +695,7 @@ class SKRDController extends Controller
             'id_rincian_jenis_pendapatan' => \Crypt::decrypt($request->id_rincian_jenis_pendapatan)
         ]);
 
-        //TODO: LOG
+        //* LOG
         Log::channel('skrd_edit')->info('Edit Data SRKD | ' . 'Oleh:' . Auth::user()->pengguna->full_name, $data->toArray());
 
         return response()->json([
@@ -714,48 +712,49 @@ class SKRDController extends Controller
 
         //* Tahap 1
         $data = TransaksiOPD::where('id', $id)->first();
-        $data->delete();
 
         //* Tahap 2 
-        // $amount       = $data->total_bayar;
-        // $customerName = $data->nm_wajib_pajak;
-        // $va_number    = (int) $data->nomor_va_bjb;
+        $amount       = $data->total_bayar;
+        $customerName = $data->nm_wajib_pajak;
+        $va_number    = (int) $data->nomor_va_bjb;
 
-        // $expiredDateAddMinute = Carbon::now()->addMinutes(1)->format('Y-m-d H:i:s');
-        // $expiredDate = $expiredDateAddMinute;
+        $expiredDateAddMinute = Carbon::now()->addMinutes(1)->format('Y-m-d H:i:s');
+        $expiredDate = $expiredDateAddMinute;
 
-        // //TODO: Get Token BJB
-        // $resGetTokenBJB = $this->vabjb->getTokenBJB();
-        // if ($resGetTokenBJB->successful()) {
-        //     $resJson = $resGetTokenBJB->json();
-        //     if ($resJson['rc'] != 0000)
-        //         return response()->json([
-        //             'message' => 'Terjadi kegagalan saat mengambil token. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . ''
-        //         ], 422);
-        //     $tokenBJB = $resJson['data'];
-        // } else {
-        //     return response()->json([
-        //         'message' => "Terjadi kegagalan saat mengambil token. Error Code " . $resGetTokenBJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator"
-        //     ], 422);
-        // }
+        //TODO: Get Token BJB
+        $resGetTokenBJB = $this->vabjb->getTokenBJB();
+        if ($resGetTokenBJB->successful()) {
+            $resJson = $resGetTokenBJB->json();
+            if ($resJson['rc'] != 0000)
+                return response()->json([
+                    'message' => 'Terjadi kegagalan saat mengambil token. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . ''
+                ], 422);
+            $tokenBJB = $resJson['data'];
+        } else {
+            return response()->json([
+                'message' => "Terjadi kegagalan saat mengambil token. Error Code " . $resGetTokenBJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator"
+            ], 422);
+        }
         
-        // //TODO: Update VA BJB
-        // $resUpdateVABJB = $this->vabjb->updateVaBJB($tokenBJB, $amount, $expiredDate, $customerName, $va_number);
-        // if ($resUpdateVABJB->successful()) {
-        //     $resJson = $resUpdateVABJB->json();
-        //     if (isset($resJson['rc']) != 0000)
-        //         return response()->json([
-        //             'message' => 'Terjadi kegagalan saat memperbarui Virtual Account. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . ''
-        //         ], 422);
-        // } else {
-        //     return response()->json([
-        //         'message' => "Terjadi kegagalan saat memperbarui Virtual Account. Error Code " . $resUpdateVABJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator"
-        //     ], 422);
-        // }
+        //TODO: Update VA BJB
+        $resUpdateVABJB = $this->vabjb->updateVaBJB($tokenBJB, $amount, $expiredDate, $customerName, $va_number);
+        if ($resUpdateVABJB->successful()) {
+            $resJson = $resUpdateVABJB->json();
+            if (isset($resJson['rc']) != 0000)
+                return response()->json([
+                    'message' => 'Terjadi kegagalan saat memperbarui Virtual Account. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . ''
+                ], 422);
+        } else {
+            return response()->json([
+                'message' => "Terjadi kegagalan saat memperbarui Virtual Account. Error Code " . $resUpdateVABJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator"
+            ], 422);
+        }
 
-        //TODO: LOG
+        //* LOG
         Log::channel('skrd_delete')->info('Hapus Data SRKD | ' . 'Oleh:' . Auth::user()->pengguna->full_name, $data->toArray());
 
+        $data->delete();
+        
         return response()->json([
             'message' => 'Data ' . $this->title . ' berhasil dihapus.'
         ]);

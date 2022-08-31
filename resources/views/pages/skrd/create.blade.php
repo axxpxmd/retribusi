@@ -321,7 +321,6 @@
             });
             return false;
         }
-        $(this).addClass('was-validated');
     });
     
 </script>
