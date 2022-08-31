@@ -716,9 +716,8 @@ class SKRDController extends Controller
         $customerName = $data->nm_wajib_pajak;
         $va_number    = (int) $data->nomor_va_bjb;
 
-        $expiredDateAddMinute = Carbon::now()->addMinutes(1)->format('Y-m-d H:i:s');
+        $expiredDateAddMinute = Carbon::now()->addMinutes(5)->format('Y-m-d H:i:s');
         $expiredDate = $expiredDateAddMinute;
-        dd($expiredDate);
 
         //TODO: Get Token BJB
         $resGetTokenBJB = $this->vabjb->getTokenBJB();
