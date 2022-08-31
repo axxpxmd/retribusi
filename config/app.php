@@ -144,6 +144,11 @@ return [
     'ip_qris' => env('IP_QRIS'),
     'app_id_qris' => env('APP_ID_QRIS'),
 
+    // Email
+    'name' => env('APP_NAME'),
+    'mail_from' => env('MAIL_USERNAME'),
+    'mail_name' => env('MAIL_NAME'),
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers

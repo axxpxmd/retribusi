@@ -29,6 +29,7 @@
             <div class="tab-pane animated fadeInUpShort show active" id="semua-data" role="tabpanel">
                 <div class="row">
                     <div class="col-md-12">
+                        <div id="alert"></div>
                         <div class="card mt-2">
                             <h6 class="card-header"><strong>Data SKRD</strong></h6>
                             <div class="card-body">
@@ -210,8 +211,9 @@
                                         <label class="col-md-3 s-12">
                                             <button class="btn btn-sm btn-primary mr-1" data-toggle="modal" data-target="#preview-file"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</button> 
                                             @if ($data->status_ttd == 1 || $data->status_ttd == 3)
-                                            <a href="{{ route('print.download', $data->id) }}" target="blank" class="btn btn-sm btn-secondary"><i class="icon-download mr-2"></i>Download File</a>
+                                            <a href="{{ route('print.download', $data->id) }}" target="blank" class="btn btn-sm btn-secondary mr-1"><i class="icon-download mr-2"></i>Download File</a>
                                             @endif
+                                            <a href="#" onclick="sendEmailConfirm({{ $data->id }})" class="btn btn-sm btn-success"><i class="icon-envelope mr-2"></i>Kirim Email</a>
                                         </label>
                                     </div> 
                                 </div>
@@ -235,9 +237,70 @@
         </div>
     </div>
 </div>
+<!-- Send TTD -->
+<div class="modal fade" id="sendEmail" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="col-md-12">
+                    <div class="row">
+                        <label class="col-form-label col-sm-3 s-12 font-weight-bold"><strong>Nama </strong></label>
+                        <label class="col-form-label col-sm-9 font-weight-normal s-12">{{ $data->nm_wajib_pajak }}</label>
+                    </div>
+                    <div class="row">
+                        <label class="col-form-label col-sm-3 s-12 font-weight-bold"><strong>Email </strong></label>
+                        <label class="col-form-label col-sm-9 font-weight-normal s-12">{{ $data->email }}</label>
+                    </div>
+                    <p class="font-weight-bold text-black-50">Apakah anda yakin ingin mengirim file SKRD ?</p>
+                </div>
+                <hr>
+                <div class="text-right">
+                    <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="icon-times mr-2"></i>Batalkan</button>
+                    <a onclick="sendEmail({{ $data->id }})" class="btn btn-sm btn-primary ml-2" id="kirimTTD"><i class="icon-envelope mr-2"></i>Kirim</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@include('layouts.loading')
 @endsection
 @section('script')
 <script type="text/javascript">
+    // Send Email
+    function sendEmailConfirm(id){
+        $('#sendEmail').modal('show');
+        $('#sendEmail').modal({keyboard: false});
+    }
 
+    function sendEmail(id){
+        $('#loading').modal('show');
+        $('#sendEmail').modal('toggle');
+        url = "{{ route('sendEmail', ':id') }}".replace(':id', id);
+        $.get(url, function(data){
+            console.log(data);
+            if (data.status === 200) {
+                $('#loading').modal('toggle');
+                $.confirm({
+                    title: 'Success',
+                    content: data.message,
+                    icon: 'icon icon-check', 
+                    theme: 'modern',
+                    animation: 'scale',
+                    autoClose: 'ok|3000',
+                    type: 'green',
+                    buttons: {
+                        ok: {
+                            text: "ok!",
+                            btnClass: 'btn-primary',
+                            keys: ['enter']
+                        }
+                    }
+                });
+            }else{
+                $('#loading').modal('toggle');
+                $('#alert').html("<div role='alert' class='alert alert-danger alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button><strong>Error!</strong> " + data.message + "</div>");
+            }
+        }, 'JSON');
+    }
 </script>
 @endsection
