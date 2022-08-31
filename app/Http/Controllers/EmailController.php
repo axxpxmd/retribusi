@@ -25,7 +25,7 @@ class EmailController extends Controller
             $mailName = config('app.mail_name');
 
             //* File
-            $fileName  = "AsipHamdi-17.14.22.00001.pdf";
+            $fileName  = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
             $path_sftp = 'file_ttd_skrd/';
             $file = Storage::disk('sftp')->get($path_sftp . $fileName);
 
@@ -43,7 +43,6 @@ class EmailController extends Controller
                 $message->from($mailFrom, $mailName);
             });
         } catch (\Throwable $th) {
-            dd($th);
             return response()->json([
                 'status' => 500,
                 'message' => "Terjadi kesalahan saat mengirim email"
