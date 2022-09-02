@@ -46,10 +46,11 @@ class SKRDController extends Controller
     protected $title  = 'SKRD';
     protected $view   = 'pages.skrd.';
 
-    public function __construct(VABJB $vabjb, QRISBJB $qrisbjb)
+    public function __construct(VABJB $vabjb, QRISBJB $qrisbjb, GenerateNumber $generateNumber)
     {
         $this->vabjb = $vabjb;
         $this->qrisbjb = $qrisbjb;
+        $this->generateNumber = $generateNumber;
 
         $this->middleware(['permission:SKRD']);
     }
@@ -287,10 +288,10 @@ class SKRDController extends Controller
 
         //* Tahap 1
         $jenisGenerate = 'no_skrd';
-        $no_skrd = GenerateNumber::generate($request->id_opd, $request->id_jenis_pendapatan, $jenisGenerate);
+        $no_skrd = $this->generateNumber->generate($request->id_opd, $request->id_jenis_pendapatan, $jenisGenerate);
 
         $jenisGenerate = 'no_bayar';
-        $no_bayar = GenerateNumber::generate($request->id_opd, $request->id_jenis_pendapatan, $jenisGenerate);
+        $no_bayar = $this->generateNumber->generate($request->id_opd, $request->id_jenis_pendapatan, $jenisGenerate);
 
         //TODO: Check Duplikat (no_bayar, no_skrd)
         $checkGenerate = [
