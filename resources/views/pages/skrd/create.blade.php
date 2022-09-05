@@ -181,7 +181,7 @@
                                         <div class="row mb-2">
                                             <label class="col-sm-4"></label>
                                             <div class="col-md-8">
-                                                {{-- <button type="submit" id="action" class="btn btn-block btn-primary btn-sm"><i class="icon-save mr-2"></i>Simpan Data</button> --}}
+                                                <button type="submit" id="action" class="btn btn-block btn-primary btn-sm"><i class="icon-save mr-2"></i>Simpan Data</button>
                                             </div>
                                         </div>
                                     </div>
