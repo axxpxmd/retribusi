@@ -399,7 +399,7 @@ class SKRDController extends Controller
             }
 
             //* Tahap 4
-            if ($amount <= 10000000 && env('STATUS_QRIS') == 1) { //* Nominal QRIS maksimal 10 juta, jika lebih maka tidak terbuat
+            if ($amount <= 10000000) { //* Nominal QRIS maksimal 10 juta, jika lebih maka tidak terbuat
                 //TODO: Get Token QRIS
                 $resGetTokenQRISBJB = $this->qrisbjb->getToken();
                 if ($resGetTokenQRISBJB->successful()) {
