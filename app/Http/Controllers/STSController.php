@@ -171,7 +171,7 @@ class STSController extends Controller
         }
 
         //* Check status pembayaran VA BJB
-        if ($data->status_bayar == 0 && $data->nomor_va_bjb != null && $data->tgl_skrd_akhir < $dateNow) {
+        if ($data->status_bayar == 0 && $data->nomor_va_bjb != null && $data->tgl_skrd_akhir > $dateNow) {
             //TODO: Get Token BJB
             $resGetTokenBJB = $this->vabjb->getTokenBJB();
             if ($resGetTokenBJB->successful()) {
@@ -261,7 +261,7 @@ class STSController extends Controller
         }
 
         //* Check status pembayaran VA BJB
-        if ($data->status_bayar == 0 && $data->nomor_va_bjb != null && $data->tgl_skrd_akhir < $dateNow) {
+        if ($data->status_bayar == 0 && $data->nomor_va_bjb != null && $data->tgl_skrd_akhir > $dateNow) {
             //TODO: Get Token BJB
             $resGetTokenBJB = $this->vabjb->getTokenBJB();
             if ($resGetTokenBJB->successful()) {
