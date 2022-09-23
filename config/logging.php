@@ -69,6 +69,13 @@ return [
             'days' => 30,
         ],
 
+        'skrd_create_va' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/skrd/create_va.log'),
+            'level' => 'info',
+            'days' => 30,
+        ],
+
         'single' => [
             'driver' => 'single',
             'path' => storage_path('logs/laravel.log'),

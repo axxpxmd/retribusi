@@ -379,6 +379,12 @@ class SKRDController extends Controller
             $resGetVABJB = $this->vabjb->createVABJB($tokenBJB, $clientRefnum, $amount, $expiredDate, $customerName, $productCode);
             if ($resGetVABJB->successful()) {
                 $resJson = $resGetVABJB->json();
+                //* LOG VA
+                $dataQris = [
+                    'no_bayar' => $no_bayar,
+                    'data' => $resJson
+                ];
+                Log::channel('skrd_create_va')->info('Create VA SKRD', $dataQris);
                 if (isset($resJson['rc']) != 0000) {
                     DB::rollback(); //* DB Transaction Failed
                     return response()->json([
