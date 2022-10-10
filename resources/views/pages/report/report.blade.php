@@ -60,7 +60,7 @@
                     <td width="17%" class="d p-l-5">{{ $i->nm_wajib_pajak }}</td>
                     <td width="30%" class="d p-l-5">{{ $i->jenis_pendapatan->jenis_pendapatan }}</td>
                     <td width="10%" class="d p-l-5"> {{ Carbon\Carbon::createFromFormat('Y-m-d', $i->tgl_skrd_awal)->isoFormat('D MMMM Y') }}</td>
-                    <td width="13%" class="d p-l-5"> {{ $i->tgl_bayar != null ? Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $i->tgl_bayar)->isoFormat('D MMMM Y | h:m:s') : '' }}</td>
+                    <td width="13%" class="d p-l-5"> {{ $i->tgl_bayar != null ? Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $i->tgl_bayar)->isoFormat('D MMMM Y | hh:mm:ss') : '' }}</td>
                     <td width="20%" class="d p-l-5">
                         {{ $i->ntb }}
                         @if (strpos($i->chanel_bayar, 'QRIS') !== false)
