@@ -210,22 +210,26 @@ class ReportController extends Controller
 
         if ($jenis == 1 || $jenis == 0) {
             $title = 'SKRD (Surat Ketetapan Retribusi Daerah)';
+            $jnsTanggal = 'SKRD';
         } else {
             $title = 'STS (Surat Tanda Setoran)';
+            $jnsTanggal = 'Bayar';
         }
 
         $pdf = app('dompdf.wrapper');
         $pdf->getDomPDF()->set_option("enable_php", true);
+        $pdf->setPaper('legal', 'landscape');
         $pdf->loadView($this->view . 'report', compact(
             'data',
             'title',
             'jenis',
             'from',
             'to',
-            'totalBayar'
+            'totalBayar', 
+            'jnsTanggal'
         ))->setPaper('a3', 'landscape');
 
-        return $pdf->download('Laporan ' . $title . ' ' . $from . ' - ' . $to . ".pdf");
+        return $pdf->download('Laporan fd' . $title . ' ' . $from . ' - ' . $to . ".pdf");
     }
 
     public function getTotalBayar(Request $request)
