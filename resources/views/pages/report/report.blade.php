@@ -62,15 +62,15 @@
                     <td width="10%" class="d p-l-5"> {{ Carbon\Carbon::createFromFormat('Y-m-d', $i->tgl_skrd_awal)->isoFormat('D MMMM Y') }}</td>
                     <td width="13%" class="d p-l-5"> {{ $i->tgl_bayar != null ? Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $i->tgl_bayar)->isoFormat('D MMMM Y | h:m:s') : '' }}</td>
                     <td width="20%" class="d p-l-5">
-                        {{ $i->ntb }} | 
+                        {{ $i->ntb }}
                         @if (strpos($i->chanel_bayar, 'QRIS') !== false)
-                            QRIS
+                            | QRIS
                         @endif
                         @if (strpos($i->chanel_bayar, 'Virtual Account') !== false)
-                            VA
+                            | VA
                         @endif
                         @if (strpos($i->chanel_bayar, 'ATM BJB') !== false)
-                            ATM
+                            | ATM
                         @endif
                     </td>
                     <td width="10%" class="d p-l-5">@currency($i->jumlah_bayar)</td>
