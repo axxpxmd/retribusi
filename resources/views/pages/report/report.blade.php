@@ -40,7 +40,7 @@
                 <th class="d">No Bayar</th>
                 <th class="d">No SKRD</th>
                 <th class="d">Nama</th>
-                <th class="d">Jenis Retribusi</th>
+                <th class="d">Rincian Pendapatan</th>
                 <th class="d">Tanggal SKRD</th>
                 <th class="d">Tanggal Bayar</th>
                 <th class="d">NTB</th>
@@ -58,7 +58,7 @@
                     <td width="8%" class="d p-l-5">{{ $i->no_bayar }}</td>
                     <td width="8%" class="d p-l-5">{{ $i->no_skrd }}</td>
                     <td width="17%" class="d p-l-5">{{ $i->nm_wajib_pajak }}</td>
-                    <td width="30%" class="d p-l-5">{{ $i->jenis_pendapatan->jenis_pendapatan }}</td>
+                    <td width="30%" class="d p-l-5">{{ $i->rincian_jenis->rincian_pendapatan }}</td>
                     <td width="10%" class="d p-l-5"> {{ Carbon\Carbon::createFromFormat('Y-m-d', $i->tgl_skrd_awal)->isoFormat('D MMMM Y') }}</td>
                     <td width="13%" class="d p-l-5"> {{ $i->tgl_bayar != null ? Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $i->tgl_bayar)->isoFormat('D MMMM Y | hh:mm:ss') : '' }}</td>
                     <td width="20%" class="d p-l-5">
@@ -89,12 +89,6 @@
             <th class="d" colspan="11">Total</th>
             <th class="d" colspan="2">@currency($totalBayar)</th>
         </tr>
-        {{-- <tfoot>
-            <tr class="d">
-                <th class="d" colspan="11">Total</th>
-                <th class="d" colspan="2">@currency($totalBayar)</th>
-            </tr>
-        </tfoot> --}}
     </table>
     <script type="text/php">
         if (isset($pdf)) {

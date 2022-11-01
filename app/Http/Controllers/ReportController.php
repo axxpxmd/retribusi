@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\Crypt;
 use App\Models\OPD;
 use App\Models\TransaksiOPD;
 use App\Models\OPDJenisPendapatan;
+use App\Models\RincianJenisPendapatan;
 
 class ReportController extends Controller
 {
@@ -69,8 +70,9 @@ class ReportController extends Controller
         $to = $request->tgl_skrd1;
         $jenis = $request->jenis;
         $channel_bayar = $request->channel_bayar;
+        $rincian_pendapatan_id = $request->rincian_pendapatan_id;
 
-        $data = TransaksiOPD::queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar);
+        $data = TransaksiOPD::queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar, $rincian_pendapatan_id);
 
         return DataTables::of($data)
             ->editColumn('no_bayar', function ($p) {
@@ -79,8 +81,8 @@ class ReportController extends Controller
             ->editColumn('opd_id', function ($p) {
                 return $p->opd->n_opd;
             })
-            ->editColumn('id_jenis_pendapatan', function ($p) {
-                return $p->jenis_pendapatan->jenis_pendapatan;
+            ->editColumn('rincian_pendapatan', function ($p) {
+                return $p->rincian_jenis->rincian_pendapatan;
             })
             ->addColumn('tgl_bayar', function ($p) {
                 if ($p->tgl_bayar != null) {
@@ -189,6 +191,13 @@ class ReportController extends Controller
         return $datas;
     }
 
+    public function getRincianByJenisPendapatan($jenis_pendapatan_id)
+    {
+        $data = RincianJenisPendapatan::where('id_jenis_pendapatan', $jenis_pendapatan_id)->get();
+
+        return $data;
+    }
+
     public function cetakSKRD(Request $request)
     {
         $checkOPD = Auth::user()->pengguna->opd_id;
@@ -199,13 +208,14 @@ class ReportController extends Controller
         }
 
         $jenis_pendapatan_id = $request->jenis_pendapatan_id;
+        $rincian_pendapatan_id = $request->rincian_pendapatan_id;
         $status_bayar = $request->status_bayar;
         $from = $request->tgl_skrd;
         $to = $request->tgl_skrd1;
         $jenis = $request->jenis;
         $channel_bayar = $request->channel_bayar;
 
-        $data = TransaksiOPD::queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar);
+        $data = TransaksiOPD::queryReportCetak($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar, $rincian_pendapatan_id);
         $totalBayar = $data->sum('total_bayar');
 
         if ($jenis == 1 || $jenis == 0) {
@@ -229,7 +239,7 @@ class ReportController extends Controller
             'jnsTanggal'
         ))->setPaper('a3', 'landscape');
 
-        return $pdf->download('Laporan fd' . $title . ' ' . $from . ' - ' . $to . ".pdf");
+        return $pdf->download('Laporan' . $title . ' ' . $from . ' - ' . $to . ".pdf");
     }
 
     public function getTotalBayar(Request $request)
@@ -242,13 +252,14 @@ class ReportController extends Controller
         }
 
         $jenis_pendapatan_id = $request->jenis_pendapatan_id;
+        $rincian_pendapatan_id = $request->rincian_pendapatan_id;
         $status_bayar = $request->status_bayar;
         $from = $request->tgl_skrd;
         $to = $request->tgl_skrd1;
         $jenis = $request->jenis;
         $channel_bayar = $request->channel_bayar;
 
-        $data = TransaksiOPD::queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar);
+        $data = TransaksiOPD::queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar, $rincian_pendapatan_id);
         $totalBayar = $data->sum('total_bayar');
 
         $totalBayarJson = [

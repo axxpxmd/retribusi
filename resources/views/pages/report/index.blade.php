@@ -56,6 +56,14 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="row mb-2">
+                                <label for="rincian_pendapatan_id" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">Rincian Pendapatan </label>
+                                <div class="col-sm-8">
+                                    <select class="select2 form-control r-0 light s-12" id="rincian_pendapatan_id" name="rincian_pendapatan_id">
+                                        <option value="0"></option>
+                                    </select>
+                                </div>
+                            </div>
                             <div id="status_bayar_display" class="row mb-2">
                                 <label for="status_bayar" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">Status Bayar </label>
                                 <div class="col-sm-8">
@@ -117,7 +125,7 @@
                                             <th>Nomor Bayar </th>
                                             <th>Nomor SKRD </th>
                                             <th>Nama Pembayar</th>
-                                            <th>Jenis Retribusi</th>
+                                            <th>Rincian Pendapatan</th>
                                             <th>Tanggal SKRD </th>
                                             <th>Tanggal Bayar</th>
                                             <th>NTB </th>
@@ -187,6 +195,7 @@
                 data.status_bayar = $('#status_bayar').val();
                 data.jenis = $('#jenis').val();
                 data.channel_bayar = $('#channel_bayar').val();
+                data.rincian_pendapatan_id = $('#rincian_pendapatan_id').val();
             }
         },
         columns: [
@@ -194,7 +203,7 @@
             {data: 'no_bayar', name: 'no_bayar'},
             {data: 'no_skrd', name: 'no_skrd'},
             {data: 'nm_wajib_pajak', name: 'nm_wajib_pajak'},
-            {data: 'id_jenis_pendapatan', name: 'id_jenis_pendapatan'},
+            {data: 'rincian_pendapatan', name: 'rincian_pendapatan'},
             {data: 'tgl_skrd', name: 'tgl_skrd'},
             {data: 'tgl_bayar', name: 'tgl_bayar'},
             {data: 'ntb', name: 'ntb'},
@@ -231,19 +240,43 @@
         }
     });
 
+    $('#jenis_pendapatan_id').on('change', function(){
+        val = $(this).val();
+        option = "<option value=''>&nbsp;</option>";
+        if(val == ""){
+            $('#rincian_pendapatan_id').html(option);
+        }else{
+            $('#rincian_pendapatan_id').html("<option value=''>Loading...</option>");
+            url = "{{ route('report.getRincianByJenisPendapatan', ':id') }}".replace(':id', val);
+            $.get(url, function(data){
+                if(data){
+                    $.each(data, function(index, value){
+                        option += "<option value='" +  value.id + "'>" + value.rincian_pendapatan +"</li>";
+                    });
+                    $('#rincian_pendapatan_id').empty().html(option);
+
+                    $("#rincian_pendapatan_id").val($("#rincian_pendapatan_id option:first").val()).trigger("change.select2");
+                }else{
+                    $('#rincian_pendapatan_id').html(option);
+                }
+            }, 'JSON');
+        }
+    });
+
     pressOnChange();
     function pressOnChange(){
         table.api().ajax.reload();
 
         opd_id = $('#opd_id').val();
         jenis_pendapatan_id = $('#jenis_pendapatan_id').val();
+        rincian_pendapatan_id = $('#rincian_pendapatan_id').val();
         status_bayar = $('#status_bayar').val();
         tgl_skrd = $('#tgl_skrd').val();
         tgl_skrd1 = $('#tgl_skrd1').val();
         jenis = $('#jenis').val();
         channel_bayar = $('#channel_bayar').val();
 
-        params = tgl_skrd + "&tgl_skrd1=" + tgl_skrd1 + "&opd_id=" + opd_id + "&jenis_pendapatan_id=" + jenis_pendapatan_id + "&status_bayar=" + status_bayar + "&jenis=" + jenis + "&channel_bayar=" + channel_bayar;
+        params = tgl_skrd + "&tgl_skrd1=" + tgl_skrd1 + "&opd_id=" + opd_id + "&jenis_pendapatan_id=" + jenis_pendapatan_id + "&status_bayar=" + status_bayar + "&jenis=" + jenis + "&channel_bayar=" + channel_bayar + "&rincian_pendapatan_id=" + rincian_pendapatan_id;
 
         url1 = "{{ route('report.cetakSKRD') }}?tgl_skrd=" + params
         url2 = "{{ route('report.getTotalBayar') }}?tgl_skrd=" + params

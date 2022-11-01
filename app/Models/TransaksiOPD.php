@@ -37,9 +37,9 @@ class TransaksiOPD extends Model
     }
 
     // 
-    public static function queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar)
+    public static function queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar, $rincian_pendapatan_id)
     {
-        $data = TransaksiOPD::select('id', 'id_opd', 'no_skrd', 'no_bayar', 'nm_wajib_pajak', 'id_jenis_pendapatan', 'tgl_skrd_awal', 'status_ttd', 'ntb', 'tgl_bayar', 'total_bayar', 'total_bayar_bjb', 'jumlah_bayar', 'status_bayar', 'chanel_bayar')
+        $data = TransaksiOPD::select('id', 'id_opd', 'id_rincian_jenis_pendapatan', 'no_skrd', 'no_bayar', 'nm_wajib_pajak', 'id_jenis_pendapatan', 'tgl_skrd_awal', 'status_ttd', 'ntb', 'tgl_bayar', 'total_bayar', 'total_bayar_bjb', 'jumlah_bayar', 'status_bayar', 'chanel_bayar', 'rincian_jenis_pendapatan')
             ->with(['jenis_pendapatan', 'opd', 'rincian_jenis'])->orderBy('id', 'DESC');
 
         if ($opd_id != 0) {
@@ -48,6 +48,10 @@ class TransaksiOPD extends Model
 
         if ($jenis_pendapatan_id != 0) {
             $data->where('id_jenis_pendapatan', $jenis_pendapatan_id);
+        }
+
+        if ($rincian_pendapatan_id != 0) {
+            $data->where('id_rincian_jenis_pendapatan', $rincian_pendapatan_id);
         }
 
         if ($jenis == 1 || $jenis == 0) {
@@ -95,6 +99,71 @@ class TransaksiOPD extends Model
         }
 
         return $data->get();
+    }
+
+    // 
+    public static function queryReportCetak($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar, $rincian_pendapatan_id)
+    {
+        $data = TransaksiOPD::select('id', 'id_opd', 'id_rincian_jenis_pendapatan', 'no_skrd', 'no_bayar', 'nm_wajib_pajak', 'id_jenis_pendapatan', 'tgl_skrd_awal', 'status_ttd', 'ntb', 'tgl_bayar', 'total_bayar', 'total_bayar_bjb', 'jumlah_bayar', 'status_bayar', 'chanel_bayar')
+            ->with(['jenis_pendapatan']);
+
+        if ($opd_id != 0) {
+            $data->where('id_opd', $opd_id);
+        }
+
+        if ($jenis_pendapatan_id != 0) {
+            $data->where('id_jenis_pendapatan', $jenis_pendapatan_id);
+        }
+
+        if ($rincian_pendapatan_id != 0) {
+            $data->where('id_rincian_jenis_pendapatan', $rincian_pendapatan_id);
+        }
+
+        if ($jenis == 1 || $jenis == 0) {
+            if ($status_bayar != 0 || $status_bayar != null) {
+                $data->where('status_bayar', $status_bayar);
+            }
+
+            if ($from != null || $to != null) {
+                if ($from != null && $to == null) {
+                    $data->whereDate('tgl_skrd_awal', $from);
+                } else {
+                    $data->whereBetween('tgl_skrd_awal', [$from, $to]);
+                }
+            }
+        } elseif ($jenis == 2) {
+            $from = $from . ' ' . '00:00:01';
+            $to = $to . ' ' . '23:59:59';
+
+            if ($from != null || $to != null) {
+                if ($from != null && $to == null) {
+                    $data->whereDate('tgl_bayar', $from);
+                } else {
+                    $data->whereBetween('tgl_bayar', [$from, $to]);
+                }
+            }
+        }
+
+        if ($channel_bayar != 0) {
+            switch ($channel_bayar) {
+                case "1":
+                    $metode_bayar = 'BJB Virtual Account';
+                    $data->where('chanel_bayar', $metode_bayar);
+                    break;
+                case 2:
+                    $metode_bayar = 'ATM BJB';
+                    $data->where('chanel_bayar', $metode_bayar);
+                    break;
+                case 3;
+                    $data->where('chanel_bayar', 'like', '%QRIS%');
+                    break;
+                default:
+                    // 
+                    break;
+            }
+        }
+
+        return $data->orderBy('id', 'DESC')->get();
     }
 
     // 
