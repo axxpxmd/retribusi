@@ -19,6 +19,7 @@ use DataTables;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\JenisPendapatan;
 use Illuminate\Support\Facades\Crypt;
 
 // Models
@@ -119,7 +120,7 @@ class ReportController extends Controller
                 $path_sftp = 'file_ttd_skrd/';
                 $fileName  = str_replace(' ', '', $p->nm_wajib_pajak) . '-' . $p->no_skrd . ".pdf";
                 $dateNow   = Carbon::now()->format('Y-m-d');
-                $belumTTD ="<a href='" . config('app.sftp_src') . $path_sftp . $fileName . "' target='_blank' class='cyan-text' title='File TTD'><i class='icon-document-file-pdf2'></i></a>";
+                $belumTTD = "<a href='" . config('app.sftp_src') . $path_sftp . $fileName . "' target='_blank' class='cyan-text' title='File TTD'><i class='icon-document-file-pdf2'></i></a>";
 
                 //* SKRD
                 if ($p->tgl_skrd_akhir >= $dateNow) {
@@ -226,6 +227,27 @@ class ReportController extends Controller
             $jnsTanggal = 'Bayar';
         }
 
+        // Filter
+        $opd = OPD::find($opd_id);
+        $jenis_pendapatan = JenisPendapatan::find($jenis_pendapatan_id);
+        $rincian_pendapatan = RincianJenisPendapatan::find($rincian_pendapatan_id);
+
+        $metode_bayar = 'Semua';
+        switch ($channel_bayar) {
+            case "1":
+                $metode_bayar = 'BJB Virtual Account';
+                break;
+            case 2:
+                $metode_bayar = 'ATM BJB';
+                break;
+            case 3;
+                $metode_bayar = 'QRIS';
+                break;
+            default:
+                // 
+                break;
+        }
+
         $pdf = app('dompdf.wrapper');
         $pdf->getDomPDF()->set_option("enable_php", true);
         $pdf->setPaper('legal', 'landscape');
@@ -235,8 +257,13 @@ class ReportController extends Controller
             'jenis',
             'from',
             'to',
-            'totalBayar', 
-            'jnsTanggal'
+            'totalBayar',
+            'jnsTanggal',
+            'opd',
+            'jenis_pendapatan',
+            'rincian_pendapatan',
+            'channel_bayar',
+            'metode_bayar'
         ))->setPaper('a3', 'landscape');
 
         return $pdf->download('Laporan' . $title . ' ' . $from . ' - ' . $to . ".pdf");

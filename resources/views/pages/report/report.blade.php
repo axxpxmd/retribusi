@@ -26,13 +26,37 @@
         .p-l-5{
             padding-left: 5px;
         }
+        .fs-14{
+            font-size: 14px
+        }
     </style>
 </head>
 <body>
     <div>
         <p class="text-center">Laporan {{ $title }}</p>
     </div>
-    <p>Tanggal {{ $jnsTanggal }}: {{ Carbon\Carbon::createFromFormat('Y-m-d', $from)->isoFormat('D MMMM Y') }} - {{ Carbon\Carbon::createFromFormat('Y-m-d', $to)->isoFormat('D MMMM Y') }}</p>
+    <table class="fs-14" style="margin-bottom: 10px">
+        <tr>
+            <td>OPD</td>
+            <td>: {{ $opd ? $opd->n_opd : 'Semua' }}</td>
+        </tr>
+        <tr>
+            <td>Jenis Pendapatan</td>
+            <td>: {{ $jenis_pendapatan ? $jenis_pendapatan->jenis_pendapatan : 'Semua' }}</td>
+        </tr>
+        <tr>
+            <td>Rincian Pendapatan</td>
+            <td>: {{ $rincian_pendapatan ? $rincian_pendapatan->rincian_pendapatan : 'Semua' }}</td>
+        </tr>
+        <tr>
+            <td>Metode Bayar</td>
+            <td>: {{ $channel_bayar ? $metode_bayar : 'Semua' }}</td>
+        </tr>
+        <tr>
+            <td>Periode</td>
+            <td>: {{ Carbon\Carbon::createFromFormat('Y-m-d', $from)->isoFormat('D MMMM Y') }} - {{ Carbon\Carbon::createFromFormat('Y-m-d', $to)->isoFormat('D MMMM Y') }}</td>
+        </tr>
+    </table>
     <table class="d">
         <thead>
             <tr class="d">
