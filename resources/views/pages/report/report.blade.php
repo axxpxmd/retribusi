@@ -79,10 +79,11 @@
             </tr>
         @endif
         <tr>
-            <td>Periode</td>
+            <td>Periode {{ $jenis == 2 ? 'STS' : 'SKRD' }}</td>
             <td>: {{ Carbon\Carbon::createFromFormat('Y-m-d', $from)->isoFormat('D MMMM Y') }} - {{ Carbon\Carbon::createFromFormat('Y-m-d', $to)->isoFormat('D MMMM Y') }}</td>
         </tr>
     </table>
+    <p style="text-align: right">{{ $data->count() }} Data</p>
     <table class="d">
         <thead>
             <tr class="d">
