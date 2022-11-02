@@ -220,7 +220,7 @@
     $('#opd_id').on('change', function(){
         val = $(this).val();
         $("#rincian_pendapatan_id").val(0).trigger("change.select2");
-        option = "<option value=''>&nbsp;</option>";
+        option = "<option value=''>Semua</option>";
         if(val == ""){
             $('#jenis_pendapatan_id').html(option);
         }else{
@@ -243,7 +243,7 @@
 
     $('#jenis_pendapatan_id').on('change', function(){
         val = $(this).val();
-        option = "<option value=''>&nbsp;</option>";
+        option = "<option value=''>Semua</option>";
         if(val == ""){
             $('#rincian_pendapatan_id').html(option);
         }else{
