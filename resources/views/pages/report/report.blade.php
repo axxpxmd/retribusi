@@ -37,6 +37,20 @@
     </div>
     <table class="fs-14" style="margin-bottom: 10px">
         <tr>
+            <td>Jenis</td>
+            <td>: 
+                @if ($jenis == 0)
+                    -
+                @endif
+                @if ($jenis == 1)
+                    SKRD
+                @endif
+                @if ($jenis == 2)
+                    STS
+                @endif
+            </td>
+        </tr>
+        <tr>
             <td>OPD</td>
             <td>: {{ $opd ? $opd->n_opd : 'Semua' }}</td>
         </tr>
@@ -48,10 +62,22 @@
             <td>Rincian Pendapatan</td>
             <td>: {{ $rincian_pendapatan ? $rincian_pendapatan->rincian_pendapatan : 'Semua' }}</td>
         </tr>
-        <tr>
-            <td>Metode Bayar</td>
-            <td>: {{ $channel_bayar ? $metode_bayar : 'Semua' }}</td>
-        </tr>
+        @if($jenis == 1) {
+            <tr>
+                <td>Status Bayar</td>
+                @if ($status_bayar)
+                <td>: {{ $status_bayar == 1 ? 'Sudah Bayar' : 'Belum Bayar' }}</td>
+                @else
+                <td>: Semua</td>
+                @endif
+            </tr>
+        @endif
+        @if($jenis == 2) {
+            <tr>
+                <td>Metode Bayar</td>
+                <td>: {{ $channel_bayar ? $metode_bayar : 'Semua' }}</td>
+            </tr>
+        @endif
         <tr>
             <td>Periode</td>
             <td>: {{ Carbon\Carbon::createFromFormat('Y-m-d', $from)->isoFormat('D MMMM Y') }} - {{ Carbon\Carbon::createFromFormat('Y-m-d', $to)->isoFormat('D MMMM Y') }}</td>

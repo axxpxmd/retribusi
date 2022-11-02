@@ -263,7 +263,8 @@ class ReportController extends Controller
             'jenis_pendapatan',
             'rincian_pendapatan',
             'channel_bayar',
-            'metode_bayar'
+            'metode_bayar',
+            'status_bayar'
         ))->setPaper('a3', 'landscape');
 
         return $pdf->download('Laporan' . $title . ' ' . $from . ' - ' . $to . ".pdf");
