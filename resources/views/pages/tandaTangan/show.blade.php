@@ -238,7 +238,8 @@
                                         <label class="col-md-10 s-12">
                                             @if ($data->status_ttd == 0 || $data->status_ttd == 2 || $data->status_ttd == 4)
                                                 <button class="btn btn-sm btn-success mr-1" data-toggle="modal" data-target="#preview-file"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</button>
-                                                <button class="btn btn-sm btn-primary mr-1" data-toggle="modal" data-target="#tte"><i class="icon-pencil mr-2"></i>TandaTangani</button>
+                                                <button class="btn btn-sm btn-primary mr-1" data-toggle="modal" data-target="#tte"><i class="icon-pencil mr-2"></i>TTE IOTENTIK</button>
+                                                <button class="btn btn-sm btn-secondary mr-1" data-toggle="modal" data-target="#tte_bsre"><i class="icon-pencil mr-2"></i>TTE BSRE</button>
                                             @else
                                                 <button class="btn btn-sm btn-success mr-2" data-toggle="modal" data-target="#preview-file"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</button> 
                                             @endif
@@ -270,12 +271,68 @@
             </div>
         </div>
     </div>
-    <!-- Form TTE -->
+    <!-- Form TTE BSRE -->
+    <div class="modal fade bd-example-modal-lg" id="tte_bsre" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="card">
+                    <h6 class="card-header font-weight-bold">TTE <b>BSRE</b></h6>
+                    <div class="card-body">
+                        <form class="needs-validation" method="POST" action="{{ route('tanda-tangan.tteBSRE') }}" enctype="multipart/form-data" novalidate>
+                            {{ method_field('POST') }}
+                            {{ csrf_field() }} 
+                            @if ($nik)
+                            <input type="hidden" name="nik" value="{{ $nik }}">     
+                            @endif
+                            <input type="hidden" name="id" value="{{ $id }}">
+                            <img src="{{ asset('images/bsre.png') }}" width="100" class="mx-auto d-block" alt="">
+                            <div class="mt-4">
+                                <div class="col-md-12">
+                                    @if ($nik)
+                                    <div class="row mb-2">
+                                        <label class="col-form-label s-12 col-md-3">Di TTD Oleh</label>
+                                        <div class="col-md-8">
+                                            <input type="text" class="form-control r-0 light s-12" value="{{ $data->nm_ttd }} &nbsp;&nbsp; [ {{ $nik }} ]" autocomplete="off" readonly required/>
+                                        </div>
+                                    </div>
+                                    @else
+                                    <div class="row mb-2">
+                                        <label class="col-form-label s-12 col-md-3">NIK</label>
+                                        <div class="col-md-8">
+                                            <input type="number" name="nik" id="nik" placeholder="Masukan NIK" class="form-control r-0 s-12" autocomplete="off" required/>
+                                        </div>
+                                    </div>
+                                    @endif
+                                    <div class="row mb-2">
+                                        <label for="password" class="col-form-label s-12 col-md-3">Passphrase</label>
+                                        <div class="col-md-8">
+                                            <input type="password" name="passphrase" id="passphrase" placeholder="Masukan Passphrase" class="form-control r-0 s-12" autocomplete="off" required/>
+                                            <div class="invalid-feedback p-0">
+                                                Passphrase tidak boleh kosong.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <label class="col-md-3"></label>
+                                        <div class="col-md-8">
+                                            <button class="btn btn-sm btn-primary mr-2"><i class="icon-pencil mr-2"></i>Tandatangani</button>
+                                            <button class="btn btn-sm btn-danger" data-dismiss="modal"><i class="icon-times mr-2"></i>Batalkan</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>  
+                        </form>  
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Form TTE IOTENTIK-->
     <div class="modal fade bd-example-modal-lg" id="tte" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="card">
-                    <h6 class="card-header font-weight-bold">Konfirmasi <b>Passphrase</b> Tandatangan Digital</h6>
+                    <h6 class="card-header font-weight-bold">TTE <b>IOTENTIK</b></h6>
                     <div class="card-body">
                         {{-- <form class="needs-validation" method="POST" action="{{ route('tanda-tangan.tteBackup') }}" enctype="multipart/form-data" novalidate>
                             {{ method_field('POST') }}

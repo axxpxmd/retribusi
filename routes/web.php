@@ -108,6 +108,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('tanda-tangan/tte', 'TandaTanganController@tte')->name('tanda-tangan.tte');
     Route::post('tanda-tangan/tteBackup', 'TandaTanganController@tteBackup')->name('tanda-tangan.tteBackup');
     Route::get('tanda-tangan/restore/{id}', 'TandaTanganController@restoreTTD')->name('tanda-tangan.restoreTTD');
+    Route::post('tanda-tangan/tte-bsre', 'TandaTanganController@tteBSRE')->name('tanda-tangan.tteBSRE');
 
     // Print 
     Route::get('print/skrd/{id}', 'PrintController@printSKRD')->name('print.skrd');

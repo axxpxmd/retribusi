@@ -30,6 +30,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\OPD;
 use App\Models\TransaksiOPD;
 use App\Models\OPDJenisPendapatan;
+use App\Models\Pengguna;
 
 class TandaTanganController extends Controller
 {
@@ -207,6 +208,10 @@ class TandaTanganController extends Controller
         $nip_ttd = $data->nip_ttd;
         $dateNow = Carbon::now()->format('Y-m-d');
 
+        // Get NIK
+        $pengguna = Pengguna::where('nip', $nip_ttd)->first();
+        $nik = $pengguna->nik;
+
         $token_godem = '';
         $id_cert     = '';
         $fileName    = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
@@ -312,7 +317,8 @@ class TandaTanganController extends Controller
             'path_sftp',
             'dateNow',
             'kenaikan',
-            'jumlahBunga'
+            'jumlahBunga',
+            'nik'
         ));
     }
 
@@ -338,6 +344,81 @@ class TandaTanganController extends Controller
         return redirect()
             ->route($this->route . 'show', \Crypt::encrypt($id))
             ->withSuccess('Berhasil melakukan tandatangan digital.');
+    }
+
+    public function tteBSRE(Request $request)
+    {
+        $id  = $request->id;
+        $nik = $request->nik;
+        $password = $request->passphrase;
+
+        $dataSKRD = TransaksiOPD::find($id);
+        $pengguna = Pengguna::where('nip', $dataSKRD->nip_ttd)->first();
+
+        if (!$pengguna->nik) {
+            $pengguna->update([
+                'nik' => $nik
+            ]);
+        }
+
+        $fileName   = str_replace(' ', '', $dataSKRD->nm_wajib_pajak) . '-' . $dataSKRD->no_skrd . ".pdf";
+        $path_local = 'app/public/';
+        $path_sftp  = 'file_ttd_skrd/';
+
+        $pdf = storage_path($path_local . 'file_skrd/' . $fileName);
+        $qrimage_path = storage_path($path_local . 'transparan.png');
+
+        $file = fopen($pdf, 'r');
+        $qrimage = fopen($qrimage_path, 'r');
+
+        // TTE
+        $data = [
+            'nik'           => $nik,
+            'passphrase'    => $password,
+            'tampilan'      => 'visible',
+            'xAxis'         => 177,
+            'yAxis'         => 840,
+            'width'         => 1,
+            'height'        => 795,
+            'page'          => 1,
+            'image'         => 'true',
+            'reason'        => 'Tanda Tangan Digital Sisumaker',
+            'location'      => 'Tangerang Selatan'
+        ];
+
+        $res = Http::attach('file', $file, 'myfile.pdf')
+            ->attach('imageTTD', $qrimage, 'myimg.png')
+            ->withBasicAuth('esign', 'qwerty')
+            ->post('http://192.168.150.79/' . 'api/sign/pdf', $data);
+
+        if ($res->status() == 200) {
+            if ($res->body()) {
+                // Update status TTD
+                if ($dataSKRD->status_ttd == 2) {
+                    $dataSKRD->update([
+                        'status_ttd' => 1,
+                    ]);
+                } else {
+                    $dataSKRD->update([
+                        'status_ttd' => 3,
+                    ]);
+                }
+
+                file_put_contents($pdf, $res->body(), true);
+                $local_pdf = Storage::disk('local')->get('public/file_skrd/' . $fileName); // get content pdf from local
+
+                // Move to storage SFTP
+                Storage::disk('sftp')->put($path_sftp . $fileName, $local_pdf);
+                Storage::delete('public/file_skrd/' . $fileName); // delete pdf from local
+                return redirect()
+                    ->route($this->route . 'show', \Crypt::encrypt($id))
+                    ->withSuccess('Berhasil melakukan tandatangan digital.');
+            }
+            return response()->json(['message' => "Gagal melakukan tandatangan digital. Aplikasi tidak mendapatkan balikan data .pdf"], 422);
+        }
+        return redirect()
+            ->route($this->route . 'show', \Crypt::encrypt($id))
+            ->withErrors("Terjadi kegagalan dalam memuat tandatangan digital. Error Code " . $res->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator");
     }
 
     public function tte(Request $request)
