@@ -135,6 +135,7 @@ class PenggunaController extends Controller
         if ($request->role_id == 11)
             $request->validate([
                 'nip'    => 'required|numeric|digits:18|unique:tmpenggunas,nip',
+                'nik'    => 'required|numeric|digits:16|unique:tmpenggunas,nik',
                 'opd_id' => 'required'
             ]);
 
@@ -193,6 +194,7 @@ class PenggunaController extends Controller
             'phone'     => $request->phone,
             'photo'     => 'default.png',
             'nip'       => $request->nip,
+            'nik'       => $request->nik,
             'api_key'   => $api_key,
             'url_callback' => $url_callback
         ];
@@ -253,6 +255,7 @@ class PenggunaController extends Controller
         if ($request->role_id == 11)
             $request->validate([
                 'nip'    => 'required|numeric|digits:18|unique:tmpenggunas,nip,' . $id,
+                'nik'    => 'required|numeric|digits:16|unique:tmpenggunas,nik,' . $id,
                 'opd_id' => 'required'
             ]);
 
@@ -276,6 +279,7 @@ class PenggunaController extends Controller
         $phone   = $request->phone;
         $role_id = $request->role_id;
         $nip     = $request->nip;
+        $nik     = $request->nik;
 
         /* Tahapan : 
          * 1. tmusers
@@ -294,7 +298,8 @@ class PenggunaController extends Controller
             'email'  => $email,
             'phone'  => $phone,
             'opd_id' => $opd_id,
-            'nip'    => $nip
+            'nip'    => $nip,
+            'nik'    => $nik
         ]);
 
         // Tahap 3

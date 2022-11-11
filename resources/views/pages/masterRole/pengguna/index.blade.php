@@ -117,6 +117,10 @@
                                                 <label for="nip" class="form-control label-input-custom col-md-2">NIP<span class="text-danger ml-1" id="nip_required"></span></label>
                                                 <input type="number" name="nip" id="nip" class="form-control r-0 light s-12 col-md-6" autocomplete="off"/>
                                             </div>
+                                            <div class="form-group m-0" id="nip_display">
+                                                <label for="nik" class="form-control label-input-custom col-md-2">NIK<span class="text-danger ml-1" id="nik_required"></span></label>
+                                                <input type="number" name="nik" id="nik" class="form-control r-0 light s-12 col-md-6" autocomplete="off"/>
+                                            </div>
                                             <div class="form-group mb-1" id="opd_display">
                                                 <label for="opd_id" class="form-control label-input-custom col-md-2">OPD<span class="text-danger ml-1">*</span></label>
                                                 <div class="col-md-6 p-0 bg-light">
@@ -188,11 +192,11 @@
             }
 
             if (role_id == 11) {
-                $('#nip_required').html('*'); 
-                $('#nip').prop('required', true); 
+                $('#nip_required,#nik_required').html('*'); 
+                $('#nip,#nik').prop('required', true); 
             } else {
-                $('#nip_required').html(''); 
-                $('#nip').prop('required', false);
+                $('#nip_required,#nik_required').html(''); 
+                $('#nip,#nik').prop('required', false);
             }
         });
     });

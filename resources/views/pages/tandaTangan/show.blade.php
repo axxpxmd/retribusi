@@ -282,27 +282,18 @@
                             {{ method_field('POST') }}
                             {{ csrf_field() }} 
                             @if ($nik)
-                            <input type="hidden" name="nik" value="{{ $nik }}">     
+                            <input type="text" name="nik" value="{{ $nik }}">     
                             @endif
                             <input type="hidden" name="id" value="{{ $id }}">
                             <img src="{{ asset('images/bsre.png') }}" width="100" class="mx-auto d-block" alt="">
                             <div class="mt-4">
                                 <div class="col-md-12">
-                                    @if ($nik)
                                     <div class="row mb-2">
                                         <label class="col-form-label s-12 col-md-3">Di TTD Oleh</label>
                                         <div class="col-md-8">
                                             <input type="text" class="form-control r-0 light s-12" value="{{ $data->nm_ttd }} &nbsp;&nbsp; [ {{ $nik }} ]" autocomplete="off" readonly required/>
                                         </div>
                                     </div>
-                                    @else
-                                    <div class="row mb-2">
-                                        <label class="col-form-label s-12 col-md-3">NIK</label>
-                                        <div class="col-md-8">
-                                            <input type="number" name="nik" id="nik" placeholder="Masukan NIK" class="form-control r-0 s-12" autocomplete="off" required/>
-                                        </div>
-                                    </div>
-                                    @endif
                                     <div class="row mb-2">
                                         <label for="password" class="col-form-label s-12 col-md-3">Passphrase</label>
                                         <div class="col-md-8">
@@ -341,8 +332,6 @@
                             {{ method_field('POST') }}
                             {{ csrf_field() }} 
                             <input type="hidden" name="id" value="{{ $id }}">
-                            <input type="hidden" name="token_godem" value="{{ $token_godem }}">
-                            <input type="hidden" name="id_cert" value="{{ $id_cert }}">
                             <input type="hidden" name="nip_ttd" value="{{ $data->nip_ttd }}">
                             <img src="{{ asset('images/iotentik.jpg') }}" class="mx-auto d-block" alt="">
                             <div class="">

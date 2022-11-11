@@ -209,8 +209,7 @@ class TandaTanganController extends Controller
         $dateNow = Carbon::now()->format('Y-m-d');
 
         // Get NIK
-        $pengguna = Pengguna::where('nip', $nip_ttd)->first();
-        $nik = $pengguna->nik;
+        $nik = Auth::user()->pengguna->nik;
 
         $token_godem = '';
         $id_cert     = '';
@@ -298,12 +297,6 @@ class TandaTanganController extends Controller
 
             // Save PDF to local storage
             Storage::put($path_local . $fileName, $content);
-
-            // Token Godem
-            $token_godem = $this->getTokenGodam($id, $nip_ttd);
-
-            // Sertifikat 
-            $id_cert = $this->getListCert($id, $nip_ttd);
         }
 
         return view($this->view . 'show', compact(
@@ -311,8 +304,6 @@ class TandaTanganController extends Controller
             'route',
             'title',
             'data',
-            'token_godem',
-            'id_cert',
             'fileName',
             'path_sftp',
             'dateNow',
@@ -353,14 +344,7 @@ class TandaTanganController extends Controller
         $password = $request->passphrase;
 
         $dataSKRD = TransaksiOPD::find($id);
-        $pengguna = Pengguna::where('nip', $dataSKRD->nip_ttd)->first();
-
-        if (!$pengguna->nik) {
-            $pengguna->update([
-                'nik' => $nik
-            ]);
-        }
-
+       
         $fileName   = str_replace(' ', '', $dataSKRD->nm_wajib_pajak) . '-' . $dataSKRD->no_skrd . ".pdf";
         $path_local = 'app/public/';
         $path_sftp  = 'file_ttd_skrd/';
@@ -429,6 +413,13 @@ class TandaTanganController extends Controller
         $fileName   = str_replace(' ', '', $dataSKRD->nm_wajib_pajak) . '-' . $dataSKRD->no_skrd . ".pdf";
         $path_local = 'app/public/';
         $path_sftp  = 'file_ttd_skrd/';
+        $nip_ttd = $request->nip_ttd;
+
+        // Token Godem
+        $token_godem = $this->getTokenGodam($id, $nip_ttd);
+
+        // Sertifikat 
+        $id_cert = $this->getListCert($id, $nip_ttd);
 
         /**
          * Process TTE
@@ -440,13 +431,13 @@ class TandaTanganController extends Controller
         $data = [
             'username'   => $request->nip_ttd,
             'passphrase' => $request->passphrase,
-            'token'      => $request->token_godem,
+            'token'      => $token_godem,
             'urx'  => 177,
             'ury'  => 840,
             'llx'  => 1,
             'lly'  => 795,
             'page' => 1,
-            'idkeystore' => $request->id_cert,
+            'idkeystore' => $id_cert,
             'reason'     => 'Tanda Tangan Digital Retribusi',
             'location'   => 'Tangerang Selatan',
             'updated_at' => ''
