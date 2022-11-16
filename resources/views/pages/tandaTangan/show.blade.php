@@ -238,10 +238,7 @@
                                         <label class="col-md-10 s-12">
                                             @if ($data->status_ttd == 0 || $data->status_ttd == 2 || $data->status_ttd == 4)
                                                 <button class="btn btn-sm btn-success mr-1" data-toggle="modal" data-target="#preview-file"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</button>
-                                                <button class="btn btn-sm btn-primary mr-1" data-toggle="modal" data-target="#tte"><i class="icon-pencil mr-2"></i>TTE IOTENTIK</button>
-                                                @if ($nik)
-                                                <button class="btn btn-sm btn-secondary mr-1" data-toggle="modal" data-target="#tte_bsre"><i class="icon-pencil mr-2"></i>TTE BSRE</button>
-                                                @endif
+                                                <button class="btn btn-sm btn-primary mr-1" data-toggle="modal" data-target="#tte"><i class="icon-pencil mr-2"></i>Tanda Tangan</button>
                                             @else
                                                 <button class="btn btn-sm btn-success mr-2" data-toggle="modal" data-target="#preview-file"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</button> 
                                             @endif
@@ -325,44 +322,64 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="card">
-                    <h6 class="card-header font-weight-bold">TTE <b>IOTENTIK</b></h6>
+                    <h6 class="card-header font-weight-bold">Tanda Tangan</h6>
                     <div class="card-body">
-                        {{-- <form class="needs-validation" method="POST" action="{{ route('tanda-tangan.tteBackup') }}" enctype="multipart/form-data" novalidate>
-                            {{ method_field('POST') }}
-                            {{ csrf_field() }}  --}}
-                        <form class="needs-validation" method="POST" action="{{ route('tanda-tangan.tte') }}" enctype="multipart/form-data" novalidate>
+                        <form class="needs-validation" method="POST" action="{{ route('tanda-tangan.tandaTangan') }}" enctype="multipart/form-data" novalidate>
                             {{ method_field('POST') }}
                             {{ csrf_field() }} 
-                            <input type="hidden" name="id" value="{{ $id }}">
-                            <input type="hidden" name="nip_ttd" value="{{ $data->nip_ttd }}">
-                            <img src="{{ asset('images/iotentik.jpg') }}" class="mx-auto d-block" alt="">
-                            <div class="">
-                                <div class="col-md-12">
-                                    <div class="row mb-2">
-                                        <label class="col-form-label s-12 col-md-3">Di TTD Oleh</label>
-                                        <div class="col-md-8">
-                                            <input type="text" class="form-control r-0 light s-12" value="{{ $data->nm_ttd }} &nbsp;&nbsp; [ {{ $data->nip_ttd }} ]" autocomplete="off" readonly required/>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-2">
-                                        <label for="password" class="col-form-label s-12 col-md-3">Passphrase</label>
-                                        <div class="col-md-8">
-                                            <input type="password" name="passphrase" id="passphrase" placeholder="Masukan Passphrase" class="form-control r-0 s-12" autocomplete="off" required/>
+                            <div class="text-center row">
+                                <div class="col-sm-6">
+                                    <div class="justify-content-center row mb-2">
+                                        <label class="col-md-2 p-0">
+                                            <input type="radio" class="form-control" name="tte" value="iotentik" required style="margin-top: 25px !important">
                                             <div class="invalid-feedback p-0">
-                                                Passphrase tidak boleh kosong.
+                                                Pilih TTE.
+                                            </div>
+                                        </label>
+                                        <div class="col-md-6 p-0">  
+                                            <div class="border py-2" style="background: #F7F7F7;">
+                                                <img src="{{ asset('images/iotentik.jpg') }}" width="100" alt="">
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row mb-2">
-                                        <label class="col-md-3"></label>
-                                        <div class="col-md-8">
-                                            <button class="btn btn-sm btn-primary mr-2"><i class="icon-pencil mr-2"></i>Tandatangani</button>
-                                            <button class="btn btn-sm btn-danger" data-dismiss="modal"><i class="icon-times mr-2"></i>Batalkan</button>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="justify-content-center row mb-2">
+                                        <label class="col-md-2 p-0">
+                                            <input type="radio" class="form-control" name="tte" value="bsre" {{ $nik ? 'required' : '' }} {{ $nik ? '-' : 'disabled' }} style="margin-top: 25px !important">
+                                            <div class="invalid-feedback p-0">
+                                                Pilih TTE.
+                                            </div>
+                                        </label>
+                                        <div class="col-md-6 p-0">  
+                                            <div class="border py-2" style="background: #F7F7F7;">
+                                                <img src="{{ asset('images/bsre.png') }}" width="118" alt="">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>  
-                        </form>  
+                            </div>
+                            <hr>
+                            <input type="hidden" name="id" value="{{ $id }}">
+                            <input type="hidden" name="nik" value="{{ $nik }}"> 
+                            <input type="hidden" name="nip" value="{{ $nip }}">     
+                            <div class="row mb-2">
+                                <label for="password" class="col-form-label s-12 col-md-2 font-weight-bold">Passphrase</label>
+                                <div class="col-md-10">
+                                    <input type="password" name="passphrase" id="passphrase" placeholder="Masukan Passphrase" class="form-control r-0 s-12" autocomplete="off" required/>
+                                    <div class="invalid-feedback p-0">
+                                        Passphrase tidak boleh kosong.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <label class="col-md-2"></label>
+                                <div class="col-md-10">
+                                    <button class="btn btn-sm btn-primary mr-2"><i class="icon-pencil mr-2"></i>Tandatangani</button>
+                                    <button class="btn btn-sm btn-danger" data-dismiss="modal"><i class="icon-times mr-2"></i>Batalkan</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

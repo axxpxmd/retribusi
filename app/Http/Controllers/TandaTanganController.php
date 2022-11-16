@@ -205,7 +205,7 @@ class TandaTanganController extends Controller
 
         $id   = \Crypt::decrypt($id);
         $data = TransaksiOPD::find($id);
-        $nip_ttd = $data->nip_ttd;
+        $nip = $data->nip_ttd;
         $dateNow = Carbon::now()->format('Y-m-d');
 
         // Get NIK
@@ -253,7 +253,7 @@ class TandaTanganController extends Controller
 
         if ($data->status_ttd == 0 || $data->status_ttd == 2 || $data->status_ttd == 4) {
 
-            //TODO: generate QR Code
+            //TODO: generate QR Code TTD
             $fileName = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
             $file_url = config('app.sftp_src') . 'file_ttd_skrd/' . $fileName;
             $b   = base64_encode(\SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')->merge(public_path('images/logo-png.png'), 0.2, true)->size(900)->errorCorrection('H')->margin(0)->generate($file_url));
@@ -309,7 +309,8 @@ class TandaTanganController extends Controller
             'dateNow',
             'kenaikan',
             'jumlahBunga',
-            'nik'
+            'nik',
+            'nip'
         ));
     }
 
@@ -337,15 +338,17 @@ class TandaTanganController extends Controller
             ->withSuccess('Berhasil melakukan tandatangan digital.');
     }
 
-    public function tteBSRE(Request $request)
+    public function tandaTangan(Request $request)
     {
         $id  = $request->id;
+        $tte = $request->tte;
         $nik = $request->nik;
-        $password = $request->passphrase;
+        $nip = $request->nip;
+        $passphrase = $request->passphrase;
 
-        $dataSKRD = TransaksiOPD::find($id);
-       
-        $fileName   = str_replace(' ', '', $dataSKRD->nm_wajib_pajak) . '-' . $dataSKRD->no_skrd . ".pdf";
+        $data =  TransaksiOPD::find($id);
+
+        $fileName   = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
         $path_local = 'app/public/';
         $path_sftp  = 'file_ttd_skrd/';
 
@@ -355,119 +358,40 @@ class TandaTanganController extends Controller
         $file = fopen($pdf, 'r');
         $qrimage = fopen($qrimage_path, 'r');
 
-        // TTE
-        $data = [
-            'nik'           => $nik,
-            'passphrase'    => $password,
-            'tampilan'      => 'visible',
-            'xAxis'         => 177,
-            'yAxis'         => 840,
-            'width'         => 1,
-            'height'        => 795,
-            'page'          => 1,
-            'image'         => 'true',
-            'reason'        => 'Tanda Tangan Digital Sisumaker',
-            'location'      => 'Tangerang Selatan'
-        ];
+        //* BSRE
+        if ($tte == 'bsre') {
+            $dataBSRE = [
+                'nik'        => $nik,
+                'passphrase' => $passphrase,
+                'tampilan'   => 'visible',
+                'xAxis'      => 177,
+                'yAxis'      => 840,
+                'width'      => 1,
+                'height'     => 795,
+                'page'       => 1,
+                'image'      => 'true',
+                'reason'     => 'Tanda Tangan Digital Retribusi',
+                'location'   => 'Tangerang Selatan'
+            ];
 
-        $res = Http::attach('file', $file, 'myfile.pdf')
-            ->attach('imageTTD', $qrimage, 'myimg.png')
-            ->withBasicAuth('esign', 'qwerty')
-            ->post('http://192.168.150.79/' . 'api/sign/pdf', $data);
+            $res = Http::attach('file', $file, 'myfile.pdf')
+                ->attach('imageTTD', $qrimage, 'myimg.png')
+                ->withBasicAuth('esign', 'qwerty')
+                ->post('http://192.168.150.79/' . 'api/sign/pdf', $dataBSRE);
 
-        if ($res->status() == 200) {
-            if ($res->body()) {
-                // Update status TTD
-                if ($dataSKRD->status_ttd == 2) {
-                    $dataSKRD->update([
-                        'status_ttd' => 1,
-                    ]);
-                } else {
-                    $dataSKRD->update([
-                        'status_ttd' => 3,
-                    ]);
-                }
-
-                file_put_contents($pdf, $res->body(), true);
-                $local_pdf = Storage::disk('local')->get('public/file_skrd/' . $fileName); // get content pdf from local
-
-                // Move to storage SFTP
-                Storage::disk('sftp')->put($path_sftp . $fileName, $local_pdf);
-                Storage::delete('public/file_skrd/' . $fileName); // delete pdf from local
-                return redirect()
-                    ->route($this->route . 'show', \Crypt::encrypt($id))
-                    ->withSuccess('Berhasil melakukan tandatangan digital.');
-            }
-            return response()->json(['message' => "Gagal melakukan tandatangan digital. Aplikasi tidak mendapatkan balikan data .pdf"], 422);
-        }
-        return redirect()
-            ->route($this->route . 'show', \Crypt::encrypt($id))
-            ->withErrors("Terjadi kegagalan dalam memuat tandatangan digital. Error Code " . $res->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator");
-    }
-
-    public function tte(Request $request)
-    {
-        $id = $request->id;
-        $dataSKRD = TransaksiOPD::find($id);
-
-        $fileName   = str_replace(' ', '', $dataSKRD->nm_wajib_pajak) . '-' . $dataSKRD->no_skrd . ".pdf";
-        $path_local = 'app/public/';
-        $path_sftp  = 'file_ttd_skrd/';
-        $nip_ttd = $request->nip_ttd;
-
-        // Token Godem
-        $token_godem = $this->getTokenGodam($id, $nip_ttd);
-
-        // Sertifikat 
-        $id_cert = $this->getListCert($id, $nip_ttd);
-
-        /**
-         * Process TTE
-         */
-        $pdf = storage_path($path_local . 'file_skrd/' . $fileName);
-        $qrimage_path = storage_path($path_local . 'transparan.png');
-
-        // Data / Payload
-        $data = [
-            'username'   => $request->nip_ttd,
-            'passphrase' => $request->passphrase,
-            'token'      => $token_godem,
-            'urx'  => 177,
-            'ury'  => 840,
-            'llx'  => 1,
-            'lly'  => 795,
-            'page' => 1,
-            'idkeystore' => $id_cert,
-            'reason'     => 'Tanda Tangan Digital Retribusi',
-            'location'   => 'Tangerang Selatan',
-            'updated_at' => ''
-        ];
-
-        $file = fopen($pdf, 'r');
-        $qrimage = fopen($qrimage_path, 'r');
-
-        $res = Http::withToken(config('app.signapi_bearer'))
-            ->attach('imageSign', $qrimage, 'myimg.png')
-            ->attach('pdf', $file, 'myfile.pdf')
-            ->post(config('app.signapi_ipserver') . 'signPDF', $data);
-
-        if ($res->successful()) {
-            $r = $res->json();
-            if ($r['status'] == 200) {
-                if ($res['data']) {
-                    // Update status TTD
-                    if ($dataSKRD->status_ttd == 2) {
-                        $dataSKRD->update([
+            if ($res->status() == 200) {
+                if ($res->body()) {
+                    if ($data->status_ttd == 2) {
+                        $data->update([
                             'status_ttd' => 1,
                         ]);
                     } else {
-                        $dataSKRD->update([
+                        $data->update([
                             'status_ttd' => 3,
                         ]);
                     }
 
-                    // Save to local storage (file already TTE)
-                    file_put_contents($pdf, base64_decode($r['data'], true));
+                    file_put_contents($pdf, $res->body(), true);
                     $local_pdf = Storage::disk('local')->get('public/file_skrd/' . $fileName); // get content pdf from local
 
                     // Move to storage SFTP
@@ -476,26 +400,86 @@ class TandaTanganController extends Controller
 
                     return redirect()
                         ->route($this->route . 'show', \Crypt::encrypt($id))
-                        ->withSuccess('Berhasil melakukan tandatangan digital.');
+                        ->withSuccess('Berhasil melakukan tandatangan digital dengan BSRE.');
                 }
-                return redirect()
-                    ->route($this->route . 'show', \Crypt::encrypt($id))
-                    ->withErrors('Gagal melakukan tandatangan digital. Aplikasi tidak mendapatkan balikan data .pdf.');
+                return response()->json(['message' => "Gagal melakukan tandatangan digital BSRE. Silahkan dicoba lagi"], 422);
             }
-            if (isset($r))
-                if ($r['status'] == 201) {
-                    return redirect()
-                        ->route($this->route . 'show', \Crypt::encrypt($id))
-                        ->withErrors('Gagal melakukan tandatangan digital. Error Code: ' .  $r['status'] . ' Message: Passphrase Salah');
-                } else {
-                    return redirect()
-                        ->route($this->route . 'show', \Crypt::encrypt($id))
-                        ->withErrors('Gagal melakukan tandatangan digital, Silahkan refresh halaman ini. Error Code: ' .  $r['status'] . ' Message: ' . $r['message']);
-                }
+            return redirect()
+                ->route($this->route . 'show', \Crypt::encrypt($id))
+                ->withErrors("Terjadi kegagalan dalam memuat tandatangan digital. Error Code " . $res->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator");
         }
-        return redirect()
-            ->route($this->route . 'show', \Crypt::encrypt($id))
-            ->withErrors("Terjadi kegagalan dalam memuat tandatangan digital. Error Code " . $res->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator");
+
+        //* IOTENTIK
+        if ($tte == 'iotentik') {
+            $id_cert     = $this->getListCert($id, $nip);
+            $token_godem = $this->getTokenGodam($id, $nip);
+
+            $dataIotentik = [
+                'username'   => $nip,
+                'passphrase' => $passphrase,
+                'token'      => $token_godem,
+                'urx'  => 177,
+                'ury'  => 840,
+                'llx'  => 1,
+                'lly'  => 795,
+                'page' => 1,
+                'idkeystore' => $id_cert,
+                'reason'     => 'Tanda Tangan Digital Retribusi',
+                'location'   => 'Tangerang Selatan',
+                'updated_at' => ''
+            ];
+
+            $res = Http::withToken(config('app.signapi_bearer'))
+                ->attach('imageSign', $qrimage, 'myimg.png')
+                ->attach('pdf', $file, 'myfile.pdf')
+                ->post(config('app.signapi_ipserver') . 'signPDF', $dataIotentik);
+
+            if ($res->successful()) {
+                $r = $res->json();
+                if ($r['status'] == 200) {
+                    if ($res['data']) {
+                        // Update status TTD
+                        if ($data->status_ttd == 2) {
+                            $data->update([
+                                'status_ttd' => 1,
+                            ]);
+                        } else {
+                            $data->update([
+                                'status_ttd' => 3,
+                            ]);
+                        }
+
+                        // Save to local storage (file already TTE)
+                        file_put_contents($pdf, base64_decode($r['data'], true));
+                        $local_pdf = Storage::disk('local')->get('public/file_skrd/' . $fileName); // get content pdf from local
+
+                        // Move to storage SFTP
+                        Storage::disk('sftp')->put($path_sftp . $fileName, $local_pdf);
+                        Storage::delete('public/file_skrd/' . $fileName); // delete pdf from local
+
+                        return redirect()
+                            ->route($this->route . 'show', \Crypt::encrypt($id))
+                            ->withSuccess('Berhasil melakukan tandatangan digital dengan IOTENTIK.');
+                    }
+                    return redirect()
+                        ->route($this->route . 'show', \Crypt::encrypt($id))
+                        ->withErrors('Gagal melakukan tandatangan digital IOTENTIK. Silahkan dicoba lagi');
+                }
+                if (isset($r))
+                    if ($r['status'] == 201) {
+                        return redirect()
+                            ->route($this->route . 'show', \Crypt::encrypt($id))
+                            ->withErrors('Gagal melakukan tandatangan digital IOTENTIK. Error Code: ' .  $r['status'] . ' Message: Passphrase Salah');
+                    } else {
+                        return redirect()
+                            ->route($this->route . 'show', \Crypt::encrypt($id))
+                            ->withErrors('Gagal melakukan tandatangan digital, Silahkan refresh halaman ini. Error Code: ' .  $r['status'] . ' Message: ' . $r['message']);
+                    }
+            }
+            return redirect()
+                ->route($this->route . 'show', \Crypt::encrypt($id))
+                ->withErrors("Terjadi kegagalan dalam memuat tandatangan digital. Error Code " . $res->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator");
+        }
     }
 
     public function restoreTTD($id)
