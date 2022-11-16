@@ -239,7 +239,9 @@
                                             @if ($data->status_ttd == 0 || $data->status_ttd == 2 || $data->status_ttd == 4)
                                                 <button class="btn btn-sm btn-success mr-1" data-toggle="modal" data-target="#preview-file"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</button>
                                                 <button class="btn btn-sm btn-primary mr-1" data-toggle="modal" data-target="#tte"><i class="icon-pencil mr-2"></i>TTE IOTENTIK</button>
+                                                @if ($nik)
                                                 <button class="btn btn-sm btn-secondary mr-1" data-toggle="modal" data-target="#tte_bsre"><i class="icon-pencil mr-2"></i>TTE BSRE</button>
+                                                @endif
                                             @else
                                                 <button class="btn btn-sm btn-success mr-2" data-toggle="modal" data-target="#preview-file"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</button> 
                                             @endif
