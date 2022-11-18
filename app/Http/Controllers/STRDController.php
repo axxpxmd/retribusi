@@ -101,7 +101,7 @@ class STRDController extends Controller
                 $edit    = "<a href='" . route($this->route . 'edit', Crypt::encrypt($p->id)) . "' class='text-primary mr-2' title='Edit Data'><i class='icon icon-edit'></i></a>";
 
                 if ($check !== false) {
-                    return $delete . $sendttd;
+                    return $sendttd;
                 } else {
                     if ($p->status_ttd == 3) {
                         return $filettd;
