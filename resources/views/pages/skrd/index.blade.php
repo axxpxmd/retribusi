@@ -35,7 +35,7 @@
                             <div class="row mb-2">
                                 <label for="opd" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">OPD</label>
                                 <div class="col-sm-8">
-                                    <select name="opd" id="opd" class="select2 form-control r-0 light s-12">
+                                    <select name="opd" id="opd" class="select2 form-control r-0 s-12">
                                         <option value="0">Semua</option>
                                         @foreach ($opds as $i)
                                             <option value="{{ $i->id }}">{{ $i->n_opd }}</option>
@@ -53,7 +53,7 @@
                             <div class="row mb-2">
                                 <label for="status_ttd" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">Status TTD</label>
                                 <div class="col-sm-8">
-                                    <select name="status_ttd" id="status_ttd" class="select2 form-control r-0 light s-12">
+                                    <select name="status_ttd" id="status_ttd" class="select2 form-control r-0 s-12">
                                         <option value=""></option>
                                         <option value="0">Belum TTD</option>
                                         <option value="1">Sudah TTD</option>
@@ -66,10 +66,10 @@
                                 <div class="col-sm-8">
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <input type="date" placeholder="MM/DD/YYYY" value="{{ $today }}" name="tgl_skrd" id="tgl_skrd" class="form-control r-0 s-12 mb-5-m" autocomplete="off"/>
+                                            <input type="date" placeholder="MM/DD/YYYY" value="{{ $today }}" name="tgl_skrd" id="tgl_skrd" class="form-control light r-0 s-12 mb-5-m" autocomplete="off"/>
                                         </div>
                                         <div class="col-md-6">
-                                            <input type="date" placeholder="MM/DD/YYYY" value="{{ $today }}" name="tgl_skrd1" id="tgl_skrd1" class="form-control r-0 s-12" autocomplete="off"/>
+                                            <input type="date" placeholder="MM/DD/YYYY" value="{{ $today }}" name="tgl_skrd1" id="tgl_skrd1" class="form-control light r-0 s-12" autocomplete="off"/>
                                         </div>
                                     </div>
                                 </div>
@@ -120,7 +120,7 @@
                                 <div class="row mb-2">
                                     <label class="col-form-label s-12 col-sm-4 text-right">OPD<span class="text-danger ml-1">*</span></label>
                                     <div class="col-sm-8">
-                                        <select class="select2 form-control r-0 light s-12" id="opd_id" name="opd_id" autocomplete="off">
+                                        <select class="select2 form-control r-0 s-12" id="opd_id" name="opd_id" autocomplete="off">
                                             <option value="0">Pilih</option>
                                             @foreach ($opds as $i)
                                                 <option value="{{ \Crypt::encrypt($i->id) }}">{{ $i->n_opd }}</option>
@@ -131,7 +131,7 @@
                                 <div class="row mb-2">
                                     <label class="col-form-label s-12 col-sm-4 text-right">Jenis Pendapatan<span class="text-danger ml-1">*</span></label>
                                     <div class="col-sm-8">
-                                        <select class="select2 form-control r-0 light s-12" id="jenis_pendapatan_id" name="jenis_pendapatan_id" autocomplete="off">
+                                        <select class="select2 form-control r-0 s-12" id="jenis_pendapatan_id" name="jenis_pendapatan_id" autocomplete="off">
                                             <option value="">Pilih</option>
                                         </select>
                                     </div>

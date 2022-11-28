@@ -27,70 +27,57 @@
             <div class="tab-pane animated fadeInUpShort show active" id="semua-data" role="tabpanel">
                 <div class="card no-b mb-2">
                     <div class="card-body">
-                        @if ($opd_id == 0)
-                        <div class="form-group row" style="margin-top: -8px !important">
-                            <label for="opd" class="col-form-label s-12 col-md-4 text-right font-weight-bolder">OPD : </label>
-                            <div class="col-sm-4">
-                                <select name="opd" id="opd" class="select2 form-control r-0 light s-12">
-                                    <option value="0">Semua</option>
-                                    @foreach ($opds as $i)
-                                        <option value="{{ $i->id }}">{{ $i->n_opd }}</option>
-                                    @endforeach
-                                </select>
+                        <div class="col-md-8 container">
+                            @if ($opd_id == 0)
+                            <div class="row mb-2">
+                                <label for="opd" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">OPD</label>
+                                <div class="col-sm-8">
+                                    <select name="opd" id="opd" class="select2 form-control r-0 s-12">
+                                        <option value="0">Semua</option>
+                                        @foreach ($opds as $i)
+                                            <option value="{{ $i->id }}">{{ $i->n_opd }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
-                        </div> 
-                        @endif
-                        <div class="form-group row" style="margin-top: -8px !important">
-                            <label for="status_bayar" class="col-form-label s-12 col-md-4 text-right font-weight-bolder">Status Bayar : </label>
-                            <div class="col-sm-4">
-                                <select name="status_bayar" id="status_bayar" class="select2 form-control r-0 light s-12">
-                                    <option value="">Semua</option>
-                                    <option value="0">Belum Dibayar</option>
-                                    <option value="1">Sudah Dibayar</option>
-                                </select>
+                            @endif
+                            <div class="row mb-2">
+                                <label for="status_bayar" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">Status Bayar</label>
+                                <div class="col-sm-8">
+                                    <select name="status_bayar" id="status_bayar" class="select2 form-control r-0 s-12">
+                                        <option value="">Semua</option>
+                                        <option value="0">Belum Dibayar</option>
+                                        <option value="1">Sudah Dibayar</option>
+                                    </select>
+                                </div>
+                            </div> 
+                            <div class="row mb-2">
+                                <label for="no_bayar" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">NO Bayar</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="no_bayar" id="no_bayar" class="form-control r-0 s-12 col-md-12" autocomplete="off" required/>
+                                </div>
                             </div>
-                        </div> 
-                        <div id="display_channel_bayar" class="form-group row" style="margin-top: -8px !important">
-                            <label for="channel_bayar" class="col-form-label s-12 col-md-4 text-right font-weight-bolder">Metode Bayar : </label>
-                            <div class="col-sm-4">
-                                <select name="channel_bayar" id="channel_bayar" class="select2 form-control r-0 light s-12">
-                                    <option value="0">Semua</option>
-                                    <option value="1">Virtual Account</option>
-                                    <option value="2">ATM / Teller</option>
-                                    <option value="3">Qris</option>
-                                </select>
-                            </div>
-                        </div> 
-                        <div class="form-group row" style="margin-top: -8px !important">
-                            <label for="no_bayar" class="col-form-label s-12 col-md-4 text-right font-weight-bolder">NO Bayar : </label>
-                            <div class="col-sm-4">
-                                <input type="text" name="no_bayar" id="no_bayar" class="form-control r-0 s-12 col-md-12" autocomplete="off" required/>
-                            </div>
-                        </div>
-                        <div class="form-group row" style="margin-top: -8px !important">
-                            <label class="col-form-label s-12 col-md-4 text-right font-weight-bolder">
-                                Tanggal &nbsp;
-                            </label>
-                            <div class="col-md-5 row">
-                                <div class="col-md-3 ml-0 pr-1">
-                                    <select name="jenis_tanggal" id="jenis_tanggal" class="select2 form-control r-0 light s-12">
+                            <div class="row mb-2">
+                                <label for="status_bayar" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">Tanggal</label>
+                                <div class="col-md-2 mb-5-m">
+                                    <select name="jenis_tanggal" id="jenis_tanggal" class="select2 form-control r-0 s-12">
                                         <option value="1">SKRD</option>
                                         <option value="2">Bayar</option>
                                     </select>
                                 </div>
-                                <input type="date" name="tgl_bayar" id="tgl_bayar" value="{{ $today }}" placeholder="" class="form-control r-0 light s-12 col-md-3 ml-3" autocomplete="off"/>
-                                <span class="mt-1 ml-2 mr-2">--</span>
-                                <input type="date" name="tgl_bayar1" id="tgl_bayar1" value="{{ $today }}" placeholder="" class="form-control r-0 light s-12 col-md-3" autocomplete="off"/>
+                                <div class="col-md-3">
+                                    <input type="date" name="tgl_bayar" id="tgl_bayar" value="{{ $today }}" placeholder="" class="form-control light r-0 s-12 mb-5-m" autocomplete="off"/>
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="date" name="tgl_bayar1" id="tgl_bayar1" value="{{ $today }}" placeholder="" class="form-control light r-0 s-12 mb-5-m" autocomplete="off"/>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group row" style="margin-top: -8px !important">
-                            <label class="col-form-label s-12 col-md-4 text-right font-weight-bolder"></label>
-                            <div class="col-sm-5 row">
-                                <button class="btn btn-success btn-sm ml-3" onclick="pressOnChange()"><i class="icon-filter mr-2"></i>Filter</button>
+                            <div class="row mb-4">
+                                <div class="col-sm-2"></div>
+                                <div class="col-sm-8">
+                                    <button class="btn btn-success btn-sm" onclick="pressOnChange()"><i class="icon-filter mr-2"></i>Filter</button>
+                                </div> 
                             </div>
-                        </div>
-                        <div>
-                            {{-- <p class="mb-0 font-weight-bold">Total Bayar : <span id="total_bayar"></span></p> --}}
                         </div>
                     </div>
                 </div>

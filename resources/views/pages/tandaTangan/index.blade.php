@@ -27,47 +27,50 @@
             <div class="tab-pane animated fadeInUpShort show active" id="semua-data" role="tabpanel">
                 <div class="card no-b mb-2">
                     <div class="card-body">
-                        @if ($opd_id == 0)
-                        <div class="form-group row" style="margin-top: -8px !important">
-                            <label for="opd" class="col-form-label s-12 col-md-4 text-right font-weight-bolder">OPD : </label>
-                            <div class="col-sm-4">
-                                <select name="opd" id="opd" class="select2 form-control r-0 light s-12">
-                                    <option value="0">Semua</option>
-                                    @foreach ($opds as $i)
-                                        <option value="{{ $i->id }}">{{ $i->n_opd }}</option>
-                                    @endforeach
-                                </select>
+                        <div class="col-md-8 container">
+                            @if ($opd_id == 0)
+                            <div class="row mb-2">
+                                <label for="opd" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">OPD</label>
+                                <div class="col-sm-8">
+                                    <select name="opd" id="opd" class="select2 form-control r-0 light s-12">
+                                        <option value="0">Semua</option>
+                                        @foreach ($opds as $i)
+                                            <option value="{{ $i->id }}">{{ $i->n_opd }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div> 
+                            @endif
+                            <div class="row mb-2">
+                                <label for="no_skrd" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">NO SKRD</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="no_skrd" id="no_skrd" class="form-control r-0 s-12 col-md-12" autocomplete="off" required/>
+                                </div>
                             </div>
-                        </div> 
-                        @endif
-                        <div class="form-group row" style="margin-top: -8px !important">
-                            <label for="no_skrd" class="col-form-label s-12 col-md-4 text-right font-weight-bolder">NO SKRD : </label>
-                            <div class="col-sm-4">
-                                <input type="text" name="no_skrd" id="no_skrd" class="form-control r-0 s-12 col-md-12" autocomplete="off" required/>
+                            <div class="row mb-2">
+                                <label for="status_ttd" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">Status TTD</label>
+                                <div class="col-sm-8">
+                                    <select name="status_ttd" id="status_ttd" class="select2 form-control r-0 light s-12">
+                                        <option value=""></option>
+                                        <option value="2">Belum diTTD</option>
+                                        <option value="1">Sudah diTTD</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div> 
-                        <div class="form-group row" style="margin-top: -8px !important">
-                            <label for="status_ttd" class="col-form-label s-12 col-md-4 text-right font-weight-bolder">Status TTD : </label>
-                            <div class="col-sm-4">
-                                <select name="status_ttd" id="status_ttd" class="select2 form-control r-0 light s-12">
-                                    <option value=""></option>
-                                    <option value="2">Belum diTTD</option>
-                                    <option value="1">Sudah diTTD</option>
-                                </select>
+                            <div class="row mb-2">
+                                <label class="col-form-label s-12 col-md-2 text-right font-weight-bolder">Tanggal SKRD</label>
+                                <div class="col-sm-4">
+                                    <input type="date" placeholder="MM/DD/YYYY" value="{{ $today }}" name="tgl_skrd" id="tgl_skrd" class="form-control light r-0 s-12" autocomplete="off"/>
+                                </div>
+                                <div class="col-sm-4">
+                                    <input type="date" placeholder="MM/DD/YYYY" value="{{ $today }}" name="tgl_skrd1" id="tgl_skrd1" class="form-control light r-0 s-12" autocomplete="off"/>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group row" style="margin-top: -8px !important">
-                            <label class="col-form-label s-12 col-md-4 text-right font-weight-bolder">Tanggal SKRD:</label>
-                            <div class="col-sm-5 row">
-                                <input type="date" placeholder="MM/DD/YYYY" value="{{ $today }}" name="tgl_skrd" id="tgl_skrd" class="form-control r-0 light s-12 col-md-4 ml-3" autocomplete="off"/>
-                                <span class="mt-1 ml-2 mr-2">-</span>
-                                <input type="date" placeholder="MM/DD/YYYY" value="{{ $today }}" name="tgl_skrd1" id="tgl_skrd1" class="form-control r-0 light s-12 col-md-4" autocomplete="off"/>
-                            </div>
-                        </div>
-                        <div class="form-group row" style="margin-top: -8px !important">
-                            <label class="col-form-label s-12 col-md-4 text-right font-weight-bolder"></label>
-                            <div class="col-sm-5 row">
-                                <button class="btn btn-success btn-sm ml-3" onclick="pressOnChange()"><i class="icon-filter mr-2"></i>Filter</button>
+                            <div class="row mb-4">
+                                <div class="col-sm-2"></div>
+                                <div class="col-sm-8">
+                                    <button class="btn btn-success btn-sm" onclick="pressOnChange()"><i class="icon-filter mr-2"></i>Filter</button>
+                                </div> 
                             </div>
                         </div>
                     </div>
@@ -83,7 +86,6 @@
                                             <th>Nomor SKRD</th>
                                             <th>Nomor Bayar</th>
                                             <th>Nama WP</th>
-                                            {{-- <th width="21%">Nama Dinas</th> --}}
                                             <th>Jenis Retribusi</th>
                                             <th>Tanggal SKRD</th>
                                             <th>Masa Berlaku SKRD</th>
@@ -133,7 +135,6 @@
             {data: 'no_skrd', name: 'no_skrd'},
             {data: 'no_bayar', name: 'no_bayar'},
             {data: 'nm_wajib_pajak', name: 'nm_wajib_pajak'},
-            // {data: 'id_opd', name: 'id_opd'},
             {data: 'id_jenis_pendapatan', name: 'id_jenis_pendapatan'},
             {data: 'tgl_skrd', name: 'tgl_skrd'},
             {data: 'masa_berlaku', name: 'masa_berlaku'},
