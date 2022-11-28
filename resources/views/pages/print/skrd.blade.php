@@ -135,7 +135,7 @@
             <tr class="c">
                 <td><p class="m-b-0 m-t-0">No Bayar </p></td>
                 <td><span>:</span></td>
-                <td><p class="m-b-0 m-t-0">{{ $data->no_bayar }}</p></td>
+                <td><p class="m-b-0 m-t-0">{{ $data->status_ttd == 1 ? $data->no_bayar : '-' }}</p></td>
             </tr>
             <tr class="c">
                 <td><p class="m-t-0 m-b-0">No Pendaftaran </p></td>
