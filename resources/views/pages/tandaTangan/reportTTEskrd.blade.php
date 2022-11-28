@@ -6,7 +6,6 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="{{ asset('css/util.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/skrd.css') }}">
 
     <!-- Font -->
     <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
