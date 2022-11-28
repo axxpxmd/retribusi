@@ -1,0 +1,109 @@
+html {
+    margin: 30px
+}
+
+table.d {
+    border-collapse: collapse;
+    width: 100%
+}
+
+table.d tr.d,
+th.d,
+td.d {
+    table-layout: fixed;
+    border: 1px solid black;
+    font-size: 12px;
+    height: 100;
+}
+
+table.a tr.a,
+th.a,
+td.a {
+    table-layout: fixed;
+    border: 1px solid black;
+    font-size: 12px;
+}
+
+table.c {
+    font-size: 15px
+}
+
+.t-bold {
+    font-weight: bold
+}
+
+.m-b-0 {
+    margin-bottom: 0px;
+}
+
+.m-r-10 {
+    margin-right: 10px;
+}
+
+.m-t-0 {
+    margin-top: 0px;
+}
+
+.m-l-5 {
+    margin-left: 5px;
+}
+
+.text-right {
+    text-align: right
+}
+
+.text-center {
+    text-align: center
+}
+
+.m-t-100 {
+    margin-top: 100px
+}
+
+.text-left {
+    text-align: left
+}
+
+.m-l-14 {
+    margin-left: 25px
+}
+
+.m-r-20 {
+    margin-right: 20px
+}
+
+.f-w-n {
+    font-weight: normal
+}
+
+.m-t-1 {
+    margin-top: 1px
+}
+
+.m-l-50 {
+    margin-left: 50px;
+}
+
+.m-t-15 {
+    margin-top: 15px
+}
+
+.m-b-5 {
+    margin-bottom: 5px
+}
+
+.f-normal {
+    font-weight: normal
+}
+
+.mt-n40 {
+    margin-top: -30px !important
+}
+
+.mt-n40 {
+    margin-top: -30px !important
+}
+
+.mt-n15 {
+    margin-top: -15px !important
+}
