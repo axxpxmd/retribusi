@@ -240,7 +240,7 @@ class TransaksiOPD extends Model
         $now = Carbon::now();
         $date = $now->format('Y-m-d');
 
-        $data = TransaksiOPD::select('id', 'id_opd', 'no_skrd', 'no_bayar', 'nm_wajib_pajak', 'id_jenis_pendapatan', 'tgl_skrd_awal', 'tgl_skrd_akhir', 'status_ttd', 'jumlah_bayar')
+        $data = TransaksiOPD::select('id', 'id_opd', 'no_skrd', 'no_bayar', 'nm_wajib_pajak', 'id_jenis_pendapatan', 'tgl_skrd_awal', 'tgl_skrd_akhir', 'status_ttd', 'jumlah_bayar', 'history_ttd')
             ->with('opd', 'jenis_pendapatan')
             ->where('status_bayar', 0)
             ->where('tgl_skrd_akhir', '>=', $date)

@@ -384,10 +384,12 @@ class TandaTanganController extends Controller
                     if ($data->status_ttd == 2) {
                         $data->update([
                             'status_ttd' => 1,
+                            'history_ttd' => 1
                         ]);
                     } else {
                         $data->update([
                             'status_ttd' => 3,
+                            'history_ttd' => 1
                         ]);
                     }
 
@@ -442,10 +444,12 @@ class TandaTanganController extends Controller
                         if ($data->status_ttd == 2) {
                             $data->update([
                                 'status_ttd' => 1,
+                                'history_ttd' => 1
                             ]);
                         } else {
                             $data->update([
                                 'status_ttd' => 3,
+                                'history_ttd' => 1
                             ]);
                         }
 

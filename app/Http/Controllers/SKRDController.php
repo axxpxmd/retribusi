@@ -106,9 +106,15 @@ class SKRDController extends Controller
                     return $filettd;
                 } else {
                     //* Proses TTD
-                    if ($p->status_ttd != 2)
-                        return $edit . $delete . $sendttd;
-                    return '-';
+                    if ($p->status_ttd != 2) {
+                        if ($p->history_ttd == 1) {
+                            return $edit . $sendttd;
+                        } else {
+                            return $edit . $delete . $sendttd;
+                        }
+                    } else {
+                        return '-';
+                    }
                 }
             })
             ->editColumn('no_skrd', function ($p) {
@@ -424,14 +430,14 @@ class SKRDController extends Controller
                 //TODO: Create QRIS
                 $resCreateQRISBJB = $this->qrisbjb->createQRIS($tokenQRISBJB, $amount, $no_hp);
                 $resJsonQRIS      = $resCreateQRISBJB->json();
-                
+
                 //* LOG
                 $dataQris = [
                     'no_bayar' => $no_bayar,
                     'data' => $resJsonQRIS
                 ];
                 Log::channel('skrd_create_qris')->info('Create Qris SKRD', $dataQris);
-                
+
                 if ($resCreateQRISBJB->successful()) {
                     if ($resJsonQRIS["status"]["code"] != 200) {
                         DB::rollback(); //* DB Transaction Failed
@@ -645,7 +651,7 @@ class SKRDController extends Controller
                     // TODO: Create QRIS
                     $resCreateQRISBJB = $this->qrisbjb->createQRIS($tokenQRISBJB, $amount, $no_hp);
                     $resJsonQRIS      = $resCreateQRISBJB->json();
-                    
+
                     //* LOG
                     $dataQris = [
                         'no_bayar' => $data->no_bayar,
@@ -740,7 +746,7 @@ class SKRDController extends Controller
                 'message' => "Terjadi kegagalan saat mengambil token. Error Code " . $resGetTokenBJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator"
             ], 422);
         }
-        
+
         //TODO: Update VA BJB
         $resUpdateVABJB = $this->vabjb->updateVaBJB($tokenBJB, $amount, $expiredDate, $customerName, $va_number);
         if ($resUpdateVABJB->successful()) {
@@ -759,7 +765,7 @@ class SKRDController extends Controller
         Log::channel('skrd_delete')->info('Hapus Data SRKD | ' . 'Oleh:' . Auth::user()->pengguna->full_name, $data->toArray());
 
         $data->delete();
-        
+
         return response()->json([
             'message' => 'Data ' . $this->title . ' berhasil dihapus.'
         ]);
