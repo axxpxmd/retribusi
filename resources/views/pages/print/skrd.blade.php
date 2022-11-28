@@ -241,7 +241,7 @@
                                 <li>ATM/Aplikasi BJB DIGI (diginet & digimobile) khusus nasabah bank BJB dengan mengikuti ketentuan limit transaksi yang berlaku menggunakan kode bayar <b>{{ $data->no_bayar }}</b></li>
                             </ul>
                         </li>
-                        <li>Pembayaran dilakukan melalui transfer VA (virtual account) bank BJB atau transfer antar bank online menggunakan nomor virtual account bank BJB <b>{{ $data->nomor_va_bjb }}</b>. (mengikuti ketentuan limit transaksi transfer yang berlaku, dan tidak berlaku untuk transaksi SKN & RTGS) ,berlaku sampai <b>{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_akhir)->format('d F Y') }}</b>.</li>
+                        <li>Pembayaran dilakukan melalui transfer VA (virtual account) bank BJB atau transfer antar bank online menggunakan nomor virtual account bank BJB <b>{{ $data->status_ttd == 1 ? $data->nomor_va_bjb : '-' }}</b>. (mengikuti ketentuan limit transaksi transfer yang berlaku, dan tidak berlaku untuk transaksi SKN & RTGS) ,berlaku sampai <b>{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_akhir)->format('d F Y') }}</b>.</li>
                         <li>Untuk pembayaran melalui SKN dan RTGS atau yang melebihi limit transaksi transfer online dapat menghubungi perangkat daerah penerbit SKRD.</li>
                         <li>Apabila SKRD ini tidak atau kurang dibayar lewat waktu paling lama 30 hari setelah SKRD diterima atau (tanggal jatuh tempo) sanksi administrasi bunga sebesar 2% per bulan</li>
                     </ol>
@@ -249,13 +249,15 @@
             </tr>
             <tr class="a">
                 <td colspan="1" class="a" style="border-right: none !important; margin-left: 10px !important">
-                    @if ($data->text_qris)
-                    <div style="margin-top: 10px !important; margin-bottom: 5px !important">
-                        <img width="80" class="m-b-5" style="margin-left: 37px !important" src="{{ public_path('images/qr-logo.png') }}" alt="qris"><br>
-                        {!! $img !!}
-                        <br style="margin-top: -30px !important">
-                        <span class="m-l-5" style="font-weight: 400; font-size: 12px; font-family: 'Open Sans'">NIMD:{{ $data->rincian_jenis->nmid }}</span>
-                    </div>
+                    @if ($data->status_ttd == 1 || $data->status_ttd == 3)
+                        @if ($data->text_qris)
+                        <div style="margin-top: 10px !important; margin-bottom: 5px !important">
+                            <img width="80" class="m-b-5" style="margin-left: 37px !important" src="{{ public_path('images/qr-logo.png') }}" alt="qris"><br>
+                            {!! $img !!}
+                            <br style="margin-top: -30px !important">
+                            <span class="m-l-5" style="font-weight: 400; font-size: 12px; font-family: 'Open Sans'">NIMD:{{ $data->rincian_jenis->nmid }}</span>
+                        </div>
+                        @endif
                     @endif
                 </td>
                 <td colspan="3" class="a" style="border-left: none !important">
