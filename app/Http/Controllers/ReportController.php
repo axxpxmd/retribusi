@@ -129,10 +129,7 @@ class ReportController extends Controller
                     } else {
                         return  "<a href='" . route('print.skrd', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
                     }
-                }
-
-                //* STRD
-                if ($p->tgl_skrd_akhir < $dateNow) {
+                }else{
                     if ($p->status_ttd == 3) {
                         return $belumTTD;
                     } else {
