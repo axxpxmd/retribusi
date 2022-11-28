@@ -2,111 +2,14 @@
 <html lang="en">
 <head>
     <title>{{ $data->nm_wajib_pajak }} - {{ $data->no_skrd }}</title>
+
+    <!-- CSS -->
     <link rel="stylesheet" href="{{ asset('css/util.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/skrd.css') }}">
 
-    <style type="text/css">
+    <!-- Font -->
+    <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
 
-        html{
-            margin: 30px
-        }
-
-		table.d {
-            border-collapse: collapse;
-            width: 100%
-        } 
-
-        table.d tr.d,th.d,td.d{
-            table-layout: fixed;
-            border: 1px solid black;
-            font-size: 12px;
-            height: 100;
-        }
-
-        table.a tr.a,th.a,td.a{
-            table-layout: fixed;
-            border: 1px solid black;
-            font-size: 12px;
-        }
-
-        table.c{
-            font-size: 15px 
-        }
-
-        .t-bold {
-            font-weight: bold
-        }
-
-        .m-b-0{
-            margin-bottom: 0px;
-        }
-        .m-r-10{
-            margin-right: 10px;
-        }
-
-        .m-t-0{
-            margin-top: 0px;
-        }
-
-        .m-l-5{
-            margin-left: 5px;
-        }
-
-        .text-right{
-            text-align: right
-        }
-        .text-center{
-            text-align: center
-        }
-        .m-t-100{
-            margin-top: 100px
-        }
-
-        .text-left{
-            text-align: left
-        }
-
-        .m-l-14{
-            margin-left: 25px
-        }
-
-        .m-r-20{
-            margin-right: 20px
-        }
-
-        .f-w-n{
-            font-weight: normal
-        }
-        .m-t-1{
-            margin-top: 1px
-        }
-
-        .m-l-50{
-            margin-left: 50px;
-        }
-        .m-t-15{
-            margin-top: 15px
-        }
-        .m-b-5{
-            margin-bottom: 5px
-        }
-        .f-normal{
-            font-weight: normal
-        }
-        .mt-n40{
-            margin-top: -30px !important
-        }
-        .mt-n40{
-            margin-top: -30px !important
-        }
-        .mt-n15{
-            margin-top: -15px !important
-        }
-        .fs-10{
-            font-size: 10px
-        }.t-blue{
-            color: blue
-        }
-	</style>
 </head>
 <body >
     <table class="d">
@@ -140,13 +43,23 @@
                 <div style="margin: 0 auto">
                     <p class="text-center t-bold m-b-0" style="font-size: 13px">NO SKRD</p>
                     <p class="text-center m-t-1 f-normal">{{ $data->no_skrd }}</p>
-                    <p class="text-left f-normal m-l-5 m-b-0">No BKU : {{ $data->no_bku != null ? $data->no_bku : '-' }}</p>
-                    @if ($data->tgl_bku != null)
-                    <p class="text-left f-normal m-l-5 m-b-0 m-t-1">Tanggal &nbsp;: {{ Carbon\Carbon::createFromFormat('Y-m-d', substr($data->tgl_bku,0,10))->format('d F Y') }}</p>
-                    @else 
-                    <p class="text-left f-normal m-l-5 m-b-0 m-t-1">Tanggal &nbsp;: -</p>
-                    @endif
-                    <p class="text-left f-normal m-l-5 m-t-1">Rek &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: -</p>
+                    <table style="font-weight: normal">
+                        <tr>
+                            <td>No BKU</td>
+                            <td>:</td>
+                            <td>{{  $data->no_bku != null ? $data->no_bku : '-' }}</td>
+                        </tr>
+                        <tr>
+                            <td>Tanggal</td>
+                            <td>:</td>
+                            <td>{{ $data->tgl_bku != null ? Carbon\Carbon::createFromFormat('Y-m-d', substr($data->tgl_bku,0,10))->format('d F Y') : '-' }}</td>
+                        </tr>
+                        <tr>
+                            <td>Rek</td>
+                            <td>:</td>
+                            <td>-</td>
+                        </tr>
+                    </table>
                 </div>
             </th>
         </tr>
@@ -182,12 +95,20 @@
             <tr class="c">
                 <td><p class="m-t-0 m-b-0">&nbsp; </p></td>
                 <td>&nbsp;</td>
-                <td><p class="m-t-0 m-b-0">Kecamatan &nbsp;&nbsp;: {{ $data->kecamatan->n_kecamatan }}</p></td>
-            </tr>
-            <tr class="c">
-                <td><p class="m-t-0 m-b-0">&nbsp;</p></td>
-                <td>&nbsp;</td>
-                <td><p class="m-t-0 m-b-0">Kelurahan &nbsp;&nbsp;&nbsp;: {{ $data->kelurahan->n_kelurahan }}</p></td>
+                <td>
+                    <table style="font-weight: normal; margin-left: -3px !important">
+                        <tr>
+                            <td>Kecamatan</td>
+                            <td>:</td>
+                            <td>{{ $data->kecamatan->n_kecamatan }}</td>
+                        </tr>
+                        <tr>
+                            <td>Kelurahan</td>
+                            <td>:</td>
+                            <td>{{ $data->kelurahan->n_kelurahan }}</td>
+                        </tr>
+                    </table>
+                </td>
             </tr>
             <tr class="c">
                 <td><p class="m-t-0 m-b-0">NPWPRD </p></td>
@@ -198,11 +119,7 @@
             <tr class="c">
                 <td><p class="m-t-0 m-b-0">Jatuh Tempo </p></td>
                 <td><span>:</span></td>
-                @if ($data->tgl_skrd_akhir != null)
                 <td><p class="m-t-0 m-b-0">{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_akhir)->format('d F Y') }}</p></td>
-                @else
-                <td><p class="m-t-0 m-b-0">- </p></td>
-                @endif
                 <td>&nbsp;</td>
             </tr>
         </table>

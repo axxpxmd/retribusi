@@ -31,6 +31,7 @@ use App\Models\OPD;
 use App\Models\TransaksiOPD;
 use App\Models\OPDJenisPendapatan;
 use App\Models\Pengguna;
+use Illuminate\Support\Facades\Mail;
 
 class TandaTanganController extends Controller
 {
@@ -400,6 +401,30 @@ class TandaTanganController extends Controller
                     Storage::disk('sftp')->put($path_sftp . $fileName, $local_pdf);
                     Storage::delete('public/file_skrd/' . $fileName); // delete pdf from local
 
+                    //* Send Email
+                    if ($data->email) {
+                        $email = $data->email;
+                        $mailFrom = config('app.mail_from');
+                        $mailName = config('app.mail_name');
+
+                        $dataEmail = array(
+                            'nama' => $data->nm_wajib_pajak,
+                            'jumlah_bayar' => 'Rp. ' . number_format($data->jumlah_bayar),
+                            'tgl_jatuh_tempo' => Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_akhir)->format('d F Y'),
+                            'no_bayar' => $data->no_bayar
+                        );
+
+                        $fileName  = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
+                        $path_sftp = 'file_ttd_skrd/';
+                        $file = Storage::disk('sftp')->get($path_sftp . $fileName);
+
+                        Mail::send('layouts.mail.skrd', $dataEmail, function ($message) use ($email, $mailFrom, $mailName, $fileName, $file) {
+                            $message->to($email)->subject('SKRD');
+                            $message->attachData($file, $fileName);
+                            $message->from($mailFrom, $mailName);
+                        });
+                    }
+
                     return redirect()
                         ->route($this->route . 'show', \Crypt::encrypt($id))
                         ->withSuccess('Berhasil melakukan tandatangan digital dengan BSRE.');
@@ -460,6 +485,30 @@ class TandaTanganController extends Controller
                         // Move to storage SFTP
                         Storage::disk('sftp')->put($path_sftp . $fileName, $local_pdf);
                         Storage::delete('public/file_skrd/' . $fileName); // delete pdf from local
+
+                        //* Send Email
+                        if ($data->email) {
+                            $email = $data->email;
+                            $mailFrom = config('app.mail_from');
+                            $mailName = config('app.mail_name');
+
+                            $dataEmail = array(
+                                'nama' => $data->nm_wajib_pajak,
+                                'jumlah_bayar' => 'Rp. ' . number_format($data->jumlah_bayar),
+                                'tgl_jatuh_tempo' => Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_akhir)->format('d F Y'),
+                                'no_bayar' => $data->no_bayar
+                            );
+
+                            $fileName  = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
+                            $path_sftp = 'file_ttd_skrd/';
+                            $file = Storage::disk('sftp')->get($path_sftp . $fileName);
+
+                            Mail::send('layouts.mail.skrd', $dataEmail, function ($message) use ($email, $mailFrom, $mailName, $fileName, $file) {
+                                $message->to($email)->subject('SKRD');
+                                $message->attachData($file, $fileName);
+                                $message->from($mailFrom, $mailName);
+                            });
+                        }
 
                         return redirect()
                             ->route($this->route . 'show', \Crypt::encrypt($id))

@@ -574,6 +574,8 @@ class SKRDController extends Controller
         $clientRefnum = $data->no_bayar;
         $productCode  = $request->kd_jenis;
         $no_hp = $request->no_hp;
+        $no_telp = $request->no_telp;
+        $email = $request->email;
 
         //*: Check Expired Date (jika tgl_skrd_akhir kurang dari tanggal sekarang maka VA dan QRIS tidak terbuat)
         //*: Check Amount (jika nominal 0 rupiah makan VA dan QRIS tidak terbuat)
@@ -703,7 +705,9 @@ class SKRDController extends Controller
             'total_bayar'   => (int) str_replace(['.', 'Rp', ' '], '', $request->jumlah_bayar),
             'jumlah_bayar'  => (int) str_replace(['.', 'Rp', ' '], '', $request->jumlah_bayar),
             'updated_by'    => Auth::user()->pengguna->full_name . ' | Update data menu SKRD',
-            'id_rincian_jenis_pendapatan' => \Crypt::decrypt($request->id_rincian_jenis_pendapatan)
+            'id_rincian_jenis_pendapatan' => \Crypt::decrypt($request->id_rincian_jenis_pendapatan),
+            'email'   => $email,
+            'no_telp' => $no_telp
         ]);
 
         //* LOG
