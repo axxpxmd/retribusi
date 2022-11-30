@@ -33,9 +33,9 @@ class PrintController extends Controller
         $dateTimeNow = new DateTime($timeNow);
         $expired     = new DateTime($tgl_skrd_akhir . ' 23:59:59');
         $interval    = $dateTimeNow->diff($expired);
-        $monthDiff   = $interval->format('%m');
+        $monthDiff   = $interval->format('%d');
 
-        $kenaikan = ((int) $monthDiff + 1) * 2;
+        $kenaikan = ((int) $monthDiff + 30) / 30 + 2;
         $bunga    = $kenaikan / 100;
         $jumlahBunga = $total_bayar * $bunga;
 
