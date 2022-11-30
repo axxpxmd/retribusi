@@ -224,6 +224,7 @@ class STRDController extends Controller
             $tgl_jatuh_tempo = $data->tgl_strd_akhir;
         }
         $daysDiff = $this->getDiffDays($tgl_jatuh_tempo);
+        $checkJatuhTempo = \str_contains($daysDiff, '1');
 
         //TODO: Get bunga
         $tgl_skrd_akhir = $data->tgl_skrd_akhir;
@@ -239,7 +240,8 @@ class STRDController extends Controller
             'daysDiff',
             'tgl_jatuh_tempo',
             'jumlahBunga',
-            'kenaikan'
+            'kenaikan',
+            'checkJatuhTempo'
         ));
     }
 

@@ -113,7 +113,7 @@
                                             </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12"><strong>Jatuh Tempo :</strong></label>
-                                                @if ($daysDiff < 0)
+                                                @if (!$checkJatuhTempo)
                                                 <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d', $tgl_jatuh_tempo)->format('d F Y') }} | <span class="badge badge-warning" style="font-size: 10.5px !important">Kadaluarsa</span></label>
                                                 @else
                                                 <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d', $tgl_jatuh_tempo)->format('d F Y') }} | <span class="badge badge-success" style="font-size: 10.5px !important">Berlaku</span></label></label> 
