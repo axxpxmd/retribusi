@@ -31,7 +31,7 @@ class PrintController extends Controller
         //TODO: Create Bunga (kenaikan 2% tiap bulan)
         $timeNow     = Carbon::now();
         $dateTimeNow = new DateTime($timeNow);
-        $expired     = new DateTime($tgl_skrd_akhir . ' 23:59:59');
+        $expired     = new DateTime($tgl_skrd_akhir);
         $interval    = $dateTimeNow->diff($expired);
         $monthDiff   = $interval->format('%m');
 
