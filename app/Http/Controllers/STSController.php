@@ -220,6 +220,12 @@ class STSController extends Controller
             }
         }
 
+        if ($data->status_ttd == 1 || $data->status_ttd == 3) {
+            $status_ttd = true;
+        }else{
+            $status_ttd = false;
+        }
+
         return view($this->view . 'show', compact(
             'route',
             'title',
@@ -228,7 +234,8 @@ class STSController extends Controller
             'fileName',
             'kenaikan',
             'jumlahBunga',
-            'dateNow'
+            'dateNow',
+            ''
         ));
     }
 
