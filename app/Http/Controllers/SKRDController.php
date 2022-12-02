@@ -531,12 +531,19 @@ class SKRDController extends Controller
         $fileName  = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
         $path_sftp = 'file_ttd_skrd/';
 
+        if ($data->status_ttd == 1 || $data->status_ttd == 3) {
+            $status_ttd = true;
+        }else{
+            $status_ttd = false;
+        }
+
         return view($this->view . 'show', compact(
             'route',
             'title',
             'data',
             'path_sftp',
-            'fileName'
+            'fileName',
+            'status_ttd'
         ));
     }
 
