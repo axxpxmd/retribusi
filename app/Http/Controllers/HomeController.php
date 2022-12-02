@@ -100,7 +100,7 @@ class HomeController extends Controller
         $childs  = [];
 
         foreach ($higherIncome as $key => $value) {
-            $color = ['#26a69a', '#26c6da', '#42a5f5', '#ef5350', '#ff7043', '#5c6bc0', '#ffee58', '#bdbdbd', '#66bb6a ', '#ec407a'];
+            $color = ['#26a69a', '#26c6da', '#42a5f5', '#ef5350', '#ff7043', '#5c6bc0', '#ffee58', '#bdbdbd', '#66bb6a ', '#ec407a', '#42a5f5', '#26a69a', '#ff7043'];
 
             $parents[$key] = [
                 'y'    => $value->y,
