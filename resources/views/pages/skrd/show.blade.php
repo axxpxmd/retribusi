@@ -158,7 +158,7 @@
                                         </div> 
                                         <div class="row">
                                             <label class="col-md-4 font-weight-bold text-right s-12"><strong>Virtual Account BJB  :</strong></label>
-                                            <label class="col-md-8 s-12">{{ $data->nomor_va_bjb }}</label>
+                                            <label class="col-md-8 s-12">{{ $status_ttd ? $data->nomor_va_bjb : '-' }}</label>
                                         </div> 
                                         <div class="row">
                                             <label class="col-md-4 font-weight-bold text-right s-12"><strong>Invoice ID QRIS  :</strong></label>
