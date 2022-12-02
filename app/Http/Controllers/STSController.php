@@ -235,7 +235,7 @@ class STSController extends Controller
             'kenaikan',
             'jumlahBunga',
             'dateNow',
-            ''
+            'status_ttd'
         ));
     }
 
