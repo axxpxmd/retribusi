@@ -331,7 +331,8 @@ class STSController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'status_bayar' => 'required'
+            'status_bayar' => 'required',
+            'chanel_bayar' => 'required'
         ]);
 
         $id   = \Crypt::decrypt($id);

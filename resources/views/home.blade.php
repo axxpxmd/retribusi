@@ -141,7 +141,7 @@
                                         <div class="text-center">
                                             <div class="row justify-content-center">
                                                 <div class="col-auto">
-                                                    <i class="icon-dollar text-success fs-40"></i>
+                                                    <i class="icon-notebook-text text-success fs-40"></i>
                                                 </div>
                                                 <div class="col-auto">
                                                     <p class="fs-22 mt-1 text-black">{{ $totalWR }}</p>
