@@ -14,6 +14,15 @@
     .mr-n30{
         margin-right: -30px !important
     }
+
+    .table-wrapper {
+        max-height: 340px;
+        overflow: auto;
+        display:inline-block;
+    }
+    .table-earnings {
+        background: #F3F5F6;
+    }
 </style>
 <div class="page has-sidebar-left height-full">
     <header class="blue accent-3 relative nav-sticky">
@@ -33,25 +42,27 @@
             <div class="tab-pane animated fadeInUpShort show p-0 active" id="v-pills-1">
                 <div class="row p-0 col-md-12 mt-3">
                     <div class="col-md-7 animate__animated animate__backInDown">
-                        <div class="card no-b" style="height: 374px !important">
+                        <div class="card no-b" style="height: 435px !important">
                             <h6 class="card-header bg-white font-weight-bold text-black">Pendapatan {{ $time->year }}</h6>
                             <div class="card-body">
-                                <div class="">
-                                    <table class="table table-striped">
-                                        <thead >
+                                <div class="table-wrapper">
+                                    <table class="table fs-12 table-striped" style="width:100%">
+                                        <thead>
                                             <tr class="text-black">
                                                 <th>No</th>
                                                 <th>Jenis Pendapatan</th>
                                                 <th>Target</th>
+                                                <th>Ketetapan</th>
                                                 <th>Diterima</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @forelse ($targetPendapatan as $index => $i)
                                             <tr>
-                                                <td class="text-center">{{  $index + $targetPendapatan->firstItem() }}</td>
+                                                <td class="text-center">{{  $index+1 }}</td>
                                                 <td>{{ $i->jenis_pendapatan }}</td>
                                                 <td>@currency($i->target_pendapatan)</td>
+                                                <td>@currency($i->ketetapan)</td>
                                                 <td>@currency($i->diterima)</td>
                                             </tr>
                                             @empty
@@ -61,9 +72,6 @@
                                             @endforelse
                                         </tbody>
                                     </table>
-                                    <div>
-                                        {{ $targetPendapatan->links() }}
-                                    </div>
                                 </div>    
                             </div>
                         </div>
@@ -77,6 +85,7 @@
                                         <div class="text-center">
                                             <i class="icon-taxes amber-text fs-40"></i>
                                             <p class="fs-32 mt-3 mb-0"><span class="badge badge-pill badge-light ">{{ $totalSKRD }}</span></p>
+                                            <p class="fs-20 mb-0"><span class="badge badge-pill badge-light ">Rp. {{ number_format($totalSKRDduit) }}</span></p>
                                         </div>
                                     </div>
                                 </div>
@@ -88,6 +97,7 @@
                                         <div class="text-center">
                                             <i class="icon-calendar-times-o text-danger fs-40"></i>
                                             <p class="fs-32 mt-3 mb-0"><span class="badge badge-pill badge-light ">{{ $totalSTRD }}</span></p>
+                                            <p class="fs-20 mb-0"><span class="badge badge-pill badge-light ">Rp. {{ number_format($totalSTRDduit) }}</span></p>
                                         </div>
                                     </div>
                                 </div>
@@ -101,17 +111,19 @@
                                         <div class="text-center">
                                             <i class="icon-pay-point text-primary fs-40"></i>
                                             <p class="fs-32 mt-3 mb-0"><span class="badge badge-pill badge-light ">{{ $totalSTS }}</span></p>
+                                            <p class="fs-20 mb-0"><span class="badge badge-pill badge-light ">Rp. {{ number_format($totalSTSduit) }}</span></p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="card no-b mr-n15">
-                                    <h6 class="card-header bg-success font-weight-bold text-white">Total Wajib Retribusi</h6>
+                                    <h6 class="card-header bg-success font-weight-bold text-white">Total Pemohon</h6>
                                     <div class="card-body">
                                         <div class="text-center">
                                             <i class="icon-user-circle text-success fs-40"></i>
-                                            <p class="fs-32 mt-3 mb-0"><span class="badge badge-pill badge-light ">{{ $totalWR }}</span></p>
+                                            <p class="fs-32 mt-3 mb-0"><span class="badge badge-pill badge-light">{{ $totalWR }}</span></p>
+                                            <p class="fs-20 mb-0"><span class="badge badge-pill badge-light">Rp. {{ number_format($totalWRduit) }}</span></p>
                                         </div>
                                     </div>
                                 </div>

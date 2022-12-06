@@ -46,7 +46,7 @@ class HomeController extends Controller
         $opd_id = Auth::user()->pengguna->opd_id;
 
         //* Tabel Target Pendapatan
-        $targetPendapatan = JenisPendapatan::select(DB::raw("SUM(tmtransaksi_opd.total_bayar_bjb) as diterima"), 'jenis_pendapatan', 'target_pendapatan')
+        $targetPendapatan = JenisPendapatan::select(DB::raw("SUM(tmtransaksi_opd.total_bayar_bjb) as diterima"), DB::raw("SUM(tmtransaksi_opd.total_bayar) as ketetapan"), 'jenis_pendapatan', 'target_pendapatan')
             ->join('tmtransaksi_opd', 'tmtransaksi_opd.id_jenis_pendapatan', '=', 'tmjenis_pendapatan.id')
             ->where('tmtransaksi_opd.total_bayar_bjb', '!=', 0)
             ->where(DB::raw('YEAR(created_at)'), '=', $time->year)
@@ -55,7 +55,7 @@ class HomeController extends Controller
             })
             ->groupBy('tmtransaksi_opd.id_jenis_pendapatan')
             ->orderBy('diterima', 'DESC')
-            ->paginate(5);
+            ->get();
 
         //* Total SKRD, STRD, STS, Wajib Retribusi
         $totalSKRD = TransaksiOPD::where('status_bayar', 0)
@@ -65,6 +65,13 @@ class HomeController extends Controller
             })
             ->where(DB::raw('YEAR(tmtransaksi_opd.created_at)'), '=', $time->year)
             ->count();
+        $totalSKRDduit = TransaksiOPD::where('status_bayar', 0)
+            ->where('tgl_skrd_akhir', '>=', $date)
+            ->when($opd_id != 0, function ($q) use ($opd_id) {
+                $q->where('tmtransaksi_opd.id_opd', $opd_id);
+            })
+            ->where(DB::raw('YEAR(tmtransaksi_opd.created_at)'), '=', $time->year)
+            ->sum('total_bayar');
         $totalSTRD = TransaksiOPD::where('status_bayar', 0)
             ->where('tgl_skrd_akhir', '<', $date)
             ->when($opd_id != 0, function ($q) use ($opd_id) {
@@ -72,15 +79,33 @@ class HomeController extends Controller
             })
             ->where(DB::raw('YEAR(tmtransaksi_opd.created_at)'), '=', $time->year)
             ->count();
+        $totalSTRDduit = TransaksiOPD::where('status_bayar', 0)
+            ->where('tgl_skrd_akhir', '<', $date)
+            ->when($opd_id != 0, function ($q) use ($opd_id) {
+                $q->where('tmtransaksi_opd.id_opd', $opd_id);
+            })
+            ->where(DB::raw('YEAR(tmtransaksi_opd.created_at)'), '=', $time->year)
+            ->sum('total_bayar');
         $totalSTS  = TransaksiOPD::where('status_bayar', 1)
             ->when($opd_id != 0, function ($q) use ($opd_id) {
                 $q->where('tmtransaksi_opd.id_opd', $opd_id);
             })
             ->where(DB::raw('YEAR(tmtransaksi_opd.created_at)'), '=', $time->year)
             ->count();
+        $totalSTSduit  = TransaksiOPD::where('status_bayar', 1)
+            ->when($opd_id != 0, function ($q) use ($opd_id) {
+                $q->where('tmtransaksi_opd.id_opd', $opd_id);
+            })
+            ->where(DB::raw('YEAR(tmtransaksi_opd.created_at)'), '=', $time->year)
+            ->sum('total_bayar');
         $totalWR   = DataWP::when($opd_id != 0, function ($q) use ($opd_id) {
             $q->where('tmdata_wp.id_opd', $opd_id);
         })->where(DB::raw('YEAR(created_at)'), '=', $time->year)->count();
+        $totalWRduit   = TransaksiOPD::when($opd_id != 0, function ($q) use ($opd_id) {
+            $q->where('tmtransaksi_opd.id_opd', $opd_id);
+        })
+            ->where(DB::raw('YEAR(tmtransaksi_opd.created_at)'), '=', $time->year)
+            ->sum('total_bayar');
 
         //* Total Retribsui / Dinas
         $totalRetribusi = TransaksiOPD::whereYear('created_at', $time->year)->count();
@@ -137,14 +162,18 @@ class HomeController extends Controller
         return view('home', compact(
             'targetPendapatan',
             'totalSKRD',
+            'totalSKRDduit',
             'totalSTRD',
+            'totalSTRDduit',
             'totalSTS',
+            'totalSTSduit',
             'totalWR',
             'totalRetribusi',
             'totalRetribusiOPD',
             'parentJson',
             'childJson',
-            'time'
+            'time',
+            'totalWRduit'
         ));
     }
 }
