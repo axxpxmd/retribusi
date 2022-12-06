@@ -98,9 +98,11 @@ class HomeController extends Controller
             })
             ->where(DB::raw('YEAR(tmtransaksi_opd.created_at)'), '=', $time->year)
             ->sum('total_bayar');
-        $totalWR   = DataWP::when($opd_id != 0, function ($q) use ($opd_id) {
-            $q->where('tmdata_wp.id_opd', $opd_id);
-        })->where(DB::raw('YEAR(created_at)'), '=', $time->year)->count();
+        $totalWR   = TransaksiOPD::when($opd_id != 0, function ($q) use ($opd_id) {
+            $q->where('tmtransaksi_opd.id_opd', $opd_id);
+        })
+            ->where(DB::raw('YEAR(tmtransaksi_opd.created_at)'), '=', $time->year)
+            ->count();
         $totalWRduit   = TransaksiOPD::when($opd_id != 0, function ($q) use ($opd_id) {
             $q->where('tmtransaksi_opd.id_opd', $opd_id);
         })

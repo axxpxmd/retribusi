@@ -143,9 +143,20 @@
                                                 <div class="col-auto">
                                                     <i class="icon-dollar text-success fs-40"></i>
                                                 </div>
+                                                <div class="col-auto">
+                                                    <p class="fs-22 mt-1 text-black">{{ $totalWR }}</p>
+                                                </div>
+                                            </div>
+                                            <p class="fs-32 mt-3"><span class="badge badge-pill badge-light ">Rp. {{ number_format($totalWRduit) }}</span></p>
+                                        </div>
+                                        {{-- <div class="text-center">
+                                            <div class="row justify-content-center">
+                                                <div class="col-auto">
+                                                    <i class="icon-dollar text-success fs-40"></i>
+                                                </div>
                                             </div>
                                             <p class="fs-32 mt-4"><span class="badge badge-pill badge-light ">Rp. {{ number_format($totalWRduit) }}</span></p>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                 </div>
                             </div>
