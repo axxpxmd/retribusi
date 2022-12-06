@@ -83,6 +83,7 @@
                                         <option value="2">ATM / Teller</option>
                                         <option value="3">Qris</option>
                                         <option value="4">Bendahara OPD</option>
+                                        <option value="5">Lainnya</option>
                                     </select>
                                 </div>
                             </div>
