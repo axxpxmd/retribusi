@@ -70,6 +70,8 @@ class TransaksiOPD extends Model
             $from = $from . ' ' . '00:00:01';
             $to = $to . ' ' . '23:59:59';
 
+            $data->where('status_bayar', 1);
+
             if ($from != null || $to != null) {
                 if ($from != null && $to == null) {
                     $data->whereDate('tgl_bayar', $from);
