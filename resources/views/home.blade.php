@@ -83,9 +83,15 @@
                                     <h6 class="card-header font-weight-bold text-white" style="background: #FFCE3B">Total SKRD</h6>
                                     <div class="card-body">
                                         <div class="text-center">
-                                            <i class="icon-taxes amber-text fs-40"></i>
-                                            <p class="fs-32 mt-3 mb-0"><span class="badge badge-pill badge-light ">{{ $totalSKRD }}</span></p>
-                                            <p class="fs-20 mb-0"><span class="badge badge-pill badge-light ">Rp. {{ number_format($totalSKRDduit) }}</span></p>
+                                            <div class="row justify-content-center">
+                                                <div class="col-auto">
+                                                    <i class="icon-taxes amber-text fs-40"></i>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <p class="fs-22 mt-1 text-black">{{ $totalSKRD }}</p>
+                                                </div>
+                                            </div>
+                                            <p class="fs-32 mt-3"><span class="badge badge-pill badge-light ">Rp. {{ number_format($totalSKRDduit) }}</span></p>
                                         </div>
                                     </div>
                                 </div>
@@ -95,9 +101,15 @@
                                     <h6 class="card-header bg-danger font-weight-bold text-white">Total STRD</h6>
                                     <div class="card-body">
                                         <div class="text-center">
-                                            <i class="icon-calendar-times-o text-danger fs-40"></i>
-                                            <p class="fs-32 mt-3 mb-0"><span class="badge badge-pill badge-light ">{{ $totalSTRD }}</span></p>
-                                            <p class="fs-20 mb-0"><span class="badge badge-pill badge-light ">Rp. {{ number_format($totalSTRDduit) }}</span></p>
+                                            <div class="row justify-content-center">
+                                                <div class="col-auto">
+                                                    <i class="icon-calendar-times-o text-danger fs-40"></i>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <p class="fs-22 mt-1 text-black">{{ $totalSTRD }}</p>
+                                                </div>
+                                            </div>
+                                            <p class="fs-32 mt-3"><span class="badge badge-pill badge-light ">Rp. {{ number_format($totalSTRDduit) }}</span></p>
                                         </div>
                                     </div>
                                 </div>
@@ -109,21 +121,30 @@
                                     <h6 class="card-header bg-primary font-weight-bold text-white">Total STS</h6>
                                     <div class="card-body">
                                         <div class="text-center">
-                                            <i class="icon-pay-point text-primary fs-40"></i>
-                                            <p class="fs-32 mt-3 mb-0"><span class="badge badge-pill badge-light ">{{ $totalSTS }}</span></p>
-                                            <p class="fs-20 mb-0"><span class="badge badge-pill badge-light ">Rp. {{ number_format($totalSTSduit) }}</span></p>
+                                            <div class="row justify-content-center">
+                                                <div class="col-auto">
+                                                    <i class="icon-pay-point text-primary fs-40"></i>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <p class="fs-22 mt-1 text-black">{{ $totalSTS }}</p>
+                                                </div>
+                                            </div>
+                                            <p class="fs-32 mt-3"><span class="badge badge-pill badge-light ">Rp. {{ number_format($totalSTSduit) }}</span></p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="card no-b mr-n15">
-                                    <h6 class="card-header bg-success font-weight-bold text-white">Total Pemohon</h6>
+                                    <h6 class="card-header bg-success font-weight-bold text-white">Total Retribusi</h6>
                                     <div class="card-body">
                                         <div class="text-center">
-                                            <i class="icon-user-circle text-success fs-40"></i>
-                                            <p class="fs-32 mt-3 mb-0"><span class="badge badge-pill badge-light">{{ $totalWR }}</span></p>
-                                            <p class="fs-20 mb-0"><span class="badge badge-pill badge-light">Rp. {{ number_format($totalWRduit) }}</span></p>
+                                            <div class="row justify-content-center">
+                                                <div class="col-auto">
+                                                    <i class="icon-dollar text-success fs-40"></i>
+                                                </div>
+                                            </div>
+                                            <p class="fs-32 mt-4"><span class="badge badge-pill badge-light ">Rp. {{ number_format($totalWRduit) }}</span></p>
                                         </div>
                                     </div>
                                 </div>

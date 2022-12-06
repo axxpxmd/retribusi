@@ -92,6 +92,9 @@ class TransaksiOPD extends Model
                 case 3;
                     $data->where('chanel_bayar', 'like', '%QRIS%');
                     break;
+                case 4;
+                    $data->where('chanel_bayar', 'like', '%Bendahara OPD%');
+                    break;
                 default:
                     // 
                     break;
