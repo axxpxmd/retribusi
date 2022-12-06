@@ -84,8 +84,7 @@ class TransaksiOPD extends Model
         if ($channel_bayar != 0) {
             switch ($channel_bayar) {
                 case "1":
-                    $metode_bayar = 'BJB Virtual Account';
-                    $data->where('chanel_bayar', $metode_bayar);
+                    $data->where('chanel_bayar', 'like', '%Virtual Account%');
                     break;
                 case 2:
                     $metode_bayar = 'ATM BJB';
