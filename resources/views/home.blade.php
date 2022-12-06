@@ -180,7 +180,7 @@
 
                     @role('admin-opd|operator-opd|bendahara-opd|penandatangan')
                     <div class="col-md-4">
-                        @include('pages.dashboard.pieChart')
+                        {{-- @include('pages.dashboard.pieChart') --}}
                     </div>
                     <div class="col-md-8">
                         {{--  --}}
