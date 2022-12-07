@@ -60,7 +60,7 @@
                             <div class="row mb-2">
                                 <label class="col-form-label s-12 col-md-2 text-right font-weight-bolder">Tanggal SKRD</label>
                                 <div class="col-sm-4">
-                                    <input type="date" placeholder="MM/DD/YYYY" value="{{ $today }}" name="tgl_skrd" id="tgl_skrd" class="form-control light r-0 s-12" autocomplete="off"/>
+                                    <input type="date" placeholder="MM/DD/YYYY" value="{{ $start }}" name="tgl_skrd" id="tgl_skrd" class="form-control light r-0 s-12" autocomplete="off"/>
                                 </div>
                                 <div class="col-sm-4">
                                     <input type="date" placeholder="MM/DD/YYYY" value="{{ $today }}" name="tgl_skrd1" id="tgl_skrd1" class="form-control light r-0 s-12" autocomplete="off"/>
