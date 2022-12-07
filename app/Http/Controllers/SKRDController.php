@@ -117,8 +117,8 @@ class SKRDController extends Controller
                     }
                 }
             })
-            ->editColumn('no_bayar', function ($p) {
-                return "<a href='" . route($this->route . 'show', Crypt::encrypt($p->id)) . "' class='text-primary' title='Menampilkan Data'>" . $p->no_bayar . "</a>";
+            ->editColumn('no_skrd', function ($p) {
+                return "<a href='" . route($this->route . 'show', Crypt::encrypt($p->id)) . "' class='text-primary' title='Menampilkan Data'>" . $p->no_skrd . "</a>";
             })
             ->editColumn('id_opd', function ($p) {
                 return $p->opd->n_opd;
@@ -145,7 +145,7 @@ class SKRDController extends Controller
                 }
             })
             ->addIndexColumn()
-            ->rawColumns(['action', 'no_skrd', 'id_opd', 'id_jenis_pendapatan', 'tgl_skrd', 'masa_berlaku', 'status_ttd', 'no_bayar'])
+            ->rawColumns(['action', 'no_skrd', 'id_opd', 'id_jenis_pendapatan', 'tgl_skrd', 'masa_berlaku', 'status_ttd'])
             ->toJson();
     }
 
@@ -285,7 +285,7 @@ class SKRDController extends Controller
         ]);
 
         /* Tahapan : 
-         * 1. Generate Nomor (no_bayar)
+         * 1. Generate Nomor (no_skrd & no_bayar)
          * 2. tmtransaksi_opd 
          * 3. Create Virtual Account
          * 4. Create QRIS
@@ -293,14 +293,19 @@ class SKRDController extends Controller
          */
 
         //* Tahap 1
+        $jenisGenerate = 'no_skrd';
+        $no_skrd = $this->generateNumber->generate($request->id_opd, $request->id_jenis_pendapatan, $jenisGenerate);
+
         $jenisGenerate = 'no_bayar';
         $no_bayar = $this->generateNumber->generate($request->id_opd, $request->id_jenis_pendapatan, $jenisGenerate);
 
         //TODO: Check Duplikat (no_bayar, no_skrd)
         $checkGenerate = [
+            'no_skrd'  => $no_skrd,
             'no_bayar' => $no_bayar
         ];
         Validator::make($checkGenerate, [
+            'no_skrd'  => 'required|unique:tmtransaksi_opd,no_skrd',
             'no_bayar' => 'required|unique:tmtransaksi_opd,no_bayar',
         ])->validate();
 
@@ -335,7 +340,7 @@ class SKRDController extends Controller
             'status_denda'     => 0,
             'status_diskon'    => 0,
             'status_ttd'       => 0,
-            'no_skrd'          => null,
+            'no_skrd'          => $no_skrd,
             'tgl_skrd_awal'    => $request->tgl_skrd_awal,
             'tgl_skrd_akhir'   => $request->tgl_skrd_akhir,
             'no_bayar'         => $no_bayar,

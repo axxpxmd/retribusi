@@ -18,13 +18,11 @@ use DateTime;
 use DataTables;
 use Carbon\Carbon;
 
-use App\Libraries\GenerateNumber;
 use App\Libraries\Html\Html_number;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Storage;
 
@@ -32,6 +30,8 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\OPD;
 use App\Models\TransaksiOPD;
 use App\Models\OPDJenisPendapatan;
+use App\Models\Pengguna;
+use Illuminate\Support\Facades\Mail;
 
 class TandaTanganController extends Controller
 {
@@ -40,10 +40,8 @@ class TandaTanganController extends Controller
     protected $view  = 'pages.tandaTangan.';
 
     // Check Permission
-    public function __construct(GenerateNumber $generateNumber)
+    public function __construct()
     {
-        $this->generateNumber = $generateNumber;
-
         $this->middleware(['permission:Tanda Tangan']);
     }
 
@@ -57,7 +55,6 @@ class TandaTanganController extends Controller
         $opds     = OPD::getAll($opdArray, $opd_id);
 
         $time = Carbon::now();
-        $start = Carbon::now()->subDays(7)->format('Y-m-d');
         $today = $time->format('Y-m-d');
 
         return view($this->view . 'index', compact(
@@ -65,8 +62,7 @@ class TandaTanganController extends Controller
             'title',
             'opds',
             'opd_id',
-            'today',
-            'start'
+            'today'
         ));
     }
 
@@ -97,8 +93,8 @@ class TandaTanganController extends Controller
                     return '-';
                 }
             })
-            ->editColumn('no_bayar', function ($p) {
-                return "<a href='" . route($this->route . 'show', Crypt::encrypt($p->id)) . "' class='text-primary' title='Menampilkan Data'>" . $p->no_bayar . "</a>";
+            ->editColumn('no_skrd', function ($p) {
+                return "<a href='" . route($this->route . 'show', Crypt::encrypt($p->id)) . "' class='text-primary' title='Menampilkan Data'>" . $p->no_skrd . "</a>";
             })
             ->editColumn('id_opd', function ($p) {
                 return $p->opd->n_opd;
@@ -123,7 +119,7 @@ class TandaTanganController extends Controller
                 }
             })
             ->addIndexColumn()
-            ->rawColumns(['file_ttd', 'no_skrd', 'id_opd', 'id_jenis_pendapatan', 'tgl_skrd', 'masa_berlaku', 'status_ttd', 'no_bayar'])
+            ->rawColumns(['file_ttd', 'no_skrd', 'id_opd', 'id_jenis_pendapatan', 'tgl_skrd', 'masa_berlaku', 'status_ttd'])
             ->toJson();
     }
 
@@ -429,17 +425,6 @@ class TandaTanganController extends Controller
                         });
                     }
 
-                    //* Generate No SKRD
-                    $jenisGenerate = 'no_skrd';
-                    $id_opd = $data->id_opd;
-                    $id_jenis_pendapatan = $data->id_jenis_pendapatan;
-
-                    $no_skrd = $this->generateNumber->generate($id_opd, $id_jenis_pendapatan, $jenisGenerate);
-
-                    $data->update([
-                        'no_skrd' => $no_skrd
-                    ]);
-
                     return redirect()
                         ->route($this->route . 'show', \Crypt::encrypt($id))
                         ->withSuccess('Berhasil melakukan tandatangan digital dengan BSRE.');
@@ -524,17 +509,6 @@ class TandaTanganController extends Controller
                                 $message->from($mailFrom, $mailName);
                             });
                         }
-
-                        //* Generate No SKRD
-                        $jenisGenerate = 'no_skrd';
-                        $id_opd = $data->id_opd;
-                        $id_jenis_pendapatan = $data->id_jenis_pendapatan;
-
-                        $no_skrd = $this->generateNumber->generate($id_opd, $id_jenis_pendapatan, $jenisGenerate);
-
-                        $data->update([
-                            'no_skrd' => $no_skrd
-                        ]);
 
                         return redirect()
                             ->route($this->route . 'show', \Crypt::encrypt($id))
