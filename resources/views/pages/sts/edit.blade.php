@@ -175,7 +175,7 @@
                                                             <select class="select2 form-control r-0 light s-12" id="chanel_bayar" name="chanel_bayar" autocomplete="off">
                                                                 <option value="">Pilih</option>
                                                                 <option value="Virtual Account" {{ $data->chanel_bayar == 'Virtual Account' ? 'selected' : '' }}>Virtual Account</option>
-                                                                <option value="ATM / Teller" {{ $data->chanel_bayar == 'ATM / Teller' ? 'selected' : '' }}>ATM / Teller</option>
+                                                                <option value="ATM BJB" {{ $data->chanel_bayar == 'ATM / Teller' ? 'selected' : '' }}>ATM / Teller</option>
                                                                 <option value="Qris" {{ $data->chanel_bayar == 'Qris' ? 'selected' : '' }}>Qris</option>
                                                                 <option value="Bendahara OPD" {{ $data->chanel_bayar == 'Bendahara OPD' ? 'selected' : '' }}>Bendahara OPD</option>
                                                                 <option value="Lainnya" {{ $data->chanel_bayar == 'ATM / Teller' ? 'selected' : '' }}>Lainnya</option>
