@@ -178,7 +178,7 @@
                                                                 <option value="ATM BJB" {{ $data->chanel_bayar == 'ATM BJB' ? 'selected' : '' }}>ATM / Teller</option>
                                                                 <option value="Qris" {{ $data->chanel_bayar == 'Qris' ? 'selected' : '' }}>Qris</option>
                                                                 <option value="Bendahara OPD" {{ $data->chanel_bayar == 'Bendahara OPD' ? 'selected' : '' }}>Bendahara OPD</option>
-                                                                <option value="Lainnya" {{ $data->chanel_bayar == 'ATM / Teller' ? 'selected' : '' }}>Lainnya</option>
+                                                                <option value="Lainnya" {{ $data->chanel_bayar == 'Lainnya' ? 'selected' : '' }}>Lainnya</option>
                                                             </select>
                                                         </div>
                                                     </div>
