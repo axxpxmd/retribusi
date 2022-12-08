@@ -26,29 +26,33 @@
             <div class="tab-pane animated fadeInUpShort show active" id="semua-data" role="tabpanel">
                 <div class="card no-b mb-2">
                     <div class="card-body">
-                        <div class="form-group row" style="margin-top: -8px !important">
-                            <label for="opd_id" class="col-form-label s-12 col-md-4 text-right font-weight-bolder">OPD : </label>
-                            <div class="col-sm-4">
-                                <select name="opd_id" id="opd_id" class="select2 form-control r-0 light s-12">
-                                    <option value="0">Semua</option>
-                                    @foreach ($opds as $i)
-                                        <option value="{{ $i->id }}">{{ $i->n_opd }}</option>
-                                    @endforeach
-                                </select>
+                        <div class="col-md-8 container">
+                            <div class="row mb-2">
+                                <label for="opd" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">OPD</label>
+                                <div class="col-sm-8">
+                                    <select name="opd_id" id="opd_id" class="select2 form-control r-0 light s-12">
+                                        @if (!$opd_id)
+                                        <option value="0">Semua</option>
+                                        @endif
+                                        @foreach ($opds as $key => $i)
+                                            <option value="{{ $i->id }}" {{ $key == 0 ? 'selected' : '-' }} >{{ $i->n_opd }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
-                        </div> 
-                        <div class="form-group row" style="margin-top: -8px !important">
-                            <label for="jenis_pendapatan_id" class="col-form-label s-12 col-md-4 text-right font-weight-bolder">Jenis Pendapatan : </label>
-                            <div class="col-sm-4">
-                                <select name="jenis_pendapatan_id" id="jenis_pendapatan_id" class="select2 form-control r-0 light s-12">
-                                    <option value="0"></option>
-                                </select>
-                            </div>
-                        </div>  
-                        <div class="form-group row" style="margin-top: -8px !important">
-                            <label class="col-form-label s-12 col-md-4 text-right font-weight-bolder"></label>
-                            <div class="col-sm-5 row">
-                                <button class="btn btn-success btn-sm ml-3" onclick="pressOnChange()"><i class="icon-filter mr-2"></i>Filter</button>
+                            <div class="row mb-2">
+                                <label for="jenis_pendapatan_id" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">Jenis Pendapatan</label>
+                                <div class="col-sm-8">
+                                    <select name="jenis_pendapatan_id" id="jenis_pendapatan_id" class="select2 form-control r-0 light s-12">
+                                        <option value="0"></option>
+                                    </select>
+                                </div>
+                            </div>  
+                            <div class="row mb-4">
+                                <div class="col-sm-2"></div>
+                                <div class="col-sm-8">
+                                    <button class="btn btn-success btn-sm" onclick="pressOnChange()"><i class="icon-filter mr-2"></i>Filter</button>
+                                </div> 
                             </div>
                         </div>
                     </div>
@@ -65,7 +69,6 @@
                                             <th>Nama Dinas</th>
                                             <th>Jenis Retribusi</th>
                                             <th>Alamat WP</th>
-                                            {{-- <th>Jumlah SKRD</th> --}}
                                             <th></th>
                                         </thead>
                                         <tbody></tbody>
@@ -117,6 +120,9 @@
         table.api().ajax.reload();
     }
 
+    $(document).ready(function(){
+        $("#opd_id").trigger('change');
+    })
     $('#opd_id').on('change', function(){
         val = $(this).val();
         option = "<option value=''>&nbsp;</option>";

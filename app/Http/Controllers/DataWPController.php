@@ -24,13 +24,12 @@ use Illuminate\Support\Facades\Crypt;
 // Models
 use App\Models\OPD;
 use App\Models\DataWP;
-use App\Models\TransaksiOPD;
 use App\Models\OPDJenisPendapatan;
 
 class DataWPController extends Controller
 {
     protected $route = 'datawp.';
-    protected $title = 'Data Wajib Retribusi';
+    protected $title = 'Data Pemohon Retribusi';
     protected $view  = 'pages.datawp.';
 
     // Check Permission
@@ -72,7 +71,7 @@ class DataWPController extends Controller
 
         $jenis_pendapatan_id = $request->jenis_pendapatan_id;
 
-        $data = DataWP::dataWP($opd_id, $jenis_pendapatan_id);
+        $data = DataWP::queryTable($opd_id, $jenis_pendapatan_id);
 
         return DataTables::of($data)
             ->addColumn('action', function ($p) {
@@ -89,17 +88,6 @@ class DataWPController extends Controller
             ->editColumn('id_jenis_pendapatan', function ($p) {
                 return $p->jenis_pendapatan->jenis_pendapatan;
             })
-            // ->addColumn('jumlah_skrd', function ($p) {
-            //     $where = [
-            //         'id_opd' => $p->id_opd,
-            //         'nm_wajib_pajak' => $p->nm_wajib_pajak,
-            //         'id_jenis_pendapatan' => $p->id_jenis_pendapatan,
-            //         'id_rincian_jenis_pendapatan' => $p->id_rincian_jenis_pendapatan
-            //     ];
-            //     $totalSKRD = TransaksiOPD::where($where)->count();
-
-            //     return $totalSKRD;
-            // })
             ->addIndexColumn()
             ->rawColumns(['action', 'nm_wajib_pajak', 'jumlah_skrd'])
             ->toJson();

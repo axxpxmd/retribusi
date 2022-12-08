@@ -34,7 +34,12 @@ class DataWP extends Model
         return $this->belongsTo(Kecamatan::class, 'kecamatan_id');
     }
 
-    public static function dataWP($opd_id, $jenis_pendapatan_id)
+    public function totalRetribusi()
+    {
+        return $this->hasMany(TransaksiOPD::class, 'nm_wajib_pajak', 'nm_wajib_pajak');
+    }
+
+    public static function queryTable($opd_id, $jenis_pendapatan_id)
     {
         $data = DataWP::with(['jenis_pendapatan', 'rincian_jenis', 'opd'])->orderBy('id', 'DESC');
 

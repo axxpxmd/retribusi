@@ -30,7 +30,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card mt-2">
-                            <h6 class="card-header"><strong>Data Wajib Retribusi</strong></h6>
+                            <h6 class="card-header"><strong>Data Pemohon Retribusi</strong></h6>
                             <div class="card-body">
                                 <div class="col-md-12">
                                     <div class="row">
@@ -51,7 +51,7 @@
                                         <label class="col-md-8 s-12">{{ $data->nm_wajib_pajak }}</label>
                                     </div>
                                     <div class="row">
-                                        <label class="col-md-2 text-right s-12"><strong>Alama t:</strong></label>
+                                        <label class="col-md-2 text-right s-12"><strong>Alamat:</strong></label>
                                         <label class="col-md-8 s-12">{{ $data->alamat_wp }}</label>
                                     </div>
                                     <div class="row">
@@ -65,6 +65,10 @@
                                     <div class="row">
                                         <label class="col-md-2 text-right s-12"><strong>Kelurahan :</strong></label>
                                         <label class="col-md-8 s-12">{{ $data->kelurahan->n_kelurahan }}</label>
+                                    </div>
+                                      <div class="row">
+                                        <label class="col-md-2 text-right s-12"><strong>Total Retribusi :</strong></label>
+                                        <label class="col-md-8 s-12">{{ $data->totalRetribusi->count() }}</label>
                                     </div>
                                     <div class="row">
                                         <label class="col-md-2 text-right s-12"></label>
