@@ -154,8 +154,7 @@ class TransaksiOPD extends Model
         if ($channel_bayar != 0) {
             switch ($channel_bayar) {
                 case "1":
-                    $metode_bayar = 'BJB Virtual Account';
-                    $data->where('chanel_bayar', $metode_bayar);
+                    $data->where('chanel_bayar', 'like', '%Virtual Account%');
                     break;
                 case 2:
                     $metode_bayar = 'ATM BJB';
@@ -163,6 +162,12 @@ class TransaksiOPD extends Model
                     break;
                 case 3;
                     $data->where('chanel_bayar', 'like', '%QRIS%');
+                    break;
+                case 4;
+                    $data->where('chanel_bayar', 'like', '%Bendahara OPD%');
+                    break;
+                case 5;
+                    $data->where('chanel_bayar', null);
                     break;
                 default:
                     // 
