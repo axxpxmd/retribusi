@@ -48,7 +48,6 @@ class HomeController extends Controller
         //* Tabel Target Pendapatan
         $targetPendapatan = JenisPendapatan::select(DB::raw("SUM(tmtransaksi_opd.total_bayar_bjb) as diterima"), DB::raw("SUM(tmtransaksi_opd.total_bayar) as ketetapan"), 'jenis_pendapatan', 'target_pendapatan')
             ->join('tmtransaksi_opd', 'tmtransaksi_opd.id_jenis_pendapatan', '=', 'tmjenis_pendapatan.id')
-            ->where('tmtransaksi_opd.total_bayar_bjb', '!=', 0)
             ->where(DB::raw('YEAR(created_at)'), '=', $time->year)
             ->when($opd_id != 0, function ($q) use ($opd_id) {
                 $q->where('tmtransaksi_opd.id_opd', $opd_id);
