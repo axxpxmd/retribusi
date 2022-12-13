@@ -1,3 +1,10 @@
+@php
+    $opd_id = Auth::user()->pengguna->opd_id;
+
+    $dataTTD = App\Models\TransaksiOPD::when($opd_id != null, function($q) use($opd_id){
+        return $q->where('id_opd', $opd_id);
+    })->whereIn('status_ttd', [0,2,4])->count();
+@endphp
 <div class="has-sidebar-left ">
     <div class="sticky">
         <div class="navbar navbar-expand navbar-dark d-flex justify-content-between bd-navbar blue accent-3">
@@ -30,6 +37,29 @@
             </div>
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
+                    {{-- @can('Tanda Tangan') --}}
+                    <li class="dropdown custom-dropdown notifications-menu">
+                        <a href="#" class=" nav-link" data-toggle="dropdown" aria-expanded="false">
+                            <i class="icon-notifications "></i>
+                            <span class="badge badge-danger badge-mini rounded-circle">1</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li class="header">{{ $dataTTD ? 'Terdapat 1 Notifikasi' : 'Tidak ada notifikasi' }}</li>
+                            <li>
+                                @if ($dataTTD)
+                                <ul class="menu">
+                                    <li>
+                                        <a href="#">
+                                            <i class="icon icon-data_usage text-success"></i> Terdapat {{ $dataTTD }} SKRD belum ditandatangani.
+                                        </a>
+                                    </li>
+                                </ul>
+                                @endif
+                            </li>
+                            <li class="footer p-2 text-center"><a href="#">{{ $dataTTD ? '' : 'Kosong' }}</a></li>
+                        </ul>
+                    </li>
+                    {{-- @endcan --}}
                     <li class="dropdown custom-dropdown user user-menu ">
                         <a href="#" class="nav-link" data-toggle="dropdown">
                             <img height="30" width="30" style="margin-top: -10px" class="rounded-circle img-circular" src="{{ asset('images/ava/'.Auth::user()->pengguna->photo) }}" alt="User Image">

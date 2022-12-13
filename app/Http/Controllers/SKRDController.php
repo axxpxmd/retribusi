@@ -239,7 +239,7 @@ class SKRDController extends Controller
         $kecamatans = Kecamatan::select('id', 'n_kecamatan')->where('kabupaten_id', 40)->get();
         $rincian_jenis_pendapatans = RincianJenisPendapatan::where('id_jenis_pendapatan', $jenis_pendapatan_id)->get();
         $penanda_tangans = TtdOPD::where('id_opd', $opd_id)->get();
-
+        
         return view($this->view . 'create', compact(
             'route',
             'title',
