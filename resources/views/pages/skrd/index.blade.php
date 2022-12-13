@@ -182,12 +182,6 @@
 @endsection
 @section('script')
 <script type="text/javascript">
-    $(document).ready(function() {
-        $("#errorAlert").fadeTo(5000, 1000).slideUp(1000, function() {
-            $("#errorAlert").slideUp(1000);
-        });
-    });
-
     var table = $('#dataTable').dataTable({
         scrollX: true,
         processing: true,
@@ -264,7 +258,7 @@
                         $.post("{{ route($route.'destroy', ':id') }}".replace(':id', id), {'_method' : 'DELETE'}, function(data) {
                             $('#dataTable').DataTable().ajax.reload();
                             $.confirm({
-                                title: 'Success',
+                                title: 'Sukses',
                                 content: data.message,
                                 icon: 'icon icon-check',
                                 theme: 'modern',

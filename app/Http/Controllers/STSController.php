@@ -246,7 +246,7 @@ class STSController extends Controller
 
         $id   = \Crypt::decrypt($id);
         $role = Auth::user()->pengguna->modelHasRole->role->name;
-        $now  = Carbon::now()->format('Y-m-d\TH:i');
+        $now  = Carbon::now()->format('Y-m-d\T:H:i');
 
         //TODO: Check role
         if ($role == 'super-admin' || $role == 'admin-opd') {
