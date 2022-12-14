@@ -55,6 +55,7 @@ class TandaTanganController extends Controller
 
         $time = Carbon::now();
         $today = $time->format('Y-m-d');
+        $lastWeek = $time->subDay(7)->format('Y-m-d');
 
         $from   = $request->tgl_skrd;
         $to     = $request->tgl_skrd1;
@@ -70,7 +71,8 @@ class TandaTanganController extends Controller
             'title',
             'opds',
             'opd_id',
-            'today'
+            'today',
+            'lastWeek'
         ));
     }
 
