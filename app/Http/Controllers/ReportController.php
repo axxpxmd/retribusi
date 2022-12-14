@@ -129,13 +129,9 @@ class ReportController extends Controller
                 }
             })
             ->addColumn('cetak_sts', function ($p) {
-                if ($p->status_ttd == 1 || $p->status_ttd == 3) {
-                    if ($p->status_bayar == 1) {
-                        return "<a href='" . route('sts.reportTTD', Crypt::encrypt($p->id)) . "' target='blank' class='cyan-text' title='File TTD'><i class='icon-document-file-pdf2'></i></a>";
-                    }else{
-                        return "<span>-</span>";
-                    }
-                } else {
+                if ($p->status_bayar == 1) {
+                    return "<a href='" . route('sts.reportTTD', Crypt::encrypt($p->id)) . "' target='blank' class='cyan-text' title='File TTD'><i class='icon-document-file-pdf2'></i></a>";
+                }else{
                     return "<span>-</span>";
                 }
             })

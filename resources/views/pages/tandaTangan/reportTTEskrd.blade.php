@@ -379,11 +379,11 @@
                 <td colspan="3" class="a" style="border-left: none !important">
                     <div style="text-align:center; margin-right: -400px !important">
                         @if ($data->tgl_ttd != null)
-                            <p>Tangerang Selatan,
-                                {{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_ttd)->format('d F Y') }}</p>
+                            <p>Tangerang Selatan, {{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_ttd)->format('d F Y') }}</p>
                         @else
                             <p>Tangerang Selatan, </p>
                         @endif
+                        @if ($data->status_ttd == 1 || $data->status_ttd == 2)
                         <table style="margin-left: 410px !important; margin-top: -8px; margin-bottom: -8px">
                             <tr class="a">
                                 <td style="padding: 1px" width="8%" class="a"> {!! $img !!}</td>
@@ -398,6 +398,13 @@
                                 </td>
                             </tr>
                         </table>
+                        @else
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        @endif
                         @if ($data->nm_ttd != null)
                             <p class="m-b-5 m-b-0"><u>{{ $data->nm_ttd }}</u></p>
                         @else
