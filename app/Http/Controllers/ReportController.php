@@ -129,14 +129,20 @@ class ReportController extends Controller
                 }
             })
             ->addColumn('cetak_sts', function ($p) {
+                $report = "<a href='" . route('print.sts', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
+
                 if ($p->status_ttd == 1 || $p->status_ttd == 3) {
                     if ($p->status_bayar == 1) {
                         return "<a href='" . route('sts.reportTTD', Crypt::encrypt($p->id)) . "' target='blank' class='cyan-text' title='File TTD'><i class='icon-document-file-pdf2'></i></a>";
-                    }else{
+                    } else {
                         return "<span>-</span>";
                     }
                 } else {
-                    return "<span>-</span>";
+                    if ($p->status_bayar == 1) {
+                        return $report;
+                    } else {
+                        return "<span>-</span>";
+                    }
                 }
             })
             ->addIndexColumn()
@@ -161,10 +167,10 @@ class ReportController extends Controller
         $tgl_skrd_akhir = $data->tgl_skrd_akhir;
         $total_bayar    = $data->jumlah_bayar;
         list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);
-        
+
         if ($data->status_ttd == 1 || $data->status_ttd == 3) {
             $status_ttd = true;
-        }else{
+        } else {
             $status_ttd = false;
         }
 
