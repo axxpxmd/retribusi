@@ -383,7 +383,7 @@
                         @else
                             <p>Tangerang Selatan, </p>
                         @endif
-                        @if ($data->status_ttd == 1 || $data->status_ttd == 2)
+                        @if ($data->status_ttd == 1 || $data->status_ttd == 3)
                         <table style="margin-left: 410px !important; margin-top: -8px; margin-bottom: -8px">
                             <tr class="a">
                                 <td style="padding: 1px" width="8%" class="a"> {!! $img !!}</td>
