@@ -161,6 +161,12 @@ class ReportController extends Controller
         $tgl_skrd_akhir = $data->tgl_skrd_akhir;
         $total_bayar    = $data->jumlah_bayar;
         list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);
+        
+        if ($data->status_ttd == 1 || $data->status_ttd == 3) {
+            $status_ttd = true;
+        }else{
+            $status_ttd = false;
+        }
 
         return view($this->view . 'show', compact(
             'route',
@@ -170,7 +176,8 @@ class ReportController extends Controller
             'fileName',
             'kenaikan',
             'jumlahBunga',
-            'dateNow'
+            'dateNow',
+            'status_ttd'
         ));
     }
 

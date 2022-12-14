@@ -122,8 +122,8 @@
                                                 <label class="col-md-8 s-12">{{ $data->no_skrd }}</label>
                                             </div>
                                             <div class="row">
-                                                <label class="col-md-4 text-right font-weight-bold s-12"><strong>Nomor Bayar :</strong></label>
-                                                <label class="col-md-8 s-12">{{ $data->no_bayar }}</label>
+                                                <label class="col-md-4 font-weight-bold text-right s-12"><strong>Nomor Bayar  :</strong></label>
+                                                <label class="col-md-8 s-12">{{ $status_ttd ? $data->no_bayar : '-' }}</label>
                                             </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right font-weight-bold s-12"><strong>Ketetapan :</strong></label>
@@ -164,8 +164,8 @@
                                             </div> 
                                             @endif
                                             <div class="row">
-                                                <label class="col-md-4 text-right font-weight-bold s-12"><strong>Virtual Account BJB :</strong></label>
-                                                <label class="col-md-8 s-12">{{ $data->nomor_va_bjb }}</label>
+                                                <label class="col-md-4 font-weight-bold text-right s-12"><strong>Virtual Account BJB  :</strong></label>
+                                                <label class="col-md-8 s-12">{{ $status_ttd ? $data->nomor_va_bjb : '-' }}</label>
                                             </div> 
                                             <div class="row">
                                                 <label class="col-md-4 text-right font-weight-bold s-12"><strong>Invoice ID QRIS  :</strong></label>
