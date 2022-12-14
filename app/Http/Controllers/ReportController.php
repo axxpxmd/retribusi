@@ -119,29 +119,24 @@ class ReportController extends Controller
             ->addColumn('cetak_skrd', function ($p) {
                 $path_sftp = 'file_ttd_skrd/';
                 $fileName  = str_replace(' ', '', $p->nm_wajib_pajak) . '-' . $p->no_skrd . ".pdf";
-                $dateNow   = Carbon::now()->format('Y-m-d');
-                $belumTTD = "<a href='" . config('app.sftp_src') . $path_sftp . $fileName . "' target='_blank' class='cyan-text' title='File TTD'><i class='icon-document-file-pdf2'></i></a>";
+                // $belumTTD  = "<a href='" . config('app.sftp_src') . $path_sftp . $fileName . "' target='_blank' class='cyan-text' title='File TTD'><i class='icon-document-file-pdf2'></i></a>";
 
                 //* SKRD
-                if ($p->tgl_skrd_akhir >= $dateNow) {
-                    if ($p->status_ttd == 1) {
-                        return $belumTTD;
-                    } else {
-                        return  "<a href='" . route('print.skrd', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
-                    }
-                }else{
-                    if ($p->status_ttd == 3) {
-                        return $belumTTD;
-                    } else {
-                        return "<a href='" . route('print.strd', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
-                    }
+                if ($p->status_ttd == 1 || $p->status_ttd == 3) {
+                    return "<a href='" . config('app.sftp_src') . $path_sftp . $fileName  . "' target='_blank' class='cyan-text' title='File TTD'><i class='icon-document-file-pdf2'></i></a>";
+                } else {
+                    return "<span>Belum TTD</span>";
                 }
             })
             ->addColumn('cetak_sts', function ($p) {
                 if ($p->status_ttd == 1 || $p->status_ttd == 3) {
-                    return "<a href='" . route('sts.reportTTD', Crypt::encrypt($p->id)) . "' target='blank' class='cyan-text' title='File TTD'><i class='icon-document-file-pdf2'></i></a>";
+                    if ($p->status_bayar == 1) {
+                        return "<a href='" . route('sts.reportTTD', Crypt::encrypt($p->id)) . "' target='blank' class='cyan-text' title='File TTD'><i class='icon-document-file-pdf2'></i></a>";
+                    }else{
+                        return "<span>-</span>";
+                    }
                 } else {
-                    return "<a href='" . route('print.sts', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
+                    return "<span>-</span>";
                 }
             })
             ->addIndexColumn()

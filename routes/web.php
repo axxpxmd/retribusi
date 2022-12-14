@@ -104,7 +104,6 @@ Route::group(['middleware' => ['auth']], function () {
 
     // Tanda Tangan
     Route::resource('tanda-tangan', 'TandaTanganController');
-    Route::post('tanda-tangan/api', 'TandaTanganController@api')->name('tanda-tangan.api');
     Route::get('tanda-tangan/restore/{id}', 'TandaTanganController@restoreTTD')->name('tanda-tangan.restoreTTD');
     Route::post('tanda-tangan/tteBackup', 'TandaTanganController@tteBackup')->name('tanda-tangan.tteBackup');
     Route::post('tanda-tangan/tte', 'TandaTanganController@tte')->name('tanda-tangan.tte');

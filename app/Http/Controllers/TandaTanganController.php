@@ -22,6 +22,7 @@ use App\Libraries\Html\Html_number;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Storage;
@@ -30,8 +31,6 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\OPD;
 use App\Models\TransaksiOPD;
 use App\Models\OPDJenisPendapatan;
-use App\Models\Pengguna;
-use Illuminate\Support\Facades\Mail;
 
 class TandaTanganController extends Controller
 {
@@ -45,7 +44,7 @@ class TandaTanganController extends Controller
         $this->middleware(['permission:Tanda Tangan']);
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $route = $this->route;
         $title = $this->title;
@@ -57,6 +56,15 @@ class TandaTanganController extends Controller
         $time = Carbon::now();
         $today = $time->format('Y-m-d');
 
+        $from   = $request->tgl_skrd;
+        $to     = $request->tgl_skrd1;
+        $opd_id = $opd_id == 0 ? $request->opd_id : $opd_id; 
+        $no_skrd    = $request->no_skrd;
+        $status_ttd = $request->status_ttd;
+        if ($request->ajax()) {
+            return $this->dataTable($from, $to, $opd_id, $no_skrd, $status_ttd);
+        }
+
         return view($this->view . 'index', compact(
             'route',
             'title',
@@ -66,20 +74,8 @@ class TandaTanganController extends Controller
         ));
     }
 
-    public function api(Request $request)
+    public function dataTable($from, $to, $opd_id, $no_skrd, $status_ttd)
     {
-        $from  = $request->tgl_skrd;
-        $to    = $request->tgl_skrd1;
-        $no_skrd    = $request->no_skrd;
-        $status_ttd = $request->status_ttd;
-
-        $checkOPD = Auth::user()->pengguna->opd_id;
-        if ($checkOPD == 0) {
-            $opd_id = $request->opd_id;
-        } else {
-            $opd_id = $checkOPD;
-        }
-
         $data = TransaksiOPD::queryTandaTangan($from, $to, $opd_id, $no_skrd, $status_ttd);
 
         return DataTables::of($data)

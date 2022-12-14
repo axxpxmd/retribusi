@@ -120,8 +120,8 @@
         order: [ 0, 'asc' ],
         pageLength: 25,
         ajax: {
-            url: "{{ route($route.'api') }}",
-            method: 'POST',
+            url: "{{ route($route.'index') }}",
+            method: 'GET',
             data: function (data) {
                 data.tgl_skrd = $('#tgl_skrd').val();
                 data.tgl_skrd1 = $('#tgl_skrd1').val();
