@@ -477,7 +477,7 @@ class STSController extends Controller
         } elseif ($data->status_ttd == 3) {
             $file = 'pages.tandaTangan.reportTTEstrd';
         } else {
-            $file = 'pages.tandaTangan.reportTTEskrd';
+            $file = 'pages.tandaTangan.reportTTEsts';
         }
 
         $statusSTS = 1;
