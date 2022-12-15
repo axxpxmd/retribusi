@@ -374,10 +374,9 @@ class TransaksiOPD extends Model
     }
 
     // 
-    public static function queryTandaTangan($from, $to, $opd_id, $no_skrd, $status_ttd)
+    public static function queryTandaTangan($belum_ttd, $from, $to, $opd_id, $no_skrd, $status_ttd)
     {
-        $data = TransaksiOPD::with(['jenis_pendapatan', 'opd', 'rincian_jenis'])->whereIn('status_ttd', [1, 2, 3, 4])
-            ->orderBy('id', 'ASC');
+        $data = TransaksiOPD::with(['jenis_pendapatan', 'opd', 'rincian_jenis'])->orderBy('id', 'ASC');
 
         if ($opd_id != 0) {
             $data->where('id_opd', $opd_id);
@@ -399,11 +398,13 @@ class TransaksiOPD extends Model
             $data->whereIn('status_ttd', [0, 2, 4]);
         }
 
-        if ($from != null ||  $to != null) {
-            if ($from != null && $to == null) {
-                $data->whereDate('tgl_skrd_awal', $from);
-            } else {
-                $data->whereBetween('tgl_skrd_awal', [$from, $to]);
+        if ($belum_ttd != 1) {
+            if ($from != null ||  $to != null) {
+                if ($from != null && $to == null) {
+                    $data->whereDate('tgl_skrd_awal', $from);
+                } else {
+                    $data->whereBetween('tgl_skrd_awal', [$from, $to]);
+                }
             }
         }
 

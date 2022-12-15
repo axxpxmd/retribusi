@@ -60,10 +60,12 @@ class TandaTanganController extends Controller
         $from   = $request->tgl_skrd;
         $to     = $request->tgl_skrd1;
         $opd_id = $opd_id == 0 ? $request->opd_id : $opd_id; 
+        $belum_ttd  = $request->belum_ttd;
         $no_skrd    = $request->no_skrd;
         $status_ttd = $request->status_ttd;
+        
         if ($request->ajax()) {
-            return $this->dataTable($from, $to, $opd_id, $no_skrd, $status_ttd);
+            return $this->dataTable($belum_ttd, $from, $to, $opd_id, $no_skrd, $status_ttd);
         }
 
         return view($this->view . 'index', compact(
@@ -72,13 +74,14 @@ class TandaTanganController extends Controller
             'opds',
             'opd_id',
             'today',
-            'lastWeek'
+            'lastWeek',
+            'belum_ttd'
         ));
     }
 
-    public function dataTable($from, $to, $opd_id, $no_skrd, $status_ttd)
+    public function dataTable($belum_ttd, $from, $to, $opd_id, $no_skrd, $status_ttd)
     {
-        $data = TransaksiOPD::queryTandaTangan($from, $to, $opd_id, $no_skrd, $status_ttd);
+        $data = TransaksiOPD::queryTandaTangan($belum_ttd, $from, $to, $opd_id, $no_skrd, $status_ttd);
 
         return DataTables::of($data)
             ->addColumn('file_ttd', function ($p) {

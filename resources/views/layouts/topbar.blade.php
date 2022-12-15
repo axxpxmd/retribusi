@@ -37,7 +37,7 @@
             </div>
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
-                    {{-- @can('Tanda Tangan') --}}
+                    @can('Tanda Tangan')
                     <li class="dropdown custom-dropdown notifications-menu">
                         <a href="#" class=" nav-link" data-toggle="dropdown" aria-expanded="false">
                             <i class="icon-notifications "></i>
@@ -49,7 +49,7 @@
                                 @if ($dataTTD)
                                 <ul class="menu">
                                     <li>
-                                        <a href="#">
+                                        <a href="{{ route('tanda-tangan.index', ['belum_ttd' => 1]) }}">
                                             <i class="icon icon-data_usage text-success"></i> Terdapat {{ $dataTTD }} SKRD belum ditandatangani.
                                         </a>
                                     </li>
@@ -59,7 +59,7 @@
                             <li class="footer p-2 text-center"><a href="#">{{ $dataTTD ? '' : 'Kosong' }}</a></li>
                         </ul>
                     </li>
-                    {{-- @endcan --}}
+                    @endcan
                     <li class="dropdown custom-dropdown user user-menu ">
                         <a href="#" class="nav-link" data-toggle="dropdown">
                             <img height="30" width="30" style="margin-top: -10px" class="rounded-circle img-circular" src="{{ asset('images/ava/'.Auth::user()->pengguna->photo) }}" alt="User Image">

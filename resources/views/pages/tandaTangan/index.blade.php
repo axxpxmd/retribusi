@@ -27,6 +27,7 @@
             <div class="tab-pane animated fadeInUpShort show active" id="semua-data" role="tabpanel">
                 <div class="card no-b mb-2">
                     <div class="card-body">
+                        <input type="hidden" id="belum_ttd" value="{{ $belum_ttd }}">
                         <div class="col-md-8 container">
                             @if ($opd_id == 0)
                             <div class="row mb-2">
@@ -128,6 +129,7 @@
                 data.opd_id = $('#opd').val();
                 data.no_skrd = $('#no_skrd').val();
                 data.status_ttd = $('#status_ttd').val();
+                data.belum_ttd = $('#belum_ttd').val();
             }
         },
         columns: [
