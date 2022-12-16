@@ -39,18 +39,18 @@
                 <ul class="nav navbar-nav">
                     @can('Tanda Tangan')
                     <li class="dropdown custom-dropdown notifications-menu">
-                        <a href="#" class=" nav-link" data-toggle="dropdown" aria-expanded="false">
+                        <a href="#" class="nav-link" data-toggle="dropdown" aria-expanded="false">
                             <i class="icon-notifications "></i>
-                            <span class="badge badge-danger badge-mini rounded-circle">1</span>
+                            <span class="badge text-white font-weight-bold badge-mini">{{ $dataTTD ? $dataTTD : 0 }}</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-right">
-                            <li class="header">{{ $dataTTD ? 'Terdapat 1 Notifikasi' : 'Tidak ada notifikasi' }}</li>
+                            <li class="header">{{ $dataTTD ? 'Terdapat ' . $dataTTD . ' SKRD belum di TTD' : 'Tidak ada notifikasi' }}</li>
                             <li>
                                 @if ($dataTTD)
                                 <ul class="menu">
                                     <li>
                                         <a href="{{ route('tanda-tangan.index', ['belum_ttd' => 1]) }}">
-                                            <i class="icon icon-data_usage text-success"></i> Terdapat {{ $dataTTD }} SKRD belum ditandatangani.
+                                            <i class="icon icon-data_usage text-success"></i> Lihat semua.
                                         </a>
                                     </li>
                                 </ul>
