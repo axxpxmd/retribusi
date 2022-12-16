@@ -3,7 +3,7 @@
 
     $dataTTD = App\Models\TransaksiOPD::when($opd_id != null, function($q) use($opd_id){
         return $q->where('id_opd', $opd_id);
-    })->whereIn('status_ttd', [0,2,4])->count();
+    })->whereIn('status_ttd', [2,4])->count();
 @endphp
 <div class="has-sidebar-left ">
     <div class="sticky">
