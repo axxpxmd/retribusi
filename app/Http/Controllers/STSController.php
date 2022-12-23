@@ -233,6 +233,7 @@ class STSController extends Controller
         }
 
         return view($this->view . 'show', compact(
+            'id',
             'route',
             'title',
             'data',
@@ -252,7 +253,7 @@ class STSController extends Controller
 
         $id   = \Crypt::decrypt($id);
         $role = Auth::user()->pengguna->modelHasRole->role->name;
-        $now  = Carbon::now()->format('Y-m-d\T:H:i');
+        $now  = Carbon::now()->format('Y-m-d\TH:i');
 
         //TODO: Check role
         if ($role == 'super-admin' || $role == 'admin-opd') {
@@ -324,6 +325,7 @@ class STSController extends Controller
         }
 
         return view($this->view . 'edit', compact(
+            'id',
             'route',
             'title',
             'data',
@@ -361,7 +363,6 @@ class STSController extends Controller
                 'status_bayar' => 1,
                 'tgl_bayar'    => $tgl_bayar,
                 'no_bku'       => $request->no_bku,
-                // 'tgl_bku'   => $request->tgl_bku,
                 'chanel_bayar' => $request->chanel_bayar,
                 'status_denda' => $status_denda,
                 'ntb'    => $request->ntb,
@@ -375,7 +376,6 @@ class STSController extends Controller
                     'status_bayar' => $status_bayar,
                     'tgl_bayar'    => null,
                     'no_bku'       => null,
-                    // 'tgl_bku'   => $request->tgl_bku,
                     'chanel_bayar' => $request->chanel_bayar,
                     'ntb'    => null,
                     'denda'  => 0,
@@ -390,7 +390,6 @@ class STSController extends Controller
                     'status_bayar' => $status_bayar,
                     'tgl_bayar'    => $tgl_bayar,
                     'no_bku'       => $request->no_bku,
-                    // 'tgl_bku'   => $request->tgl_bku,
                     'chanel_bayar' => $request->chanel_bayar,
                     'status_denda' => $status_denda,
                     'ntb'    => $request->ntb,

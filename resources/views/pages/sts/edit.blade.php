@@ -148,7 +148,8 @@
                                                             <select class="select2 form-control r-0 light s-12" id="status_bayar" name="status_bayar" autocomplete="off">
                                                                 <option value="">Pilih</option>
                                                                 <option value="0">Belum Dibayar</option>
-                                                                <!-- check untuk bendahara OPD -->
+                                                                <option value="1" {{ $data->status_bayar == 1 ? 'selected' : '' }}>Sudah Dibayar</option>
+                                                                {{-- <!-- check untuk bendahara OPD -->
                                                                 @if ($data->ntb != null && $data->total_bayar_bjb != null)
                                                                 <option value="1">Sudah Dibayar</option>
                                                                 @endif
@@ -157,13 +158,13 @@
                                                                     @if ($data->ntb == null && $data->total_bayar_bjb == null)
                                                                     <option value="1">Sudah Dibayar</option>
                                                                     @endif
-                                                                @endrole
+                                                                @endrole --}}
                                                             </select>
                                                         </div>
                                                     </div>
                                                     <div class="form-group mt-1">
                                                         <label for="tgl_bayar" class="form-control label-input-custom col-md-4">Tanggal Bayar</label>
-                                                        <input type="datetime-local" name="tgl_bayar" {{ $readonly }} value="{{ $data->tgl_bayar != null ? date('Y-m-d\TH:i', strtotime($data->tgl_bayar)) : $now }}" id="tgl_bayar" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
+                                                        <input type="datetime-local" name="tgl_bayar" {{ $data->status_bayar == 1 ? 'readonly' : '' }} {{ $readonly }} value="{{ $data->tgl_bayar != null ? date('Y-m-d\TH:i', strtotime($data->tgl_bayar)) : $now }}" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
                                                     </div>
                                                     <div class="form-group m-0">
                                                         <label for="no_bku" class="form-control label-input-custom col-md-4">Nomor BKU</label>
@@ -175,17 +176,17 @@
                                                             <select class="select2 form-control r-0 light s-12" id="chanel_bayar" name="chanel_bayar" autocomplete="off">
                                                                 <option value="">Pilih</option>
                                                                 <option value="Virtual Account" {{ $data->chanel_bayar == 'Virtual Account' ? 'selected' : '' }}>Virtual Account</option>
-                                                                <option value="ATM BJB" {{ $data->chanel_bayar == 'ATM BJB' ? 'selected' : '' }}>ATM / Teller</option>
-                                                                <option value="Qris" {{ $data->chanel_bayar == 'Qris' ? 'selected' : '' }}>Qris</option>
+                                                                <option value="ATM" {{ $data->chanel_bayar == 'ATM' ? 'selected' : '' }}>ATM</option>
+                                                                <option value="BJB MOBILE" {{ $data->chanel_bayar == 'BJB MOBILE' ? 'selected' : '' }}>BJB MOBILE</option>
+                                                                <option value="TELLER" {{ $data->chanel_bayar == 'TELLER' ? 'selected' : '' }}>TELLER</option>
+                                                                <option value="QRIS" {{ $data->chanel_bayar == 'QRIS' ? 'selected' : '' }}>QRIS</option>
                                                                 <option value="Bendahara OPD" {{ $data->chanel_bayar == 'Bendahara OPD' ? 'selected' : '' }}>Bendahara OPD</option>
+                                                                <option value="Transfer RKUD" {{ $data->chanel_bayar == 'Transfer RKUD' ? 'selected' : '' }}>Transfer RKUD</option>
+                                                                <option value="RTGS/SKN" {{ $data->chanel_bayar == 'RTGS/SKN' ? 'selected' : '' }}>RTGS/SKN</option>
                                                                 <option value="Lainnya" {{ $data->chanel_bayar == 'Lainnya' ? 'selected' : '' }}>Lainnya</option>
                                                             </select>
                                                         </div>
                                                     </div>
-                                                    <!-- <div class="form-group m-0">
-                                                        <label for="tgl_bku" class="form-control label-input-custom col-md-4">Tanggal BKU</label>
-                                                        <input type="date" name="tgl_bku" value="{{ substr($data->tgl_bku,0,10) }}" id="tgl_bku" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
-                                                    </div> -->
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group m-0">
@@ -203,7 +204,7 @@
                                                     </div>
                                                     <div class="form-group m-0">
                                                         <label for="total_bayar_bjb" class="form-control label-input-custom col-md-4">Total Bayar Bank</label>
-                                                        <input type="text" name="total_bayar_bjb" value="{{ $data->total_bayar_bjb }}" {{ $readonly }} id="rupiah2" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
+                                                        <input type="text" name="total_bayar_bjb" {{ $data->status_bayar == 1 ? 'readonly' : '' }} value="{{ $data->total_bayar_bjb }}" {{ $readonly }} id="rupiah2" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
                                                     </div>
                                                 </div>
                                             </div>
@@ -283,7 +284,7 @@
                                 btnClass: 'btn-primary',
                                 keys: ['enter'],
                                 action: function () {
-                                    location.reload();
+                                    window.location.href = "{{ route('sts.show', Crypt::encrypt($id)) }}";
                                 }
                             }
                         }
