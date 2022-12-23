@@ -81,23 +81,46 @@ class TransaksiOPD extends Model
             }
         }
 
+        /**
+         * 1. VA
+         * 2. ATM
+         * 3. BJB Mobile
+         * 4. Teller
+         * 5. QRIS
+         * 6. Bendahara OPD
+         * 7. Transfer RKUD
+         * 8. RTGS/SKN
+         * 9. Lainnya
+         */
+
         if ($channel_bayar != 0) {
             switch ($channel_bayar) {
                 case "1":
                     $data->where('chanel_bayar', 'like', '%Virtual Account%');
                     break;
                 case 2:
-                    $metode_bayar = 'ATM BJB';
-                    $data->where('chanel_bayar', $metode_bayar);
+                    $data->where('chanel_bayar', 'like', '%ATM%');
                     break;
                 case 3;
-                    $data->where('chanel_bayar', 'like', '%QRIS%');
+                    $data->where('chanel_bayar', 'like', '%BJB MOBILE%');
                     break;
                 case 4;
-                    $data->where('chanel_bayar', 'like', '%Bendahara OPD%');
+                    $data->where('chanel_bayar', 'like', '%TELLER%');
                     break;
                 case 5;
-                    $data->where('chanel_bayar', null);
+                    $data->where('chanel_bayar', 'like', '%QRIS%');
+                    break;
+                case 6;
+                    $data->where('chanel_bayar', 'like', '%Bendahara%');
+                    break;
+                case 7;
+                    $data->where('chanel_bayar', 'like', '%Transfer RKUD%');
+                    break;
+                case 8;
+                    $data->where('chanel_bayar', 'like', '%RTGS/SKN%');
+                    break;
+                case 9;
+                    $data->where('chanel_bayar', 'like', '%Lainnya%');
                     break;
                 default:
                     // 
@@ -151,23 +174,46 @@ class TransaksiOPD extends Model
             }
         }
 
+        /**
+         * 1. VA
+         * 2. ATM
+         * 3. BJB Mobile
+         * 4. Teller
+         * 5. QRIS
+         * 6. Bendahara OPD
+         * 7. Transfer RKUD
+         * 8. RTGS/SKN
+         * 9. Lainnya
+         */
+
         if ($channel_bayar != 0) {
             switch ($channel_bayar) {
                 case "1":
                     $data->where('chanel_bayar', 'like', '%Virtual Account%');
                     break;
                 case 2:
-                    $metode_bayar = 'ATM BJB';
-                    $data->where('chanel_bayar', $metode_bayar);
+                    $data->where('chanel_bayar', 'like', '%ATM%');
                     break;
                 case 3;
-                    $data->where('chanel_bayar', 'like', '%QRIS%');
+                    $data->where('chanel_bayar', 'like', '%BJB MOBILE%');
                     break;
                 case 4;
-                    $data->where('chanel_bayar', 'like', '%Bendahara OPD%');
+                    $data->where('chanel_bayar', 'like', '%TELLER%');
                     break;
                 case 5;
-                    $data->where('chanel_bayar', null);
+                    $data->where('chanel_bayar', 'like', '%QRIS%');
+                    break;
+                case 6;
+                    $data->where('chanel_bayar', 'like', '%Bendahara%');
+                    break;
+                case 7;
+                    $data->where('chanel_bayar', 'like', '%Transfer RKUD%');
+                    break;
+                case 8;
+                    $data->where('chanel_bayar', 'like', '%RTGS/SKN%');
+                    break;
+                case 9;
+                    $data->where('chanel_bayar', 'like', '%Lainnya%');
                     break;
                 default:
                     // 

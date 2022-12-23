@@ -131,7 +131,7 @@ class ReportController extends Controller
             ->addColumn('cetak_sts', function ($p) {
                 if ($p->status_bayar == 1) {
                     return "<a href='" . route('sts.reportTTD', Crypt::encrypt($p->id)) . "' target='blank' class='cyan-text' title='File TTD'><i class='icon-document-file-pdf2'></i></a>";
-                }else{
+                } else {
                     return "<span>-</span>";
                 }
             })
@@ -157,10 +157,10 @@ class ReportController extends Controller
         $tgl_skrd_akhir = $data->tgl_skrd_akhir;
         $total_bayar    = $data->jumlah_bayar;
         list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);
-        
+
         if ($data->status_ttd == 1 || $data->status_ttd == 3) {
             $status_ttd = true;
-        }else{
+        } else {
             $status_ttd = false;
         }
 
@@ -227,20 +227,52 @@ class ReportController extends Controller
         $jenis_pendapatan = JenisPendapatan::find($jenis_pendapatan_id);
         $rincian_pendapatan = RincianJenisPendapatan::find($rincian_pendapatan_id);
 
+        /**
+         * 1. VA
+         * 2. ATM
+         * 3. BJB Mobile
+         * 4. Teller
+         * 5. QRIS
+         * 6. Bendahara OPD
+         * 7. Transfer RKUD
+         * 8. RTGS/SKN
+         * 9. Lainnya
+         */
+
         $metode_bayar = 'Semua';
-        switch ($channel_bayar) {
-            case "1":
-                $metode_bayar = 'BJB Virtual Account';
-                break;
-            case 2:
-                $metode_bayar = 'ATM BJB';
-                break;
-            case 3;
-                $metode_bayar = 'QRIS';
-                break;
-            default:
-                // 
-                break;
+        if ($channel_bayar != 0) {
+            switch ($channel_bayar) {
+                case "1":
+                    $metode_bayar = 'Virtual Account';
+                    break;
+                case 2:
+                    $metode_bayar = 'ATM';
+                    break;
+                case 3;
+                    $metode_bayar = 'BJB Mobile';
+                    break;
+                case 4;
+                    $metode_bayar = 'Teller';
+                    break;
+                case 5;
+                    $metode_bayar = 'QRIS';
+                    break;
+                case 6;
+                    $metode_bayar = 'Bendahara';
+                    break;
+                case 7;
+                    $metode_bayar = 'Transfer RKUD';
+                    break;
+                case 8;
+                    $metode_bayar = 'RTGS/SKN';
+                    break;
+                case 9;
+                    $metode_bayar = 'Lainnya';
+                    break;
+                default:
+                    // 
+                    break;
+            }
         }
 
         $pdf = app('dompdf.wrapper');

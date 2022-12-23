@@ -80,10 +80,14 @@
                                     <select class="select2 form-control r-0 light s-12" id="channel_bayar" name="channel_bayar">
                                         <option value="0">Semua</option>
                                         <option value="1">Virtual Account</option>
-                                        <option value="2">ATM / Teller</option>
-                                        <option value="3">Qris</option>
-                                        <option value="4">Bendahara OPD</option>
-                                        <option value="5">Lainnya</option>
+                                        <option value="2">ATM</option>
+                                        <option value="3">BJB MOBILE</option>
+                                        <option value="4">TELLER</option>
+                                        <option value="5">QRIS</option>
+                                        <option value="6">Bendahara OPD</option>
+                                        <option value="7">Transfer RKUD</option>
+                                        <option value="8">RTGS/SKN</option>
+                                        <option value="9">Lainnya</option>
                                     </select>
                                 </div>
                             </div>
