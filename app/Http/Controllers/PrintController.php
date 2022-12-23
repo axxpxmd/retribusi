@@ -29,11 +29,9 @@ class PrintController extends Controller
     public static function createBunga($tgl_skrd_akhir, $total_bayar)
     {
         //TODO: Create Bunga (kenaikan 2% tiap bulan)
-        $timeNow     = Carbon::now();
-        $dateTimeNow = new DateTime($timeNow);
-        $expired     = new DateTime($tgl_skrd_akhir);
-        $interval    = $dateTimeNow->diff($expired);
-        $monthDiff   = $interval->format('%m');
+        $toDate = Carbon::parse($tgl_skrd_akhir);
+        $fromDate = Carbon::now();
+        $monthDiff = $toDate->diffInMonths($fromDate);
 
         $kenaikan = ((int) $monthDiff + 1) * 2;
         $bunga    = $kenaikan / 100;
