@@ -25,7 +25,7 @@ class VABJBRes
             }
         } else {
             $err = true;
-            $err = 'Terjadi kegagalan saat mengambil token. Error Sever';
+            $err = 'Terjadi kegagalan saat mengambil token. Error Server';
         }
 
         return [$err, $errMsg, $tokenBJB];
@@ -47,14 +47,16 @@ class VABJBRes
         }
 
         $resCreateVABJB = VABJB::createVABJB($tokenBJB, $clientRefnum, $amount, $expiredDate, $customerName, $productCode);
+        $resJson = $resCreateVABJB->json();
+
+        //* LOG VA
+        $dataVA = [
+            'no_bayar' => $no_bayar,
+            'data' => $resJson
+        ];
+        Log::channel($channel)->info($log, $dataVA);
+        
         if ($resCreateVABJB->successful()) {
-            $resJson = $resCreateVABJB->json();
-            //* LOG VA
-            $dataVA = [
-                'no_bayar' => $no_bayar,
-                'data' => $resJson
-            ];
-            Log::channel($channel)->info($log, $dataVA);
             if (isset($resJson['rc']) != 0000) {
                 $err = true;
                 $errMsg = 'Terjadi kegagalan saat membuat Virtual Account.';
