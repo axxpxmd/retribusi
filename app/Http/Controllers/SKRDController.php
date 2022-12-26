@@ -19,6 +19,7 @@ use Validator;
 use DataTables;
 use Carbon\Carbon;
 
+use App\Libraries\VABJBRes;
 use App\Http\Services\VABJB;
 use App\Http\Services\QRISBJB;
 use App\Libraries\GenerateNumber;
@@ -46,8 +47,9 @@ class SKRDController extends Controller
     protected $title  = 'SKRD';
     protected $view   = 'pages.skrd.';
 
-    public function __construct(VABJB $vabjb, QRISBJB $qrisbjb, GenerateNumber $generateNumber)
+    public function __construct(VABJB $vabjb, QRISBJB $qrisbjb, GenerateNumber $generateNumber, VABJBRes $vabjbres)
     {
+        $this->vabjbres = $vabjbres;
         $this->vabjb = $vabjb;
         $this->qrisbjb = $qrisbjb;
         $this->generateNumber = $generateNumber;
@@ -239,7 +241,7 @@ class SKRDController extends Controller
         $kecamatans = Kecamatan::select('id', 'n_kecamatan')->where('kabupaten_id', 40)->get();
         $rincian_jenis_pendapatans = RincianJenisPendapatan::where('id_jenis_pendapatan', $jenis_pendapatan_id)->get();
         $penanda_tangans = TtdOPD::where('id_opd', $opd_id)->get();
-        
+
         return view($this->view . 'create', compact(
             'route',
             'title',
@@ -364,50 +366,26 @@ class SKRDController extends Controller
 
             //* Tahap 3
             //TODO: Get Token VA
-            $resGetTokenBJB = $this->vabjb->getTokenBJB();
-            if ($resGetTokenBJB->successful()) {
-                $resJson = $resGetTokenBJB->json();
-                if ($resJson['rc'] != 0000) {
-                    DB::rollback(); //* DB Transaction Failed
-                    return response()->json([
-                        'message' => 'Terjadi kegagalan saat mengambil token. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . ''
-                    ], 422);
-                }
-                $tokenBJB = $resJson['data'];
-            } else {
+            list($err, $errMsg, $tokenBJB) = $this->vabjbres->getTokenBJBres();
+            if ($err) {
                 DB::rollback(); //* DB Transaction Failed
                 return response()->json([
-                    'message' => "Terjadi kegagalan saat mengambil token. Error Code " . $resGetTokenBJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator"
-                ], 422);
+                    'message' => $errMsg
+                ], 500);
             }
 
             //TODO: Create VA
-            $resGetVABJB = $this->vabjb->createVABJB($tokenBJB, $clientRefnum, $amount, $expiredDate, $customerName, $productCode);
-            if ($resGetVABJB->successful()) {
-                $resJson = $resGetVABJB->json();
-                //* LOG VA
-                $dataQris = [
-                    'no_bayar' => $no_bayar,
-                    'data' => $resJson
-                ];
-                Log::channel('skrd_create_va')->info('Create VA SKRD', $dataQris);
-                if (isset($resJson['rc']) != 0000) {
-                    DB::rollback(); //* DB Transaction Failed
-                    return response()->json([
-                        'message' => 'Terjadi kegagalan saat membuat Virtual Account. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . ''
-                    ], 422);
-                }
-                $VABJB = $resJson['va_number'];
-
+            list($err, $errMsg, $VABJB) = $this->vabjbres->createVABJBres($tokenBJB, $clientRefnum, $amount, $expiredDate, $customerName, $productCode, 1, $no_bayar);
+            if ($err) {
+                DB::rollback(); //* DB Transaction Failed
+                return response()->json([
+                    'message' => $errMsg
+                ], 500);
+            } else {
                 //* Update data SKRD
                 $dataSKRD->update([
                     'nomor_va_bjb' => $VABJB
                 ]);
-            } else {
-                DB::rollback(); //* DB Transaction Failed
-                return response()->json([
-                    'message' => "Terjadi kegagalan saat membuat Virtual Account. Error Code " . $resGetVABJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator"
-                ], 422);
             }
 
             //* Tahap 4
@@ -533,7 +511,7 @@ class SKRDController extends Controller
 
         if ($data->status_ttd == 1 || $data->status_ttd == 3) {
             $status_ttd = true;
-        }else{
+        } else {
             $status_ttd = false;
         }
 
