@@ -39,8 +39,12 @@ class QRISBJBRes
 
         switch ($jenis) {
             case 1:
-                $channel = 'skrd_create_qris';
-                $log = 'Create Qris SKRD';
+                $channel = 'create_qris';
+                $log = 'Create Qris SKRD (create)';
+                break;
+            case 2:
+                $channel = 'create_qris';
+                $log = 'Update Qris SKRD (update)';
                 break;
             default:
                 # code...

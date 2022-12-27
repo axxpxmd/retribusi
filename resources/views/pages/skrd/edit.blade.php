@@ -120,7 +120,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="row mb-1">
-                                                        <label for="alamat_wp" class="col-form-label s-12 col-sm-4 text-right">Alamat Wajib Retribusi<span class="text-danger ml-1">*</span></label>
+                                                        <label for="alamat_wp" class="col-form-label s-12 col-sm-4 text-right">Alamat<span class="text-danger ml-1">*</span></label>
                                                         <div class="col-md-8">
                                                             <textarea type="text" rows="3" name="alamat_wp" id="alamat_wp" class="form-control r-0 s-12" autocomplete="off" required>{{ $data->alamat_wp }}</textarea>
                                                         </div>

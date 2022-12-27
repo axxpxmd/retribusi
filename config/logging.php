@@ -62,17 +62,23 @@ return [
             'days' => 30,
         ],
 
-        'skrd_create_qris' => [
+        'create_qris' => [
             'driver' => 'daily',
-            'path' => storage_path('logs/skrd/create_qris.log'),
+            'path' => storage_path('logs/qris/create_qris.log'),
             'level' => 'info',
             'days' => 30,
         ],
 
-        // 1
-        'skrd_create_va' => [
+        'create_va' => [
             'driver' => 'daily',
-            'path' => storage_path('logs/skrd/create_va.log'),
+            'path' => storage_path('logs/va/create_va.log'),
+            'level' => 'info',
+            'days' => 30,
+        ],
+
+        'update_va' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/va/update_va.log'),
             'level' => 'info',
             'days' => 30,
         ],
