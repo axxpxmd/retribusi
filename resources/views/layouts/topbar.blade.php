@@ -15,7 +15,7 @@
                             <i></i>
                         </a>
                     </div>
-                    <div class="row m-t-12">
+                    <div class="row m-t-12 c-clock">
                         <li type="none" class="mr-1 ml-2 fs-13 text-white">
                             <i class="icon icon-calendar-check-o"></i>
                             <a id="hari"></a>

@@ -129,6 +129,10 @@
         display: none;
     } 
 
+    .c-clock{
+        display: none !important;
+    }
+
     .m-none{
         display: none !important;
     }
