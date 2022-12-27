@@ -641,7 +641,7 @@ class SKRDController extends Controller
     public function destroy($id)
     {
         /* Tahapan :
-         * 1. tmtransaksi_opd
+         * 1. tmtransaksi_opd (delete)
          * 2. VA (make va expired)
          */
 
