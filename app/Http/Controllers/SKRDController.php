@@ -48,12 +48,10 @@ class SKRDController extends Controller
     protected $title  = 'SKRD';
     protected $view   = 'pages.skrd.';
 
-    public function __construct(VABJB $vabjb, QRISBJB $qrisbjb, GenerateNumber $generateNumber, VABJBRes $vabjbres, QRISBJBRes $qrisbjbres)
+    public function __construct(GenerateNumber $generateNumber, VABJBRes $vabjbres, QRISBJBRes $qrisbjbres)
     {
-        $this->vabjbres = $vabjbres;
+        $this->vabjbres   = $vabjbres;
         $this->qrisbjbres = $qrisbjbres;
-        $this->vabjb = $vabjb;
-        $this->qrisbjb = $qrisbjb;
         $this->generateNumber = $generateNumber;
 
         $this->middleware(['permission:SKRD']);

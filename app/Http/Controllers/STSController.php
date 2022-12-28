@@ -37,9 +37,10 @@ class STSController extends Controller
     protected $view  = 'pages.sts.';
 
 
-    public function __construct(VABJB $vabjb)
+    public function __construct(VABJB $vabjb, VABJBRes $vabjbres)
     {
         $this->vabjb = $vabjb;
+        $this->qrisbjbres = $qrisbjbres;
 
         $this->middleware(['permission:STS']);
     }
@@ -87,7 +88,6 @@ class STSController extends Controller
         return DataTables::of($data)
             ->addColumn('action', function ($p) {
                 $edit      = "<a href='" . route($this->route . 'edit', Crypt::encrypt($p->id)) . "' class='text-primary' title='Edit Data'><i class='icon icon-edit'></i></a>";
-                $report    = "<a href='" . route('print.sts', Crypt::encrypt($p->id)) . "' target='blank' title='Print Data' class='text-success'><i class='icon icon-printer2 mr-1'></i></a>";
 
                 if ($p->status_bayar == 0) {
                     if ($p->status_ttd == 1 || $p->status_ttd == 3) {
@@ -179,18 +179,11 @@ class STSController extends Controller
         //* Check status pembayaran VA BJB
         if ($data->status_bayar == 0 && $data->nomor_va_bjb != null && $data->tgl_skrd_akhir > $dateNow) {
             //TODO: Get Token BJB
-            $resGetTokenBJB = $this->vabjb->getTokenBJB();
-            if ($resGetTokenBJB->successful()) {
-                $resJson = $resGetTokenBJB->json();
-                if ($resJson['rc'] != 0000)
-                    return redirect()
-                        ->route($this->route . 'index')
-                        ->withErrors('Terjadi kegagalan saat mengambil token. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . '');
-                $tokenBJB = $resJson['data'];
-            } else {
+            list($err, $errMsg, $tokenBJB) = $this->vabjbres->getTokenBJBres();
+            if ($err) {
                 return redirect()
                     ->route($this->route . 'index')
-                    ->withErrors("Terjadi kegagalan saat mengambil token. Error Code " . $resGetTokenBJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator");
+                    ->withErrors($errMsg);
             }
 
             //TODO: Check VA BJB
