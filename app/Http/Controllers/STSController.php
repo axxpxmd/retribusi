@@ -308,7 +308,7 @@ class STSController extends Controller
 
         //TODO: Check denda
         $status_denda = TransaksiOPD::checkDenda($request->denda);
-       
+
         // Check 
         if ($status_bayar == 1) {
             $data->update([
@@ -322,10 +322,10 @@ class STSController extends Controller
                 'total_bayar_bjb' => $request->total_bayar_bjb == 0 ? null : (int) str_replace(['.', 'Rp', ' '], '', $request->total_bayar_bjb),
                 'updated_by'      => Auth::user()->pengguna->full_name . ' | Update data menu STS'
             ]);
-        }else{
+        } else {
             return response()->json([
                 'message' => 'Pilih status bayar'
-            ],500);
+            ], 500);
         }
 
         return response()->json([
