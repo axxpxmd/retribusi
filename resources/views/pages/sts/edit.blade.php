@@ -1,16 +1,6 @@
 @extends('layouts.app')
 @section('title', '| '.$title.'')
 @section('content')
-<style>
-    .label-input-custom{
-        font-size: 12px !important;
-        text-align: right !important;
-        border: none !important;
-        padding-right: 1.5rem !important;
-        color: #86939E !important;
-        font-weight: 400 !important
-    }
-</style>
 <div class="page has-sidebar-left height-full">
     <header class="blue accent-3 relative nav-sticky">
          <div class="container-fluid text-white">
@@ -18,7 +8,7 @@
                 <div class="col">
                     <h4>
                         <i class="icon icon-document-list mr-2"></i>
-                        Menampilkan {{ $title }} | {{ $data->nm_wajib_pajak }}
+                        Edit {{ $title }} | {{ $data->nm_wajib_pajak }}
                     </h4>
                 </div>
             </div>
@@ -46,178 +36,215 @@
                                 <form class="needs-validation" id="form" method="PATCH"  enctype="multipart/form-data" novalidate>
                                     {{ method_field('PATCH') }}
                                     <input type="hidden" id="id" name="id" value="{{ \Crypt::encrypt($data->id) }}"/>
-                                    <div class="form-row form-inline">
-                                        <div class="col-md-12">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-group m-0">
-                                                        <label for="n_opd" class="form-control label-input-custom col-md-4">Nama OPD<span class="text-danger ml-1">*</span></label>
-                                                        <input type="text" name="n_opd" id="n_opd" value="{{ $data->opd->n_opd }}"  class="form-control r-0 light s-12 col-md-8" autocomplete="off" readonly required/>
-                                                    </div>
-                                                    <div class="form-group m-0">
-                                                        <label for="rincian_jenis_pendapatan" class="form-control label-input-custom col-md-4">Jenis Pendapatan<span class="text-danger ml-1">*</span></label>
-                                                        <input type="text" name="rincian_jenis_pendapatan" id="rincian_jenis_pendapatan" value="{{ $data->jenis_pendapatan->jenis_pendapatan }}"  class="form-control r-0 light s-12 col-md-8" autocomplete="off" readonly required/>
-                                                    </div>
-                                                    <div class="form-group m-0">
-                                                        <label for="rincian_jenis_pendapatan" class="form-control label-input-custom col-md-4">Rincian Jenis Pendapatan<span class="text-danger ml-1">*</span></label>
-                                                        <input type="text" name="rincian_jenis_pendapatan" id="rincian_jenis_pendapatan" value="{{  $data->rincian_jenis != null ? $data->rincian_jenis->rincian_pendapatan : '' }}"  class="form-control r-0 light s-12 col-md-8" autocomplete="off" readonly required/>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                <div class="form-group m-0">
-                                                        <label for="kode_rekening" class="form-control label-input-custom col-md-4">Kode Rekening<span class="text-danger ml-1">*</span></label>
-                                                        <input type="text" id="kode_rekening" value="{{ $data->rincian_jenis != null ? $data->rincian_jenis->nmr_rekening : '' }}" class="form-control r-0 light s-12 col-md-8" autocomplete="off" readonly required/>
-                                                    </div>
-                                                    <div class="form-group m-0">
-                                                        <label for="uraian_retribusi" class="form-control label-input-custom col-md-4">Uraian Retribusi<span class="text-danger ml-1">*</span></label>
-                                                        <textarea type="text" rows="3" name="uraian_retribusi" id="uraian_retribusi" readonly class="form-control r-0 light s-12 col-md-8" autocomplete="off" required>{{ $data->uraian_retribusi }}</textarea>
-                                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="row mb-2">
+                                                <label for="n_opd" class="col-form-label s-12 col-sm-4 text-right">Nama OPD</label>
+                                                <div class="col-md-8">
+                                                    <input type="text" name="n_opd" id="n_opd" value="{{ $data->opd->n_opd }}"  class="form-control s-12" autocomplete="off" readonly required/>
                                                 </div>
                                             </div>
-                                            <hr>
+                                            <div class="row mb-2">
+                                                <label for="rincian_jenis_pendapatan" class="col-form-label s-12 col-sm-4 text-right">Jenis Pendapatan</label>
+                                                <div class="col-md-8">
+                                                    <input type="text" name="rincian_jenis_pendapatan" id="rincian_jenis_pendapatan" value="{{ $data->jenis_pendapatan->jenis_pendapatan }}"  class="form-control s-12" autocomplete="off" readonly required/>
+                                                </div>    
+                                            </div>
+                                            <div class="row mb-2">
+                                                <label for="rincian_jenis_pendapatan" class="col-form-label s-12 col-sm-4 text-right">Rincian Jenis Pendapatan</label>
+                                                <div class="col-md-8">
+                                                    <input type="text" name="rincian_jenis_pendapatan" id="rincian_jenis_pendapatan" value="{{  $data->rincian_jenis != null ? $data->rincian_jenis->rincian_pendapatan : '' }}"  class="form-control s-12" autocomplete="off" readonly required/>
+                                                </div>    
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                        <div class="row mb-2">
+                                                <label for="kode_rekening" class="col-form-label s-12 col-sm-4 text-right">Kode Rekening</label>
+                                                <div class="col-md-8">
+                                                    <input type="text" id="kode_rekening" value="{{ $data->rincian_jenis != null ? $data->rincian_jenis->nmr_rekening : '' }}" class="form-control s-12" autocomplete="off" readonly required/>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <label for="uraian_retribusi" class="col-form-label s-12 col-sm-4 text-right">Uraian Retribusi</label>
+                                                <div class="col-md-8">
+                                                    <textarea type="text" rows="3" name="uraian_retribusi" id="uraian_retribusi" readonly class="form-control s-12" autocomplete="off" required>{{ $data->uraian_retribusi }}</textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr>
 
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                <div class="form-group m-0">
-                                                        <label class="form-control label-input-custom col-md-4">No Bayar<span class="text-danger ml-1">*</span></label>
-                                                        <input type="text" value="{{ $data->no_bayar }}" readonly class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
-                                                    </div>
-                                                    <div class="form-group m-0">
-                                                        <label for="nmr_daftar" class="form-control label-input-custom col-md-4">Nomor Daftar<span class="text-danger ml-1">*</span></label>
-                                                        <input type="text" name="nmr_daftar" id="nmr_daftar" value="{{ $data->nmr_daftar }}" readonly class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
-                                                    </div>
-                                                    <div class="form-group m-0">
-                                                        <label for="nm_wajib_pajak" class="form-control label-input-custom col-md-4">Nama Wajib Retribusi<span class="text-danger ml-1">*</span></label>
-                                                        <input type="text" name="nm_wajib_pajak" id="nm_wajib_pajak" value="{{ $data->nm_wajib_pajak }}" readonly class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
-                                                    </div>
-                                                    <div class="form-group m-0">
-                                                        <label for="alamat_wp" class="form-control label-input-custom col-md-4">Alamat Wajib Retribusi<span class="text-danger ml-1">*</span></label>
-                                                        <textarea name="alamat_wp" rows="3" id="alamat_wp" readonly class="form-control r-0 light s-12 col-md-8" autocomplete="off" required>{{ $data->alamat_wp }}</textarea>
-                                                    </div>
-                                                    <div class="form-group m-0">
-                                                        <label for="lokasi" class="form-control label-input-custom col-md-4">Lokasi<span class="text-danger ml-1">*</span></label>
-                                                        <input type="text" name="lokasi" id="lokasi" value="{{ $data->lokasi }}" readonly placeholder="Contoh: Ruko Sektor 1.2 BSD" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
-                                                    </div>
-                                                    <div class="form-group m-0">
-                                                        <label for="kecamatan_id" class="form-control label-input-custom col-md-4">Kecamatan<span class="text-danger ml-1">*</span></label>
-                                                        <input type="text" name="kecamatan_id" id="kecamatan_id" value="{{ $data->kecamatan->n_kecamatan }}" readonly class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
-                                                    </div>
-                                                    <div class="form-group m-0">
-                                                        <label for="kelurahan_id" class="form-control label-input-custom col-md-4">Kelurahan<span class="text-danger ml-1">*</span></label>
-                                                        <input type="text" name="kelurahan_id" id="kelurahan_id" value="{{ $data->kelurahan->n_kelurahan }}" readonly class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
-                                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                        <div class="row mb-2">
+                                                <label class="col-form-label s-12 col-sm-4 text-right">No Bayar</label>
+                                                <div class="col-md-8">
+                                                    <input type="text" value="{{ $data->no_bayar }}" readonly class="form-control s-12" autocomplete="off" required/>
                                                 </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group m-0">
-                                                        <label for="no_skrd" class="form-control label-input-custom col-md-4">Nomor SKRD<span class="text-danger ml-1">*</span></label>
-                                                        <input type="text" name="no_skrd" id="no_skrd" value="{{ $data->no_skrd }}" readonly class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
-                                                    </div>
-                                                    <div class="form-group m-0">
-                                                        <label for="tgl_skrd_awal" class="form-control label-input-custom col-md-4">Tanggal SKRD<span class="text-danger ml-1">*</span></label>
-                                                        <input type="date" value="{{ $data->tgl_skrd_awal }}" readonly name="tgl_skrd_awal" id="tgl_skrd_awal" class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
-                                                    </div>
-                                                    <div class="form-group m-0">
-                                                        <label for="tgl_skrd_akhir" class="form-control label-input-custom col-md-4">Jatuh Tempo<span class="text-danger ml-1">*</span></label>
-                                                        <input type="date" name="tgl_skrd_akhir" value="{{ $data->tgl_skrd_akhir }}" id="tgl_skrd_akhir" readonly class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
-                                                    </div>
-                                                    <div class="form-group m-0">
-                                                        <label for="nm_ttd" class="form-control label-input-custom col-md-4">Nama Penandatangan<span class="text-danger ml-1">*</span></label>
-                                                        <input type="text" name="nm_ttd" id="nm_ttd" value="{{ $data->nm_ttd }}" readonly class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
-                                                    </div>
-                                                    <div class="form-group m-0">
-                                                        <label for="nip_ttd" class="form-control label-input-custom col-md-4">NIP Penandatangan<span class="text-danger ml-1">*</span></label>
-                                                        <input type="text" name="nip_ttd" id="nip_ttd" value="{{ $data->nip_ttd }}" readonly class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
-                                                    </div>
-                                                    <div class="form-group m-0">
-                                                        <label for="tgl_ttd" class="form-control label-input-custom col-md-4">Tanggal TTD<span class="text-danger ml-1">*</span></label>
-                                                        <input type="date" name="tgl_ttd" id="tgl_ttd" value="{{ $data->tgl_ttd }}" readonly class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
-                                                    </div>
-                                                    <div class="form-group m-0">
-                                                        <label for="jumlah_bayar" class="form-control label-input-custom col-md-4">Ketetapan<span class="text-danger ml-1">*</span></label>
-                                                        <input type="text" name="jumlah_bayar" value="{{ $data->jumlah_bayar }}" readonly class="form-control r-0 light s-12 col-md-8" autocomplete="off" required/>
-                                                    </div>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <label for="nmr_daftar" class="col-form-label s-12 col-sm-4 text-right">Nomor Daftar</label>
+                                                <div class="col-md-8">
+                                                    <input type="text" name="nmr_daftar" id="nmr_daftar" value="{{ $data->nmr_daftar }}" readonly class="form-control s-12" autocomplete="off" required/>
+                                                </div>    
+                                            </div>
+                                            <div class="row mb-2">
+                                                <label for="nm_wajib_pajak" class="col-form-label s-12 col-sm-4 text-right">Nama</label>
+                                                <div class="col-md-8">
+                                                    <input type="text" name="nm_wajib_pajak" id="nm_wajib_pajak" value="{{ $data->nm_wajib_pajak }}" readonly class="form-control s-12" autocomplete="off" required/>
+                                                </div>    
+                                            </div>
+                                            <div class="row mb-2">
+                                                <label for="alamat_wp" class="col-form-label s-12 col-sm-4 text-right">Alamat</label>
+                                                <div class="col-md-8">
+                                                    <textarea name="alamat_wp" rows="3" id="alamat_wp" readonly class="form-control s-12" autocomplete="off" required>{{ $data->alamat_wp }}</textarea>
                                                 </div>
-                                            </div> 
-                                            <hr>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <label for="lokasi" class="col-form-label s-12 col-sm-4 text-right">Lokasi</label>
+                                                <div class="col-md-8">
+                                                    <input type="text" name="lokasi" id="lokasi" value="{{ $data->lokasi }}" readonly placeholder="Contoh: Ruko Sektor 1.2 BSD" class="form-control s-12" autocomplete="off" required/>
+                                                </div>    
+                                            </div>
+                                            <div class="row mb-2">
+                                                <label for="kecamatan_id" class="col-form-label s-12 col-sm-4 text-right">Kecamatan</label>
+                                                <div class="col-md-8">
+                                                    <input type="text" name="kecamatan_id" id="kecamatan_id" value="{{ $data->kecamatan->n_kecamatan }}" readonly class="form-control s-12" autocomplete="off"/>
+                                                </div>    
+                                            </div>
+                                            <div class="row mb-2">
+                                                <label for="kelurahan_id" class="col-form-label s-12 col-sm-4 text-right">Kelurahan</label>
+                                                <div class="col-md-8">
+                                                    <input type="text" name="kelurahan_id" id="kelurahan_id" value="{{ $data->kelurahan->n_kelurahan }}" readonly class="form-control s-12" autocomplete="off"/>
+                                                </div>    
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="row mb-2">
+                                                <label for="no_skrd" class="col-form-label s-12 col-sm-4 text-right">Nomor SKRD</label>
+                                                <div class="col-md-8">
+                                                    <input type="text" name="no_skrd" id="no_skrd" value="{{ $data->no_skrd }}" readonly class="form-control s-12" autocomplete="off"/>
+                                                </div>    
+                                            </div>
+                                            <div class="row mb-2">
+                                                <label for="tgl_skrd_awal" class="col-form-label s-12 col-sm-4 text-right">Tanggal SKRD</label>
+                                                <div class="col-md-8">
+                                                    <input type="date" value="{{ $data->tgl_skrd_awal }}" readonly name="tgl_skrd_awal" id="tgl_skrd_awal" class="form-control s-12" autocomplete="off" required/>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <label for="tgl_skrd_akhir" class="col-form-label s-12 col-sm-4 text-right">Jatuh Tempo</label>
+                                                <div class="col-md-8">
+                                                    <input type="date" name="tgl_skrd_akhir" value="{{ $data->tgl_skrd_akhir }}" id="tgl_skrd_akhir" readonly class="form-control s-12" autocomplete="off" required/>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <label for="nm_ttd" class="col-form-label s-12 col-sm-4 text-right">Penanda Tangan</label>
+                                                <div class="col-md-8">
+                                                    <input type="text" name="nm_ttd" id="nm_ttd" value="{{ $data->nm_ttd }}" readonly class="form-control s-12" autocomplete="off" required/>
+                                                </div>    
+                                            </div>
+                                            <div class="row mb-2">
+                                                <label for="nip_ttd" class="col-form-label s-12 col-sm-4 text-right">NIP Penandatangan</label>
+                                                <div class="col-md-8">
+                                                    <input type="text" name="nip_ttd" id="nip_ttd" value="{{ $data->nip_ttd }}" readonly class="form-control s-12" autocomplete="off" required/>
+                                                </div>    
+                                            </div>
+                                            <div class="row mb-2">
+                                                <label for="tgl_ttd" class="col-form-label s-12 col-sm-4 text-right">Tanggal TTD</label>
+                                                <div class="col-md-8">
+                                                    <input type="date" name="tgl_ttd" id="tgl_ttd" value="{{ $data->tgl_ttd }}" readonly class="form-control s-12" autocomplete="off" required/>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <label for="jumlah_bayar" class="col-form-label s-12 col-sm-4 text-right">Ketetapan</label>
+                                                <div class="col-md-8">
+                                                    <input type="text" name="jumlah_bayar" value="{{ $data->jumlah_bayar }}" readonly class="form-control s-12" autocomplete="off" required/>
+                                                </div>    
+                                            </div>
+                                        </div>
+                                    </div> 
+                                    <hr>
 
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-group m-0">
-                                                        <label class="form-control label-input-custom col-md-4">Status</label>
-                                                        <div class="col-md-8 p-0 bg-light">
-                                                            <select class="select2 form-control r-0 light s-12" id="status_bayar" name="status_bayar" autocomplete="off">
-                                                                <option value="">Pilih</option>
-                                                                <option value="0">Belum Dibayar</option>
-                                                                <option value="1" {{ $data->status_bayar == 1 ? 'selected' : '' }}>Sudah Dibayar</option>
-                                                                {{-- <!-- check untuk bendahara OPD -->
-                                                                @if ($data->ntb != null && $data->total_bayar_bjb != null)
-                                                                <option value="1">Sudah Dibayar</option>
-                                                                @endif
-                                                                <!-- check untuk admin OPD -->
-                                                                @role('admin-opd|super-admin')
-                                                                    @if ($data->ntb == null && $data->total_bayar_bjb == null)
-                                                                    <option value="1">Sudah Dibayar</option>
-                                                                    @endif
-                                                                @endrole --}}
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group mt-1">
-                                                        <label for="tgl_bayar" class="form-control label-input-custom col-md-4">Tanggal Bayar</label>
-                                                        <input type="datetime-local" name="tgl_bayar" {{ $data->status_bayar == 1 ? 'readonly' : '' }} {{ $readonly }} value="{{ $data->tgl_bayar != null ? date('Y-m-d\TH:i', strtotime($data->tgl_bayar)) : $now }}" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
-                                                    </div>
-                                                    <div class="form-group m-0">
-                                                        <label for="no_bku" class="form-control label-input-custom col-md-4">Nomor BKU</label>
-                                                        <input type="text" name="no_bku" value="{{ $data->no_bku }}" {{ $readonly }} id="no_bku" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
-                                                    </div>
-                                                    <div class="form-group m-0">
-                                                        <label for="chanel_bayar" class="form-control label-input-custom col-md-4">Chanel Bayar</label>
-                                                        <div class="col-md-8 p-0 bg-light">
-                                                            <select class="select2 form-control r-0 light s-12" id="chanel_bayar" name="chanel_bayar" autocomplete="off">
-                                                                <option value="">Pilih</option>
-                                                                <option value="Virtual Account" {{ $data->chanel_bayar == 'Virtual Account' ? 'selected' : '' }}>Virtual Account</option>
-                                                                <option value="ATM" {{ $data->chanel_bayar == 'ATM' ? 'selected' : '' }}>ATM</option>
-                                                                <option value="BJB MOBILE" {{ $data->chanel_bayar == 'BJB MOBILE' ? 'selected' : '' }}>BJB MOBILE</option>
-                                                                <option value="TELLER" {{ $data->chanel_bayar == 'TELLER' ? 'selected' : '' }}>TELLER</option>
-                                                                <option value="QRIS" {{ $data->chanel_bayar == 'QRIS' ? 'selected' : '' }}>QRIS</option>
-                                                                <option value="Bendahara OPD" {{ $data->chanel_bayar == 'Bendahara OPD' ? 'selected' : '' }}>Bendahara OPD</option>
-                                                                <option value="Transfer RKUD" {{ $data->chanel_bayar == 'Transfer RKUD' ? 'selected' : '' }}>Transfer RKUD</option>
-                                                                <option value="RTGS/SKN" {{ $data->chanel_bayar == 'RTGS/SKN' ? 'selected' : '' }}>RTGS/SKN</option>
-                                                                <option value="Lainnya" {{ $data->chanel_bayar == 'Lainnya' ? 'selected' : '' }}>Lainnya</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group m-0">
-                                                        <label for="ntb" class="form-control label-input-custom col-md-4">NTB</label>
-                                                        <input type="text" name="ntb" value="{{ $data->ntb }}" {{ $readonly }} id="ntb" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
-                                                    </div>
-                                                    <div class="form-group m-0">
-                                                        <label for="denda" class="form-control label-input-custom col-md-4">Denda</label>
-                                                        <input type="text" name="denda" value="{{ $data->denda == 0 ? $jumlahBunga : $data->denda }}" {{ $readonly }} id="rupiah1" onkeyup="totalBayarBJB()" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
-                                                    </div>
-                                                    <div class="form-group m-0">
-                                                        <label for="diskon" class="form-control label-input-custom col-md-4">Diskon</label>
-                                                        <input type="text" name="diskon" value="{{ $data->diskon }} %" readonly id="diskon" class="form-control r-0 light col-md-1 s-12" autocomplete="off"/>
-                                                        <input type="text" name="jumlah_diskon" value="@currency($data->diskon / 100 * $data->jumlah_bayar )" readonly id="diskon" class="form-control r-0 light col-md-7 s-12" autocomplete="off"/>
-                                                    </div>
-                                                    <div class="form-group m-0">
-                                                        <label for="total_bayar_bjb" class="form-control label-input-custom col-md-4">Total Bayar Bank</label>
-                                                        <input type="text" name="total_bayar_bjb" {{ $data->status_bayar == 1 ? 'readonly' : '' }} value="{{ $data->total_bayar_bjb }}" {{ $readonly }} id="rupiah2" class="form-control r-0 light s-12 col-md-8" autocomplete="off"/>
-                                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="row mb-2">
+                                                <label class="col-form-label s-12 col-sm-4 text-right">Status<span class="text-danger ml-1">*</span></label>
+                                                <div class="col-md-8">
+                                                    <select class="select2 form-control s-12" id="status_bayar" name="status_bayar" autocomplete="off">
+                                                        <option value="">Pilih</option>
+                                                        <option value="1" {{ $data->status_bayar == 1 ? 'selected' : '' }}>Sudah Dibayar</option>
+                                                    </select>
                                                 </div>
                                             </div>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-group mt-2">
-                                                        <div class="col-md-4"></div>
-                                                        <button type="submit" class="btn btn-primary btn-sm"><i class="icon-save mr-2"></i>Simpan</button>
-                                                    </div>  
-                                                </div>
-                                                <div class="col-md-6">
+                                            <div class="row mb-2">
+                                                <label for="tgl_bayar" class="col-form-label s-12 col-sm-4 text-right">Tanggal Bayar<span class="text-danger ml-1">*</span></label>
+                                                <div class="col-md-8">
+                                                    <input type="datetime-local" name="tgl_bayar" {{ $data->status_bayar == 1 ? 'readonly' : '' }} {{ $readonly }} value="{{ $data->tgl_bayar != null ? date('Y-m-d\TH:i', strtotime($data->tgl_bayar)) : $now }}" class="form-control s-12" autocomplete="off"/>
                                                 </div>
                                             </div>
+                                            <div class="row mb-2">
+                                                <label for="no_bku" class="col-form-label s-12 col-sm-4 text-right">Nomor BKU</label>
+                                                <div class="col-md-8">
+                                                    <input type="text" name="no_bku" value="{{ $data->no_bku }}" {{ $readonly }} id="no_bku" class="form-control s-12" autocomplete="off"/>
+                                                </div>    
+                                            </div>
+                                            <div class="row mb-2">
+                                                <label for="chanel_bayar" class="col-form-label s-12 col-sm-4 text-right">Chanel Bayar<span class="text-danger ml-1">*</span></label>
+                                                <div class="col-md-8">
+                                                    <select class="select2 form-control s-12" id="chanel_bayar" name="chanel_bayar" autocomplete="off">
+                                                        <option value="">Pilih</option>
+                                                        <option value="Virtual Account" {{ $data->chanel_bayar == 'Virtual Account' ? 'selected' : '' }}>Virtual Account</option>
+                                                        <option value="ATM" {{ $data->chanel_bayar == 'ATM' ? 'selected' : '' }}>ATM</option>
+                                                        <option value="BJB MOBILE" {{ $data->chanel_bayar == 'BJB MOBILE' ? 'selected' : '' }}>BJB MOBILE</option>
+                                                        <option value="TELLER" {{ $data->chanel_bayar == 'TELLER' ? 'selected' : '' }}>TELLER</option>
+                                                        <option value="QRIS" {{ $data->chanel_bayar == 'QRIS' ? 'selected' : '' }}>QRIS</option>
+                                                        <option value="Bendahara OPD" {{ $data->chanel_bayar == 'Bendahara OPD' ? 'selected' : '' }}>Bendahara OPD</option>
+                                                        <option value="Transfer RKUD" {{ $data->chanel_bayar == 'Transfer RKUD' ? 'selected' : '' }}>Transfer RKUD</option>
+                                                        <option value="RTGS/SKN" {{ $data->chanel_bayar == 'RTGS/SKN' ? 'selected' : '' }}>RTGS/SKN</option>
+                                                        <option value="Lainnya" {{ $data->chanel_bayar == 'Lainnya' ? 'selected' : '' }}>Lainnya</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="row mb-2">
+                                                <label for="ntb" class="col-form-label s-12 col-sm-4 text-right">NTB</label>
+                                                <div class="col-md-8">
+                                                    <input type="text" name="ntb" value="{{ $data->ntb }}" {{ $readonly }} id="ntb" class="form-control s-12" autocomplete="off"/>
+                                                </div>    
+                                            </div>
+                                            <div class="row mb-2">
+                                                <label for="denda" class="col-form-label s-12 col-sm-4 text-right">Denda</label>
+                                                <div class="col-md-8">
+                                                    <input type="text" name="denda" value="{{ $data->denda == 0 ? $jumlahBunga : $data->denda }}" {{ $readonly }} id="rupiah1" onkeyup="totalBayarBJB()" class="form-control s-12" autocomplete="off"/>
+                                                </div>    
+                                            </div>
+                                            <div class="row mb-2">
+                                                <label for="diskon" class="col-form-label s-12 col-sm-4 text-right">Diskon</label>
+                                                <div class="col-md-2 mb-5-m">
+                                                    <input type="text" name="diskon" value="{{ $data->diskon }} %" readonly id="diskon" class="form-control s-12" autocomplete="off"/>
+                                                </div> 
+                                                <div class="col-md-6">
+                                                    <input type="text" name="jumlah_diskon" value="@currency($data->diskon / 100 * $data->jumlah_bayar )" readonly id="diskon" class="form-control s-12" autocomplete="off"/>
+                                                </div>    
+                                            </div>
+                                            <div class="row mb-2">
+                                                <label for="total_bayar_bjb" class="col-form-label s-12 col-sm-4 text-right">Total Bayar Bank<span class="text-danger ml-1">*</span></label>
+                                                <div class="col-md-8">
+                                                    <input type="text" name="total_bayar_bjb" {{ $data->status_bayar == 1 ? 'readonly' : '' }} value="{{ $data->total_bayar_bjb }}" {{ $readonly }} id="rupiah2" class="form-control s-12" autocomplete="off"/>
+                                                </div>    
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="row mb-2">
+                                                <div class="col-md-4"></div>
+                                                <div class="col-md-8">
+                                                    <button type="submit" class="btn btn-primary btn-sm btn-block"><i class="icon-save mr-2"></i>Simpan Perubahan</button>
+                                                </div>
+                                            </div>  
                                         </div>
                                     </div>
                                 </form>

@@ -22,4 +22,15 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Pengguna::class, 'id', 'user_id');
     }
+
+    public static function checkRole($role)
+    {
+        if ($role == 'super-admin' || $role == 'admin-opd') {
+            $readonly = '';
+        } else {
+            $readonly = 'readonly';
+        }
+
+        return $readonly;
+    }
 }

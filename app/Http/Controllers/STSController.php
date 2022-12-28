@@ -24,11 +24,12 @@ use Illuminate\Support\Facades\Crypt;
 use App\Http\Services\VABJB;
 use App\Libraries\Html\Html_number;
 use App\Http\Controllers\Controller;
-
+use App\Libraries\VABJBRes;
 // Models
 use App\Models\OPD;
 use App\Models\TransaksiOPD;
 use App\Models\OPDJenisPendapatan;
+use App\User;
 
 class STSController extends Controller
 {
@@ -40,7 +41,7 @@ class STSController extends Controller
     public function __construct(VABJB $vabjb, VABJBRes $vabjbres)
     {
         $this->vabjb = $vabjb;
-        $this->qrisbjbres = $qrisbjbres;
+        $this->vabjbres   = $vabjbres;
 
         $this->middleware(['permission:STS']);
     }
@@ -159,20 +160,21 @@ class STSController extends Controller
         $data = TransaksiOPD::find($id);
 
         $va_number = (int) $data->nomor_va_bjb;
+        $no_bayar  = $data->no_bayar;
         $fileName  = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
         $path_sftp = 'file_ttd_skrd/';
         $dateNow   = Carbon::now()->format('Y-m-d');
-
-        //TODO: Get bunga
         $tgl_skrd_akhir = $data->tgl_skrd_akhir;
         $total_bayar    = $data->jumlah_bayar;
+        $status_ttd     = $data->status_ttd;
+
+        $status_ttd = TransaksiOPD::checkStatusTTD($status_ttd);
+
         //TODO: Get bunga
+        $kenaikan    = 0;
         $jumlahBunga = 0;
-        $kenaikan = 0;
         $dateNow = Carbon::now()->format('Y-m-d');
         if ($data->tgl_skrd_akhir < $dateNow) {
-            $tgl_skrd_akhir = $data->tgl_skrd_akhir;
-            $total_bayar    = $data->jumlah_bayar;
             list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);
         }
 
@@ -187,27 +189,16 @@ class STSController extends Controller
             }
 
             //TODO: Check VA BJB
-            $resCheckVABJB = $this->vabjb->CheckVABJB($tokenBJB, $va_number);
-            if ($resCheckVABJB->successful()) {
-                $resJson = $resCheckVABJB->json();
-                if (isset($resJson['rc']) != 0000)
-                    return redirect()
-                        ->route($this->route . 'index')
-                        ->withErrors('Terjadi kegagalan saat mengecek status pembayaran VA BJB. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . '');
-                $VABJB  = $resJson['va_number'];
-                $status = $resJson['status'];
-                $transactionTime = $resJson['transactions']['transaction_date'];
-                $transactionAmount = $resJson['transactions']['transaction_amount'];
-            } else {
+            list($err, $errMsg, $VABJB, $status, $transactionTime, $transactionAmount) = $this->vabjbres->CheckVABJBres($tokenBJB, $va_number, 1, $no_bayar);
+            if ($err) {
                 return redirect()
                     ->route($this->route . 'index')
-                    ->withErrors("Terjadi kegagalan saat mengecek status pembayaran VA BJB. Error Code " . $resCheckVABJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator");
+                    ->withErrors($errMsg);
             }
 
             //TODO: Update tmtransaksi_opd
             if ($status == 2) {
                 $ntb = \md5($data->no_bayar);
-
                 $data->update([
                     'ntb'        => $ntb,
                     'tgl_bayar'  => $transactionTime,
@@ -217,12 +208,6 @@ class STSController extends Controller
                     'total_bayar_bjb' => $transactionAmount,
                 ]);
             }
-        }
-
-        if ($data->status_ttd == 1 || $data->status_ttd == 3) {
-            $status_ttd = true;
-        } else {
-            $status_ttd = false;
         }
 
         return view($this->view . 'show', compact(
@@ -247,65 +232,44 @@ class STSController extends Controller
         $id   = \Crypt::decrypt($id);
         $role = Auth::user()->pengguna->modelHasRole->role->name;
         $now  = Carbon::now()->format('Y-m-d\TH:i');
-
-        //TODO: Check role
-        if ($role == 'super-admin' || $role == 'admin-opd') {
-            $readonly = '';
-        } else {
-            $readonly = 'readonly';
-        }
-
         $data      = TransaksiOPD::find($id);
         $va_number = (int) $data->nomor_va_bjb;
+        $no_bayar  = $data->no_bayar;
+        $tgl_skrd_akhir = $data->tgl_skrd_akhir;
+        $total_bayar    = $data->jumlah_bayar;
+
+        //TODO: Check role
+        $readonly = User::checkRole($role);
 
         //TODO: Get bunga
+        $kenaikan    = 0;
         $jumlahBunga = 0;
         $dateNow = Carbon::now()->format('Y-m-d');
         if ($data->tgl_skrd_akhir < $dateNow) {
-            $tgl_skrd_akhir = $data->tgl_skrd_akhir;
-            $total_bayar    = $data->jumlah_bayar;
             list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);
         }
 
         //* Check status pembayaran VA BJB
         if ($data->status_bayar == 0 && $data->nomor_va_bjb != null && $data->tgl_skrd_akhir > $dateNow) {
             //TODO: Get Token BJB
-            $resGetTokenBJB = $this->vabjb->getTokenBJB();
-            if ($resGetTokenBJB->successful()) {
-                $resJson = $resGetTokenBJB->json();
-                if ($resJson['rc'] != 0000)
-                    return redirect()
-                        ->route($this->route . 'index')
-                        ->withErrors('Terjadi kegagalan saat mengambil token. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . '');
-                $tokenBJB = $resJson['data'];
-            } else {
+            list($err, $errMsg, $tokenBJB) = $this->vabjbres->getTokenBJBres();
+            if ($err) {
                 return redirect()
                     ->route($this->route . 'index')
-                    ->withErrors("Terjadi kegagalan saat mengambil token. Error Code " . $resGetTokenBJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator");
+                    ->withErrors($errMsg);
             }
 
             //TODO: Check VA BJB
-            $resCheckVABJB = $this->vabjb->CheckVABJB($tokenBJB, $va_number);
-            if ($resCheckVABJB->successful()) {
-                $resJson = $resCheckVABJB->json();
-                if (isset($resJson['rc']) != 0000)
-                    return redirect()
-                        ->route($this->route . 'index')
-                        ->withErrors('Terjadi kegagalan saat mengecek status pembayaran VA BJB. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . '');
-                $VABJB  = $resJson['va_number'];
-                $status = $resJson['status'];
-                $transactionTime = $resJson['transactions']['transaction_date'];
-                $transactionAmount = $resJson['transactions']['transaction_amount'];
-            } else {
+            list($err, $errMsg, $VABJB, $status, $transactionTime, $transactionAmount) = $this->vabjbres->CheckVABJBres($tokenBJB, $va_number, 2, $no_bayar);
+            if ($err) {
                 return redirect()
                     ->route($this->route . 'index')
-                    ->withErrors("Terjadi kegagalan saat mengecek status pembayaran VA BJB. Error Code " . $resCheckVABJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator");
+                    ->withErrors($errMsg);
             }
 
             //TODO: Update tmtransaksi_opd
             if ($status == 2) {
                 $ntb = \md5($data->no_bayar);
-
                 $data->update([
                     'ntb'        => $ntb,
                     'tgl_bayar'  => $transactionTime,
@@ -333,23 +297,18 @@ class STSController extends Controller
     {
         $request->validate([
             'status_bayar' => 'required',
-            'chanel_bayar' => 'required'
+            'chanel_bayar' => 'required',
+            'tgl_bayar' => 'required'
         ]);
 
         $id   = \Crypt::decrypt($id);
         $data = TransaksiOPD::find($id);
-        $role = Auth::user()->pengguna->modelHasRole->role->name;
-
         $status_bayar = $request->status_bayar;
         $tgl_bayar    = $request->tgl_bayar;
 
-        //* Status Denda
-        if ($request->denda == 0 || $request->denda == null) {
-            $status_denda = 0;
-        } else {
-            $status_denda = 1;
-        }
-
+        //TODO: Check denda
+        $status_denda = TransaksiOPD::checkDenda($request->denda);
+       
         // Check 
         if ($status_bayar == 1) {
             $data->update([
@@ -363,34 +322,10 @@ class STSController extends Controller
                 'total_bayar_bjb' => $request->total_bayar_bjb == 0 ? null : (int) str_replace(['.', 'Rp', ' '], '', $request->total_bayar_bjb),
                 'updated_by'      => Auth::user()->pengguna->full_name . ' | Update data menu STS'
             ]);
-        } else {
-            if ($role == 'bendahara-opd') {
-                $data->update([
-                    'status_bayar' => $status_bayar,
-                    'tgl_bayar'    => null,
-                    'no_bku'       => null,
-                    'chanel_bayar' => $request->chanel_bayar,
-                    'ntb'    => null,
-                    'denda'  => 0,
-                    'diskon' => 0,
-                    'status_diskon' => 0,
-                    'total_bayar_bjb' => null,
-                    'total_bayar' => $data->jumlah_bayar,
-                    'updated_by'  => Auth::user()->pengguna->full_name . ' | Update data menu STS'
-                ]);
-            } else {
-                $data->update([
-                    'status_bayar' => $status_bayar,
-                    'tgl_bayar'    => $tgl_bayar,
-                    'no_bku'       => $request->no_bku,
-                    'chanel_bayar' => $request->chanel_bayar,
-                    'status_denda' => $status_denda,
-                    'ntb'    => $request->ntb,
-                    'denda'  => (int) str_replace(['.', 'Rp', ' '], '', $request->denda),
-                    'total_bayar_bjb' => $request->total_bayar_bjb == 0 ? null : (int) str_replace(['.', 'Rp', ' '], '', $request->total_bayar_bjb),
-                    'updated_by'      => Auth::user()->pengguna->full_name . ' | Update data menu STS'
-                ]);
-            }
+        }else{
+            return response()->json([
+                'message' => 'Pilih status bayar'
+            ],500);
         }
 
         return response()->json([

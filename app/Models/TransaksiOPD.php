@@ -36,6 +36,28 @@ class TransaksiOPD extends Model
         return $this->belongsTo(Kecamatan::class, 'kecamatan_id');
     }
 
+    public static function checkStatusTTD($status_ttd)
+    {
+        if ($status_ttd == 1 || $status_ttd == 3) {
+            $status_ttd = true;
+        } else {
+            $status_ttd = false;
+        }
+
+        return $status_ttd;
+    }
+
+    public static function checkDenda($denda)
+    {
+        if ($denda == 0 || $denda == null) {
+            $status_denda = 0;
+        } else {
+            $status_denda = 1;
+        }
+
+        return $status_denda;
+    }
+
     // 
     public static function queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar, $rincian_pendapatan_id)
     {

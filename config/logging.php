@@ -83,6 +83,13 @@ return [
             'days' => 30,
         ],
 
+        'check_va' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/va/check_va.log'),
+            'level' => 'info',
+            'days' => 30,
+        ],
+
         'single' => [
             'driver' => 'single',
             'path' => storage_path('logs/laravel.log'),
