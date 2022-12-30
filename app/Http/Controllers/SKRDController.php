@@ -14,15 +14,12 @@
 namespace App\Http\Controllers;
 
 use Auth;
-use DateTime;
 use Validator;
 use DataTables;
 use Carbon\Carbon;
 
 use App\Libraries\VABJBRes;
-use App\Http\Services\VABJB;
 use App\Libraries\QRISBJBRes;
-use App\Http\Services\QRISBJB;
 use App\Libraries\GenerateNumber;
 use App\Http\Controllers\Controller;
 
@@ -35,6 +32,7 @@ use Illuminate\Support\Facades\Crypt;
 use App\Models\OPD;
 use App\Models\DataWP;
 use App\Models\TtdOPD;
+use App\Models\Utility;
 use App\Models\Kecamatan;
 use App\Models\Kelurahan;
 use App\Models\TransaksiOPD;
