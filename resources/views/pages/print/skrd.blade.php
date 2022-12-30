@@ -148,15 +148,13 @@
                     <p class="m-b-0" style="font-size: 13px">SURAT KETETAPAN RETRIBUSI DAERAH</p>
                     <p class="m-t-1" style="font-size: 13px">(SKRD)</p>
                     <p>&nbsp;</p>
-                    <p class="text-left m-l-14 m-t-0 f-w-n">Tanggal SKRD :
-                        {{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_awal)->format('d F Y') }}</p>
+                    <p class="text-left m-l-14 m-t-0 f-w-n">Tanggal SKRD : {{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_awal)->format('d F Y') }}</p>
                 </div>
             </th>
             <th width="20%" class="d">
                 <div style="margin: 0 auto">
                     <p class="text-center t-bold m-b-0" style="font-size: 13px">NO SKRD</p>
                     <p class="text-center m-t-1 f-normal">{{ $data->no_skrd }}</p>
-
                     <table style="font-weight: normal">
                         <tr>
                             <td>No BKU</td>
@@ -262,8 +260,7 @@
                 </td>
                 <td><span>:</span></td>
                 <td>
-                    <p class="m-t-0 m-b-0">
-                        {{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_akhir)->format('d F Y') }}</p>
+                    <p class="m-t-0 m-b-0">{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_akhir)->format('d F Y') }}</p>
                 </td>
                 <td>&nbsp;</td>
             </tr>
@@ -285,23 +282,20 @@
                 </td>
                 <td class="a">
                     <p class="m-l-5 m-b-0">{{ $data->jenis_pendapatan->jenis_pendapatan }}</p>
-                    <p class="m-l-5 m-b-0 m-t-0">
-                        {{ $data->rincian_jenis != null ? $data->rincian_jenis->rincian_pendapatan : '-' }}</p>
+                    <p class="m-l-5 m-b-0 m-t-0">{{ $data->rincian_jenis != null ? $data->rincian_jenis->rincian_pendapatan : '-' }}</p>
                     <p class="m-l-5 m-t-0">{{ $data->uraian_retribusi }}</p>
                 </td>
                 <td class="a">
                     <p class="m-l-5 text-right m-r-10">@currency($data->jumlah_bayar),-</p>
                     @if ($data->status_diskon == 1)
-                        <p class="m-l-5 text-right m-r-10">(Diskon {{ (int) $data->diskon }}%)&nbsp;&nbsp;
-                            @currency(($data->diskon / 100) * $data->jumlah_bayar),-</p>
+                        <p class="m-l-5 text-right m-r-10">(Diskon {{ (int) $data->diskon }}%)&nbsp;&nbsp;@currency(($data->diskon / 100) * $data->jumlah_bayar),-</p>
                     @endif
                 </td>
             </tr>
             <tr class="a">
                 <td rowspan="2" class="a text-center">2</td>
                 <td rowspan="2" class="a">
-                    <p class="m-l-5">
-                        {{ $data->rincian_jenis != null ? $data->rincian_jenis->nmr_rekening_denda : '-' }}</p>
+                    <p class="m-l-5">{{ $data->rincian_jenis != null ? $data->rincian_jenis->nmr_rekening_denda : '-' }}</p>
                 </td>
                 <td class="a">
                     <p class="m-l-5 m-b-0">Jumlah Ketetapan Pokok Retribusi :</p>
@@ -326,8 +320,7 @@
             </tr>
             <tr class="a">
                 <td colspan="4" class="a">
-                    <p class="m-l-5">Dengan Huruf : <span class="t-bold"
-                            style="text-transform: uppercase">{{ $data->jumlah_bayar == 0 ? '0 Rupiah' : $terbilang }}</span>
+                    <p class="m-l-5">Dengan Huruf : <span class="t-bold" style="text-transform: uppercase">{{ $data->jumlah_bayar == 0 ? '0 Rupiah' : $terbilang }}</span>
                     </p>
                     <p class="fs-12 t-bold m-l-5"><u>PERHATIAN :</u></p>
                     <ol>
@@ -355,42 +348,27 @@
                 </td>
             </tr>
             <tr class="a">
-                <td colspan="1" class="a"
-                    style="border-right: none !important; margin-left: 10px !important">
+                <td colspan="1" class="a" style="border-right: none !important; margin-left: 10px !important">
                     @if ($data->status_ttd == 1)
                         @if ($data->text_qris)
                             <div style="margin-top: 10px !important; margin-bottom: 5px !important">
-                                <img width="80" class="m-b-5" style="margin-left: 37px !important"
-                                    src="{{ public_path('images/qr-logo.png') }}" alt="qris"><br>
-                                {!! $img !!}
+                                <img width="80" class="m-b-5" style="margin-left: 37px !important" src="{{ public_path('images/qr-logo.png') }}" alt="qris"><br>
+                                {!! $imgQRIS !!}
                                 <br style="margin-top: -30px !important">
-                                <span class="m-l-5"
-                                    style="font-weight: 400; font-size: 12px; font-family: 'Open Sans'">NIMD:{{ $data->rincian_jenis->nmid }}</span>
+                                <span class="m-l-5" style="font-weight: 400; font-size: 12px; font-family: 'Open Sans'">NIMD:{{ $data->rincian_jenis->nmid }}</span>
                             </div>
                         @endif
                     @endif
                 </td>
                 <td colspan="3" class="a" style="border-left: none !important">
                     <div style="text-align:center; margin-right: -500px !important">
-                        @if ($data->tgl_ttd != null)
-                            <p>Tangerang Selatan,
-                                {{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_ttd)->format('d F Y') }}</p>
-                        @else
-                            <p>Tangerang Selatan, </p>
-                        @endif
+                        <p>Tangerang Selatan, {{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_ttd)->format('d F Y') }}</p>
                         <br>
                         <br>
                         <br>
-                        @if ($data->nm_ttd != null)
-                            <p class="m-b-5"><u>{{ $data->nm_ttd }}</u></p>
-                        @else
-                            <p class="m-b-5"><u>{{ $data->opd->nm_ttd }}</u></p>
-                        @endif
-                        @if ($data->nip_ttd != null)
-                            <p class="m-t-0">NIP.{{ $data->nip_ttd }}</p>
-                        @else
-                            <p class="m-t-0">NIP.{{ $data->opd->nip_ttd }}</p>
-                        @endif
+                        <br>
+                        <p class="m-b-5"><u>{{ $data->nm_ttd }}</u></p>
+                        <p class="m-t-0">NIP.{{ $data->nip_ttd }}</p>
                     </div>
                 </td>
             </tr>

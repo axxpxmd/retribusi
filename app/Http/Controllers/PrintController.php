@@ -13,7 +13,6 @@
 
 namespace App\Http\Controllers;
 
-use DateTime;
 use Carbon\Carbon;
 
 use App\Libraries\Html\Html_number;
@@ -21,6 +20,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 
 // Models
+use App\Models\Utility;
 use App\Models\TransaksiOPD;
 
 class PrintController extends Controller
@@ -46,15 +46,17 @@ class PrintController extends Controller
         $id = \Crypt::decrypt($id);
 
         $data = TransaksiOPD::find($id);
+
         $terbilang = Html_number::terbilang($data->total_bayar) . 'rupiah';
 
-        //TODO: generate QR Code
-        $img = '';
+        $fileName  = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
+        $file_url  = config('app.sftp_src') . 'file_ttd_skrd/' . $fileName;
+        $text_qris = $data->text_qris;
+
+        //TODO: generate QR Code (QRIS)
+        $imgQRIS = '';
         if ($data->text_qris) {
-            $fileName = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
-            $file_url = config('app.sftp_src') . 'file_ttd_skrd/' . $fileName;
-            $b   = base64_encode(\SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')->size(1000)->errorCorrection('H')->margin(0)->generate($data->text_qris));
-            $img = '<img width="150" src="data:image/png;base64, ' . $b . '" alt="qr code" />';
+            $imgQRIS = Utility::createQrQris($text_qris);
         }
 
         $pdf = app('dompdf.wrapper');
@@ -63,7 +65,7 @@ class PrintController extends Controller
         $pdf->loadView('pages.print.skrd', compact(
             'data',
             'terbilang',
-            'img'
+            'imgQRIS'
         ));
 
         return $pdf->stream($data->nm_wajib_pajak . '-' . $data->no_skrd . ".pdf");
