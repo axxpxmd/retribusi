@@ -169,10 +169,10 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="row mb-2">
-                                                <label class="col-form-label s-12 col-sm-4 text-right">Status<span class="text-danger ml-1">*</span></label>
+                                                <label class="col-form-label s-12 col-sm-4 text-right">Status Bayar<span class="text-danger ml-1">*</span></label>
                                                 <div class="col-md-8">
                                                     <select class="select2 form-control s-12" id="status_bayar" name="status_bayar" autocomplete="off">
-                                                        <option value="">Pilih</option>
+                                                        <option value="0">Pilih</option>
                                                         <option value="1" {{ $data->status_bayar == 1 ? 'selected' : '' }}>Sudah Dibayar</option>
                                                     </select>
                                                 </div>
@@ -217,7 +217,7 @@
                                             <div class="row mb-2">
                                                 <label for="denda" class="col-form-label s-12 col-sm-4 text-right">Denda</label>
                                                 <div class="col-md-8">
-                                                    <input type="text" name="denda" value="{{ $data->denda == 0 ? $jumlahBunga : $data->denda }}" {{ $readonly }} id="rupiah1" onkeyup="totalBayarBJB()" class="form-control s-12" autocomplete="off"/>
+                                                    <input type="text" name="denda" value="{{ $jumlahBunga }}" {{ $readonly }} id="rupiah1" onkeyup="totalBayarBJB()" class="form-control s-12" autocomplete="off"/>
                                                 </div>    
                                             </div>
                                             <div class="row mb-2">

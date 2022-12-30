@@ -91,7 +91,7 @@
                                             <th width="5%">No</th>
                                             <th width="8%">Nomor Bayar </th>
                                             <th width="8%">Nomor SKRD </th>
-                                            <th width="11%">Nama Pembayar</th>
+                                            <th width="11%">Nama</th>
                                             <th width="20%">Jenis Retribusi</th>
                                             <th width="8%">Tanggal SKRD </th>
                                             <th width="8%">Tanggal Bayar</th>

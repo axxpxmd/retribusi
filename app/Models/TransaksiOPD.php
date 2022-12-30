@@ -58,6 +58,17 @@ class TransaksiOPD extends Model
         return $status_denda;
     }
 
+    public static function getDiffDate($tgl_jatuh_tempo)
+    {
+        $startDate = Carbon::parse($tgl_jatuh_tempo . ' 23:59:59');
+        $endDate   = Carbon::now();
+
+        $dayDiff = $startDate->diffInDays($endDate);
+        $monthDiff = $startDate->diffInMonths()($endDate);
+
+        return [$dayDiff, $monthDiff];
+    }
+
     // 
     public static function queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar, $rincian_pendapatan_id)
     {
@@ -124,7 +135,7 @@ class TransaksiOPD extends Model
                     $data->where('chanel_bayar', 'like', '%ATM%');
                     break;
                 case 3;
-                    $data->where('chanel_bayar', 'like', '%BJB MOBILE%');
+                    $data->where('chanel_bayar', 'like', '%MOBIL%');
                     break;
                 case 4;
                     $data->where('chanel_bayar', 'like', '%TELLER%');
@@ -145,7 +156,8 @@ class TransaksiOPD extends Model
                     $data->where('chanel_bayar', 'like', '%Lainnya%');
                     break;
                 default:
-                    // 
+                    $data->where('chanel_bayar', 'like', '%Lainnya%');
+                    break;
                     break;
             }
         }
@@ -217,7 +229,7 @@ class TransaksiOPD extends Model
                     $data->where('chanel_bayar', 'like', '%ATM%');
                     break;
                 case 3;
-                    $data->where('chanel_bayar', 'like', '%BJB MOBILE%');
+                    $data->where('chanel_bayar', 'like', '%MOBIL%');
                     break;
                 case 4;
                     $data->where('chanel_bayar', 'like', '%TELLER%');
@@ -238,7 +250,8 @@ class TransaksiOPD extends Model
                     $data->where('chanel_bayar', 'like', '%Lainnya%');
                     break;
                 default:
-                    // 
+                    $data->where('chanel_bayar', 'like', '%Lainnya%');
+                    break;
                     break;
             }
         }

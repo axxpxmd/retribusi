@@ -89,11 +89,11 @@
                                                 <label class="col-md-8 s-12">{{ $data->nmr_daftar }}</label>
                                             </div>
                                             <div class="row">
-                                                <label class="col-md-4 text-right s-12 font-weight-bold">Nama Wajib Retribusi :</label>
+                                                <label class="col-md-4 text-right s-12 font-weight-bold">Nama :</label>
                                                 <label class="col-md-8 s-12">{{ $data->nm_wajib_pajak }}</label>
                                             </div>
                                             <div class="row">
-                                                <label class="col-md-4 text-right s-12 font-weight-bold">Alamat Wajib Retribusi :</label>
+                                                <label class="col-md-4 text-right s-12 font-weight-bold">Alamat :</label>
                                                 <label class="col-md-8 s-12">{{ $data->alamat_wp }}</label>
                                             </div>
                                             <div class="row">
@@ -132,11 +132,7 @@
                                             </div> 
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12 font-weight-bold">Denda  :</label>
-                                                @if ($data->status_bayar == 1)
-                                                    <label class="col-md-8 s-12">@currency($data->denda)</label>
-                                                @else
-                                                    <label class="col-md-8 s-12">({{ $kenaikan }}%) &nbsp;@currency($jumlahBunga)</label>
-                                                @endif
+                                                <label class="col-md-8 s-12">({{ $kenaikan }}%) &nbsp;@currency($jumlahBunga)</label>
                                             </div> 
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12 font-weight-bold">Diskon  :</label>
@@ -146,20 +142,15 @@
                                                 <label class="col-md-8 s-12">({{ $data->diskon }}%) &nbsp;@currency(((int) $data->diskon / 100) * $data->jumlah_bayar)</label>
                                                 @endif
                                             </div> 
-                                            <!-- STRD (+bunga) -->
-                                            @if ($data->tgl_skrd_akhir < $dateNow)
+
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12 font-weight-bold">Total Bayar :</label>
-                                                <label class="col-md-8 s-12">@currency($data->total_bayar)</label>
+                                                @if (!$jatuh_tempo)
+                                                    <label class="col-md-8 s-12">@currency($data->total_bayar)</label>
+                                                @else
+                                                    <label class="col-md-8 s-12">@currency($data->total_bayar + $jumlahBunga)</label>
+                                                @endif
                                             </div> 
-                                            @endif
-                                            <!-- SKRD -->
-                                            @if ($data->tgl_skrd_akhir >= $dateNow)
-                                            <div class="row">
-                                                <label class="col-md-4 text-right s-12 font-weight-bold">Total Bayar :</label>
-                                                <label class="col-md-8 s-12">@currency($data->total_bayar + $jumlahBunga)</label>
-                                            </div> 
-                                            @endif
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12 font-weight-bold">Virtual Account BJB :</label>
                                                 <label class="col-md-8 s-12">{{ $status_ttd ? $data->nomor_va_bjb : '-' }}</label>

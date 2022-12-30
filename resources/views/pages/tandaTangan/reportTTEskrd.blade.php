@@ -335,9 +335,7 @@
             </tr>
             <tr class="a">
                 <td colspan="4" class="a">
-                    <p class="m-l-5">Dengan Huruf : <span class="t-bold"
-                            style="text-transform: uppercase">{{ $data->jumlah_bayar == 0 ? '0 Rupiah' : $terbilang }}</span>
-                    </p>
+                    <p class="m-l-5">Dengan Huruf : <span class="t-bold" style="text-transform: uppercase">{{ $data->jumlah_bayar == 0 ? '0 Rupiah' : $terbilang }}</span></p>
                     <p class="fs-12 t-bold m-l-5"><u>PERHATIAN :</u></p>
                     <ol>
                         <li>
@@ -387,13 +385,11 @@
                             <tr class="a">
                                 <td style="padding: 1px" width="8%" class="a"> {!! $img !!}</td>
                                 <td style="padding: 3px" width="92%" class="a">
-                                    <p class="m-b-0 m-t-0 fs-10" style="font-style: italic">Telah ditandatangani
-                                        secara elektronik oleh :</p>
+                                    <p class="m-b-0 m-t-0 fs-10" style="font-style: italic">Telah ditandatangani secara elektronik oleh :</p>
                                     <p class="m-t-0 m-b-0 fs-10 t-blue">{{ $data->nm_ttd }}</p>
                                     <p class="m-t-0 m-b-0 fs-10">Menggunakan Sertifikat Elektronik.</p>
                                     <p class="m-t-0 m-b-0 fs-10">Verifikasi dokumen bisa dilakukan melalui :</p>
-                                    <p class="m-t-0 m-b-0 fs-10 t-blue" style="font-style: italic">
-                                        https://tte.kominfo.go.id/verifyPDF</p>
+                                    <p class="m-t-0 m-b-0 fs-10 t-blue" style="font-style: italic">https://tte.kominfo.go.id/verifyPDF</p>
                                 </td>
                             </tr>
                         </table>

@@ -29,6 +29,7 @@ use App\Libraries\VABJBRes;
 use App\Models\OPD;
 use App\Models\TransaksiOPD;
 use App\Models\OPDJenisPendapatan;
+use App\Models\Utility;
 use App\User;
 
 class STSController extends Controller
@@ -156,26 +157,33 @@ class STSController extends Controller
         $route = $this->route;
         $title = $this->title;
 
-        $id   = \Crypt::decrypt($id);
-        $data = TransaksiOPD::find($id);
+        $id      = \Crypt::decrypt($id);
+        $data    = TransaksiOPD::find($id);
+        $dateNow = Carbon::now()->format('Y-m-d');
 
         $va_number = (int) $data->nomor_va_bjb;
         $no_bayar  = $data->no_bayar;
         $fileName  = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
         $path_sftp = 'file_ttd_skrd/';
-        $dateNow   = Carbon::now()->format('Y-m-d');
         $tgl_skrd_akhir = $data->tgl_skrd_akhir;
         $total_bayar    = $data->jumlah_bayar;
         $status_ttd     = $data->status_ttd;
+        $tgl_bayar      = $data->tgl_bayar;
+        $status_bayar   = $data->status_bayar;
 
-        $status_ttd = TransaksiOPD::checkStatusTTD($status_ttd);
+        $jatuh_tempo = Utility::isJatuhTempo($tgl_skrd_akhir, $dateNow);
+
+        $status_ttd = Utility::checkStatusTTD($status_ttd);
 
         //TODO: Get bunga
         $kenaikan    = 0;
         $jumlahBunga = 0;
-        $dateNow = Carbon::now()->format('Y-m-d');
-        if ($data->tgl_skrd_akhir < $dateNow) {
-            list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);
+        if ($status_bayar == 1) {
+            list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $total_bayar, $tgl_bayar);
+        } else {
+            if ($jatuh_tempo) {
+                list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $total_bayar);
+            }
         }
 
         //* Check status pembayaran VA BJB
@@ -220,7 +228,8 @@ class STSController extends Controller
             'kenaikan',
             'jumlahBunga',
             'dateNow',
-            'status_ttd'
+            'status_ttd',
+            'jatuh_tempo'
         ));
     }
 
@@ -232,21 +241,32 @@ class STSController extends Controller
         $id   = \Crypt::decrypt($id);
         $role = Auth::user()->pengguna->modelHasRole->role->name;
         $now  = Carbon::now()->format('Y-m-d\TH:i');
-        $data      = TransaksiOPD::find($id);
+        $data = TransaksiOPD::find($id);
+        $dateNow = Carbon::now()->format('Y-m-d');
+
         $va_number = (int) $data->nomor_va_bjb;
         $no_bayar  = $data->no_bayar;
         $tgl_skrd_akhir = $data->tgl_skrd_akhir;
         $total_bayar    = $data->jumlah_bayar;
+        $status_bayar   = $data->status_bayar;
 
         //TODO: Check role
         $readonly = User::checkRole($role);
 
+        $jatuh_tempo = Utility::isJatuhTempo($tgl_skrd_akhir, $dateNow);
+
         //TODO: Get bunga
         $kenaikan    = 0;
         $jumlahBunga = 0;
-        $dateNow = Carbon::now()->format('Y-m-d');
-        if ($data->tgl_skrd_akhir < $dateNow) {
-            list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);
+        if ($jatuh_tempo) {
+            list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $total_bayar);
+        }
+
+        //* Check status bayar
+        if ($status_bayar == 1) {
+            return redirect()
+                ->route($this->route . 'index')
+                ->withErrors('Data sudah dibayar');
         }
 
         //* Check status pembayaran VA BJB
@@ -333,83 +353,62 @@ class STSController extends Controller
         ]);
     }
 
-    public function getDiffDays($tgl_skrd_akhir)
-    {
-        $timeNow = Carbon::now();
-
-        $dateTimeNow = new DateTime($timeNow);
-        $expired     = new DateTime($tgl_skrd_akhir . ' 23:59:59');
-        $interval    = $dateTimeNow->diff($expired);
-        $daysDiff    = $interval->format('%r%a');
-
-        return $daysDiff;
-    }
-
     public function printDataTTD(Request $request, $id)
     {
-        $id   = \Crypt::decrypt($id);
-        $data = TransaksiOPD::find($id);
+        $id      = \Crypt::decrypt($id);
+        $data    = TransaksiOPD::find($id);
+        $dateNow = Carbon::now()->format('Y-m-d');
 
         $tgl_skrd_akhir = $data->tgl_skrd_akhir;
         $total_bayar    = $data->jumlah_bayar;
-        $daysDiff = $this->getDiffDays($tgl_skrd_akhir);
+        $status_bayar   = $data->status_bayar;
+        $denda          = $data->denda;
+        $text_qris      = $data->text_qris;
+        $nm_wajib_pajak = $data->nm_wajib_pajak;
+        $no_skrd        = $data->no_skrd;
+        $tgl_strd_akhir = $data->tgl_strd_akhir;
+        $tgl_skrd_akhir = $data->tgl_skrd_akhir;
+        $tgl_bayar      = $data->tgl_bayar;
 
-        //TODO: Check bunga (STRD)
-        if ($daysDiff > 0) {
-            $jumlahBunga = 0;
-            $kenaikan = 0;
+        $fileName = str_replace(' ', '', $nm_wajib_pajak) . '-' . $no_skrd . ".pdf";
+        $file_url = config('app.sftp_src') . 'file_ttd_skrd/' . $fileName;
+
+        $jatuh_tempo = Utility::isJatuhTempo($tgl_skrd_akhir, $dateNow);
+
+        //TODO: Get different between 2 date
+        list($dayDiff, $monthDiff) = Utility::getDiffDate($tgl_skrd_akhir);
+
+        //TODO: Get bunga
+        $kenaikan    = 0;
+        $jumlahBunga = 0;
+        if ($status_bayar == 1) {
+            list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $total_bayar, $tgl_bayar);
         } else {
-            //* Bunga
-            list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);
+            if ($jatuh_tempo) {
+                list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $total_bayar);
+            }
         }
 
-        //* Total Bayar + Bunga
-        if ($data->status_bayar == 1) {
-            $total_bayar = $total_bayar + $data->denda;
-        } else {
-            $total_bayar = $total_bayar + $jumlahBunga;
-        }
+        //TODO: Total Bayar + Bunga
+        $total_bayar = Utility::createDenda($status_bayar, $total_bayar, $denda, $jumlahBunga);
 
-        $terbilang   = Html_number::terbilang($total_bayar) . 'rupiah';
+        $terbilang = Html_number::terbilang($total_bayar) . 'rupiah';
+        $tgl_jatuh_tempo = Utility::tglJatuhTempo($tgl_strd_akhir, $tgl_skrd_akhir);
 
-        //TODO: generate QR Code
+        //TODO: generate QR Code (QRIS)
         $imgQRIS = '';
         if ($data->text_qris) {
-            $fileName = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
-            $file_url = config('app.sftp_src') . 'file_ttd_skrd/' . $fileName;
-            $b   = base64_encode(\SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')->size(1000)->errorCorrection('H')->margin(0)->generate($data->text_qris));
-            $imgQRIS = '<img width="150" src="data:image/png;base64, ' . $b . '" alt="qr code" />';
-        }
-
-        //* Tanggal Jatuh Tempo STRD
-        if ($data->tgl_strd_akhir == null) {
-            $tgl_jatuh_tempo = $data->tgl_skrd_akhir;
-        } else {
-            $tgl_jatuh_tempo = $data->tgl_strd_akhir;
+            $imgQRIS = Utility::createQrQris($text_qris);
         }
 
         //TODO: generate QR Code
-        $fileName = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
-        $file_url = config('app.sftp_src') . 'file_ttd_skrd/' . $fileName;
-        $b   = base64_encode(\SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')->merge(public_path('images/logo-png.png'), 0.2, true)->size(900)->errorCorrection('H')->margin(0)->generate($file_url));
-        $img = '<img width="60" height="61" src="data:image/png;base64, ' . $b . '" alt="qr code" />';
+        $img = Utility::createQrTTD($file_url);
 
         $pdf = app('dompdf.wrapper');
         $pdf->getDomPDF()->set_option("enable_php", true);
         $pdf->setPaper('legal', 'portrait');
 
-        //TODO: Check status TTD
-        if ($data->status_ttd == 1) {
-            $file = 'pages.tandaTangan.reportTTEskrd';
-        } elseif ($data->status_ttd == 3) {
-            $file = 'pages.tandaTangan.reportTTEstrd';
-        } else {
-            $file = 'pages.tandaTangan.reportTTEsts';
-        }
-
-        $statusSTS = 1;
-
-        $pdf->loadView($file, compact(
+        $pdf->loadView('pages.sts.reportTTE', compact(
             'data',
             'terbilang',
             'jumlahBunga',
@@ -417,7 +416,6 @@ class STSController extends Controller
             'kenaikan',
             'tgl_jatuh_tempo',
             'img',
-            'statusSTS',
             'imgQRIS'
         ));
 
@@ -437,6 +435,8 @@ class STSController extends Controller
             'updated_by'   => Auth::user()->pengguna->full_name . ' | Batal Bayar',
             'chanel_bayar' => null,
             'total_bayar_bjb' => null,
+            'denda' => 0,
+            'status_denda' => 1
         ]);
 
         return redirect()
