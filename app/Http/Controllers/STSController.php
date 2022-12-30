@@ -14,23 +14,23 @@
 namespace App\Http\Controllers;
 
 use Auth;
-use DateTime;
 use DataTables;
 use Carbon\Carbon;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 
+use App\Libraries\VABJBRes;
 use App\Http\Services\VABJB;
 use App\Libraries\Html\Html_number;
 use App\Http\Controllers\Controller;
-use App\Libraries\VABJBRes;
+
 // Models
+use App\User;
 use App\Models\OPD;
+use App\Models\Utility;
 use App\Models\TransaksiOPD;
 use App\Models\OPDJenisPendapatan;
-use App\Models\Utility;
-use App\User;
 
 class STSController extends Controller
 {
@@ -39,9 +39,8 @@ class STSController extends Controller
     protected $view  = 'pages.sts.';
 
 
-    public function __construct(VABJB $vabjb, VABJBRes $vabjbres)
+    public function __construct(VABJBRes $vabjbres)
     {
-        $this->vabjb = $vabjb;
         $this->vabjbres   = $vabjbres;
 
         $this->middleware(['permission:STS']);
