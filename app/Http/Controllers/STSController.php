@@ -374,9 +374,6 @@ class STSController extends Controller
 
         $jatuh_tempo = Utility::isJatuhTempo($tgl_skrd_akhir, $dateNow);
 
-        //TODO: Get different between 2 date
-        list($dayDiff, $monthDiff) = Utility::getDiffDate($tgl_skrd_akhir);
-
         //TODO: Get bunga
         $kenaikan    = 0;
         $jumlahBunga = 0;

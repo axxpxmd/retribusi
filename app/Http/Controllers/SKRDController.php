@@ -237,10 +237,10 @@ class SKRDController extends Controller
         }
 
         $opd = OPD::find($opd_id);
+        $kecamatans       = Kecamatan::select('id', 'n_kecamatan')->where('kabupaten_id', 40)->get();
+        $penanda_tangans  = TtdOPD::where('id_opd', $opd_id)->get();
         $jenis_pendapatan = JenisPendapatan::find($jenis_pendapatan_id);
-        $kecamatans = Kecamatan::select('id', 'n_kecamatan')->where('kabupaten_id', 40)->get();
         $rincian_jenis_pendapatans = RincianJenisPendapatan::where('id_jenis_pendapatan', $jenis_pendapatan_id)->get();
-        $penanda_tangans = TtdOPD::where('id_opd', $opd_id)->get();
 
         return view($this->view . 'create', compact(
             'route',
@@ -252,18 +252,6 @@ class SKRDController extends Controller
             'data_wp',
             'penanda_tangans'
         ));
-    }
-
-    public function getDiffDays($tgl_skrd_akhir)
-    {
-        $timeNow = Carbon::now();
-
-        $dateTimeNow = new DateTime($timeNow);
-        $expired     = new DateTime($tgl_skrd_akhir . ' 23:59:59');
-        $interval    = $dateTimeNow->diff($expired);
-        $daysDiff    = $interval->format('%r%a');
-
-        return $daysDiff;
     }
 
     public function store(Request $request)
@@ -361,8 +349,8 @@ class SKRDController extends Controller
 
         //*: Check Expired Date (jika tgl_skrd_akhir kurang dari tanggal sekarang maka VA dan QRIS tidak terbuat)
         //*: Check Amount (jika nominal 0 rupiah makan VA dan QRIS tidak terbuat)
-        $daysDiff = $this->getDiffDays($request->tgl_skrd_akhir);
-        if ($daysDiff > 0 && $amount != 0) {
+        list($dayDiff, $monthDiff) = Utility::getDiffDate($request->tgl_skrd_akhir);
+        if ($dayDiff > 0 && $amount != 0) {
             //* Tahap 3
             //TODO: Get Token VA
             list($err, $errMsg, $tokenBJB) = $this->vabjbres->getTokenBJBres();
@@ -459,8 +447,8 @@ class SKRDController extends Controller
         $id = \Crypt::decrypt($id);
 
         $data = TransaksiOPD::find($id);
-        $rincian_jenis_pendapatans = RincianJenisPendapatan::where('id_jenis_pendapatan', $data->id_jenis_pendapatan)->get();
         $penanda_tangans = TtdOPD::where('id_opd', $data->id_opd)->get();
+        $rincian_jenis_pendapatans = RincianJenisPendapatan::where('id_jenis_pendapatan', $data->id_jenis_pendapatan)->get();
 
         return view($this->view . 'edit', compact(
             'route',
@@ -480,14 +468,11 @@ class SKRDController extends Controller
 
         $data = TransaksiOPD::find($id);
 
-        $fileName  = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
-        $path_sftp = 'file_ttd_skrd/';
+        $fileName   = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
+        $path_sftp  = 'file_ttd_skrd/';
+        $status_ttd = $data->status_ttd;
 
-        if ($data->status_ttd == 1 || $data->status_ttd == 3) {
-            $status_ttd = true;
-        } else {
-            $status_ttd = false;
-        }
+        $status_ttd = Utility::checkStatusTTD($status_ttd);
 
         return view($this->view . 'show', compact(
             'route',
@@ -538,8 +523,8 @@ class SKRDController extends Controller
 
         //*: Check Expired Date (jika tgl_skrd_akhir kurang dari tanggal sekarang maka VA dan QRIS tidak terbuat)
         //*: Check Amount (jika nominal 0 rupiah makan VA dan QRIS tidak terbuat)
-        $daysDiff = $this->getDiffDays($request->tgl_skrd_akhir);
-        if ($daysDiff > 0 && $amount != 0) {
+        list($dayDiff, $monthDiff) = Utility::getDiffDate($request->tgl_skrd_akhir);
+        if ($dayDiff > 0 && $amount != 0) {
             //* Tahap 1
             //TODO: Get Token BJB
             list($err, $errMsg, $tokenBJB) = $this->vabjbres->getTokenBJBres();
