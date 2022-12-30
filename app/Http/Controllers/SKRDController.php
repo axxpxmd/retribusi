@@ -84,12 +84,12 @@ class SKRDController extends Controller
         $to    = $request->tgl_skrd1;
         $no_skrd    = $request->no_skrd;
         $status_ttd = $request->status_ttd;
-
-        $checkOPD = Auth::user()->pengguna->opd_id;
-        if ($checkOPD == 0) {
+        $opd        = Auth::user()->pengguna->opd_id;
+        
+        if ($opd == 0) {
             $opd_id = $request->opd_id;
         } else {
-            $opd_id = $checkOPD;
+            $opd_id = $opd;
         }
 
         $data = TransaksiOPD::querySKRD($from, $to, $opd_id, $no_skrd, $status_ttd);
