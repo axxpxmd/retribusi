@@ -18,8 +18,8 @@ use DateTime;
 use DataTables;
 use Carbon\Carbon;
 
-use App\Http\Services\VABJB;
-use App\Http\Services\QRISBJB;
+use App\Libraries\QRISBJBRes;
+use App\Libraries\VABJBRes;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\Crypt;
 
 // Models
 use App\Models\OPD;
+use App\Models\Utility;
 use App\Models\TransaksiOPD;
 use App\Models\OPDJenisPendapatan;
 
@@ -37,10 +38,10 @@ class STRDController extends Controller
     protected $title = 'STRD';
     protected $path  = '';
 
-    public function __construct(VABJB $vabjb, QRISBJB $qrisbjb)
+    public function __construct(VABJBRes $vabjbres, QRISBJBRes $qrisbjbres)
     {
-        $this->vabjb = $vabjb;
-        $this->qrisbjb = $qrisbjb;
+        $this->vabjbres   = $vabjbres;
+        $this->qrisbjbres = $qrisbjbres;
 
         $this->middleware(['permission:STRD']);
     }
@@ -54,8 +55,7 @@ class STRDController extends Controller
         $opdArray = OPDJenisPendapatan::select('id_opd')->get()->toArray();
         $opds     = OPD::getAll($opdArray, $opd_id);
 
-        $time = Carbon::yesterday();
-        $today = $time->format('Y-m-d');
+        $today = Carbon::yesterday()->format('Y-m-d');
 
         return view($this->view . 'index', compact(
             'route',
@@ -73,7 +73,9 @@ class STRDController extends Controller
         $no_skrd    = $request->no_skrd;
         $status_ttd = $request->status_ttd;
 
+        $dateNow  = Carbon::now()->format('Y-m-d');
         $checkOPD = Auth::user()->pengguna->opd_id;
+
         if ($checkOPD == 0) {
             $opd_id = $request->opd_id;
         } else {
@@ -83,24 +85,20 @@ class STRDController extends Controller
         $data = TransaksiOPD::querySTRD($from, $to, $opd_id, $no_skrd, $status_ttd);
 
         return DataTables::of($data)
-            ->addColumn('action', function ($p) {
+            ->addColumn('action', function ($p) use ($dateNow) {
                 $fileName  = str_replace(' ', '', $p->nm_wajib_pajak) . '-' . $p->no_skrd . ".pdf";
                 $path_sftp = 'file_ttd_skrd/';
 
-                if ($p->tgl_strd_akhir == null) {
-                    $tgl_jatuh_tempo = $p->tgl_skrd_akhir;
-                } else {
-                    $tgl_jatuh_tempo = $p->tgl_strd_akhir;
-                }
-                $daysDiff = $this->getDiffDays($tgl_jatuh_tempo);
-                $check = strpos($daysDiff, '-');
-
                 $filettd = "<a href='" . config('app.sftp_src') . $path_sftp . $fileName . "' target='_blank' class='cyan-text' title='File TTD'><i class='icon-document-file-pdf2'></i></a>";
                 $sendttd = "<a href='#' onclick='updateStatusTTD(" . $p->id . ")' class='amber-text' title='Kirim Untuk TTD'><i class='icon icon-send'></i></a>";
-                $delete  = "<a href='#' onclick='remove(" . $p->id . ")' class='text-danger mr-2' title='Hapus Data'><i class='icon icon-remove'></i></a>";
-                $edit    = "<a href='" . route($this->route . 'edit', Crypt::encrypt($p->id)) . "' class='text-primary mr-2' title='Edit Data'><i class='icon icon-edit'></i></a>";
 
-                if ($check !== false) {
+                $tgl_skrd_akhir = $p->tgl_skrd_akhir;
+                $tgl_strd_akhir = $p->tgl_strd_akhir;
+
+                $tgl_jatuh_tempo = Utility::tglJatuhTempo($tgl_strd_akhir, $tgl_skrd_akhir);
+                $jatuh_tempo = Utility::isJatuhTempo($tgl_jatuh_tempo, $dateNow);
+
+                if ($jatuh_tempo) {
                     return $sendttd;
                 } else {
                     if ($p->status_ttd == 3) {
@@ -139,20 +137,18 @@ class STRDController extends Controller
             ->addColumn('bunga', function ($p) {
                 $tgl_skrd_akhir = $p->tgl_skrd_akhir;
                 $total_bayar    = $p->jumlah_bayar;
-                list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);
+                list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $total_bayar);
 
                 return 'Rp. ' . number_format($jumlahBunga) . ' (' . $kenaikan . '%)';
             })
-            ->addColumn('status_ttd', function ($p) {
-                if ($p->tgl_strd_akhir == null) {
-                    $tgl_jatuh_tempo = $p->tgl_skrd_akhir;
-                } else {
-                    $tgl_jatuh_tempo = $p->tgl_strd_akhir;
-                }
-                $daysDiff = $this->getDiffDays($tgl_jatuh_tempo);
-                $check = strpos($daysDiff, '-');
+            ->addColumn('status_ttd', function ($p) use ($dateNow) {
+                $tgl_skrd_akhir = $p->tgl_skrd_akhir;
+                $tgl_strd_akhir = $p->tgl_strd_akhir;
 
-                if ($check !== false) {
+                $tgl_jatuh_tempo = Utility::tglJatuhTempo($tgl_strd_akhir, $tgl_skrd_akhir);
+                $jatuh_tempo = Utility::isJatuhTempo($tgl_jatuh_tempo, $dateNow);
+
+                if ($jatuh_tempo) {
                     return "<span class='badge badge-danger'>Belum</span>";
                 } else {
                     if ($p->status_ttd == 0 || $p->status_ttd == 1 || $p->status_ttd == 2) {
@@ -164,22 +160,19 @@ class STRDController extends Controller
                     }
                 }
             })
-            ->addColumn('status_strd', function ($p) {
-                if ($p->tgl_strd_akhir == null) {
-                    $tgl_jatuh_tempo = $p->tgl_skrd_akhir;
-                } else {
-                    $tgl_jatuh_tempo = $p->tgl_strd_akhir;
-                }
-                $daysDiff = $this->getDiffDays($tgl_jatuh_tempo);
-
+            ->addColumn('status_strd', function ($p) use ($dateNow) {
                 $kadaluarsa = "<span class='badge badge-warning' style='font-size: 10.5px !important'>Kadaluarsa</span>";
                 $berlaku    = "<span class='badge badge-success' style='font-size: 10.5px !important'>Berlaku</span>";
                 $perbarui   = "<a href='#' onclick='perbaruiSTRD(" . $p->id . ")' class='text-primary mr-2' title='Perbarui STRD'><i class='icon-refresh'></i></a>";
 
-                $check = strpos($daysDiff, '-');
+                $tgl_skrd_akhir = $p->tgl_skrd_akhir;
+                $tgl_strd_akhir = $p->tgl_strd_akhir;
+
+                $tgl_jatuh_tempo = Utility::tglJatuhTempo($tgl_strd_akhir, $tgl_skrd_akhir);
+                $jatuh_tempo = Utility::isJatuhTempo($tgl_jatuh_tempo, $dateNow);
 
                 if ($p->tgl_strd_akhir != null) {
-                    if ($check !== false) {
+                    if ($jatuh_tempo !== false) {
                         return $kadaluarsa . ' &nbsp; ' . $perbarui;
                     } else {
                         return $berlaku;
@@ -200,9 +193,9 @@ class STRDController extends Controller
         $dateTimeNow = new DateTime($timeNow);
         $expired     = new DateTime($tgl_skrd_akhir . ' 23:59:59');
         $interval    = $dateTimeNow->diff($expired);
-        $daysDiff    = $interval->format('%r%a');
+        $dayDiff    = $interval->format('%r%a');
 
-        return $daysDiff;
+        return $dayDiff;
     }
 
     public function show($id)
@@ -211,25 +204,26 @@ class STRDController extends Controller
         $title = $this->title;
 
         $id = \Crypt::decrypt($id);
+        $dateNow = Carbon::now()->format('Y-m-d');
 
         $data = TransaksiOPD::find($id);
 
         $fileName  = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
         $path_sftp = 'file_ttd_skrd/';
+        $tgl_skrd_akhir = $data->tgl_skrd_akhir;
+        $tgl_strd_akhir = $data->tgl_strd_akhir;
+        $total_bayar    = $data->jumlah_bayar;
+        $status_ttd     = $data->status_ttd;
+
+        $status_ttd = Utility::checkStatusTTD($status_ttd);
+        $tgl_jatuh_tempo = Utility::tglJatuhTempo($tgl_strd_akhir, $tgl_skrd_akhir);
 
         //TODO: Get diff days
-        if ($data->tgl_strd_akhir == null) {
-            $tgl_jatuh_tempo = $data->tgl_skrd_akhir;
-        } else {
-            $tgl_jatuh_tempo = $data->tgl_strd_akhir;
-        }
-        $daysDiff = $this->getDiffDays($tgl_jatuh_tempo);
-        $checkJatuhTempo = \str_contains($daysDiff, '1');
+        list($dayDiff, $monthDiff) = Utility::getDiffDate($tgl_skrd_akhir);
+        $checkJatuhTempo = Utility::isJatuhTempo($tgl_jatuh_tempo, $dateNow);
 
         //TODO: Get bunga
-        $tgl_skrd_akhir = $data->tgl_skrd_akhir;
-        $total_bayar    = $data->jumlah_bayar;
-        list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);
+        list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $total_bayar);
 
         return view($this->view . 'show', compact(
             'route',
@@ -237,11 +231,12 @@ class STRDController extends Controller
             'data',
             'path_sftp',
             'fileName',
-            'daysDiff',
+            'dayDiff',
             'tgl_jatuh_tempo',
             'jumlahBunga',
             'kenaikan',
-            'checkJatuhTempo'
+            'checkJatuhTempo',
+            'status_ttd'
         ));
     }
 
@@ -255,28 +250,24 @@ class STRDController extends Controller
          * 2. tmtransaksi_opd
          */
 
+        $jumlah_bayar   = $data->jumlah_bayar;
+        $tgl_skrd_akhir = $data->tgl_skrd_akhir;
+        $tgl_strd_akhir = $data->tgl_strd_akhir;
+
+        $tgl_jatuh_tempo = Utility::tglJatuhTempo($tgl_strd_akhir, $tgl_skrd_akhir);
+
         //TODO: Generate new tgl_jatuh_tempo (+30 day from last jatuh tempo)
-        $daysDiff = $this->getDiffDays($data->tgl_skrd_akhir);
-        $days = (int) abs($daysDiff) + 30;
+        list($dayDiff, $monthDiff) = Utility::getDiffDate($tgl_skrd_akhir);
+        $addDays = ($monthDiff + 1) * 30;
 
-        if ($data->tgl_strd_akhir == null) {
-            $tgl_jatuh_tempo = $data->tgl_skrd_akhir;
-            $days = (int) abs($daysDiff) + 30;
-        } else {
-            $tgl_jatuh_tempo = $data->tgl_strd_akhir;
-            $days = 30;
-        }
-
-        $tgl_jatuh_tempo = Carbon::createFromFormat('Y-m-d', $tgl_jatuh_tempo)->addDays($days)->format('Y-m-d');
+        $tgl_jatuh_tempo_baru = Carbon::createFromFormat('Y-m-d', $tgl_jatuh_tempo)->addDays($addDays)->format('Y-m-d');
 
         //* Bunga
-        $tgl_skrd_akhir = $data->tgl_skrd_akhir;
-        $total_bayar    = $data->jumlah_bayar;
-        list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);
-        $total_bayar = $data->total_bayar + $jumlahBunga;
+        list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar);
+        $total_bayar = $jumlah_bayar + $jumlahBunga;
 
         $amount = \strval((int) str_replace(['.', 'Rp', ' '], '', $total_bayar));
-        $expiredDate  = $tgl_jatuh_tempo . ' 23:59:59';
+        $expiredDate  = $tgl_jatuh_tempo_baru . ' 23:59:59';
         $customerName = $data->nm_wajib_pajak;
         $va_number    = (int) $data->nomor_va_bjb;
         $VABJB        = $data->nomor_va_bjb;
@@ -286,86 +277,53 @@ class STRDController extends Controller
 
         //* Tahap 1
         //TODO: Get Token BJB
-        $resGetTokenBJB = $this->vabjb->getTokenBJB();
-        if ($resGetTokenBJB->successful()) {
-            $resJson = $resGetTokenBJB->json();
-            if ($resJson['rc'] != 0000)
-                return redirect()
-                    ->route($this->route . 'index')
-                    ->withErrors('Terjadi kegagalan saat mengambil token. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . '');
-            $tokenBJB = $resJson['data'];
-        } else {
+        list($err, $errMsg, $tokenBJB) = $this->vabjbres->getTokenBJBres();
+        if ($err) {
             return redirect()
                 ->route($this->route . 'index')
-                ->withErrors("Terjadi kegagalan saat mengambil token. Error Code " . $resGetTokenBJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator");
+                ->withErrors($errMsg);
         }
 
-        // if ($VABJB == null) {
-        //TODO: Create VA BJB
-        $resGetVABJB = VABJB::createVABJB($tokenBJB, $clientRefnum, $amount, $expiredDate, $customerName, $productCode);
-        if ($resGetVABJB->successful()) {
-            $resJson = $resGetVABJB->json();
-            if (isset($resJson['rc']) != 0000)
-                return redirect()
-                    ->route($this->route . 'index')
-                    ->withErrors('Terjadi kegagalan saat membuat Virtual Account. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . '');
-            $VABJB = $resJson['va_number'];
+        if ($VABJB == null) {
+            //TODO: Create VA BJB
+            list($err, $errMsg, $VABJB) = $this->vabjbres->createVABJBres($tokenBJB, $clientRefnum, $amount, $expiredDate, $customerName, $productCode, 3, $clientRefnum);
+            if ($err) {
+                DB::rollback(); //* DB Transaction Failed
+                return response()->json([
+                    'message' => $errMsg
+                ], 500);
+            }
         } else {
-            return redirect()
-                ->route($this->route . 'index')
-                ->withErrors("Terjadi kegagalan saat membuat Virtual Account. Error Code " . $resGetVABJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator");
+            //TODO: Update VA BJB
+            list($err, $errMsg, $VABJB) = $this->vabjbres->updateVABJBres($tokenBJB, $amount, $expiredDate, $customerName, $va_number, 3, $clientRefnum);
+            if ($err) {
+                DB::rollback(); //* DB Transaction Failed
+                return response()->json([
+                    'message' => $errMsg
+                ], 500);
+            }
         }
-        // } else {
-        //     //TODO: Update VA BJB
-        //     $resUpdateVABJB = $this->vabjb->updateVaBJB($tokenBJB, $amount, $expiredDate, $customerName, $va_number);
-        //     if ($resUpdateVABJB->successful()) {
-        //         $resJson = $resUpdateVABJB->json();
-        //         if (isset($resJson['rc']) != 0000)
-        //             return redirect()
-        //                 ->route($this->route . 'index')
-        //                 ->withErrors('Terjadi kegagalan saat memperbarui Virtual Account. Error Code : ' . $resJson['rc'] . '. Message : ' . $resJson['message'] . '');
-        //         $VABJB = $resJson['va_number'];
-        //     } else {
-        //         return redirect()
-        //             ->route($this->route . 'index')
-        //             ->withErrors("Terjadi kegagalan saat memperbarui Virtual Account. Error Code " . $resUpdateVABJB->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator");
-        //     }
-        // }
 
         //* Tahap 2
         $invoiceId = null;
         $textQRIS = null;
         if ($amount <= 10000000 && env('STATUS_QRIS') == 1) { //* Nominal QRIS maksimal 10 juta, jika lebih maka tidak terbuat
             //TODO: Get Token QRIS
-            $resGetTokenQRISBJB = $this->qrisbjb->getToken();
-            if ($resGetTokenQRISBJB->successful()) {
-                $resJsonQRIS = $resGetTokenQRISBJB->json();
-                if ($resJsonQRIS["status"]["code"] != 200)
-                    return response()->json([
-                        'message' => 'Terjadi kegagalan saat mengambil token QRIS BJB. Error Code : ' . $resJsonQRIS["status"]["code"] . '. Message : ' . $resJsonQRIS["status"]["description"] . ''
-                    ], 422);
-                $tokenQRISBJB = $resGetTokenQRISBJB->header('X-AUTH-TOKEN');
-            } else {
+            list($err, $errMsg, $tokenQRISBJB) = $this->qrisbjbres->getTokenQrisres();
+            if ($err) {
+                DB::rollback(); //* DB Transaction Failed
                 return response()->json([
-                    'message' => "Terjadi kegagalan saat mengambil token QRIS BJB. Error Code. Silahkan laporkan masalah ini pada administrator"
-                ], 422);
+                    'message' => $errMsg
+                ], 500);
             }
 
-            // //TODO: Create QRIS
-            $resCreateQRISBJB = $this->qrisbjb->createQRIS($tokenQRISBJB, $amount, $no_hp);
-            if ($resCreateQRISBJB->successful()) {
-                $resJsonQRIS = $resCreateQRISBJB->json();
-                if ($resJsonQRIS["status"]["code"] != 200)
-                    return response()->json([
-                        'message' => 'Terjadi kegagalan saat mengambil token QRIS BJB. Error Code : ' . $resJsonQRIS["status"]["code"] . '. Message : ' . $resJsonQRIS["status"]["description"] . ''
-                    ], 422);
-                $respondBody = $resJsonQRIS["body"]["CreateInvoiceQRISDinamisExtResponse"];
-                $invoiceId = $respondBody["invoiceId"]["_text"];
-                $textQRIS = $respondBody["stringQR"]["_text"];
-            } else {
+            // TODO: Create QRIS
+            list($err, $errMsg, $invoiceId, $textQRIS) = $this->qrisbjbres->createQRISres($tokenQRISBJB, $amount, $no_hp, 3, $clientRefnum);
+            if ($err) {
+                DB::rollback(); //* DB Transaction Failed
                 return response()->json([
-                    'message' => "Terjadi kegagalan saat mengambil token QRIS BJB. Error Code. Silahkan laporkan masalah ini pada administrator"
-                ], 422);
+                    'message' => $errMsg
+                ], 500);
             }
         } else {
             $invoiceId = null;
@@ -374,7 +332,7 @@ class STRDController extends Controller
 
         //* Tahap 3
         $data->update([
-            'tgl_strd_akhir' => $tgl_jatuh_tempo,
+            'tgl_strd_akhir' => $tgl_jatuh_tempo_baru,
             'nomor_va_bjb'   => $VABJB,
             'invoice_id' => $invoiceId,
             'text_qris'  => $textQRIS,
@@ -397,43 +355,6 @@ class STRDController extends Controller
         return redirect()
             ->route($this->route . 'index')
             ->withSuccess('Selamat! Data berhasil dikirim untuk ditandatangan.');
-    }
-
-    //* Sedang dihide
-    public function updateStatusKirimTTDs(Request $request)
-    {
-        $checkOPD = Auth::user()->pengguna->opd_id;
-        if ($checkOPD == 0) {
-            $opd_id = $request->opd_id;
-        } else {
-            $opd_id = $checkOPD;
-        }
-
-        //TODO: Get params
-        $from = $request->tgl_skrd;
-        $to   = $request->tgl_skrd1;
-        $no_skrd    = $request->no_skrd;
-        $status_ttd = $request->status_ttd;
-
-        $datas = TransaksiOPD::querySTRD($from, $to, $opd_id, $no_skrd, $status_ttd);
-
-        //TODO: Check length datas
-        $dataLength = count($datas);
-        if ($dataLength == 0)
-            return redirect()
-                ->route($this->route . 'index')
-                ->withErrors('Tidak ada data yang dikirim, pastikan filter data sudah sesuai.');
-
-        //TODO: Proses update status TTD
-        for ($i = 0; $i < $dataLength; $i++) {
-            $datas[$i]->update([
-                'status_ttd' => 4
-            ]);
-        }
-
-        return redirect()
-            ->route($this->route . 'index')
-            ->withSuccess('Selamat! ' . $dataLength . ' Data berhasil dikirim untuk ditandatangan.');
     }
 
     public function destroy($id)

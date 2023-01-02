@@ -49,8 +49,6 @@ class PrintController extends Controller
 
         $terbilang = Html_number::terbilang($data->total_bayar) . 'rupiah';
 
-        $fileName  = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
-        $file_url  = config('app.sftp_src') . 'file_ttd_skrd/' . $fileName;
         $text_qris = $data->text_qris;
 
         //TODO: generate QR Code (QRIS)
@@ -78,42 +76,42 @@ class PrintController extends Controller
 
         $data = TransaksiOPD::find($id);
 
-        //* Bunga
+        $status_ttd  = $data->status_ttd;
+        $text_qris   = $data->text_qris;
+        $total_bayar = $data->jumlah_bayar;
         $tgl_skrd_akhir = $data->tgl_skrd_akhir;
-        $total_bayar    = $data->jumlah_bayar;
-        list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);
+        $tgl_strd_akhir = $data->tgl_strd_akhir;
+
+        $status_ttd = Utility::checkStatusTTD($status_ttd);
+
+        //* Bunga
+        list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $total_bayar);
 
         //* Total Bayar + Bunga
         $total_bayar = $data->total_bayar + $jumlahBunga;
         $terbilang   = Html_number::terbilang($total_bayar) . 'rupiah';
 
-        //TODO: generate QR Code
-        $img = '';
+        //TODO: generate QR Code (QRIS)
+        $imgQRIS = '';
         if ($data->text_qris) {
-            $fileName = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
-            $file_url = config('app.sftp_src') . 'file_ttd_skrd/' . $fileName;
-            $b   = base64_encode(\SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')->size(1000)->errorCorrection('H')->margin(0)->generate($data->text_qris));
-            $img = '<img width="150" src="data:image/png;base64, ' . $b . '" alt="qr code" />';
+            $imgQRIS = Utility::createQrQris($text_qris);
         }
 
         //* Tanggal Jatuh Tempo STRD
-        if ($data->tgl_strd_akhir == null) {
-            $tgl_jatuh_tempo = $data->tgl_skrd_akhir;
-        } else {
-            $tgl_jatuh_tempo = $data->tgl_strd_akhir;
-        }
-
+        $tgl_jatuh_tempo = Utility::tglJatuhTempo($tgl_strd_akhir, $tgl_skrd_akhir);
+       
         $pdf = app('dompdf.wrapper');
         $pdf->getDomPDF()->set_option("enable_php", true);
         $pdf->setPaper('legal', 'portrait');
         $pdf->loadView('pages.print.strd', compact(
-            'img',
+            'imgQRIS',
             'data',
             'terbilang',
             'jumlahBunga',
             'total_bayar',
             'kenaikan',
-            'tgl_jatuh_tempo'
+            'tgl_jatuh_tempo',
+            'status_ttd'
         ));
 
         return $pdf->stream($data->nm_wajib_pajak . '-' . $data->no_skrd . ".pdf");

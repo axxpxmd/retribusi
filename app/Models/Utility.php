@@ -91,9 +91,9 @@ class Utility extends Model
         return $tgl_jatuh_tempo;
     }
 
-    public static function isJatuhTempo($tgl_skrd_akhir, $dateNow)
+    public static function isJatuhTempo($tgl_jatuh_tempo, $dateNow)
     {
-        if ($dateNow <= $tgl_skrd_akhir) {
+        if ($dateNow <= $tgl_jatuh_tempo) {
             $jatuh_tempo = false;
         } else {
             $jatuh_tempo = true;

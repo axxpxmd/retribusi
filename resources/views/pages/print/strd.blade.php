@@ -122,24 +122,30 @@
                     <p class="m-b-0" style="font-size: 13px">SURAT TAGIHAN RETRIBUSI DAERAH</p>
                     <p class="m-t-1" style="font-size: 13px">(STRD)</p>
                     <p>&nbsp;</p>
-                    @if ($data->tgl_skrd_awal != null)
                     <p class="text-left m-l-14 m-t-0 f-w-n">Tanggal STRD : {{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_awal)->format('d F Y') }}</p>
-                    @else
-                    <p class="text-left m-l-14 m-t-0 f-w-n">Tanggal STRD : - </p>
-                    @endif
                 </div>
             </th>
             <th width="20%" class="d">
                 <div style="margin: 0 auto">
-                    <p class="text-center t-bold m-b-0" style="font-size: 13px">NO STRD</p>
+                    <p class="text-center t-bold m-b-0" style="font-size: 13px">NO SKRD</p>
                     <p class="text-center m-t-1 f-normal">{{ $data->no_skrd }}</p>
-                    <p class="text-left f-normal m-l-5 m-b-0">No BKU : {{ $data->no_bku != null ? $data->no_bku : '-' }}</p>
-                    @if ($data->tgl_bku != null)
-                    <p class="text-left f-normal m-l-5 m-b-0 m-t-1">Tanggal &nbsp;: {{ Carbon\Carbon::createFromFormat('Y-m-d', substr($data->tgl_bku,0,10))->format('d F Y') }}</p>
-                    @else 
-                    <p class="text-left f-normal m-l-5 m-b-0 m-t-1">Tanggal &nbsp;: -</p>
-                    @endif
-                    <p class="text-left f-normal m-l-5 m-t-1">Rek &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </p>
+                    <table style="font-weight: normal">
+                        <tr>
+                            <td>No BKU</td>
+                            <td>:</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>Tanggal</td>
+                            <td>:</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>Rek</td>
+                            <td>:</td>
+                            <td>-</td>
+                        </tr>
+                    </table>
                 </div>
             </th>
         </tr>
@@ -150,7 +156,7 @@
             <tr class="c">
                 <td><p class="m-b-0 m-t-0">No Bayar </p></td>
                 <td><span>:</span></td>
-                <td><p class="m-b-0 m-t-0">{{ $data->no_bayar }}</p></td>
+                <td><p class="m-b-0 m-t-0">{{ $status_ttd ? $data->no_bayar : '-' }}</p></td>
             </tr>
             <tr class="c">
                 <td><p class="m-t-0 m-b-0">No Pendaftaran </p></td>
@@ -254,11 +260,11 @@
                         <li>
                             Pembayaran dilakukan di Bank Jabar Banten (BJB) melalui :
                             <ul style="margin-left: -28px !important; list-style-type: armenian">
-                                <li>Teller dengan menggunakan kode bayar <b>{{ $data->no_bayar }}</b></li>
-                                <li>ATM/Aplikasi BJB DIGI (diginet & digimobile) khusus nasabah bank BJB dengan mengikuti ketentuan limit transaksi yang berlaku menggunakan kode bayar <b>{{ $data->no_bayar }}</b></li>
+                                <li>Teller dengan menggunakan kode bayar <b>{{ $status_ttd ? $data->no_bayar : '-' }}</b></li>
+                                <li>ATM/Aplikasi BJB DIGI (diginet & digimobile) khusus nasabah bank BJB dengan mengikuti ketentuan limit transaksi yang berlaku menggunakan kode bayar <b>{{ $status_ttd ? $data->no_bayar : '-' }}</b></li>
                             </ul>
                         </li>
-                        <li>Pembayaran dilakukan melalui transfer VA (virtual account) bank BJB atau transfer antar bank online menggunakan nomor virtual account bank BJB <b>{{ $data->nomor_va_bjb }}</b>. (mengikuti ketentuan limit transaksi transfer yang berlaku, dan tidak berlaku untuk transaksi SKN & RTGS) ,berlaku sampai <b>{{ Carbon\Carbon::createFromFormat('Y-m-d', $tgl_jatuh_tempo)->format('d F Y') }}</b>.</li>
+                        <li>Pembayaran dilakukan melalui transfer VA (virtual account) bank BJB atau transfer antar bank online menggunakan nomor virtual account bank BJB <b>{{ $status_ttd ? $data->nomor_va_bjb : '-' }}</b>. (mengikuti ketentuan limit transaksi transfer yang berlaku, dan tidak berlaku untuk transaksi SKN & RTGS) ,berlaku sampai <b>{{ Carbon\Carbon::createFromFormat('Y-m-d', $tgl_jatuh_tempo)->format('d F Y') }}</b>.</li>
                         <li>Untuk pembayaran melalui SKN dan RTGS atau yang melebihi limit transaksi transfer online dapat menghubungi perangkat daerah penerbit SKRD.</li>
                         <li>Apabila SKRD ini tidak atau kurang dibayar lewat waktu paling lama 30 hari setelah SKRD diterima atau (tanggal jatuh tempo) sanksi administrasi bunga sebesar 2% per bulan</li>
                     </ol>
@@ -266,13 +272,15 @@
             </tr>
             <tr class="a">
                 <td colspan="1" class="a" style="border-right: none !important; margin-left: 10px !important">
-                    @if ($data->text_qris)
-                    <div style="margin-top: 10px !important; margin-bottom: 5px !important">
-                        <img width="80" class="m-b-5" style="margin-left: 37px !important" src="{{ public_path('images/qr-logo.png') }}" alt="qris"><br>
-                        {!! $img !!}
-                        <br style="margin-top: -30px !important">
-                        <span class="m-l-5" style="font-weight: 400; font-size: 12px; font-family: 'Open Sans'">NIMD:{{ $data->rincian_jenis->nmid }}</span>
-                    </div>
+                    @if ($status_ttd)
+                        @if ($data->text_qris)
+                            <div style="margin-top: 10px !important; margin-bottom: 5px !important">
+                                <img width="80" class="m-b-5" style="margin-left: 37px !important" src="{{ public_path('images/qr-logo.png') }}" alt="qris"><br>
+                                {!! $imgQRIS !!}
+                                <br style="margin-top: -30px !important">
+                                <span class="m-l-5" style="font-weight: 400; font-size: 12px; font-family: 'Open Sans'">NIMD:{{ $data->rincian_jenis->nmid }}</span>
+                            </div>
+                        @endif
                     @endif
                 </td>
                 <td colspan="3" class="a" style="border-left: none !important">

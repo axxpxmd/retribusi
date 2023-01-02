@@ -46,6 +46,10 @@ class QRISBJBRes
                 $channel = 'create_qris';
                 $log = 'Update Qris SKRD (update)';
                 break;
+            case 3:
+                $channel = 'create_qris';
+                $log = 'Update Qris STRD (perbarui)';
+                break;
             default:
                 # code...
                 break;

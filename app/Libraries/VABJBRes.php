@@ -45,6 +45,10 @@ class VABJBRes
                 $channel = 'create_va';
                 $log = 'Create VA SKRD (update)';
                 break;
+            case 3:
+                $channel = 'create_va';
+                $log = 'Create VA STRD (perbarui)';
+                break;
             default:
                 # code...
                 break;
@@ -89,6 +93,10 @@ class VABJBRes
             case 2:
                 $channel = 'update_va';
                 $log = 'Update VA SKRD (delete - make VA expired)';
+                break;
+            case 3:
+                $channel = 'update_va';
+                $log = 'Update VA STRD (perbarui)';
                 break;
             default:
                 # code...
