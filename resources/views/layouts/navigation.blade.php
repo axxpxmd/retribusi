@@ -1,3 +1,15 @@
+@php
+    $dateNow = Carbon\Carbon::now()->format('Y-m-d');
+    $opd_id = Auth::user()->pengguna->opd_id;
+
+    $dataTTD = App\Models\TransaksiOPD::when($opd_id != null, function($q) use($opd_id){
+        return $q->where('id_opd', $opd_id);
+    })->whereIn('status_ttd', [2,4])->count();
+
+    $dataSTRD = App\Models\TransaksiOPD::when($opd_id != null, function($q) use($opd_id){
+        return $q->where('id_opd', $opd_id);
+    })->where('status_bayar', 0)->where('tgl_skrd_akhir', '<', $dateNow)->count();
+@endphp
 <ul class="sidebar-menu">
     <li class="header"><strong>MAIN NAVIGATION</strong></li>
     <li>
@@ -90,6 +102,7 @@
         <a href="{{ route('strd.index') }}">
             <i class="icon icon-document-list green-text s-18"></i> 
             <span>STRD</span>
+            <span class="float-right mr-4 text-danger font-weight-bold">{{ $dataSTRD }}</span>
         </a>
     </li>
     @endcan
@@ -122,6 +135,7 @@
         <a href="{{ route('tanda-tangan.index') }}">
             <i class="icon icon-document-list amber-text s-18"></i> 
             <span>Tanda Tangan</span>
+            <span class="float-right mr-4 text-danger font-weight-bold">{{ $dataTTD }}</span>
         </a>
     </li>
     @endcan
