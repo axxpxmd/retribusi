@@ -285,47 +285,17 @@
                 </td>
                 <td colspan="3" class="a" style="border-left: none !important">
                     <div style="text-align:center; margin-right: -500px !important">
-                        @if ($data->tgl_ttd != null)
                         <p>Tangerang Selatan, {{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_ttd)->format('d F Y') }}</p>
-                        @else
-                        <p>Tangerang Selatan, </p>
-                        @endif
                         <br>
                         <br>
                         <br>
-                        @if ($data->nm_ttd != null)
-                            <p class="m-b-5"><u>{{ $data->nm_ttd }}</u></p>
-                        @else 
-                            <p class="m-b-5"><u>{{ $data->opd->nm_ttd }}</u></p>
-                        @endif
-                        @if ($data->nip_ttd != null)
-                            <p class="m-t-0">NIP.{{ $data->nip_ttd }}</p>
-                        @else
-                            <p class="m-t-0">NIP.{{ $data->opd->nip_ttd }}</p>
-                        @endif
+                        <br>
+                        <p class="m-b-5"><u>{{ $data->nm_ttd }}</u></p>
+                        <p class="m-t-0">NIP.{{ $data->nip_ttd }}</p>
                     </div>
                 </td>
             </tr>
         </table>
     </div>
-
-    @if (isset($statusSTS))
-    <div class="">
-        <table class="c">
-            <tr class="c">
-                <td><p class="m-b-0 fs-12">NTB</p></td>
-                <td><p class="m-b-0 fs-12">: {{ $data->ntb != null ? $data->ntb : ''}}</p></td>
-            </tr>
-            <tr class="c">
-                <td><p class="m-t-0 m-b-0 fs-12">TANGGAL BAYAR</p></td>
-                @if ($data->tgl_bayar != null)
-                <td><p class="m-t-0 m-b-0 fs-12">: {{ Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $data->tgl_bayar)->format('d F Y | H:i:s') }}</p></td>
-                @else
-                <td><p class="m-t-0 m-b-0 fs-12">: </p></td>
-                @endif
-            </tr>
-        </table>
-    </div>
-    @endif
 </body>
 </html>
