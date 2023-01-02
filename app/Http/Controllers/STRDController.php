@@ -186,18 +186,6 @@ class STRDController extends Controller
             ->toJson();
     }
 
-    public function getDiffDays($tgl_skrd_akhir)
-    {
-        $timeNow = Carbon::now();
-
-        $dateTimeNow = new DateTime($timeNow);
-        $expired     = new DateTime($tgl_skrd_akhir . ' 23:59:59');
-        $interval    = $dateTimeNow->diff($expired);
-        $dayDiff    = $interval->format('%r%a');
-
-        return $dayDiff;
-    }
-
     public function show($id)
     {
         $route = $this->route;
