@@ -158,7 +158,6 @@ class TransaksiOPD extends Model
                 default:
                     $data->where('chanel_bayar', 'like', '%Lainnya%');
                     break;
-                    break;
             }
         }
 
@@ -251,7 +250,6 @@ class TransaksiOPD extends Model
                     break;
                 default:
                     $data->where('chanel_bayar', 'like', '%Lainnya%');
-                    break;
                     break;
             }
         }
