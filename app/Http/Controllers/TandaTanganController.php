@@ -29,6 +29,7 @@ use Illuminate\Support\Facades\Storage;
 
 // Models
 use App\Models\OPD;
+use App\Models\Utility;
 use App\Models\TransaksiOPD;
 use App\Models\OPDJenisPendapatan;
 
@@ -85,10 +86,12 @@ class TandaTanganController extends Controller
 
         return DataTables::of($data)
             ->addColumn('file_ttd', function ($p) {
-                $path_sftp = 'file_ttd_skrd/';
-                $fileName  = str_replace(' ', '', $p->nm_wajib_pajak) . '-' . $p->no_skrd . ".pdf";
+                $path_sftp  = 'file_ttd_skrd/';
+                $fileName   = str_replace(' ', '', $p->nm_wajib_pajak) . '-' . $p->no_skrd . ".pdf";
 
-                if ($p->status_ttd == 3 || $p->status_ttd == 1) {
+                $status_ttd = Utility::checkStatusTTD($p->status_ttd);
+
+                if ($status_ttd) {
                     return "<a href='" . config('app.sftp_src') . $path_sftp . $fileName . "' target='_blank' class='cyan-text'><i class='icon-document-file-pdf2'></i></a>";
                 } else {
                     return '-';
@@ -114,9 +117,9 @@ class TandaTanganController extends Controller
             })
             ->addColumn('status_ttd', function ($p) {
                 if ($p->status_ttd == 3 || $p->status_ttd == 1) {
-                    return 'Sudah TTD';
+                    return "<span class='badge badge-success'>Sudah TTD</span>";
                 } else {
-                    return "Belum TTD";
+                    return "<span class='badge badge-danger'>Belum TTD</span>";
                 }
             })
             ->addIndexColumn()
@@ -207,10 +210,9 @@ class TandaTanganController extends Controller
 
         $id   = \Crypt::decrypt($id);
         $data = TransaksiOPD::find($id);
-        $nip = $data->nip_ttd;
         $dateNow = Carbon::now()->format('Y-m-d');
 
-        // Get NIK
+        $nip = $data->nip_ttd;
         $nik = Auth::user()->pengguna->nik;
 
         $token_godem = '';
@@ -227,7 +229,7 @@ class TandaTanganController extends Controller
 
         $tgl_skrd_akhir = $data->tgl_skrd_akhir;
         $total_bayar    = $data->jumlah_bayar;
-        $daysDiff = $this->getDiffDays($tgl_skrd_akhir);
+        $daysDiff       = $this->getDiffDays($tgl_skrd_akhir);
 
         //TODO: Check bunga (STRD)
         $jumlahBunga = 0;
@@ -292,7 +294,7 @@ class TandaTanganController extends Controller
             ));
 
             // get content PDF
-            $content  = $pdf->download()->getOriginalContent();
+            $content = $pdf->download()->getOriginalContent();
 
             // save PDF to sftp storage
             Storage::disk('sftp')->put($path_sftp . $fileName, $content);
@@ -322,14 +324,11 @@ class TandaTanganController extends Controller
 
         $dataSKRD = TransaksiOPD::find($id);
 
-        // Update status TTD
         if ($dataSKRD->status_ttd == 2) {
-            // SKRD
             $dataSKRD->update([
                 'status_ttd' => 1,
             ]);
         } else {
-            // STRD
             $dataSKRD->update([
                 'status_ttd' => 3,
             ]);
