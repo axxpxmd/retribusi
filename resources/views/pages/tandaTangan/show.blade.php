@@ -282,12 +282,12 @@
                 <div class="card">
                     <h6 class="card-header font-weight-bold">Tanda Tangan</h6>
                     <div class="card-body">
-                        <form class="needs-validation" method="POST" action="{{ route('tanda-tangan.tandaTangan') }}" enctype="multipart/form-data" novalidate>
-                            {{ method_field('POST') }}
-                            {{ csrf_field() }} 
-                        {{-- <form class="needs-validation" method="POST" action="{{ route('tanda-tangan.tteBackup') }}" enctype="multipart/form-data" novalidate>
+                        {{-- <form class="needs-validation" method="POST" action="{{ route('tanda-tangan.tandaTangan') }}" enctype="multipart/form-data" novalidate>
                             {{ method_field('POST') }}
                             {{ csrf_field() }}  --}}
+                        <form class="needs-validation" method="POST" action="{{ route('tanda-tangan.tteBackup') }}" enctype="multipart/form-data" novalidate>
+                            {{ method_field('POST') }}
+                            {{ csrf_field() }} 
                             <div class="text-center row">
                                 <div class="col-sm-6">
                                     <div class="justify-content-center row mb-2">
