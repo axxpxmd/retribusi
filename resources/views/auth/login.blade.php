@@ -30,7 +30,7 @@
                         <hr class="mt-2 bg-white" width="200%">
                     </div>
                 </div>
-                <div class="absolute bottom-0 text-white p-l-85 mb-5">COPYRIGHT © 2022.</div>
+                <div class="absolute bottom-0 text-white p-l-85 mb-5">COPYRIGHT © {{ $year }}.</div>
             </div>
             <div class="col-md-3 white m-mt-login">
                 <div class="pl-5 pt-5 pr-5 m-t-90 pb-0">

@@ -393,11 +393,11 @@ class STSController extends Controller
 
         //TODO: generate QR Code (QRIS)
         $imgQRIS = '';
-        if ($data->text_qris) {
+        if ($text_qris) {
             $imgQRIS = Utility::createQrQris($text_qris);
         }
 
-        //TODO: generate QR Code
+        //TODO: generate QR Code (TTD)
         $img = Utility::createQrTTD($file_url);
 
         $pdf = app('dompdf.wrapper');

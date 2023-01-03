@@ -145,20 +145,10 @@
             </th>
             <th width="40%" class="d">
                 <div style="margin: 0 auto">
-                    @if (isset($statusSTS))
-                        <p class="m-b-0" style="font-size: 13px">SURAT TANDA SETORAN</p>
-                        <p class="m-t-1" style="font-size: 13px">(STS)</p>
-                    @else
-                        <p class="m-b-0" style="font-size: 13px">SURAT KETETAPAN RETRIBUSI DAERAH</p>
-                        <p class="m-t-1" style="font-size: 13px">(SKRD)</p>
-                    @endif
+                    <p class="m-b-0" style="font-size: 13px">SURAT KETETAPAN RETRIBUSI DAERAH</p>
+                    <p class="m-t-1" style="font-size: 13px">(SKRD)</p>
                     <p>&nbsp;</p>
-                    @if ($data->tgl_skrd_awal != null)
-                        <p class="text-left m-l-14 m-t-0 f-w-n">Tanggal SKRD :
-                            {{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_awal)->format('d F Y') }}</p>
-                    @else
-                        <p class="text-left m-l-14 m-t-0 f-w-n">Tanggal SKRD : - </p>
-                    @endif
+                    <p class="text-left m-l-14 m-t-0 f-w-n">Tanggal SKRD : {{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_awal)->format('d F Y') }}</p>
                 </div>
             </th>
             <th width="20%" class="d">
@@ -169,13 +159,12 @@
                         <tr>
                             <td>No BKU</td>
                             <td>:</td>
-                            <td>{{ $data->no_bku != null ? $data->no_bku : '-' }}</td>
+                            <td>-</td>
                         </tr>
                         <tr>
                             <td>Tanggal</td>
                             <td>:</td>
-                            <td>{{ $data->tgl_bku != null ? Carbon\Carbon::createFromFormat('Y-m-d', substr($data->tgl_bku, 0, 10))->format('d F Y') : '-' }}
-                            </td>
+                            <td>-</td>
                         </tr>
                         <tr>
                             <td>Rek</td>
@@ -271,8 +260,7 @@
                 </td>
                 <td><span>:</span></td>
                 <td>
-                    <p class="m-t-0 m-b-0">
-                        {{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_akhir)->format('d F Y') }}</p>
+                    <p class="m-t-0 m-b-0">{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_akhir)->format('d F Y') }}</p>
                 </td>
                 <td>&nbsp;</td>
             </tr>
@@ -294,23 +282,20 @@
                 </td>
                 <td class="a">
                     <p class="m-l-5 m-b-0">{{ $data->jenis_pendapatan->jenis_pendapatan }}</p>
-                    <p class="m-l-5 m-b-0 m-t-0">
-                        {{ $data->rincian_jenis != null ? $data->rincian_jenis->rincian_pendapatan : '-' }}</p>
+                    <p class="m-l-5 m-b-0 m-t-0">{{ $data->rincian_jenis != null ? $data->rincian_jenis->rincian_pendapatan : '-' }}</p>
                     <p class="m-l-5 m-t-0">{{ $data->uraian_retribusi }}</p>
                 </td>
                 <td class="a">
                     <p class="m-l-5 text-right m-r-10">@currency($data->jumlah_bayar),-</p>
                     @if ($data->status_diskon == 1)
-                        <p class="m-l-5 text-right m-r-10">(Diskon {{ (int) $data->diskon }}%)&nbsp;&nbsp;
-                            @currency(($data->diskon / 100) * $data->jumlah_bayar),-</p>
+                        <p class="m-l-5 text-right m-r-10">(Diskon {{ (int) $data->diskon }}%)&nbsp;&nbsp;@currency(($data->diskon / 100) * $data->jumlah_bayar),-</p>
                     @endif
                 </td>
             </tr>
             <tr class="a">
                 <td rowspan="2" class="a text-center">2</td>
                 <td rowspan="2" class="a">
-                    <p class="m-l-5">
-                        {{ $data->rincian_jenis != null ? $data->rincian_jenis->nmr_rekening_denda : '-' }}</p>
+                    <p class="m-l-5">{{ $data->rincian_jenis != null ? $data->rincian_jenis->nmr_rekening_denda : '-' }}</p>
                 </td>
                 <td class="a">
                     <p class="m-l-5 m-b-0">Jumlah Ketetapan Pokok Retribusi :</p>
@@ -330,7 +315,7 @@
                     <p class="m-l-5 t-bold">Jumlah Keseluruhan :</p>
                 </td>
                 <td class="a">
-                    <p class="m-l-5 t-bold text-right m-r-10">@currency($total_bayar),-</p>
+                    <p class="m-l-5 t-bold text-right m-r-10">@currency($data->total_bayar),-</p>
                 </td>
             </tr>
             <tr class="a">
@@ -348,9 +333,10 @@
                             </ul>
                         </li>
                         <li>Pembayaran dilakukan melalui transfer VA (virtual account) bank BJB atau transfer antar bank
-                            online menggunakan nomor virtual account bank BJB <b>{{ $data->nomor_va_bjb }}</b>.
-                            (mengikuti ketentuan limit transaksi transfer yang berlaku, dan tidak berlaku untuk
-                            transaksi SKN & RTGS) ,berlaku sampai
+                            online menggunakan nomor virtual account bank BJB
+                            <b>{{ $data->nomor_va_bjb }}</b>. (mengikuti ketentuan limit
+                            transaksi transfer yang berlaku, dan tidak berlaku untuk transaksi SKN & RTGS) ,berlaku
+                            sampai
                             <b>{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_akhir)->format('d F Y') }}</b>.
                         </li>
                         <li>Untuk pembayaran melalui SKN dan RTGS atau yang melebihi limit transaksi transfer online
@@ -361,26 +347,19 @@
                 </td>
             </tr>
             <tr class="a">
-                <td colspan="1" class="a"
-                    style="border-right: none !important; margin-left: 10px !important">
+                <td colspan="1" class="a" style="border-right: none !important; margin-left: 10px !important">
                     @if ($data->text_qris)
                         <div style="margin-top: 10px !important; margin-bottom: 5px !important">
-                            <img width="80" class="m-b-5" style="margin-left: 37px !important"
-                                src="{{ public_path('images/qr-logo.png') }}" alt="qris"><br>
+                            <img width="80" class="m-b-5" style="margin-left: 37px !important" src="{{ public_path('images/qr-logo.png') }}" alt="qris"><br>
                             {!! $imgQRIS !!}
                             <br style="margin-top: -30px !important">
-                            <span class="m-l-5"
-                                style="font-weight: 400; font-size: 12px; font-family: 'Open Sans'">NIMD:{{ $data->rincian_jenis->nmid }}</span>
+                            <span class="m-l-5" style="font-weight: 400; font-size: 12px; font-family: 'Open Sans'">NIMD:{{ $data->rincian_jenis->nmid }}</span>
                         </div>
                     @endif
                 </td>
                 <td colspan="3" class="a" style="border-left: none !important">
                     <div style="text-align:center; margin-right: -400px !important">
-                        @if ($data->tgl_ttd != null)
-                            <p>Tangerang Selatan, {{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_ttd)->format('d F Y') }}</p>
-                        @else
-                            <p>Tangerang Selatan, </p>
-                        @endif
+                        <p>Tangerang Selatan, {{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_ttd)->format('d F Y') }}</p>
                         <table style="margin-left: 410px !important; margin-top: -8px; margin-bottom: -8px">
                             <tr class="a">
                                 <td style="padding: 1px" width="8%" class="a"> {!! $img !!}</td>
@@ -393,52 +372,13 @@
                                 </td>
                             </tr>
                         </table>
-                        @if ($data->nm_ttd != null)
-                            <p class="m-b-5 m-b-0"><u>{{ $data->nm_ttd }}</u></p>
-                        @else
-                            <p class="m-b-5 m-b-0"><u>{{ $data->opd->nm_ttd }}</u></p>
-                        @endif
-                        @if ($data->nip_ttd != null)
-                            <p class="m-t-0">NIP.{{ $data->nip_ttd }}</p>
-                        @else
-                            <p class="m-t-0">NIP.{{ $data->opd->nip_ttd }}</p>
-                        @endif
+                        <p class="m-b-5 m-b-0"><u>{{ $data->nm_ttd }}</u></p>
+                        <p class="m-t-0">NIP.{{ $data->nip_ttd }}</p>
                     </div>
                 </td>
             </tr>
         </table>
     </div>
-
-    @if (isset($statusSTS))
-        <div class="">
-            <table class="c">
-                <tr class="c">
-                    <td>
-                        <p class="m-b-0 fs-12">NTB</p>
-                    </td>
-                    <td>
-                        <p class="m-b-0 fs-12">: {{ $data->ntb != null ? $data->ntb : '' }}</p>
-                    </td>
-                </tr>
-                <tr class="c">
-                    <td>
-                        <p class="m-t-0 m-b-0 fs-12">TANGGAL BAYAR</p>
-                    </td>
-                    @if ($data->tgl_bayar != null)
-                        <td>
-                            <p class="m-t-0 m-b-0 fs-12">:
-                                {{ Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $data->tgl_bayar)->format('d F Y | H:i:s') }}
-                            </p>
-                        </td>
-                    @else
-                        <td>
-                            <p class="m-t-0 m-b-0 fs-12">: </p>
-                        </td>
-                    @endif
-                </tr>
-            </table>
-        </div>
-    @endif
 </body>
 
 </html>

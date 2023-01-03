@@ -327,10 +327,10 @@
                         <li>
                             Pembayaran dilakukan di Bank Jabar Banten (BJB) melalui :
                             <ul style="margin-left: -28px !important; list-style-type: armenian">
-                                <li>Teller dengan menggunakan kode bayar <b>{{ $data->no_bayar }}</b></li>
+                                <li>Teller dengan menggunakan kode bayar <b>{{ $data->status_ttd == 1 ? $data->no_bayar : '-' }}</b></li>
                                 <li>ATM/Aplikasi BJB DIGI (diginet & digimobile) khusus nasabah bank BJB dengan
                                     mengikuti ketentuan limit transaksi yang berlaku menggunakan kode bayar
-                                    <b>{{ $data->no_bayar }}</b></li>
+                                    <b>{{ $data->status_ttd == 1 ? $data->no_bayar : '-' }}</b></li>
                             </ul>
                         </li>
                         <li>Pembayaran dilakukan melalui transfer VA (virtual account) bank BJB atau transfer antar bank

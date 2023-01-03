@@ -60,11 +60,11 @@ class TandaTanganController extends Controller
 
         $from   = $request->tgl_skrd;
         $to     = $request->tgl_skrd1;
-        $opd_id = $opd_id == 0 ? $request->opd_id : $opd_id; 
+        $opd_id = $opd_id == 0 ? $request->opd_id : $opd_id;
         $belum_ttd  = $request->belum_ttd;
         $no_skrd    = $request->no_skrd;
         $status_ttd = $request->status_ttd;
-        
+
         if ($request->ajax()) {
             return $this->dataTable($belum_ttd, $from, $to, $opd_id, $no_skrd, $status_ttd);
         }
@@ -127,70 +127,6 @@ class TandaTanganController extends Controller
             ->toJson();
     }
 
-    public function getListCert($id, $nip_ttd)
-    {
-        if ($nip_ttd != null) {
-            $res = Http::withToken(config('app.signapi_bearer'))->post(config('app.signapi_ipserver') . 'listCert', ['username' => $nip_ttd]);
-
-            // Check
-            if ($res->successful()) {
-                if ($res['code'] == 200) {
-                    $arr = json_decode($res, true);
-                    $idCert = end($arr);
-                    $idCert = end($idCert);
-                    return $idCert['id'];
-                } else {
-                    return redirect()
-                        ->route($this->route . 'show', \Crypt::encrypt($id))
-                        ->withErrors('TTE Gagal, Tidak memiliki sertifikat terdaftar.');
-                }
-            } else {
-                $msg = '';
-                if (isset($res['error']))
-                    $msg .= $res['error']['code'] . ' - ' . $res['error']['message'];
-                return redirect()
-                    ->route($this->route . 'show', \Crypt::encrypt($id))
-                    ->withErrors("Terjadi kegagalan dalam memuat sertifikat digital. Error Code " . $res->getStatusCode() . ". \n " . $msg . ".\n Silahkan laporkan masalah ini pada administrator.");
-            }
-        } else {
-            return redirect()
-                ->route($this->route . 'show', \Crypt::encrypt($id))
-                ->withErrors('TTE Gagal. NIP kosong, Silahkan edit data SKRD.');
-        }
-    }
-
-    public function getTokenGodam($id, $nip_ttd)
-    {
-        if ($nip_ttd != null) {
-            $res = Http::withToken(config('app.signapi_bearer'))
-                ->post(config('app.signapi_ipserver') . 'getToken', ['username' => $nip_ttd]);
-
-            // Check
-            if ($res->successful()) {
-                if ($res['code'] == 200) {
-                    $arr = json_decode($res, true);
-                    $token_story = substr($arr['message'], 0, 6);
-                    $this->my_token = $token_story;
-                    return $token_story;
-                }
-                return redirect()
-                    ->route($this->route . 'show', \Crypt::encrypt($id))
-                    ->withErrors('TTE Gagal, Gagal membuat token godam. refresh halaman atau silahkan hubungi administrator');
-            } else {
-                $msg = '';
-                if (isset($res['error']))
-                    $msg .= $res['error']['code'] . ' - ' . $res['error']['message'];
-                return redirect()
-                    ->route($this->route . 'show', \Crypt::encrypt($id))
-                    ->withErrors("Terjadi kegagalan dalam memuat Token Godem. Error Code " . $res->getStatusCode() . ". \n " . $msg . ".\n Silahkan laporkan masalah ini pada administrator.");
-            }
-        } else {
-            return redirect()
-                ->route($this->route . 'show', \Crypt::encrypt($id))
-                ->withErrors('TTE Gagal. NIP kosong, Silahkan edit data SKRD.');
-        }
-    }
-
     public function getDiffDays($tgl_skrd_akhir)
     {
         $timeNow = Carbon::now();
@@ -214,62 +150,48 @@ class TandaTanganController extends Controller
 
         $nip = $data->nip_ttd;
         $nik = Auth::user()->pengguna->nik;
-
-        $token_godem = '';
-        $id_cert     = '';
-        $fileName    = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
-        $path_sftp   = 'file_ttd_skrd/';
-        $path_local  = 'public/file_skrd/';
-
-        /* Check Status TTD
-         * 0 = Belum
-         * 1 = Sudah 
-         * 2 = Proses
-         */
-
         $tgl_skrd_akhir = $data->tgl_skrd_akhir;
         $total_bayar    = $data->jumlah_bayar;
-        $daysDiff       = $this->getDiffDays($tgl_skrd_akhir);
+        $status_bayar   = $data->status_bayar;
+        $tgl_bayar      = $data->tgl_bayar;
+        $denda          = $data->denda;
+        $tgl_strd_akhir = $data->tgl_strd_akhir;
+        $status_ttd     = $data->status_ttd;
+        $text_qris      = $data->text_qris;
 
-        //TODO: Check bunga (STRD)
+        $path_sftp   = 'file_ttd_skrd/';
+        $path_local  = 'public/file_skrd/';
+        $fileName    = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
+        $file_url    = config('app.sftp_src') . 'file_ttd_skrd/' . $fileName;
+
+        $jatuh_tempo = Utility::isJatuhTempo($tgl_skrd_akhir, $dateNow);
+
+        //TODO: Get bunga
+        $kenaikan    = 0;
         $jumlahBunga = 0;
-        $kenaikan = 0;
-        if ($data->status_bayar == 0) {
-            if ($daysDiff > 0) {
-                $jumlahBunga = 0;
-                $kenaikan = 0;
-            } else {
-                //* Bunga
-                list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);
+        if ($status_bayar == 1) {
+            list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $total_bayar, $tgl_bayar);
+        } else {
+            if ($jatuh_tempo) {
+                list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $total_bayar);
             }
         }
 
-        //* Total Bayar + Bunga
-        $total_bayar = $data->total_bayar + $jumlahBunga;
-        $terbilang   = Html_number::terbilang($total_bayar) . 'rupiah';
+        //TODO Total Bayar + Bunga
+        $total_bayar = Utility::createDenda($status_bayar, $total_bayar, $denda, $jumlahBunga);
 
-        //* Tanggal Jatuh Tempo STRD
-        if ($data->tgl_strd_akhir == null) {
-            $tgl_jatuh_tempo = $data->tgl_skrd_akhir;
-        } else {
-            $tgl_jatuh_tempo = $data->tgl_strd_akhir;
-        }
+        $terbilang = Html_number::terbilang($total_bayar) . 'rupiah';
+        $tgl_jatuh_tempo = Utility::tglJatuhTempo($tgl_strd_akhir, $tgl_skrd_akhir);
+        $status_ttd = Utility::checkStatusTTD($status_ttd);
 
-        if ($data->status_ttd == 0 || $data->status_ttd == 2 || $data->status_ttd == 4) {
+        if (!$status_ttd) {
+            //TODO: generate QR Code (TTD)
+            $img = Utility::createQrTTD($file_url);
 
-            //TODO: generate QR Code TTD
-            $fileName = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
-            $file_url = config('app.sftp_src') . 'file_ttd_skrd/' . $fileName;
-            $b   = base64_encode(\SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')->merge(public_path('images/logo-png.png'), 0.2, true)->size(900)->errorCorrection('H')->margin(0)->generate($file_url));
-            $img = '<img width="60" height="61" src="data:image/png;base64, ' . $b . '" alt="qr code" />';
-
-            //TODO: generate QR Code QRIS
+            //TODO: generate QR Code (QRIS)
             $imgQRIS = '';
-            if ($data->text_qris) {
-                $fileName = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
-                $file_url = config('app.sftp_src') . 'file_ttd_skrd/' . $fileName;
-                $b   = base64_encode(\SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')->size(1000)->errorCorrection('H')->margin(0)->generate($data->text_qris));
-                $imgQRIS = '<img width="150" src="data:image/png;base64, ' . $b . '" alt="qr code" />';
+            if ($text_qris) {
+                $imgQRIS = Utility::createQrQris($text_qris);
             }
 
             //TODO: Check status TTD
@@ -314,7 +236,9 @@ class TandaTanganController extends Controller
             'kenaikan',
             'jumlahBunga',
             'nik',
-            'nip'
+            'nip',
+            'status_ttd',
+            'jatuh_tempo'
         ));
     }
 
