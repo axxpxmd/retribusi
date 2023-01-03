@@ -214,12 +214,12 @@
                                             <div class="col-auto p-1">
                                                 <a href="{{ route('print.download', $data->id) }}" target="blank" class="btn btn-sm btn-secondary mr-1"><i class="icon-download mr-2"></i>Download File</a>
                                             </div>
-                                            <!-- Send Email -->
+                                            {{-- <!-- Send Email -->
                                             @if ($data->email)
                                                 <div class="col-auto p-1">
                                                     <a href="#" onclick="sendEmailConfirm({{ $data->id }})" class="btn btn-sm btn-success"><i class="icon-envelope mr-2"></i>Kirim SKRD</a>
                                                 </div>
-                                            @endif
+                                            @endif --}}
                                         @endif
                                     </div>
                                 </div>
