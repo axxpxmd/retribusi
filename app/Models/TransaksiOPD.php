@@ -388,7 +388,7 @@ class TransaksiOPD extends Model
     }
 
     // 
-    public static function querySTS($from, $to, $opd_id, $status_bayar, $jenis_tanggal, $no_bayar, $channel_bayar)
+    public static function querySTS($from, $to, $opd_id, $status_bayar, $jenis_tanggal, $no_bayar)
     {
         $now = Carbon::now();
         $date = $now->format('Y-m-d');
@@ -402,26 +402,6 @@ class TransaksiOPD extends Model
 
         if ($status_bayar != null) {
             $data->where('status_bayar', $status_bayar);
-        }
-
-        if ($channel_bayar != 0) {
-            switch ($channel_bayar) {
-                case "1":
-                    $metode_bayar = 'BJB Virtual Account';
-                    $data->where('chanel_bayar', $metode_bayar);
-                    break;
-                case 2:
-                    $metode_bayar = 'ATM BJB';
-                    $data->where('chanel_bayar', $metode_bayar);
-                    break;
-                case 3;
-                    $metode_bayar = '';
-                    $data->where('chanel_bayar', 'like', '%QRIS%');
-                    break;
-                default:
-                    // 
-                    break;
-            }
         }
 
         if ($no_bayar != null) {

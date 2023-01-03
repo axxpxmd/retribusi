@@ -121,19 +121,6 @@
         });
     });
 
-    $(function() {
-        $('#display_channel_bayar').hide(); 
-
-        $('#status_bayar').change(function(){
-            if($('#status_bayar').val() === "1") {
-                $('#display_channel_bayar').show(); 
-            } else {
-                $('#display_channel_bayar').hide(); 
-                $('#channel_bayar').val("0").change();
-            } 
-        });
-    });
-
     var table = $('#dataTable').dataTable({
         scrollX: true,
         processing: true,
@@ -150,7 +137,6 @@
                 data.status_bayar = $('#status_bayar').val();
                 data.jenis_tanggal = $('#jenis_tanggal').val();
                 data.no_bayar = $('#no_bayar').val();
-                data.channel_bayar = $('#channel_bayar').val();
             }
         },
         columns: [
