@@ -20,7 +20,7 @@ use Carbon\Carbon;
 
 use App\Libraries\Html\Html_number;
 use App\Http\Controllers\Controller;
-
+use App\Http\Services\Iontentik;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Http;
@@ -40,8 +40,10 @@ class TandaTanganController extends Controller
     protected $view  = 'pages.tandaTangan.';
 
     // Check Permission
-    public function __construct()
+    public function __construct(Iontentik $iotentik)
     {
+        $this->iotentik = $iotentik;
+
         $this->middleware(['permission:Tanda Tangan']);
     }
 
@@ -362,19 +364,30 @@ class TandaTanganController extends Controller
 
         //* IOTENTIK
         if ($tte == 'iotentik') {
-            $id_cert     = $this->getListCert($id, $nip);
-            $token_godem = $this->getTokenGodam($id, $nip);
+            list($err, $errMsg, $idCert) = $this->iotentik->getListCert($nip);
+            if ($err) {
+                return redirect()
+                    ->route($this->route . 'show', \Crypt::encrypt($id))
+                    ->withSuccess($errMsg);
+            }
+
+            list($err, $errMsg, $tokenGodem) = $this->iotentik->getTokenGodem($nip);
+            if ($err) {
+                return redirect()
+                    ->route($this->route . 'show', \Crypt::encrypt($id))
+                    ->withSuccess($errMsg);
+            }
 
             $dataIotentik = [
                 'username'   => $nip,
                 'passphrase' => $passphrase,
-                'token'      => $token_godem,
+                'token'      => $tokenGodem,
                 'urx'  => 177,
                 'ury'  => 840,
                 'llx'  => 1,
                 'lly'  => 795,
                 'page' => 1,
-                'idkeystore' => $id_cert,
+                'idkeystore' => $idCert,
                 'reason'     => 'Tanda Tangan Digital Retribusi',
                 'location'   => 'Tangerang Selatan',
                 'updated_at' => ''
@@ -437,25 +450,26 @@ class TandaTanganController extends Controller
                         return redirect()
                             ->route($this->route . 'show', \Crypt::encrypt($id))
                             ->withSuccess('Berhasil melakukan tandatangan digital dengan IOTENTIK.');
-                    }
-                    return redirect()
-                        ->route($this->route . 'show', \Crypt::encrypt($id))
-                        ->withErrors('Gagal melakukan tandatangan digital IOTENTIK. Silahkan dicoba lagi');
-                }
-                if (isset($r))
-                    if ($r['status'] == 201) {
-                        return redirect()
-                            ->route($this->route . 'show', \Crypt::encrypt($id))
-                            ->withErrors('Gagal melakukan tandatangan digital IOTENTIK. Error Code: ' .  $r['status'] . ' Message: Passphrase Salah');
                     } else {
                         return redirect()
                             ->route($this->route . 'show', \Crypt::encrypt($id))
-                            ->withErrors('Gagal melakukan tandatangan digital, Silahkan refresh halaman ini. Error Code: ' .  $r['status'] . ' Message: ' . $r['message']);
+                            ->withErrors('Gagal melakukan tandatangan digital IOTENTIK. Silahkan dicoba lagi');
                     }
+                }
+                if ($r['status'] && $r['data']) {
+                    return redirect()
+                        ->route($this->route . 'show', \Crypt::encrypt($id))
+                        ->withErrors('Gagal melakukan tandatangan digital IOTENTIK. Error Code: ' .  $r['status'] . ' Message: ' . $r['data']);
+                } else {
+                    return redirect()
+                        ->route($this->route . 'show', \Crypt::encrypt($id))
+                        ->withErrors('Gagal melakukan tandatangan digital IOTENTIK');
+                }
+            } else {
+                return redirect()
+                    ->route($this->route . 'show', \Crypt::encrypt($id))
+                    ->withErrors("Terjadi kegagalan dalam melakukan tanda tangan. Error Server");
             }
-            return redirect()
-                ->route($this->route . 'show', \Crypt::encrypt($id))
-                ->withErrors("Terjadi kegagalan dalam memuat tandatangan digital. Error Code " . $res->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator");
         }
     }
 

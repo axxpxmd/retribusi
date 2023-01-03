@@ -2,6 +2,8 @@
 
 namespace App\Http\Services;
 
+use Illuminate\Support\Facades\Http;
+
 class Iontentik
 {
     public static function getListCert($nip)
@@ -62,5 +64,13 @@ class Iontentik
         }
 
         return [$err, $errMsg, $tokenGodem];
+    }
+
+    public static function sign()
+    {
+        $res = Http::withToken(config('app.signapi_bearer'))
+            ->attach('imageSign', $qrimage, 'myimg.png')
+            ->attach('pdf', $file, 'myfile.pdf')
+            ->post(config('app.signapi_ipserver') . 'signPDF', $dataIotentik);
     }
 }
