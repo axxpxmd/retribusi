@@ -197,11 +197,7 @@
             <tr class="c">
                 <td><p class="m-t-0 m-b-0">Jatuh Tempo </p></td>
                 <td><span>:</span></td>
-                @if ($tgl_jatuh_tempo != null)
                 <td><p class="m-t-0 m-b-0">{{ Carbon\Carbon::createFromFormat('Y-m-d', $tgl_jatuh_tempo)->format('d F Y') }}</p></td>
-                @else
-                <td><p class="m-t-0 m-b-0">- </p></td>
-                @endif
                 <td>&nbsp;</td>
             </tr>
         </table>

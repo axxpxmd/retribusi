@@ -354,12 +354,14 @@ class TandaTanganController extends Controller
                     return redirect()
                         ->route($this->route . 'show', \Crypt::encrypt($id))
                         ->withSuccess('Berhasil melakukan tandatangan digital dengan BSRE.');
+                } else {
+                    return response()->json(['message' => "Gagal melakukan tandatangan digital BSRE. Silahkan dicoba lagi"], 422);
                 }
-                return response()->json(['message' => "Gagal melakukan tandatangan digital BSRE. Silahkan dicoba lagi"], 422);
+            } else {
+                return redirect()
+                    ->route($this->route . 'show', \Crypt::encrypt($id))
+                    ->withErrors("Terjadi kegagalan dalam melakukan tanda tangan. Error Server");
             }
-            return redirect()
-                ->route($this->route . 'show', \Crypt::encrypt($id))
-                ->withErrors("Terjadi kegagalan dalam memuat tandatangan digital. Error Code " . $res->getStatusCode() . ". Silahkan laporkan masalah ini pada administrator");
         }
 
         //* IOTENTIK
@@ -401,69 +403,62 @@ class TandaTanganController extends Controller
             if ($res->successful()) {
                 $r = $res->json();
                 if ($r['status'] == 200) {
-                    if ($res['data']) {
-                        // Update status TTD
-                        if ($data->status_ttd == 2) {
-                            $data->update([
-                                'status_ttd' => 1,
-                                'history_ttd' => 1
-                            ]);
-                        } else {
-                            $data->update([
-                                'status_ttd' => 3,
-                                'history_ttd' => 1
-                            ]);
-                        }
-
-                        // Save to local storage (file already TTE)
-                        file_put_contents($pdf, base64_decode($r['data'], true));
-                        $local_pdf = Storage::disk('local')->get('public/file_skrd/' . $fileName); // get content pdf from local
-
-                        // Move to storage SFTP
-                        Storage::disk('sftp')->put($path_sftp . $fileName, $local_pdf);
-                        Storage::delete('public/file_skrd/' . $fileName); // delete pdf from local
-
-                        //* Send Email
-                        if ($data->email) {
-                            $email = $data->email;
-                            $mailFrom = config('app.mail_from');
-                            $mailName = config('app.mail_name');
-
-                            $dataEmail = array(
-                                'nama' => $data->nm_wajib_pajak,
-                                'jumlah_bayar' => 'Rp. ' . number_format($data->jumlah_bayar),
-                                'tgl_jatuh_tempo' => Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_akhir)->format('d F Y'),
-                                'no_bayar' => $data->no_bayar
-                            );
-
-                            $fileName  = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
-                            $path_sftp = 'file_ttd_skrd/';
-                            $file = Storage::disk('sftp')->get($path_sftp . $fileName);
-
-                            Mail::send('layouts.mail.skrd', $dataEmail, function ($message) use ($email, $mailFrom, $mailName, $fileName, $file) {
-                                $message->to($email)->subject('SKRD');
-                                $message->attachData($file, $fileName);
-                                $message->from($mailFrom, $mailName);
-                            });
-                        }
-
-                        return redirect()
-                            ->route($this->route . 'show', \Crypt::encrypt($id))
-                            ->withSuccess('Berhasil melakukan tandatangan digital dengan IOTENTIK.');
+                    // Update status TTD
+                    if ($data->status_ttd == 2) {
+                        $data->update([
+                            'status_ttd' => 1,
+                            'history_ttd' => 1
+                        ]);
                     } else {
-                        return redirect()
-                            ->route($this->route . 'show', \Crypt::encrypt($id))
-                            ->withErrors('Gagal melakukan tandatangan digital IOTENTIK. Silahkan dicoba lagi');
+                        $data->update([
+                            'status_ttd' => 3,
+                            'history_ttd' => 1
+                        ]);
                     }
-                }
-                if ($r['status'] && $r['data']) {
+
+                    // Save to local storage (file already TTE)
+                    file_put_contents($pdf, base64_decode($r['data'], true));
+                    $local_pdf = Storage::disk('local')->get('public/file_skrd/' . $fileName); // get content pdf from local
+
+                    // Move to storage SFTP
+                    Storage::disk('sftp')->put($path_sftp . $fileName, $local_pdf);
+                    Storage::delete('public/file_skrd/' . $fileName); // delete pdf from local
+
+                    //* Send Email
+                    if ($data->email) {
+                        $email = $data->email;
+                        $mailFrom = config('app.mail_from');
+                        $mailName = config('app.mail_name');
+
+                        $dataEmail = array(
+                            'nama' => $data->nm_wajib_pajak,
+                            'jumlah_bayar' => 'Rp. ' . number_format($data->jumlah_bayar),
+                            'tgl_jatuh_tempo' => Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_akhir)->format('d F Y'),
+                            'no_bayar' => $data->no_bayar
+                        );
+
+                        $fileName  = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
+                        $path_sftp = 'file_ttd_skrd/';
+                        $file = Storage::disk('sftp')->get($path_sftp . $fileName);
+
+                        Mail::send('layouts.mail.skrd', $dataEmail, function ($message) use ($email, $mailFrom, $mailName, $fileName, $file) {
+                            $message->to($email)->subject('SKRD');
+                            $message->attachData($file, $fileName);
+                            $message->from($mailFrom, $mailName);
+                        });
+                    }
+
+                    return redirect()
+                        ->route($this->route . 'show', \Crypt::encrypt($id))
+                        ->withSuccess('Berhasil melakukan tandatangan digital dengan IOTENTIK.');
+                } elseif ($r['status'] && $r['data']) {
                     return redirect()
                         ->route($this->route . 'show', \Crypt::encrypt($id))
                         ->withErrors('Gagal melakukan tandatangan digital IOTENTIK. Error Code: ' .  $r['status'] . ' Message: ' . $r['data']);
                 } else {
                     return redirect()
                         ->route($this->route . 'show', \Crypt::encrypt($id))
-                        ->withErrors('Gagal melakukan tandatangan digital IOTENTIK');
+                        ->withErrors('Gagal melakukan tandatangan digital IOTENTIK.');
                 }
             } else {
                 return redirect()
