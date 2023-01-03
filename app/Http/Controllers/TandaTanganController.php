@@ -14,13 +14,13 @@
 namespace App\Http\Controllers;
 
 use Auth;
-use DateTime;
 use DataTables;
 use Carbon\Carbon;
 
+use App\Http\Services\Iontentik;
 use App\Libraries\Html\Html_number;
 use App\Http\Controllers\Controller;
-use App\Http\Services\Iontentik;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Http;
@@ -118,7 +118,9 @@ class TandaTanganController extends Controller
                 return 'Rp. ' . number_format($p->jumlah_bayar);
             })
             ->addColumn('status_ttd', function ($p) {
-                if ($p->status_ttd == 3 || $p->status_ttd == 1) {
+                $status_ttd = Utility::checkStatusTTD($p->status_ttd);
+
+                if ($status_ttd) {
                     return "<span class='badge badge-success'>Sudah TTD</span>";
                 } else {
                     return "<span class='badge badge-danger'>Belum TTD</span>";
@@ -127,18 +129,6 @@ class TandaTanganController extends Controller
             ->addIndexColumn()
             ->rawColumns(['file_ttd', 'no_skrd', 'id_opd', 'id_jenis_pendapatan', 'tgl_skrd', 'masa_berlaku', 'status_ttd'])
             ->toJson();
-    }
-
-    public function getDiffDays($tgl_skrd_akhir)
-    {
-        $timeNow = Carbon::now();
-
-        $dateTimeNow = new DateTime($timeNow);
-        $expired     = new DateTime($tgl_skrd_akhir . ' 23:59:59');
-        $interval    = $dateTimeNow->diff($expired);
-        $daysDiff    = $interval->format('%r%a');
-
-        return $daysDiff;
     }
 
     public function show($id)
@@ -301,24 +291,20 @@ class TandaTanganController extends Controller
                 'location'   => 'Tangerang Selatan'
             ];
 
+            $url = 'http://192.168.150.79/';
             $res = Http::attach('file', $file, 'myfile.pdf')
                 ->attach('imageTTD', $qrimage, 'myimg.png')
                 ->withBasicAuth('esign', 'qwerty')
-                ->post('http://192.168.150.79/' . 'api/sign/pdf', $dataBSRE);
+                ->post($url . 'api/sign/pdf', $dataBSRE);
 
             if ($res->status() == 200) {
                 if ($res->body()) {
-                    if ($data->status_ttd == 2) {
-                        $data->update([
-                            'status_ttd' => 1,
-                            'history_ttd' => 1
-                        ]);
-                    } else {
-                        $data->update([
-                            'status_ttd' => 3,
-                            'history_ttd' => 1
-                        ]);
-                    }
+
+                    $update_ttd = $data->status_ttd == 2 ? 1 : 3;
+                    $data->update([
+                        'status_ttd' => $update_ttd,
+                        'history_ttd' => 1
+                    ]);
 
                     file_put_contents($pdf, $res->body(), true);
                     $local_pdf = Storage::disk('local')->get('public/file_skrd/' . $fileName); // get content pdf from local
@@ -395,26 +381,21 @@ class TandaTanganController extends Controller
                 'updated_at' => ''
             ];
 
+            $url = config('app.signapi_ipserver');
             $res = Http::withToken(config('app.signapi_bearer'))
                 ->attach('imageSign', $qrimage, 'myimg.png')
                 ->attach('pdf', $file, 'myfile.pdf')
-                ->post(config('app.signapi_ipserver') . 'signPDF', $dataIotentik);
+                ->post($url . 'signPDF', $dataIotentik);
 
             if ($res->successful()) {
                 $r = $res->json();
                 if ($r['status'] == 200) {
-                    // Update status TTD
-                    if ($data->status_ttd == 2) {
-                        $data->update([
-                            'status_ttd' => 1,
-                            'history_ttd' => 1
-                        ]);
-                    } else {
-                        $data->update([
-                            'status_ttd' => 3,
-                            'history_ttd' => 1
-                        ]);
-                    }
+
+                    $update_ttd = $data->status_ttd == 2 ? 1 : 3;
+                    $data->update([
+                        'status_ttd' => $update_ttd,
+                        'history_ttd' => 1
+                    ]);
 
                     // Save to local storage (file already TTE)
                     file_put_contents($pdf, base64_decode($r['data'], true));
