@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Crypt;
 
 // Models
 use App\Models\OPD;
+use App\Models\Utility;
 use App\Models\TransaksiOPD;
 use App\Models\OPDJenisPendapatan;
 use App\Models\RincianJenisPendapatan;
@@ -49,8 +50,7 @@ class ReportController extends Controller
         $opdArray = OPDJenisPendapatan::select('id_opd')->get()->toArray();
         $opds     = OPD::getAll($opdArray, $opd_id);
 
-        $time = Carbon::now();
-        $today = $time->format('Y-m-d');
+        $today = Carbon::now()->format('Y-m-d');
 
         return view($this->view . 'index', compact(
             'route',
@@ -117,12 +117,12 @@ class ReportController extends Controller
                 }
             })
             ->addColumn('cetak_skrd', function ($p) {
-                $path_sftp = 'file_ttd_skrd/';
-                $fileName  = str_replace(' ', '', $p->nm_wajib_pajak) . '-' . $p->no_skrd . ".pdf";
-                // $belumTTD  = "<a href='" . config('app.sftp_src') . $path_sftp . $fileName . "' target='_blank' class='cyan-text' title='File TTD'><i class='icon-document-file-pdf2'></i></a>";
+                $path_sftp  = 'file_ttd_skrd/';
+                $fileName   = str_replace(' ', '', $p->nm_wajib_pajak) . '-' . $p->no_skrd . ".pdf";
+                $status_ttd = Utility::checkStatusTTD($p->status_ttd);
 
                 //* SKRD
-                if ($p->status_ttd == 1 || $p->status_ttd == 3) {
+                if ($status_ttd) {
                     return "<a href='" . config('app.sftp_src') . $path_sftp . $fileName  . "' target='_blank' class='cyan-text' title='File TTD'><i class='icon-document-file-pdf2'></i></a>";
                 } else {
                     return "<span>Belum TTD</span>";
@@ -147,22 +147,32 @@ class ReportController extends Controller
 
         $id   = \Crypt::decrypt($id);
         $data = TransaksiOPD::find($id);
+        $dateNow = Carbon::now()->format('Y-m-d');
 
-        $va_number = (int) $data->nomor_va_bjb;
         $fileName  = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
         $path_sftp = 'file_ttd_skrd/';
-        $dateNow   = Carbon::now()->format('Y-m-d');
+
+        $va_number      = (int) $data->nomor_va_bjb;
+        $status_ttd     = $data->status_ttd;
+        $tgl_skrd_akhir = $data->tgl_skrd_akhir;
+        $status_bayar   = $data->status_bayar;
+        $total_bayar    = $data->jumlah_bayar;
+        $tgl_bayar      = $data->tgl_bayar;
+
+        $jatuh_tempo = Utility::isJatuhTempo($tgl_skrd_akhir, $dateNow);
 
         //TODO: Get bunga
-        $tgl_skrd_akhir = $data->tgl_skrd_akhir;
-        $total_bayar    = $data->jumlah_bayar;
-        list($jumlahBunga, $kenaikan) = PrintController::createBunga($tgl_skrd_akhir, $total_bayar);
-
-        if ($data->status_ttd == 1 || $data->status_ttd == 3) {
-            $status_ttd = true;
+        $kenaikan    = 0;
+        $jumlahBunga = 0;
+        if ($status_bayar == 1) {
+            list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $total_bayar, $tgl_bayar);
         } else {
-            $status_ttd = false;
+            if ($jatuh_tempo) {
+                list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $total_bayar);
+            }
         }
+
+        $status_ttd = Utility::checkStatusTTD($status_ttd);
 
         return view($this->view . 'show', compact(
             'route',
@@ -270,7 +280,7 @@ class ReportController extends Controller
                     $metode_bayar = 'Lainnya';
                     break;
                 default:
-                    // 
+                    $metode_bayar = 'Lainnya';
                     break;
             }
         }
