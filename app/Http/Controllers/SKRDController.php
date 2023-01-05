@@ -39,6 +39,7 @@ use App\Models\TransaksiOPD;
 use App\Models\JenisPendapatan;
 use App\Models\OPDJenisPendapatan;
 use App\Models\RincianJenisPendapatan;
+use App\Models\TransaksiDelete;
 
 class SKRDController extends Controller
 {
@@ -85,7 +86,7 @@ class SKRDController extends Controller
         $no_skrd    = $request->no_skrd;
         $status_ttd = $request->status_ttd;
         $opd        = Auth::user()->pengguna->opd_id;
-        
+
         if ($opd == 0) {
             $opd_id = $request->opd_id;
         } else {
@@ -623,13 +624,22 @@ class SKRDController extends Controller
     {
         /* Tahapan :
          * 1. tmtransaksi_opd (delete)
+         * 2. Backup Data (Store)
          * 2. VA (make va expired)
          */
 
         //* Tahap 1
         $data = TransaksiOPD::where('id', $id)->first();
 
-        //* Tahap 2 
+        //* Tahap 2
+        $dataBackup = $data->toArray();
+        TransaksiDelete::create(array_merge($dataBackup, ['updated_by' => Auth::user()->pengguna->full_name . ' | Hapus']));
+
+        return response()->json([
+            'message' => 'Data ' . $this->title . ' berhasil dihapus.'
+        ]);
+
+        //* Tahap 3
         $amount = \strval((int) str_replace(['.', 'Rp', ' '], '', $data->jumlah_bayar));
         $customerName = $data->nm_wajib_pajak;
         $va_number    = (int) $data->nomor_va_bjb;
