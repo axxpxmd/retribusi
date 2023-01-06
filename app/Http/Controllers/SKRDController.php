@@ -635,10 +635,6 @@ class SKRDController extends Controller
         $dataBackup = $data->toArray();
         TransaksiDelete::create(array_merge($dataBackup, ['updated_by' => Auth::user()->pengguna->full_name . ' | Hapus']));
 
-        return response()->json([
-            'message' => 'Data ' . $this->title . ' berhasil dihapus.'
-        ]);
-
         //* Tahap 3
         $amount = \strval((int) str_replace(['.', 'Rp', ' '], '', $data->jumlah_bayar));
         $customerName = $data->nm_wajib_pajak;
