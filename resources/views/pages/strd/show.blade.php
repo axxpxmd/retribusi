@@ -60,19 +60,11 @@
                                             </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12 font-weight-bold"><strong>Nama TTD :</strong></label>
-                                                @if ($data->nm_ttd != null)
                                                 <label class="col-md-8 s-12">{{ $data->nm_ttd }}</label>
-                                                @else
-                                                <label class="col-md-8 s-12">{{ $data->opd->nm_ttd }}</label>
-                                                @endif
                                             </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12 font-weight-bold"><strong>NIP TTD :</strong></label>
-                                                @if ($data->nip_ttd != null)
                                                 <label class="col-md-8 s-12">{{ $data->nip_ttd }}</label>
-                                                @else
-                                                <label class="col-md-8 s-12">{{ $data->opd->nip_ttd }}</label>
-                                                @endif
                                             </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12 font-weight-bold"><strong>Tanggal TTD :</strong></label>
@@ -88,11 +80,11 @@
                                                 <label class="col-md-8 s-12">{{ $data->nmr_daftar }}</label>
                                             </div>
                                             <div class="row">
-                                                <label class="col-md-4 text-right s-12 font-weight-bold"><strong>Nama Wajib Retribusi :</strong></label>
+                                                <label class="col-md-4 text-right s-12 font-weight-bold"><strong>Nama :</strong></label>
                                                 <label class="col-md-8 s-12">{{ $data->nm_wajib_pajak }}</label>
                                             </div>
                                             <div class="row">
-                                                <label class="col-md-4 text-right s-12 font-weight-bold"><strong>Alamat Wajib Retribusi :</strong></label>
+                                                <label class="col-md-4 text-right s-12 font-weight-bold"><strong>Alamat :</strong></label>
                                                 <label class="col-md-8 s-12">{{ $data->alamat_wp }}</label>
                                             </div>
                                             <div class="row">
@@ -113,11 +105,13 @@
                                             </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12 font-weight-bold"><strong>Jatuh Tempo :</strong></label>
-                                                @if ($checkJatuhTempo)
-                                                <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d', $tgl_jatuh_tempo)->format('d F Y') }} | <span class="badge badge-warning" style="font-size: 10.5px !important">Kadaluarsa</span></label>
-                                                @else
-                                                <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d', $tgl_jatuh_tempo)->format('d F Y') }} | <span class="badge badge-success" style="font-size: 10.5px !important">Berlaku</span></label></label> 
-                                                @endif
+                                                <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d', $tgl_jatuh_tempo)->format('d F Y') }} | 
+                                                    @if ($checkJatuhTempo)
+                                                    <span class="badge badge-warning" style="font-size: 10.5px !important">Kadaluarsa</span>
+                                                    @else
+                                                    <span class="badge badge-success" style="font-size: 10.5px !important">Berlaku</span>
+                                                    @endif
+                                                </label>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -134,12 +128,8 @@
                                                 <label class="col-md-8 s-12">@currency($data->jumlah_bayar)</label>
                                             </div> 
                                             <div class="row">
-                                                <label class="col-md-4 text-right s-12 font-weight-bold"><strong>Denda  :</strong></label>
-                                                @if ($data->status_denda == 0)
-                                                <label class="col-md-8 s-12"> ({{ $kenaikan }}%) &nbsp;@currency($jumlahBunga)</label>
-                                                @else
-                                                <label class="col-md-8 s-12">(Ya {{ $kenaikan }}%) @currency($data->denda)</label>
-                                                @endif
+                                                <label class="col-md-4 text-right s-12 font-weight-bold">Denda  :</label>
+                                                <label class="col-md-8 s-12">({{ $kenaikan }}%) &nbsp;@currency($jumlahBunga)</label>
                                             </div> 
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12 font-weight-bold"><strong>Diskon  :</strong></label>
@@ -169,9 +159,9 @@
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12 font-weight-bold"><strong>Status TTD :</strong></label>
                                                 <label class="col-md-8">
-                                                    @if ($data->status_ttd == 1 || $data->status_ttd == 3)
+                                                    @if ($data->status_ttd == 3)
                                                     <span class="badge badge-success">Sudah TTD</span>
-                                                    @elseif($data->status_ttd == 0)
+                                                    @elseif($data->status_ttd == 0 || $data->status_ttd == 1)
                                                     <span class="badge badge-danger">Belum TTD</span>
                                                     @elseif($data->status_ttd == 2 || $data->status_ttd == 4)
                                                     <span class="badge badge-warning">Sedang Proses TTD</span>
@@ -202,14 +192,15 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row mt-2">
-                                        <label class="col-md-2 text-right s-12"></label>
-                                        <label class="col-md-3 s-12">
+                                    <div class="container col-md-6">
+                                        <div class="row justify-content-center">
                                             @if (!$checkJatuhTempo)
-                                            <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#preview-file"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</button>
-                                            @endif 
-                                        </label>
-                                    </div> 
+                                                <div class="col-auto p-1">
+                                                    <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#preview-file"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</button>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -231,6 +222,8 @@
         </div>
     </div>
 </div>
+<!-- Loading -->
+@include('layouts.loading')
 @endsection
 @section('script')
 <script type="text/javascript">

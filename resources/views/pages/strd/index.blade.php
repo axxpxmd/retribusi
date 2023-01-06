@@ -135,21 +135,6 @@
         </div>
     </div>
 </div>
-<!-- send TTDs -->
-<div class="modal fade" id="updateStatusTTDs" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-body">
-                <p class="font-weight-bold">Apakah sudah yakin mengirim data ini untuk ditandatangi ?</p>
-                <hr>
-                <div class="text-right">
-                    <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="icon-times mr-2"></i>Batalkan</button>
-                    <a href="{{ route('strd.updateStatusKirimTTDs') }}" class="btn btn-sm btn-primary ml-2" id="kirimTTDs"><i class="icon-pencil mr-2"></i>Kirim untuk TTD</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 <!-- perbarui STRD -->
 <div class="modal fade" id="perbaruiSTRD" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -324,16 +309,6 @@
         }, 'JSON');
 
         $('#kirimTTD').attr('href', "{{ route('strd.updateStatusKirimTTD', ':id') }}".replace(':id', id));
-    }
-
-    function createRoute(){
-        var tgl_skrd   = $('#tgl_skrd').val();
-        var tgl_skrd1  = $('#tgl_skrd1').val();
-        var opd_id     = $('#opd').val();
-        var no_skrd    = $('#no_skrd').val();
-        var status_ttd = $('#status_ttd').val();
-
-        $('#kirimTTDs').attr('href', "{{ route('strd.updateStatusKirimTTDs') }}?tgl_skrd=" + tgl_skrd + "&tgl_skrd1=" + tgl_skrd1 + "&opd_id=" + opd_id + "&status_ttd=" + status_ttd + "&no_skrd=" + no_skrd);
     }
 </script>
 @endsection
