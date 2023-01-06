@@ -185,7 +185,7 @@ class STSController extends Controller
         }
 
         //* Check status pembayaran VA BJB
-        if ($data->status_bayar == 0 && $data->nomor_va_bjb != null && $data->tgl_skrd_akhir > $dateNow) {
+        if ($data->status_bayar == 0 && $data->nomor_va_bjb != null && $jatuh_tempo == false) {
             //TODO: Get Token BJB
             list($err, $errMsg, $tokenBJB) = $this->vabjbres->getTokenBJBres();
             if ($err) {

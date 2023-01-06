@@ -276,17 +276,17 @@ class STRDController extends Controller
             //TODO: Create VA BJB
             list($err, $errMsg, $VABJB) = $this->vabjbres->createVABJBres($tokenBJB, $clientRefnum, $amount, $expiredDate, $customerName, $productCode, 3, $clientRefnum);
             if ($err) {
-                return response()->json([
-                    'message' => $errMsg
-                ], 500);
+                return redirect()
+                    ->route($this->route . 'index')
+                    ->withErrors($errMsg);
             }
         } else {
             //TODO: Update VA BJB
             list($err, $errMsg, $VABJB) = $this->vabjbres->updateVABJBres($tokenBJB, $amount, $expiredDate, $customerName, $va_number, 3, $clientRefnum);
             if ($err) {
-                return response()->json([
-                    'message' => $errMsg
-                ], 500);
+                return redirect()
+                    ->route($this->route . 'index')
+                    ->withErrors($errMsg);
             }
         }
 
@@ -297,17 +297,17 @@ class STRDController extends Controller
             //TODO: Get Token QRIS
             list($err, $errMsg, $tokenQRISBJB) = $this->qrisbjbres->getTokenQrisres();
             if ($err) {
-                return response()->json([
-                    'message' => $errMsg
-                ], 500);
+                return redirect()
+                    ->route($this->route . 'index')
+                    ->withErrors($errMsg);
             }
 
             // TODO: Create QRIS
             list($err, $errMsg, $invoiceId, $textQRIS) = $this->qrisbjbres->createQRISres($tokenQRISBJB, $amount, $no_hp, 3, $clientRefnum);
             if ($err) {
-                return response()->json([
-                    'message' => $errMsg
-                ], 500);
+                return redirect()
+                    ->route($this->route . 'index')
+                    ->withErrors($errMsg);
             }
         } else {
             $invoiceId = null;

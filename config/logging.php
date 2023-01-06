@@ -69,6 +69,13 @@ return [
             'days' => 30,
         ],
 
+        'token' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/va/token.log'),
+            'level' => 'info',
+            'days' => 30,
+        ],
+
         'create_va' => [
             'driver' => 'daily',
             'path' => storage_path('logs/va/create_va.log'),

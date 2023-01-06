@@ -14,11 +14,19 @@ class VABJBRes
         $errMsg = '';
 
         $resGetTokenBJB = VABJB::getTokenBJB();
+        $resJson = $resGetTokenBJB->json();
+
+        //* LOG Token
+        $dataToken = [
+            'data' => $resJson
+        ];
+
         if ($resGetTokenBJB->successful()) {
-            $resJson = $resGetTokenBJB->json();
             if ($resJson['rc'] != 0000) {
                 $err = true;
-                $errMsg = 'Terjadi kegagalan saat mengambil token VA';
+                $errMsg = 'Terjadi kegagalan saat mengambil token VA. Message : ' . $resJson['message'];
+
+                Log::channel('token')->info('Create Token', $dataToken);
             } else {
                 $err = false;
                 $tokenBJB = $resJson['data'];
@@ -65,9 +73,9 @@ class VABJBRes
         Log::channel($channel)->info($log, $dataVA);
 
         if ($resCreateVABJB->successful()) {
-            if (isset($resJson['rc']) != 0000) {
+            if (isset($resJson['response_code']) != '0000') {
                 $err = true;
-                $errMsg = 'Terjadi kegagalan saat membuat Virtual Account.';
+                $errMsg = isset($resJson['repsonse_code_desc']) ? 'Terjadi kegagalan saat membuat Virtual Account. Message : ' . $resJson['repsonse_code_desc'] : 'Terjadi kegagalan saat membuat Virtual Account.';
             } else {
                 $err = false;
                 $VABJB = $resJson['va_number'];
@@ -112,11 +120,10 @@ class VABJBRes
             'data' => $resJson
         ];
         Log::channel($channel)->info($log, $dataVA);
-
         if ($resUpdateVABJB->successful()) {
-            if (isset($resJson['rc']) != 0000) {
+            if (isset($resJson['response_code']) != '0000') {
                 $err = true;
-                $errMsg = 'Terjadi kegagalan saat membuat Virtual Account.';
+                $errMsg = isset($resJson['repsonse_code_desc']) ? 'Terjadi kegagalan saat membuat Virtual Account. Message : ' . $resJson['repsonse_code_desc'] : 'Terjadi kegagalan saat membuat Virtual Account.';
             } else {
                 $err = false;
                 $VABJB = $resJson['va_number'];
@@ -159,9 +166,9 @@ class VABJBRes
         Log::channel($channel)->info($log, $dataVA);
 
         if ($resCheckVABJB->successful()) {
-            if (isset($resJson['rc']) != 0000) {
+            if (isset($resJson['response_code']) != '0000') {
                 $err = true;
-                $errMsg = 'Terjadi kegagalan saat check inquiry Virtual Account.';
+                $errMsg = isset($resJson['repsonse_code_desc']) ? 'Terjadi kegagalan saat membuat Virtual Account. Message : ' . $resJson['repsonse_code_desc'] : 'Terjadi kegagalan saat membuat Virtual Account.';
             } else {
                 $err = false;
                 $VABJB  = $resJson['va_number'];
