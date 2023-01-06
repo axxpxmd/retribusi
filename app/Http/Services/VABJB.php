@@ -22,7 +22,7 @@ class VABJB
         $key = config('app.key_bjb');
 
         $payload   = array(
-            "sub" => "va-onlined",
+            "sub" => "va-online",
             "aud" => "access-token",
             "iat" => $timestamp_now,
             "exp" => $timestamp_1hour
