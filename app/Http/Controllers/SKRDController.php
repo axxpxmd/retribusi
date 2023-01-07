@@ -625,7 +625,7 @@ class SKRDController extends Controller
         /* Tahapan :
          * 1. tmtransaksi_opd (delete)
          * 2. Backup Data (Store)
-         * 2. VA (make va expired)
+         * 3. Update VA (make va expired)
          */
 
         //* Tahap 1

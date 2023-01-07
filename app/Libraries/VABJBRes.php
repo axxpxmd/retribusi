@@ -26,7 +26,7 @@ class VABJBRes
                 $err = true;
                 $errMsg = 'Terjadi kegagalan saat mengambil token VA. Message : ' . $resJson['message'];
 
-                Log::channel('token')->info('Create Token', $dataToken);
+                Log::channel('token')->info('Error create token', $dataToken);
             } else {
                 $err = false;
                 $tokenBJB = $resJson['data'];
@@ -46,15 +46,12 @@ class VABJBRes
 
         switch ($jenis) {
             case 1:
-                $channel = 'create_va';
                 $log = 'Create VA SKRD (create)';
                 break;
             case 2:
-                $channel = 'create_va';
                 $log = 'Create VA SKRD (update)';
                 break;
             case 3:
-                $channel = 'create_va';
                 $log = 'Create VA STRD (perbarui)';
                 break;
             default:
@@ -70,7 +67,7 @@ class VABJBRes
             'no_bayar' => $no_bayar,
             'data' => $resJson
         ];
-        Log::channel($channel)->info($log, $dataVA);
+        Log::channel('create_va')->info($log, $dataVA);
 
         if ($resCreateVABJB->successful()) {
             if (isset($resJson['response_code']) != '0000') {
@@ -95,15 +92,12 @@ class VABJBRes
 
         switch ($jenis) {
             case 1:
-                $channel = 'update_va';
                 $log = 'Update VA SKRD (update)';
                 break;
             case 2:
-                $channel = 'update_va';
                 $log = 'Update VA SKRD (delete - make VA expired)';
                 break;
             case 3:
-                $channel = 'update_va';
                 $log = 'Update VA STRD (perbarui)';
                 break;
             default:
@@ -119,7 +113,7 @@ class VABJBRes
             'no_bayar' => $no_bayar,
             'data' => $resJson
         ];
-        Log::channel($channel)->info($log, $dataVA);
+        Log::channel('update_va')->info($log, $dataVA);
         if ($resUpdateVABJB->successful()) {
             if (isset($resJson['response_code']) != '0000') {
                 $err = true;
@@ -143,11 +137,9 @@ class VABJBRes
 
         switch ($jenis) {
             case 1:
-                $channel = 'check_va';
                 $log = 'Check inquiry VA STS (show)';
                 break;
             case 2:
-                $channel = 'check_va';
                 $log = 'Check inquiry VA STS (edit)';
                 break;
             default:
@@ -163,7 +155,7 @@ class VABJBRes
             'no_bayar' => $no_bayar,
             'data' => $resJson
         ];
-        Log::channel($channel)->info($log, $dataVA);
+        Log::channel('check_va')->info($log, $dataVA);
 
         if ($resCheckVABJB->successful()) {
             if (isset($resJson['response_code']) != '0000') {

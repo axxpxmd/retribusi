@@ -39,15 +39,12 @@ class QRISBJBRes
 
         switch ($jenis) {
             case 1:
-                $channel = 'create_qris';
                 $log = 'Create Qris SKRD (create)';
                 break;
             case 2:
-                $channel = 'create_qris';
                 $log = 'Update Qris SKRD (update)';
                 break;
             case 3:
-                $channel = 'create_qris';
                 $log = 'Update Qris STRD (perbarui)';
                 break;
             default:
@@ -64,7 +61,7 @@ class QRISBJBRes
             'no_bayar' => $no_bayar,
             'data' => $resJsonQRIS
         ];
-        Log::channel($channel)->info($log, $dataQris);
+        Log::channel('create_qris')->info($log, $dataQris);
 
         if ($resCreateQRISBJB->successful()) {
             if ($resJsonQRIS["status"]["code"] != 200) {
