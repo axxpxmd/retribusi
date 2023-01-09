@@ -231,7 +231,32 @@ class HomeController extends Controller
             })
             ->where(DB::raw('YEAR(tmtransaksi_opd.created_at)'), '=', $year)
             ->first();
-   
+
+        $totalRetribusi = TransaksiOPD::select(DB::raw("SUM(tmtransaksi_opd.total_bayar) as total_bayar"), DB::raw("COUNT(tmtransaksi_opd.id) as total_skrd"))->whereYear('created_at', $year)->first();
+        $existedOPD = OPDJenisPendapatan::select('id_opd')->get()->toArray();
+        $totalRetribusiOPD = TransaksiOPD::select(DB::raw("COUNT('id') as total"), DB::raw("SUM(total_bayar) as total_bayar"), 'initial')
+            ->join('tmopds', 'tmopds.id', '=', 'tmtransaksi_opd.id_opd')
+            ->whereIn('id_opd', $existedOPD)
+            ->where(DB::raw('YEAR(tmtransaksi_opd.created_at)'), '=', $year)
+            ->groupBy('id_opd')
+            ->get();
+
+        // Channel Bayar
+        $qris = TransaksiOPD::select('chanel_bayar', DB::raw("COUNT(id) as total"), DB::raw("SUM(total_bayar_bjb) as total_bayar"))
+            ->where('status_bayar', 1)
+            ->where('chanel_bayar', 'like', '%qris%')
+            ->get()->toArray();
+        $mobileBanking = TransaksiOPD::select('chanel_bayar', DB::raw("COUNT(id) as total"), DB::raw("SUM(total_bayar_bjb) as total_bayar"))
+            ->where('status_bayar', 1)
+            ->where('chanel_bayar', 'like', '%MOBIL%')
+            ->get()->toArray();
+        $channelBayar = TransaksiOPD::select('chanel_bayar', DB::raw("COUNT('id') as total"), DB::raw("SUM(total_bayar_bjb) as total_bayar"))
+            ->where('status_bayar', 1)
+            ->whereIn('chanel_bayar', ['Bendahara OPD', 'ATM', 'BJB Virtual Account', 'Lainnya', 'TELLER', 'Transfer RKUD', 'Virtual Account'])
+            ->groupBy('chanel_bayar')
+            ->get()->toArray();
+        $totalChannelBayar = array_merge($channelBayar, $qris, $mobileBanking);
+
         return view('pages.dashboard.testDashboard', compact(
             'totalSKRD',
             'targetPendapatan',
@@ -241,7 +266,10 @@ class HomeController extends Controller
             'totalSTRD',
             'totalKeseluruhan',
             'opds',
-            'opd_id'
+            'opd_id',
+            'totalRetribusiOPD',
+            'totalRetribusi',
+            'totalChannelBayar'
         ));
     }
 }

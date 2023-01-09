@@ -31,7 +31,7 @@ $template = App\Models\Template::select('id', 'logo', 'logo_title', 'logo_auth')
     <!-- Font -->
     <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
 </head>
-<body class="light" style="font-family: 'Nunito'">
+<body class="light">
 @include('layouts.preloader')
 <div id="app">
     <aside class="main-sidebar fixed offcanvas shadow" data-toggle='offcanvas'>

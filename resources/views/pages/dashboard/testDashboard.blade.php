@@ -2,11 +2,6 @@
 @section('title', '| Dashboard  ')
 @section('content')
 <style>
-    .dtHorizontalVerticalExampleWrapper {
-        max-width: 600px;
-        margin: 0 auto;
-        height: 600px !important;
-    }
     #dtHorizontalVerticalExample td {
         white-space: nowrap;
     }
@@ -24,7 +19,7 @@
         bottom: .5em;
     }
     table thead tr th{
-        font-size: 14px !important;
+        font-size: 12px !important;
         font-weight: bolder !important;
     }
 </style>
@@ -48,7 +43,7 @@
                     <div class="card-body p-2">
                         <div class="row">
                             <div class="col-auto mb-5-m">
-                                <a href="#" data-toggle="modal" data-target="#modalFilter" class="btn btn-sm btn-success fs-14">Pilih Filter<i class="icon icon-filter_list m-l-8"></i></a>
+                                <a href="#" data-toggle="modal" data-target="#modalFilter" class="btn btn-sm btn-success fs-14">Pilih Filter<i class="icon-filter_list ml-2"></i></a>
                             </div>
                             <div class="col-auto mt-1">
                                 <div class="row">
@@ -69,7 +64,7 @@
                         <table id="dtHorizontalVerticalExample" class="table table-hover fs-12" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
-                                    <th>No</th>
+                                    <th>#</th>
                                     <th>Jenis Pendapatan</th>
                                     <th>OPD</th>
                                     <th>Target</th>
@@ -93,6 +88,13 @@
                                 </tr>
                                 @endforeach
                             </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="4"></td>
+                                    <td colspan="1" class="font-weight-bold">Total Bayar</td>
+                                    <td colspan="2">@currency($targetPendapatan->sum('diterima'))</td>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </div>
@@ -104,9 +106,11 @@
                             <h6 class="card-header font-weight-bold text-white" style="background: #FFCE3B; border-top-right-radius: 15px; border-top-left-radius: 15px">Total SKRD</h6>
                             <div class="card-body text-center">
                                 <div class="mb-2">
-                                    <i class="icon-notebook-text fs-24 amber-text mr-2"></i><span class="m-0 font-weight-bold fs-16">{{ $totalSKRD->total_skrd }}</sp>
+                                    <i class="icon-notebook-text fs-24 amber-text mr-2"></i>
+                                    <span class="m-0 font-weight-bold fs-16">{{ $totalSKRD->total_skrd }}</span>
+                                    <a href="#" class="ml-2" title="Lihat Data"><i class="icon-external-link"></i></a>
                                 </div>
-                                <p class="m-0 fs-16">@currency($totalSKRD->total_bayar)</p>
+                                <p class="m-0 fs-14">@currency($totalSKRD->total_bayar)</p>
                             </div>
                         </div>
                     </div>
@@ -115,9 +119,11 @@
                             <h6 class="card-header font-weight-bold text-white bg-danger" style="border-top-right-radius: 15px; border-top-left-radius: 15px">Total STRD</h6>
                             <div class="card-body text-center">
                                 <div class="mb-2">
-                                    <i class="icon-notebook-text fs-24 text-danger mr-2"></i><span class="m-0 font-weight-bold fs-16">{{ $totalSTRD->total_skrd }}</sp>
+                                    <i class="icon-notebook-text fs-24 text-danger mr-2"></i>
+                                    <span class="m-0 font-weight-bold fs-16">{{ $totalSTRD->total_skrd }}</span>
+                                    <a href="#" class="ml-2" title="Lihat Data"><i class="icon-external-link"></i></a>
                                 </div>
-                                <p class="m-0 fs-16">@currency($totalSTRD->total_bayar)</p>
+                                <p class="m-0 fs-14">@currency($totalSTRD->total_bayar)</p>
                             </div>
                         </div>
                     </div>
@@ -128,25 +134,97 @@
                             <h6 class="card-header font-weight-bold text-white bg-primary" style="border-top-right-radius: 15px; border-top-left-radius: 15px">Total STS</h6>
                             <div class="card-body text-center">
                                 <div class="mb-2">
-                                    <i class="icon-notebook-text fs-24 text-primary mr-2"></i><span class="m-0 font-weight-bold fs-16">{{ $totalSTS->total_skrd }}</sp>
+                                    <i class="icon-notebook-text fs-24 text-primary mr-2"></i>
+                                    <span class="m-0 font-weight-bold fs-16">{{ $totalSTS->total_skrd }}</span>
+                                    <a href="#" class="ml-2" title="Lihat Data"><i class="icon-external-link"></i></a>
                                 </div>
-                                <p class="m-0 fs-16">@currency($totalSTS->total_bayar)</p>
+                                <p class="m-0 fs-14">@currency($totalSTS->total_bayar)</p>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6 px-2 mb-5-m">
                         <div class="card no-b r-15">
-                            <h6 class="card-header font-weight-bold text-white bg-success" style="border-top-right-radius: 15px; border-top-left-radius: 15px">Total Keseluruhan</h6>
+                            <h6 class="card-header font-weight-bold text-white bg-success" style="border-top-right-radius: 15px; border-top-left-radius: 15px">Keseluruhan</h6>
                             <div class="card-body text-center">
                                 <div class="mb-2">
-                                    <i class="icon-notebook-text fs-24 text-success mr-2"></i><span class="m-0 font-weight-bold fs-16">{{ $totalKeseluruhan->total_skrd }}</sp>
+                                    <i class="icon-notebook-text fs-24 text-success mr-2"></i>
+                                    <span class="m-0 font-weight-bold fs-16">{{ $totalKeseluruhan->total_skrd }}</span>
+                                    <a href="#" class="ml-2" title="Lihat Data"><i class="icon-external-link"></i></a>
                                 </div>
-                                <p class="m-0 fs-16">@currency($totalKeseluruhan->total_bayar)</p>
+                                <p class="m-0 fs-14">@currency($totalKeseluruhan->total_bayar)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-12 px-2">
+                        <div class="card no-b r-15" style="height: 162px !important">
+                            <h6 class="card-header bg-primary text-white font-weight-bold" style="border-top-right-radius: 15px; border-top-left-radius: 15px">Notifikasi</h6>
+                            <div class="card-body px-4 py-2">
+                                    {{-- <p class="m-0"><i class="icon icon-data_usage text-danger mr-2"></i>Terdapat 49 berkas belum di TTD.</p> --}}
+                                <p class="m-0 fs-14"><i class="icon icon-data_usage text-danger mr-2"></i><a href="#" title="Lihat Data">Terdapat 49 SKRD telah jatuh tempo.</a></p>
+                                <p class="m-0 fs-14"><i class="icon icon-data_usage text-primary mr-2"></i><a href="#" title="Lihat Data">Terdapat 498 SKRD terbuat pada hari ini.</a></p>
+                                <p class="m-0 fs-14"><i class="icon icon-data_usage text-success mr-2"></i><a href="#" title="Lihat Data">Terdapat 49 SKRD telah dibayar pada hari ini.</a></p>
                             </div>
                         </div>
                     </div>
                 </div>
            </div>
+        </div>
+        <div class="card mt-3 no-b bg-transparent">
+            <div class="card-body p-0 bg-transparent">
+                <div class="lightSlider bg-transparent" data-item="6" data-item-xl="4" data-item-md="2" data-item-sm="1" data-pause="5000" data-pager="false" data-auto="true" data-loop="true">
+                    <div class="bg-primary border text-white r-15 py-2 text-center">
+                        <p class="font-weight-bold text-primary fs-16 m-0" title="Total Retribusi Seluruh Dinas">Total Retribusi</p>
+                        <p class="fs-16 amber-text m-0">{{ $totalRetribusi->total_skrd }}</p->
+                        <p class="fs-14 text-black m-0">@currency($totalRetribusi->total_bayar)</p>
+                    </div>
+                    @foreach ($totalRetribusiOPD as $index => $i)
+                        @if ($index % 2 == 0)
+                        <div class="bg-white text-center r-15 py-2">
+                            <p class="font-weight-bold amber-text fs-16 m-0" title="{{ $i->n_opd }}" style="margin-bottom: 20px">{{ $i->initial }}</p>
+                            <p class="fs-16 amber-text m-0">{{ $i->total }}</p>
+                            <p class="fs-14 amber-text  m-0">@currency($i->total_bayar)</p>
+                        </div>
+                        @else
+                        <div class="text-center py-2 r-15 bg-white">
+                            <p class="font-weight-bold text-primary fs-16 m-0" title="{{ $i->n_opd }}" style="margin-bottom: 20px">{{ $i->initial }}</p>
+                            <p class="fs-16 text-primary m-0">{{ $i->total }}</p>
+                            <p class="fs-14 text-primary m-0">@currency($i->total_bayar)</p>
+                        </div>
+                        @endif
+                    @endforeach
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-4">
+                <div class="card no-b r-15">
+                    <h6 class="card-header bg-success text-white font-weight-bold" style="border-top-right-radius: 15px; border-top-left-radius: 15px">Channel Bayar {{ $year }}</h6>
+                    <div class="card-body pt-1">
+                        <table id="tableChannelBayar" class="table table-hover fs-12" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Metode Bayar</th>
+                                    <th>Jumlah</th>
+                                    <th>Total Pembayaran</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($totalChannelBayar as $index => $i)
+                                <tr>
+                                    <td class="text-center">{{  $index+1 }}</td>
+                                    <td>{{ str_contains($i['chanel_bayar'], 'QRIS') ? 'QRIS' : $i['chanel_bayar'] }}</td>
+                                    <td>{{ $i['total'] }}</td>
+                                    <td>@currency($i['total_bayar'])</td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -185,7 +263,7 @@
                 <div class="row">
                     <div class="col-sm-2"></div>
                     <div class="col-sm-10">
-                        <a href="#" id="filterData" class="btn btn-success btn-sm fs-14"><i class="icon icon-filter_list"></i>Filter</a>
+                        <a href="#" id="filterData" class="btn btn-success btn-sm fs-14">Filter<i class="icon-filter_list ml-2"></i></a>
                     </div>
                 </div>
             </div>
@@ -199,6 +277,17 @@
         $('#dtHorizontalVerticalExample').DataTable({
             "scrollX": true,
             "scrollY": 300,
+            "bPaginate": false,
+            "bInfo": false,
+            "searching": false
+        });
+        $('.dataTables_length').addClass('bs-select');
+    });
+
+    $(document).ready(function () {
+        $('#tableChannelBayar').DataTable({
+            "scrollX": true,
+            // "scrollY": ,
             "bPaginate": false,
             "bInfo": false,
             "searching": false
