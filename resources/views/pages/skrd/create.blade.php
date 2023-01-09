@@ -110,13 +110,13 @@
                                         <div class="row mb-1">
                                             <label for="alamat_wp" class="col-form-label s-12 col-sm-4 text-right">Alamat<span class="text-danger ml-1">*</span></label>
                                             <div class="col-md-8">
-                                                <textarea type="text" rows="3" name="alamat_wp" id="alamat_wp" class="form-control r-0 s-12" autocomplete="off" required>{{ $data_wp != null ? $data_wp->alamat_wp : '' }}</textarea>
+                                                <textarea type="text" rows="3" name="alamat_wp" id="alamat_wp" class="form-control r-0 s-12" autocomplete="off" required onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode==32)">{{ $data_wp != null ? $data_wp->alamat_wp : '' }}</textarea>
                                             </div>
                                         </div>
                                         <div class="row mb-1">
                                             <label for="lokasi" class="col-form-label s-12 col-sm-4 text-right">Lokasi<span class="text-danger ml-1">*</span></label>
                                             <div class="col-md-8">
-                                                <textarea type="text" rows="2" name="lokasi" id="lokasi" placeholder="Contoh: Ruko Sektor 1.2 BSD" class="form-control r-0 s-12" autocomplete="off" required>{{ $data_wp != null ? $data_wp->lokasi : '' }}</textarea>
+                                                <textarea type="text" rows="2" name="lokasi" id="lokasi" placeholder="Contoh: Ruko Sektor 1.2 BSD" class="form-control r-0 s-12" autocomplete="off" required onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode==32)">{{ $data_wp != null ? $data_wp->lokasi : '' }}</textarea>
                                             </div>
                                         </div>
                                         <div class="row mb-2">
