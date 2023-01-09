@@ -19,6 +19,7 @@ use Carbon\Carbon;
 use App\Models\DataWP;
 use App\Models\JenisPendapatan;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 // Models
@@ -178,19 +179,21 @@ class HomeController extends Controller
         ));
     }
 
-    public function testDashboard()
+    public function testDashboard(Request $request)
     {
         $time  = Carbon::now();
         $date  = $time->format('Y-m-d');
-        $year  = $time->format('Y');
-        $opd_id = Auth::user()->pengguna->opd_id;
-        $n_opd  = Auth::user()->pengguna->opd->n_opd;
+        $year  = $request->tahun ? $request->tahun : $time->format('Y');
+        $opd_id = $request->opd_id ? $request->opd_id : Auth::user()->pengguna->opd_id;
+        $n_opd  = $request->opd_id ? OPD::select('n_opd')->where('id', $request->opd_id)->first() : Auth::user()->pengguna->opd;
+
+        $opds = OPD::select('id', 'n_opd')->get();
 
         //* Tabel Target Pendapatan
         $targetPendapatan = JenisPendapatan::select(DB::raw("SUM(tmtransaksi_opd.total_bayar_bjb) as diterima"), DB::raw("SUM(tmtransaksi_opd.jumlah_bayar) as ketetapan"), DB::raw("round((SUM(tmtransaksi_opd.total_bayar_bjb) / target_pendapatan * 100), 2) as realisasi"), 'denda', 'jenis_pendapatan', 'target_pendapatan', 'tmopds.initial', 'tmopds.n_opd')
             ->join('tmtransaksi_opd', 'tmtransaksi_opd.id_jenis_pendapatan', '=', 'tmjenis_pendapatan.id')
             ->join('tmopds', 'tmopds.id', '=', 'tmtransaksi_opd.id_opd')
-            ->where(DB::raw('YEAR(tmtransaksi_opd.created_at)'), '=', $time->year)
+            ->where(DB::raw('YEAR(tmtransaksi_opd.created_at)'), '=', $year)
             ->when($opd_id != 0, function ($q) use ($opd_id) {
                 $q->where('tmtransaksi_opd.id_opd', $opd_id);
             })
@@ -205,14 +208,14 @@ class HomeController extends Controller
             ->when($opd_id != 0, function ($q) use ($opd_id) {
                 $q->where('tmtransaksi_opd.id_opd', $opd_id);
             })
-            ->where(DB::raw('YEAR(tmtransaksi_opd.created_at)'), '=', $time->year)
+            ->where(DB::raw('YEAR(tmtransaksi_opd.created_at)'), '=', $year)
             ->first();
         $totalSTS = TransaksiOPD::select(DB::raw("SUM(tmtransaksi_opd.total_bayar) as total_bayar"), DB::raw("COUNT(tmtransaksi_opd.id) as total_skrd"))
             ->where('status_bayar', 1)
             ->when($opd_id != 0, function ($q) use ($opd_id) {
                 $q->where('tmtransaksi_opd.id_opd', $opd_id);
             })
-            ->where(DB::raw('YEAR(tmtransaksi_opd.created_at)'), '=', $time->year)
+            ->where(DB::raw('YEAR(tmtransaksi_opd.created_at)'), '=', $year)
             ->first();
         $totalSTRD = TransaksiOPD::select('id', DB::raw("SUM(tmtransaksi_opd.total_bayar) as total_bayar"), DB::raw("COUNT(tmtransaksi_opd.id) as total_skrd"))
             ->where('status_bayar', 0)
@@ -220,13 +223,13 @@ class HomeController extends Controller
             ->when($opd_id != 0, function ($q) use ($opd_id) {
                 $q->where('tmtransaksi_opd.id_opd', $opd_id);
             })
-            ->where(DB::raw('YEAR(tmtransaksi_opd.created_at)'), '=', $time->year)
+            ->where(DB::raw('YEAR(tmtransaksi_opd.created_at)'), '=', $year)
             ->first();
         $totalKeseluruhan = TransaksiOPD::select(DB::raw("SUM(tmtransaksi_opd.total_bayar) as total_bayar"), DB::raw("COUNT(tmtransaksi_opd.id) as total_skrd"))
             ->when($opd_id != 0, function ($q) use ($opd_id) {
                 $q->where('tmtransaksi_opd.id_opd', $opd_id);
             })
-            ->where(DB::raw('YEAR(tmtransaksi_opd.created_at)'), '=', $time->year)
+            ->where(DB::raw('YEAR(tmtransaksi_opd.created_at)'), '=', $year)
             ->first();
    
         return view('pages.dashboard.testDashboard', compact(
@@ -236,7 +239,9 @@ class HomeController extends Controller
             'n_opd',
             'totalSTS',
             'totalSTRD',
-            'totalKeseluruhan'
+            'totalKeseluruhan',
+            'opds',
+            'opd_id'
         ));
     }
 }

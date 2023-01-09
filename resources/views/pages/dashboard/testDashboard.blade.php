@@ -48,7 +48,7 @@
                     <div class="card-body p-2">
                         <div class="row">
                             <div class="col-auto mb-5-m">
-                                <a href="#" data-bs-toggle="modal" data-bs-target="#modalFilter" class="btn btn-sm btn-success fs-14">Pilih Filter<i class="icon icon-filter_list m-l-8"></i></a>
+                                <a href="#" data-toggle="modal" data-target="#modalFilter" class="btn btn-sm btn-success fs-14">Pilih Filter<i class="icon icon-filter_list m-l-8"></i></a>
                             </div>
                             <div class="col-auto mt-1">
                                 <div class="row">
@@ -56,7 +56,7 @@
                                         <span>Tahun : {{ $year }}</span>
                                     </div>
                                     <div class="col-auto">
-                                        <span>OPD : {{ $n_opd }} </span>
+                                        <span>OPD : {{ $n_opd->n_opd }} </span>
                                     </div>
                                 </div>
                             </div>
@@ -83,7 +83,7 @@
                                 @foreach ($targetPendapatan as $index => $i)
                                 <tr>
                                     <td class="text-center">{{  $index+1 }}</td>
-                                    <td>{{ $i->jenis_pendapatan }} an Menara Telekomunik</td>
+                                    <td>{{ $i->jenis_pendapatan }}</td>
                                     <td title="{{ $i->n_opd }}">{{ $i->initial }}</td>
                                     <td>@currency($i->target_pendapatan)</td>
                                     <td>@currency($i->ketetapan)</td>
@@ -150,6 +150,48 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="modalFilter" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content no-b">
+            <div class="modal-header">
+                <h5 class="modal-title font-weight-bold" id="exampleModalLabel">Filter Data</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-2">
+                    <label for="tahun" class="col-sm-2 col-form-label font-weight-bold">Tahun</label>
+                    <div class="col-sm-10">
+                        <select class="select2 form-control bg s-12" name="tahun" id="tahun_filter">
+                            <option value="2021" {{ $year == 2021 ? 'selected' : '' }}>2021</option>
+                            <option value="2022" {{ $year == 2022 ? 'selected' : '' }}>2022</option>
+                            <option value="2023" {{ $year == 2023 ? 'selected' : '' }}>2023</option>
+                            <option value="2024" {{ $year == 2024 ? 'selected' : '' }}>2024</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <label for="opd_id" class="col-sm-2 col-form-label font-weight-bold">OPD</label>
+                    <div class="col-sm-10">
+                        <select class="select2 form-control bg s-12" name="opd_id" id="opd_filter">
+                            <option value="">Semua</option>
+                            @foreach ($opds as $i)
+                                <option value="{{ $i->id }}" {{ $opd_id == $i->id ? 'selected' : '' }}>{{ $i->n_opd }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-10">
+                        <a href="#" id="filterData" class="btn btn-success btn-sm fs-14"><i class="icon icon-filter_list"></i>Filter</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 @section('script')
 <script type="text/javascript">
@@ -163,5 +205,29 @@
         });
         $('.dataTables_length').addClass('bs-select');
     });
+
+    $('.select2').select2({
+        dropdownParent: $('#modalFilter')
+    });
+
+    $('#tahun_filter').on('change', function(){
+        getParamFilter()
+    });
+
+    $('#opd_filter').on('change', function(){
+        getParamFilter()
+    });
+
+    function getParamFilter()
+    {
+        tahun =  $("#tahun_filter").val(); 
+        opd_id = $("#opd_filter").val();
+       
+        url = "{{ route('test-home') }}?tahun=" + tahun + "&opd_id=" + opd_id;
+
+        console.log(url);
+
+        $('#filterData').attr('href', url);
+    }
 </script>
 @endsection
