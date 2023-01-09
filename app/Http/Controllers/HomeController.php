@@ -177,4 +177,9 @@ class HomeController extends Controller
             'totalWRduit'
         ));
     }
+
+    public function testDashboard()
+    {
+        return view('pages.dashboard.testDashboard');
+    }
 }
