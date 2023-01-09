@@ -28,8 +28,10 @@ $template = App\Models\Template::select('id', 'logo', 'logo_title', 'logo_auth')
     <!-- Animate CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
    
+    <!-- Font -->
+    <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
 </head>
-<body class="light">
+<body class="light" style="font-family: 'Nunito'">
 @include('layouts.preloader')
 <div id="app">
     <aside class="main-sidebar fixed offcanvas shadow" data-toggle='offcanvas'>

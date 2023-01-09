@@ -20,7 +20,9 @@ class Pengguna extends Model
 
     public function opd()
     {
-        return $this->belongsTo(OPD::class, 'opd_id');
+        return $this->belongsTo(OPD::class, 'opd_id')->withDefault([
+            'n_opd' => 'Semua'
+        ]);
     }
 
     public function role()

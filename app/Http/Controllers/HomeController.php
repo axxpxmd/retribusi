@@ -180,6 +180,63 @@ class HomeController extends Controller
 
     public function testDashboard()
     {
-        return view('pages.dashboard.testDashboard');
+        $time  = Carbon::now();
+        $date  = $time->format('Y-m-d');
+        $year  = $time->format('Y');
+        $opd_id = Auth::user()->pengguna->opd_id;
+        $n_opd  = Auth::user()->pengguna->opd->n_opd;
+
+        //* Tabel Target Pendapatan
+        $targetPendapatan = JenisPendapatan::select(DB::raw("SUM(tmtransaksi_opd.total_bayar_bjb) as diterima"), DB::raw("SUM(tmtransaksi_opd.jumlah_bayar) as ketetapan"), DB::raw("round((SUM(tmtransaksi_opd.total_bayar_bjb) / target_pendapatan * 100), 2) as realisasi"), 'denda', 'jenis_pendapatan', 'target_pendapatan', 'tmopds.initial', 'tmopds.n_opd')
+            ->join('tmtransaksi_opd', 'tmtransaksi_opd.id_jenis_pendapatan', '=', 'tmjenis_pendapatan.id')
+            ->join('tmopds', 'tmopds.id', '=', 'tmtransaksi_opd.id_opd')
+            ->where(DB::raw('YEAR(tmtransaksi_opd.created_at)'), '=', $time->year)
+            ->when($opd_id != 0, function ($q) use ($opd_id) {
+                $q->where('tmtransaksi_opd.id_opd', $opd_id);
+            })
+            ->groupBy('tmtransaksi_opd.id_jenis_pendapatan')
+            ->orderBy('diterima', 'DESC')
+            ->get();
+
+        //* Total SKRD, STRD, STS, Wajib Retribusi
+        $totalSKRD = TransaksiOPD::select(DB::raw("SUM(tmtransaksi_opd.total_bayar) as total_bayar"), DB::raw("COUNT(tmtransaksi_opd.id) as total_skrd"))
+            ->where('status_bayar', 0)
+            ->where('tgl_skrd_akhir', '>=', $date)
+            ->when($opd_id != 0, function ($q) use ($opd_id) {
+                $q->where('tmtransaksi_opd.id_opd', $opd_id);
+            })
+            ->where(DB::raw('YEAR(tmtransaksi_opd.created_at)'), '=', $time->year)
+            ->first();
+        $totalSTS = TransaksiOPD::select(DB::raw("SUM(tmtransaksi_opd.total_bayar) as total_bayar"), DB::raw("COUNT(tmtransaksi_opd.id) as total_skrd"))
+            ->where('status_bayar', 1)
+            ->when($opd_id != 0, function ($q) use ($opd_id) {
+                $q->where('tmtransaksi_opd.id_opd', $opd_id);
+            })
+            ->where(DB::raw('YEAR(tmtransaksi_opd.created_at)'), '=', $time->year)
+            ->first();
+        $totalSTRD = TransaksiOPD::select('id', DB::raw("SUM(tmtransaksi_opd.total_bayar) as total_bayar"), DB::raw("COUNT(tmtransaksi_opd.id) as total_skrd"))
+            ->where('status_bayar', 0)
+            ->where('tgl_skrd_akhir', '<', $date)
+            ->when($opd_id != 0, function ($q) use ($opd_id) {
+                $q->where('tmtransaksi_opd.id_opd', $opd_id);
+            })
+            ->where(DB::raw('YEAR(tmtransaksi_opd.created_at)'), '=', $time->year)
+            ->first();
+        $totalKeseluruhan = TransaksiOPD::select(DB::raw("SUM(tmtransaksi_opd.total_bayar) as total_bayar"), DB::raw("COUNT(tmtransaksi_opd.id) as total_skrd"))
+            ->when($opd_id != 0, function ($q) use ($opd_id) {
+                $q->where('tmtransaksi_opd.id_opd', $opd_id);
+            })
+            ->where(DB::raw('YEAR(tmtransaksi_opd.created_at)'), '=', $time->year)
+            ->first();
+   
+        return view('pages.dashboard.testDashboard', compact(
+            'totalSKRD',
+            'targetPendapatan',
+            'year',
+            'n_opd',
+            'totalSTS',
+            'totalSTRD',
+            'totalKeseluruhan'
+        ));
     }
 }
