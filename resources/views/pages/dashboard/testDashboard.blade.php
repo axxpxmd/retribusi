@@ -171,6 +171,7 @@
                 </div>
            </div>
         </div>
+        @if ($role == 'super-admin' || $role == 'admin-bjb')
         <div class="card mt-3 no-b bg-transparent">
             <div class="card-body p-0 bg-transparent">
                 <div class="lightSlider bg-transparent" data-item="6" data-item-xl="4" data-item-md="2" data-item-sm="1" data-pause="5000" data-pager="false" data-auto="true" data-loop="true">
@@ -197,6 +198,7 @@
                 </div>
             </div>
         </div>
+        @endif
         <div class="row mt-3">
             <div class="col-md-4">
                 <div class="card no-b r-15">
