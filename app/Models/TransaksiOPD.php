@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
 class TransaksiOPD extends Model
@@ -326,10 +327,9 @@ class TransaksiOPD extends Model
     }
 
     //* Query get data SKRD
-    public static function querySKRD($from, $to, $opd_id, $no_skrd, $status_ttd)
+    public static function querySKRD($from, $to, $opd_id, $no_skrd, $status_ttd, $status, $year)
     {
-        $now = Carbon::now();
-        $date = $now->format('Y-m-d');
+        $date =  Carbon::now()->format('Y-m-d');
 
         $data = TransaksiOPD::select('id', 'id_opd', 'no_skrd', 'no_bayar', 'nm_wajib_pajak', 'id_jenis_pendapatan', 'tgl_skrd_awal', 'tgl_skrd_akhir', 'status_ttd', 'jumlah_bayar', 'history_ttd')
             ->with('opd', 'jenis_pendapatan')
@@ -345,11 +345,15 @@ class TransaksiOPD extends Model
                 return $q->where('status_ttd', $status_ttd);
             });
 
-        if ($from != null ||  $to != null) {
-            if ($from != null && $to == null) {
-                $data->whereDate('tgl_skrd_awal', $from);
-            } else {
-                $data->whereBetween('tgl_skrd_awal', [$from, $to]);
+        if ($status == 1) {
+            $data->where(DB::raw('YEAR(tmtransaksi_opd.created_at)'), '=', $year);
+        } else {
+            if ($from != null ||  $to != null) {
+                if ($from != null && $to == null) {
+                    $data->whereDate('tgl_skrd_awal', $from);
+                } else {
+                    $data->whereBetween('tgl_skrd_awal', [$from, $to]);
+                }
             }
         }
 

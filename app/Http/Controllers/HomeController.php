@@ -185,7 +185,7 @@ class HomeController extends Controller
         $date  = $time->format('Y-m-d');
         $year  = $request->tahun ? $request->tahun : $time->format('Y');
         $opd_id = $request->opd_id ? $request->opd_id : Auth::user()->pengguna->opd_id;
-        $n_opd  = $request->opd_id ? OPD::select('n_opd')->where('id', $request->opd_id)->first() : Auth::user()->pengguna->opd;
+        $n_opd  = $request->opd_id ? OPD::select('n_opd', 'id')->where('id', $request->opd_id)->first() : Auth::user()->pengguna->opd;
 
         $opds = OPD::select('id', 'n_opd')->get();
 

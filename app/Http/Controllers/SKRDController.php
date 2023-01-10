@@ -36,10 +36,10 @@ use App\Models\Utility;
 use App\Models\Kecamatan;
 use App\Models\Kelurahan;
 use App\Models\TransaksiOPD;
+use App\Models\TransaksiDelete;
 use App\Models\JenisPendapatan;
 use App\Models\OPDJenisPendapatan;
 use App\Models\RincianJenisPendapatan;
-use App\Models\TransaksiDelete;
 
 class SKRDController extends Controller
 {
@@ -56,44 +56,46 @@ class SKRDController extends Controller
         $this->middleware(['permission:SKRD']);
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $route = $this->route;
         $title = $this->title;
 
-        $opd_id   = Auth::user()->pengguna->opd_id;
-        $opdArray = OPDJenisPendapatan::select('id_opd')->get()->toArray();
-        $opds     = OPD::getAll($opdArray, $opd_id);
-
         //TODO: Set filter to date now
         $time  = Carbon::now();
         $today = $time->format('Y-m-d');
+
+        $opd_id   = Auth::user()->pengguna->opd_id == 0 ? $request->opd_id : Auth::user()->pengguna->opd_id;
+        $opdArray = OPDJenisPendapatan::select('id_opd')->get()->toArray();
+        $opds     = OPD::getAll($opdArray, $opd_id);
+
+
+        $from = $request->from;
+        $to   = $request->to;
+        $status = $request->status;
+        $year   = $request->year;
+        $no_skrd    = $request->no_skrd;
+        $status_ttd = $request->status_ttd;
+
+        if ($request->ajax()) {
+            return $this->dataTable($from, $to, $opd_id, $no_skrd, $status_ttd, $status, $year);
+        }
 
         return view($this->view . 'index', compact(
             'route',
             'title',
             'opds',
             'opd_id',
-            'today'
+            'today',
+            'year',
+            'status',
+            'opd_id'
         ));
     }
 
-    public function api(Request $request)
-    {
-        //* Get params
-        $from  = $request->tgl_skrd;
-        $to    = $request->tgl_skrd1;
-        $no_skrd    = $request->no_skrd;
-        $status_ttd = $request->status_ttd;
-        $opd        = Auth::user()->pengguna->opd_id;
-
-        if ($opd == 0) {
-            $opd_id = $request->opd_id;
-        } else {
-            $opd_id = $opd;
-        }
-
-        $data = TransaksiOPD::querySKRD($from, $to, $opd_id, $no_skrd, $status_ttd);
+    public function dataTable($from, $to, $opd_id, $no_skrd, $status_ttd, $status, $year)
+    {   
+        $data = TransaksiOPD::querySKRD($from, $to, $opd_id, $no_skrd, $status_ttd, $status, $year);
 
         return DataTables::of($data)
             ->addColumn('action', function ($p) {

@@ -51,7 +51,7 @@
                                         <span class="font-weight-bold">Tahun : {{ $year }}</span>
                                     </div>
                                     <div class="col-auto">
-                                        <span class="font-weight-bold">OPD : {{ $n_opd->n_opd }} </span>
+                                        <span class="font-weight-bold">OPD : {{ $n_opd->n_opd }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -108,7 +108,7 @@
                                 <div class="mb-2">
                                     <i class="icon-notebook-text fs-24 amber-text mr-2"></i>
                                     <span class="m-0 font-weight-bold fs-16">{{ $totalSKRD->total_skrd }}</span>
-                                    <a href="#" class="ml-2" title="Lihat Data"><i class="icon-external-link"></i></a>
+                                    <a href="{{ route('skrd.index', ['year' => $year, 'status' => 1, 'opd_id' => $n_opd->id]) }}" target="_blank" class="ml-2" title="Lihat Data"><i class="icon-external-link"></i></a>
                                 </div>
                                 <p class="m-0 fs-14">@currency($totalSKRD->total_bayar)</p>
                             </div>
