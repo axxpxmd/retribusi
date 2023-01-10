@@ -330,6 +330,9 @@ class TransaksiOPD extends Model
     public static function querySKRD($from, $to, $opd_id, $no_skrd, $status_ttd, $status, $year)
     {
         $date =  Carbon::now()->format('Y-m-d');
+        if ($date != $from) {
+            $status = 0;
+        }
 
         $data = TransaksiOPD::select('id', 'id_opd', 'no_skrd', 'no_bayar', 'nm_wajib_pajak', 'id_jenis_pendapatan', 'tgl_skrd_awal', 'tgl_skrd_akhir', 'status_ttd', 'jumlah_bayar', 'history_ttd')
             ->with('opd', 'jenis_pendapatan')

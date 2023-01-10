@@ -33,19 +33,19 @@
                         <input type="hidden" id="year" value="{{ $year }}">
                         <input type="hidden" id="status" value="{{ $status }}">
                         <div class="col-md-8 container">
-                            {{-- @if ($opd_id == 0) --}}
                             <div class="row mb-2">
                                 <label for="opd" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">OPD</label>
                                 <div class="col-sm-8">
                                     <select id="opd" class="select2 form-control r-0 s-12">
-                                        <option value="0" {{ $opd_id != 0 ? 'disabled' : '' }}>{{ $opd_id != 0 ? '' : 'Semua' }}</option>
+                                        @if ($role == 'super-admin' || $role == 'admin-bjb')
+                                            <option value="0">Semua</option>
+                                        @endif
                                         @foreach ($opds as $i)
                                             <option value="{{ $i->id }}" {{ $opd_id == $i->id ? 'selected' : '' }}>{{ $i->n_opd }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
-                            {{-- @endif --}}
                             <div class="row mb-2">
                                 <label for="no_skrd" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">NO SKRD</label>
                                 <div class="col-sm-8">
@@ -56,7 +56,7 @@
                                 <label for="status_ttd" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">Status TTD</label>
                                 <div class="col-sm-8">
                                     <select id="status_ttd" class="select2 form-control r-0 s-12">
-                                        <option value=""></option>
+                                        <option value="">Semua</option>
                                         <option value="0">Belum TTD</option>
                                         <option value="1">Sudah TTD</option>
                                         <option value="2">Proses TTD</option>
@@ -196,11 +196,11 @@
             data: function (data) {
                 data.from = $('#from').val();
                 data.to   = $('#to').val();
+                data.year   = $('#year').val();
+                data.status = $('#status').val();
                 data.opd_id     = $('#opd').val();
                 data.no_skrd    = $('#no_skrd').val();
                 data.status_ttd = $('#status_ttd').val();
-                data.year = $('#year').val();
-                data.status = $('#status').val();
             }
         },
         columns: [

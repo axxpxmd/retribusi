@@ -64,11 +64,11 @@ class SKRDController extends Controller
         //TODO: Set filter to date now
         $time  = Carbon::now();
         $today = $time->format('Y-m-d');
+        $role  = Auth::user()->pengguna->modelHasRole->role->name;
 
         $opd_id   = Auth::user()->pengguna->opd_id == 0 ? $request->opd_id : Auth::user()->pengguna->opd_id;
         $opdArray = OPDJenisPendapatan::select('id_opd')->get()->toArray();
         $opds     = OPD::getAll($opdArray, $opd_id);
-
 
         $from = $request->from;
         $to   = $request->to;
@@ -89,7 +89,8 @@ class SKRDController extends Controller
             'today',
             'year',
             'status',
-            'opd_id'
+            'opd_id',
+            'role'
         ));
     }
 

@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 
 class OPD extends Model
@@ -34,8 +36,10 @@ class OPD extends Model
 
     public static function getAll($opdArray, $opd_id)
     {
+        $role  = Auth::user()->pengguna->modelHasRole->role->name;
+
         $data = OPD::select('id', 'n_opd')->whereIn('id', $opdArray)
-            ->when($opd_id != 0, function ($q) use ($opd_id) {
+            ->when($opd_id != 0 && $role != 'super-admin' && $role != 'admin-bjb' , function ($q) use ($opd_id) {
                 return $q->where('id', $opd_id);
             })->get();
 
