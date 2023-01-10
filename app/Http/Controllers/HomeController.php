@@ -184,10 +184,16 @@ class HomeController extends Controller
         $time  = Carbon::now();
         $date  = $time->format('Y-m-d');
         $year  = $request->tahun ? $request->tahun : $time->format('Y');
+        $role  = Auth::user()->pengguna->modelHasRole->role->name;
         $opd_id = $request->opd_id ? $request->opd_id : Auth::user()->pengguna->opd_id;
         $n_opd  = $request->opd_id ? OPD::select('n_opd', 'id')->where('id', $request->opd_id)->first() : Auth::user()->pengguna->opd;
 
-        $opds = OPD::select('id', 'n_opd')->get();
+        $opdArray = OPDJenisPendapatan::select('id_opd')->get()->toArray();
+        if ($role == 'super-admin' || $role == 'admin-bjb') {
+            $opds = OPD::whereIn('id', $opdArray)->get();
+        } else {
+            $opds = OPD::getAll($opdArray, $opd_id);
+        }
 
         //* Tabel Target Pendapatan
         $targetPendapatan = JenisPendapatan::select(DB::raw("SUM(tmtransaksi_opd.total_bayar_bjb) as diterima"), DB::raw("SUM(tmtransaksi_opd.jumlah_bayar) as ketetapan"), DB::raw("round((SUM(tmtransaksi_opd.total_bayar_bjb) / target_pendapatan * 100), 2) as realisasi"), 'denda', 'jenis_pendapatan', 'target_pendapatan', 'tmopds.initial', 'tmopds.n_opd')
@@ -297,7 +303,8 @@ class HomeController extends Controller
             'totalChannelBayar',
             'skrdToday',
             'stsToday',
-            'strdToday'
+            'strdToday',
+            'role'
         ));
     }
 }
