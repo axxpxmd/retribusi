@@ -45,13 +45,13 @@
                             <div class="col-auto mb-5-m">
                                 <a href="#" data-toggle="modal" data-target="#modalFilter" class="btn btn-sm btn-success fs-14">Pilih Filter<i class="icon-filter_list ml-2"></i></a>
                             </div>
-                            <div class="col-auto mt-1">
+                            <div class="col-auto mt-2">
                                 <div class="row">
                                     <div class="col-auto">
-                                        <span>Tahun : {{ $year }}</span>
+                                        <span class="font-weight-bold">Tahun : {{ $year }}</span>
                                     </div>
                                     <div class="col-auto">
-                                        <span>OPD : {{ $n_opd->n_opd }} </span>
+                                        <span class="font-weight-bold">OPD : {{ $n_opd->n_opd }} </span>
                                     </div>
                                 </div>
                             </div>
@@ -59,7 +59,7 @@
                     </div>
                 </div>
                 <div class="card no-b r-15">
-                    <h6 class="card-header r-15 bg-white font-weight-bold">Jenis Pendapatan {{ $year }}</h6>
+                    <h6 class="card-header r-15 bg-white font-weight-bold">Pendapatan</h6>
                     <div class="card-body pt-1">
                         <table id="dtHorizontalVerticalExample" class="table table-hover fs-12" cellspacing="0" width="100%">
                             <thead>
@@ -162,9 +162,9 @@
                             <h6 class="card-header bg-primary text-white font-weight-bold" style="border-top-right-radius: 15px; border-top-left-radius: 15px">Notifikasi</h6>
                             <div class="card-body px-4 py-2">
                                     {{-- <p class="m-0"><i class="icon icon-data_usage text-danger mr-2"></i>Terdapat 49 berkas belum di TTD.</p> --}}
-                                <p class="m-0 fs-14"><i class="icon icon-data_usage text-danger mr-2"></i><a href="#" title="Lihat Data">Terdapat 49 SKRD telah jatuh tempo.</a></p>
-                                <p class="m-0 fs-14"><i class="icon icon-data_usage text-primary mr-2"></i><a href="#" title="Lihat Data">Terdapat 498 SKRD terbuat pada hari ini.</a></p>
-                                <p class="m-0 fs-14"><i class="icon icon-data_usage text-success mr-2"></i><a href="#" title="Lihat Data">Terdapat 49 SKRD telah dibayar pada hari ini.</a></p>
+                                <p class="m-0 fs-12"><i class="icon icon-data_usage text-danger mr-2"></i><a href="#" title="Lihat Data">Terdapat 49 SKRD telah jatuh tempo.</a></p>
+                                <p class="m-0 fs-12"><i class="icon icon-data_usage amber-text mr-2"></i><a href="#" title="Lihat Data">Terdapat {{ $skrdCreate }} SKRD terbuat pada hari ini.</a></p>
+                                <p class="m-0 fs-12"><i class="icon icon-data_usage text-success mr-2"></i><a href="#" title="Lihat Data">Terdapat 49 SKRD telah dibayar pada hari ini.</a></p>
                             </div>
                         </div>
                     </div>
@@ -200,12 +200,12 @@
         <div class="row mt-3">
             <div class="col-md-4">
                 <div class="card no-b r-15">
-                    <h6 class="card-header bg-success text-white font-weight-bold" style="border-top-right-radius: 15px; border-top-left-radius: 15px">Channel Bayar {{ $year }}</h6>
+                    <h6 class="card-header bg-danger text-white font-weight-bold" style="border-top-right-radius: 15px; border-top-left-radius: 15px">Metode Pembayaran</h6>
                     <div class="card-body pt-1">
                         <table id="tableChannelBayar" class="table table-hover fs-12" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
-                                    <th>#</th>
+                                    {{-- <th>#</th> --}}
                                     <th>Metode Bayar</th>
                                     <th>Jumlah</th>
                                     <th>Total Pembayaran</th>
@@ -213,12 +213,14 @@
                             </thead>
                             <tbody>
                                 @foreach ($totalChannelBayar as $index => $i)
-                                <tr>
-                                    <td class="text-center">{{  $index+1 }}</td>
-                                    <td>{{ str_contains($i['chanel_bayar'], 'QRIS') ? 'QRIS' : $i['chanel_bayar'] }}</td>
-                                    <td>{{ $i['total'] }}</td>
-                                    <td>@currency($i['total_bayar'])</td>
-                                </tr>
+                                    @if ($i['total'])
+                                    <tr>
+                                        {{-- <td class="text-center">{{  $index+1 }}</td> --}}
+                                        <td><a href="#" title="Lihat Data">{{ str_contains($i['chanel_bayar'], 'QRIS') ? 'QRIS' : $i['chanel_bayar'] }}</a></td>
+                                        <td>{{ $i['total'] }}</td>
+                                        <td>@currency($i['total_bayar'])</td>
+                                    </tr>
+                                    @endif
                                 @endforeach
                             </tbody>
                         </table>

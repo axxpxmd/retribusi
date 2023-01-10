@@ -210,7 +210,7 @@ class HomeController extends Controller
             })
             ->where(DB::raw('YEAR(tmtransaksi_opd.created_at)'), '=', $year)
             ->first();
-        $totalSTS = TransaksiOPD::select(DB::raw("SUM(tmtransaksi_opd.total_bayar) as total_bayar"), DB::raw("COUNT(tmtransaksi_opd.id) as total_skrd"))
+        $totalSTS = TransaksiOPD::select(DB::raw("SUM(tmtransaksi_opd.total_bayar_bjb) as total_bayar"), DB::raw("COUNT(tmtransaksi_opd.id) as total_skrd"))
             ->where('status_bayar', 1)
             ->when($opd_id != 0, function ($q) use ($opd_id) {
                 $q->where('tmtransaksi_opd.id_opd', $opd_id);
@@ -242,20 +242,26 @@ class HomeController extends Controller
             ->get();
 
         // Channel Bayar
-        $qris = TransaksiOPD::select('chanel_bayar', DB::raw("COUNT(id) as total"), DB::raw("SUM(total_bayar_bjb) as total_bayar"))
+        $qris = TransaksiOPD::select('chanel_bayar', DB::raw("COUNT('id') as total"), DB::raw("SUM(total_bayar_bjb) as total_bayar"))
             ->where('status_bayar', 1)
             ->where('chanel_bayar', 'like', '%qris%')
+            ->where(DB::raw('YEAR(tmtransaksi_opd.created_at)'), '=', $year)
             ->get()->toArray();
-        $mobileBanking = TransaksiOPD::select('chanel_bayar', DB::raw("COUNT(id) as total"), DB::raw("SUM(total_bayar_bjb) as total_bayar"))
+        $mobileBanking = TransaksiOPD::select('chanel_bayar', DB::raw("COUNT('id') as total"), DB::raw("SUM(total_bayar_bjb) as total_bayar"))
             ->where('status_bayar', 1)
             ->where('chanel_bayar', 'like', '%MOBIL%')
+            ->where(DB::raw('YEAR(tmtransaksi_opd.created_at)'), '=', $year)
             ->get()->toArray();
         $channelBayar = TransaksiOPD::select('chanel_bayar', DB::raw("COUNT('id') as total"), DB::raw("SUM(total_bayar_bjb) as total_bayar"))
             ->where('status_bayar', 1)
             ->whereIn('chanel_bayar', ['Bendahara OPD', 'ATM', 'BJB Virtual Account', 'Lainnya', 'TELLER', 'Transfer RKUD', 'Virtual Account'])
+            ->where(DB::raw('YEAR(tmtransaksi_opd.created_at)'), '=', $year)
             ->groupBy('chanel_bayar')
             ->get()->toArray();
         $totalChannelBayar = array_merge($channelBayar, $qris, $mobileBanking);
+
+        // Notifikasi
+        $skrdCreate = TransaksiOPD::whereDate('created_at', $time)->count();
 
         return view('pages.dashboard.testDashboard', compact(
             'totalSKRD',
@@ -269,7 +275,8 @@ class HomeController extends Controller
             'opd_id',
             'totalRetribusiOPD',
             'totalRetribusi',
-            'totalChannelBayar'
+            'totalChannelBayar',
+            'skrdCreate'
         ));
     }
 }
