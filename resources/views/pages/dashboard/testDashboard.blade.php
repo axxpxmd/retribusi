@@ -159,12 +159,12 @@
                 <div class="row mt-3">
                     <div class="col-md-12 px-2">
                         <div class="card no-b r-15" style="height: 162px !important">
-                            <h6 class="card-header bg-primary text-white font-weight-bold" style="border-top-right-radius: 15px; border-top-left-radius: 15px">Notifikasi</h6>
+                            <h6 class="card-header bg-primary text-white font-weight-bold" style="border-top-right-radius: 15px; border-top-left-radius: 15px">Notifikasi <i class="icon-notifications ml-2"></i></h6>
                             <div class="card-body px-4 py-2">
                                     {{-- <p class="m-0"><i class="icon icon-data_usage text-danger mr-2"></i>Terdapat 49 berkas belum di TTD.</p> --}}
-                                <p class="m-0 fs-12"><i class="icon icon-data_usage text-danger mr-2"></i><a href="#" title="Lihat Data">Terdapat 49 SKRD telah jatuh tempo.</a></p>
-                                <p class="m-0 fs-12"><i class="icon icon-data_usage amber-text mr-2"></i><a href="#" title="Lihat Data">Terdapat {{ $skrdCreate }} SKRD terbuat pada hari ini.</a></p>
-                                <p class="m-0 fs-12"><i class="icon icon-data_usage text-success mr-2"></i><a href="#" title="Lihat Data">Terdapat 49 SKRD telah dibayar pada hari ini.</a></p>
+                                <p class="m-0 fs-12"><i class="icon icon-data_usage text-danger mr-2"></i><a href="#" title="Lihat Data">Terdapat {{ $strdToday }} SKRD telah jatuh tempo.</a></p>
+                                <p class="m-0 fs-12"><i class="icon icon-data_usage amber-text mr-2"></i><a href="#" title="Lihat Data">Terdapat {{ $skrdToday }} SKRD terbuat pada hari ini.</a></p>
+                                <p class="m-0 fs-12"><i class="icon icon-data_usage text-success mr-2"></i><a href="#" title="Lihat Data">Terdapat {{ $stsToday }} SKRD telah dibayar pada hari ini.</a></p>
                             </div>
                         </div>
                     </div>
@@ -200,7 +200,7 @@
         <div class="row mt-3">
             <div class="col-md-4">
                 <div class="card no-b r-15">
-                    <h6 class="card-header bg-danger text-white font-weight-bold" style="border-top-right-radius: 15px; border-top-left-radius: 15px">Metode Pembayaran</h6>
+                    <h6 class="card-header bg-danger text-white font-weight-bold" style="border-top-right-radius: 15px; border-top-left-radius: 15px">Metode Pembayaran <i class="icon-payment ml-2"></i></h6>
                     <div class="card-body pt-1">
                         <table id="tableChannelBayar" class="table table-hover fs-12" cellspacing="0" width="100%">
                             <thead>

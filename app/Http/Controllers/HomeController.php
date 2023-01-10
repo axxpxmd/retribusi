@@ -245,23 +245,42 @@ class HomeController extends Controller
         $qris = TransaksiOPD::select('chanel_bayar', DB::raw("COUNT('id') as total"), DB::raw("SUM(total_bayar_bjb) as total_bayar"))
             ->where('status_bayar', 1)
             ->where('chanel_bayar', 'like', '%qris%')
+            ->when($opd_id != 0, function ($q) use ($opd_id) {
+                $q->where('tmtransaksi_opd.id_opd', $opd_id);
+            })
             ->where(DB::raw('YEAR(tmtransaksi_opd.created_at)'), '=', $year)
             ->get()->toArray();
         $mobileBanking = TransaksiOPD::select('chanel_bayar', DB::raw("COUNT('id') as total"), DB::raw("SUM(total_bayar_bjb) as total_bayar"))
             ->where('status_bayar', 1)
             ->where('chanel_bayar', 'like', '%MOBIL%')
+            ->when($opd_id != 0, function ($q) use ($opd_id) {
+                $q->where('tmtransaksi_opd.id_opd', $opd_id);
+            })
             ->where(DB::raw('YEAR(tmtransaksi_opd.created_at)'), '=', $year)
             ->get()->toArray();
         $channelBayar = TransaksiOPD::select('chanel_bayar', DB::raw("COUNT('id') as total"), DB::raw("SUM(total_bayar_bjb) as total_bayar"))
             ->where('status_bayar', 1)
             ->whereIn('chanel_bayar', ['Bendahara OPD', 'ATM', 'BJB Virtual Account', 'Lainnya', 'TELLER', 'Transfer RKUD', 'Virtual Account'])
+            ->when($opd_id != 0, function ($q) use ($opd_id) {
+                $q->where('tmtransaksi_opd.id_opd', $opd_id);
+            })
             ->where(DB::raw('YEAR(tmtransaksi_opd.created_at)'), '=', $year)
             ->groupBy('chanel_bayar')
             ->get()->toArray();
         $totalChannelBayar = array_merge($channelBayar, $qris, $mobileBanking);
 
         // Notifikasi
-        $skrdCreate = TransaksiOPD::whereDate('created_at', $time)->count();
+        $skrdToday = TransaksiOPD::when($opd_id != 0, function ($q) use ($opd_id) {
+            $q->where('tmtransaksi_opd.id_opd', $opd_id);
+        })->whereDate('created_at', $time)->count();
+        $stsToday = TransaksiOPD::when($opd_id != 0, function ($q) use ($opd_id) {
+            $q->where('tmtransaksi_opd.id_opd', $opd_id);
+        })->whereDate('tgl_bayar', $time)
+            ->where('status_bayar', 1)->count();
+        $strdToday = TransaksiOPD::when($opd_id != 0, function ($q) use ($opd_id) {
+            $q->where('tmtransaksi_opd.id_opd', $opd_id);
+        })->where('tgl_skrd_akhir', '<', $date)
+            ->where('status_bayar', 0)->count();
 
         return view('pages.dashboard.testDashboard', compact(
             'totalSKRD',
@@ -276,7 +295,9 @@ class HomeController extends Controller
             'totalRetribusiOPD',
             'totalRetribusi',
             'totalChannelBayar',
-            'skrdCreate'
+            'skrdToday',
+            'stsToday',
+            'strdToday'
         ));
     }
 }
