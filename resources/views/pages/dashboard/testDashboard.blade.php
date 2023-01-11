@@ -6,6 +6,20 @@
         white-space: nowrap;
     }
 
+    .highcharts-root{
+        height: 320px !important;
+        margin-top: -20px !important;
+    }
+
+    .highcharts-container {
+        height: 320px !important;
+        margin-top: -20px !important;
+    }
+
+    .highcharts-background{
+        background: transparent !important;
+    }
+
     table.dataTable thead .sorting:after,
     table.dataTable thead .sorting:before,
     table.dataTable thead .sorting_asc:after,
@@ -200,8 +214,8 @@
         </div>
         @endif
         <div class="row mt-3">
-            <div class="col-md-4">
-                <div class="card no-b r-15">
+            <div class="col-md-4 mb-5-m">
+                <div class="card no-b r-15" style="height: 300px !important">
                     <h6 class="card-header bg-danger text-white font-weight-bold" style="border-top-right-radius: 15px; border-top-left-radius: 15px">Metode Pembayaran <i class="icon-payment ml-2"></i></h6>
                     <div class="card-body pt-1">
                         <table id="tableChannelBayar" class="table table-hover fs-12" cellspacing="0" width="100%">
@@ -224,6 +238,16 @@
                                 @endforeach
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card r-15 no-b" style="height: 300px !important">
+                    <h6 class="card-header text-white font-weight-bold" style="background: #FFCE3B; border-top-right-radius: 15px; border-top-left-radius: 15px">Total Retribusi</h6>
+                    <div class="card-body p-0">
+                        <figure class="highcharts-figure">
+                            <div id="pieChartJenisKelamin"></div>
+                        </figure>
                     </div>
                 </div>
             </div>
@@ -276,6 +300,10 @@
 </div>
 @endsection
 @section('script')
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
         $('#dtHorizontalVerticalExample').DataTable({
@@ -291,13 +319,73 @@
     $(document).ready(function () {
         $('#tableChannelBayar').DataTable({
             "scrollX": true,
-            // "scrollY": ,
+            "scrollY": 180,
             "bPaginate": false,
             "bInfo": false,
             "searching": false,
             "order": [[2, 'desc']],
         });
         $('.dataTables_length').addClass('bs-select');
+    });
+
+    Highcharts.chart('pieChartJenisKelamin', {
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            backgroundColor: 'transparent',
+            type: 'pie'
+        },
+        credits: {
+            enabled: false
+        },
+        exporting: { enabled: false },
+        title: false,
+        accessibility: {
+            point: {
+                valueSuffix: '%'
+            }
+        },
+        tooltip: {
+            style: {
+                fontSize: '100%'
+            },
+            pointFormat: '<b>{point.name}</b>: <b>{point.y}</b>'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                size: '50%',
+                cursor: 'pointer',
+                dataLabels: {
+                    crop: false,
+                    distance: 25,
+                    overflow: "none",
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    style: {
+                        fontSize: '100%'
+                    }
+                },
+                center: ["50%", "50%"]
+            }
+        },
+        series: [{
+            colorByPoint: true,
+            data: [{
+                name: 'SKRD',
+                y: {{ $totalSKRD->total_skrd }},
+                color: '#FFCE3C',
+            }, {
+                name: 'STS',
+                y: {{ $totalSTS->total_skrd }},
+                color: '#4385F4',
+                sliced: true
+            }, {
+                name: 'STRD',
+                y: {{ $totalSTRD->total_skrd }},
+                color: '#ED5665',
+            }]
+        }]
     });
 
     $('.select2').select2({
@@ -318,8 +406,6 @@
         opd_id = $("#opd_filter").val();
        
         url = "{{ route('test-home') }}?tahun=" + tahun + "&opd_id=" + opd_id;
-
-        console.log(url);
 
         $('#filterData').attr('href', url);
     }
