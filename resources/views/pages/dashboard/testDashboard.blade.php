@@ -6,20 +6,6 @@
         white-space: nowrap;
     }
 
-    .highcharts-root{
-        height: 320px !important;
-        margin-top: -20px !important;
-    }
-
-    .highcharts-container {
-        height: 320px !important;
-        margin-top: -20px !important;
-    }
-
-    .highcharts-background{
-        background: transparent !important;
-    }
-
     table.dataTable thead .sorting:after,
     table.dataTable thead .sorting:before,
     table.dataTable thead .sorting_asc:after,
@@ -130,7 +116,7 @@
                     </div>
                     <div class="col-md-6 px-2 mb-5-m">
                         <div class="card no-b r-15">
-                            <h6 class="card-header font-weight-bold text-white bg-danger" style="border-top-right-radius: 15px; border-top-left-radius: 15px">Total STRD</h6>
+                            <h6 class="card-header font-weight-bold text-white bg-danger" title="SKRD yang telah jatuh tempo" style="border-top-right-radius: 15px; border-top-left-radius: 15px">Total STRD</h6>
                             <div class="card-body text-center">
                                 <div class="mb-2">
                                     <i class="icon-notebook-text fs-24 text-danger mr-2"></i>
@@ -145,7 +131,7 @@
                 <div class="row mt-3">
                     <div class="col-md-6 px-1 mb-5-m">
                         <div class="card no-b r-15">
-                            <h6 class="card-header font-weight-bold text-white bg-primary" style="border-top-right-radius: 15px; border-top-left-radius: 15px">Total STS</h6>
+                            <h6 class="card-header font-weight-bold text-white bg-primary" title="SKRD yang sudah dibayar" style="border-top-right-radius: 15px; border-top-left-radius: 15px">Total STS</h6>
                             <div class="card-body text-center">
                                 <div class="mb-2">
                                     <i class="icon-notebook-text fs-24 text-primary mr-2"></i>
@@ -243,11 +229,26 @@
             </div>
             <div class="col-md-3">
                 <div class="card r-15 no-b" style="height: 300px !important">
+                    <h6 class="card-header bg-success text-white font-weight-bold" style="border-top-right-radius: 15px; border-top-left-radius: 15px">Metode Pembayaran <i class="icon-payment ml-2"></i></h6>
+                    <div class="card-body p-0">
+                        @include('pages.dashboard.pieTest2')
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="card r-15 no-b" style="height: 300px !important">
                     <h6 class="card-header text-white font-weight-bold" style="background: #FFCE3B; border-top-right-radius: 15px; border-top-left-radius: 15px">Total Retribusi</h6>
                     <div class="card-body p-0">
-                        <figure class="highcharts-figure">
-                            <div id="pieChartJenisKelamin"></div>
-                        </figure>
+                        <div class="row p-0">
+                            <div class="col-md-6 p-0">
+                                @include('pages.dashboard.pieTest')
+                            </div>
+                            <div class="col-md-6">
+                                <div class="my-3">
+                                    <p class="text-black text-center fs-14 font-weight-bold">Total Retribusi</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -299,11 +300,7 @@
     </div>
 </div>
 @endsection
-@section('script')
-<script src="https://code.highcharts.com/highcharts.js"></script>
-<script src="https://code.highcharts.com/modules/exporting.js"></script>
-<script src="https://code.highcharts.com/modules/export-data.js"></script>
-<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+@push('script')
 <script type="text/javascript">
     $(document).ready(function () {
         $('#dtHorizontalVerticalExample').DataTable({
@@ -328,66 +325,6 @@
         $('.dataTables_length').addClass('bs-select');
     });
 
-    Highcharts.chart('pieChartJenisKelamin', {
-        chart: {
-            plotBackgroundColor: null,
-            plotBorderWidth: null,
-            plotShadow: false,
-            backgroundColor: 'transparent',
-            type: 'pie'
-        },
-        credits: {
-            enabled: false
-        },
-        exporting: { enabled: false },
-        title: false,
-        accessibility: {
-            point: {
-                valueSuffix: '%'
-            }
-        },
-        tooltip: {
-            style: {
-                fontSize: '100%'
-            },
-            pointFormat: '<b>{point.name}</b>: <b>{point.y}</b>'
-        },
-        plotOptions: {
-            pie: {
-                allowPointSelect: true,
-                size: '50%',
-                cursor: 'pointer',
-                dataLabels: {
-                    crop: false,
-                    distance: 25,
-                    overflow: "none",
-                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                    style: {
-                        fontSize: '100%'
-                    }
-                },
-                center: ["50%", "50%"]
-            }
-        },
-        series: [{
-            colorByPoint: true,
-            data: [{
-                name: 'SKRD',
-                y: {{ $totalSKRD->total_skrd }},
-                color: '#FFCE3C',
-            }, {
-                name: 'STS',
-                y: {{ $totalSTS->total_skrd }},
-                color: '#4385F4',
-                sliced: true
-            }, {
-                name: 'STRD',
-                y: {{ $totalSTRD->total_skrd }},
-                color: '#ED5665',
-            }]
-        }]
-    });
-
     $('.select2').select2({
         dropdownParent: $('#modalFilter')
     });
@@ -410,4 +347,4 @@
         $('#filterData').attr('href', url);
     }
 </script>
-@endsection
+@endpush

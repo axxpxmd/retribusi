@@ -191,6 +191,8 @@ class HomeController extends Controller
         $opdArray = OPDJenisPendapatan::select('id_opd')->get()->toArray();
         $opds = OPD::getAll($opdArray, $opd_id);
 
+        $color = ['#26a69a', '#26c6da', '#42a5f5', '#ef5350', '#ff7043', '#5c6bc0', '#ffee58', '#bdbdbd', '#66bb6a ', '#ec407a', '#42a5f5', '#26a69a', '#ff7043'];
+
         //* Tabel Target Pendapatan
         $targetPendapatan = JenisPendapatan::select(DB::raw("SUM(tmtransaksi_opd.total_bayar_bjb) as diterima"), DB::raw("SUM(tmtransaksi_opd.jumlah_bayar) as ketetapan"), DB::raw("round((SUM(tmtransaksi_opd.total_bayar_bjb) / target_pendapatan * 100), 2) as realisasi"), 'denda', 'jenis_pendapatan', 'target_pendapatan', 'tmopds.initial', 'tmopds.n_opd')
             ->join('tmtransaksi_opd', 'tmtransaksi_opd.id_jenis_pendapatan', '=', 'tmjenis_pendapatan.id')
@@ -270,6 +272,14 @@ class HomeController extends Controller
             ->groupBy('chanel_bayar')
             ->get()->toArray();
         $totalChannelBayar = array_merge($channelBayar, $qris, $mobileBanking);
+        foreach ($totalChannelBayar as $key => $i) {
+            $dataPieChartChanelBayar[$key] = [
+                'y'    => $i['total'],
+                'name' => str_contains($i['chanel_bayar'], 'QRIS') ? 'QRIS' : $i['chanel_bayar'],
+                'color'     => $color[$key]
+            ];
+        }
+        $dataPieChartChanelBayar = json_encode($dataPieChartChanelBayar);
 
         //* Notifikasi
         $skrdToday = TransaksiOPD::when($opd_id != 0, function ($q) use ($opd_id) {
@@ -300,7 +310,8 @@ class HomeController extends Controller
             'skrdToday',
             'stsToday',
             'strdToday',
-            'role'
+            'role',
+            'dataPieChartChanelBayar'
         ));
     }
 }

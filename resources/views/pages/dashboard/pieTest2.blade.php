@@ -1,12 +1,12 @@
 <style>
     .highcharts-root {
         height: 320px !important;
-        margin-top: -20px !important;
+        margin-top: 20px !important;
     }
 
     .highcharts-container {
         height: 320px !important;
-        margin-top: -20px !important;
+        margin-top: 20px !important;
     }
 
     .highcharts-background {
@@ -14,7 +14,7 @@
     }
 </style>
 <figure class="highcharts-figure">
-    <div id="pieChartTotalRetribusi"></div>
+    <div id="pieChartChanelBayar"></div>
 </figure>
 @push('script')
 <script src="https://code.highcharts.com/highcharts.js"></script>
@@ -22,7 +22,9 @@
 <script src="https://code.highcharts.com/modules/export-data.js"></script>
 <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 <script type="text/javascript">
-    Highcharts.chart('pieChartTotalRetribusi', {
+    var parents = <?php echo $dataPieChartChanelBayar?>;
+
+    Highcharts.chart('pieChartChanelBayar', {
         chart: {
             plotBackgroundColor: null,
             plotBorderWidth: null,
@@ -51,7 +53,7 @@
         plotOptions: {
             pie: {
                 allowPointSelect: true,
-                size: '55%',
+                size: '50%',
                 cursor: 'pointer',
                 dataLabels: {
                     crop: false,
@@ -67,20 +69,7 @@
         },
         series: [{
             colorByPoint: true,
-            data: [{
-                name: 'SKRD',
-                y: {{ $totalSKRD->total_skrd }},
-                color: '#FFCE3C',
-            }, {
-                name: 'STS',
-                y: {{ $totalSTS->total_skrd }},
-                color: '#4385F4',
-                // sliced: true
-            }, {
-                name: 'STRD',
-                y: {{ $totalSTRD->total_skrd }},
-                color: '#ED5665',
-            }]
+            data: parents
         }]
     });
 </script>
