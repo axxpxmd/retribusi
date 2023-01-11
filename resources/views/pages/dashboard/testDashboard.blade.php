@@ -39,7 +39,7 @@
     <div class="container my-3 col-md-12 relative animatedParent animateOnce">
         <div class="row">
            <div class="col-md-8 mb-5-m">
-                <div class="card no-b mb-2">
+                <div class="card shadow-sm no-b mb-2">
                     <div class="card-body p-2">
                         <div class="row">
                             <div class="col-auto mb-5-m">
@@ -101,14 +101,14 @@
            </div>
            <div class="col-md-4">
                 <div class="row">
-                    <div class="col-md-6 px-2 mb-5-m">
+                    <div class="col-md-6 px-1 mb-5-m">
                         <div class="card no-b r-15">
                             <h6 class="card-header font-weight-bold text-white" style="background: #FFCE3B; border-top-right-radius: 15px; border-top-left-radius: 15px">Total SKRD</h6>
                             <div class="card-body text-center">
                                 <div class="mb-2">
                                     <i class="icon-notebook-text fs-24 amber-text mr-2"></i>
                                     <span class="m-0 font-weight-bold fs-16">{{ $totalSKRD->total_skrd }}</span>
-                                    <a href="{{ route('skrd.index', ['year' => $year, 'status' => 1, 'opd_id' => $n_opd->id]) }}" target="_blank" class="ml-2" title="Lihat Data"><i class="icon-external-link"></i></a>
+                                    <a href="{{ route('report.index', ['year' => $year, 'status' => 1, 'opd_id' => $n_opd->id]) }}" target="_blank" class="ml-2" title="Lihat Data"><i class="icon-external-link"></i></a>
                                 </div>
                                 <p class="m-0 fs-14">@currency($totalSKRD->total_bayar)</p>
                             </div>
@@ -129,7 +129,7 @@
                     </div>
                 </div>
                 <div class="row mt-3">
-                    <div class="col-md-6 px-2 mb-5-m">
+                    <div class="col-md-6 px-1 mb-5-m">
                         <div class="card no-b r-15">
                             <h6 class="card-header font-weight-bold text-white bg-primary" style="border-top-right-radius: 15px; border-top-left-radius: 15px">Total STS</h6>
                             <div class="card-body text-center">
@@ -157,11 +157,11 @@
                     </div>
                 </div>
                 <div class="row mt-3">
-                    <div class="col-md-12 px-2">
+                    <div class="col-md-12 px-1">
                         <div class="card no-b r-15" style="height: 162px !important">
                             <h6 class="card-header bg-primary text-white font-weight-bold" style="border-top-right-radius: 15px; border-top-left-radius: 15px">Notifikasi <i class="icon-notifications ml-2"></i></h6>
                             <div class="card-body px-4 py-2">
-                                    {{-- <p class="m-0"><i class="icon icon-data_usage text-danger mr-2"></i>Terdapat 49 berkas belum di TTD.</p> --}}
+                                {{-- <p class="m-0"><i class="icon icon-data_usage text-danger mr-2"></i>Terdapat 49 berkas belum di TTD.</p> --}}
                                 <p class="m-0 fs-12"><i class="icon icon-data_usage text-danger mr-2"></i><a href="#" title="Lihat Data">Terdapat {{ $strdToday }} SKRD telah jatuh tempo.</a></p>
                                 <p class="m-0 fs-12"><i class="icon icon-data_usage amber-text mr-2"></i><a href="#" title="Lihat Data">Terdapat {{ $skrdToday }} SKRD terbuat pada hari ini.</a></p>
                                 <p class="m-0 fs-12"><i class="icon icon-data_usage text-success mr-2"></i><a href="#" title="Lihat Data">Terdapat {{ $stsToday }} SKRD telah dibayar pada hari ini.</a></p>
@@ -207,7 +207,6 @@
                         <table id="tableChannelBayar" class="table table-hover fs-12" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
-                                    {{-- <th>#</th> --}}
                                     <th>Metode Bayar</th>
                                     <th>Jumlah</th>
                                     <th>Total Pembayaran</th>
@@ -217,7 +216,6 @@
                                 @foreach ($totalChannelBayar as $index => $i)
                                     @if ($i['total'])
                                     <tr>
-                                        {{-- <td class="text-center">{{  $index+1 }}</td> --}}
                                         <td><a href="#" title="Lihat Data">{{ str_contains($i['chanel_bayar'], 'QRIS') ? 'QRIS' : $i['chanel_bayar'] }}</a></td>
                                         <td>{{ $i['total'] }}</td>
                                         <td>@currency($i['total_bayar'])</td>
@@ -296,7 +294,8 @@
             // "scrollY": ,
             "bPaginate": false,
             "bInfo": false,
-            "searching": false
+            "searching": false,
+            "order": [[2, 'desc']],
         });
         $('.dataTables_length').addClass('bs-select');
     });

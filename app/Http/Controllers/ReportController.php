@@ -41,38 +41,45 @@ class ReportController extends Controller
         $this->middleware(['permission:Laporan']);
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $route = $this->route;
         $title = $this->title;
 
-        $opd_id   = Auth::user()->pengguna->opd_id;
+        $today = Carbon::now()->format('Y-m-d');
+        $role  = Auth::user()->pengguna->modelHasRole->role->name;
+
+        $opd_id = $request->opd_id ? $request->opd_id : Auth::user()->pengguna->opd_id;
         $opdArray = OPDJenisPendapatan::select('id_opd')->get()->toArray();
         $opds     = OPD::getAll($opdArray, $opd_id);
 
-        $today = Carbon::now()->format('Y-m-d');
+        $to    = $request->to;
+        $from  = $request->from;
+        $jenis = $request->jenis;
+        $status_bayar = $request->status_bayar;
+        $channel_bayar = $request->channel_bayar;
+        $jenis_pendapatan_id   = $request->jenis_pendapatan_id;
+        $rincian_pendapatan_id = $request->rincian_pendapatan_id;
+
+        $status = $request->status;
+        $tahun  = $request->year;
+
+        if ($request->ajax()) {
+            return $this->dataTable($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar, $rincian_pendapatan_id);
+        }
 
         return view($this->view . 'index', compact(
             'route',
             'title',
             'opds',
-            'today'
+            'today',
+            'status',
+            'tahun'
         ));
     }
 
-    public function api(Request $request)
+    public function dataTable($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar, $rincian_pendapatan_id)
     {
-        $checkOPD = Auth::user()->pengguna->opd_id;
-        $opd_id = $checkOPD == 0 ? $request->opd_id : $checkOPD;
-
-        $jenis_pendapatan_id = $request->jenis_pendapatan_id;
-        $status_bayar = $request->status_bayar;
-        $from = $request->tgl_skrd;
-        $to = $request->tgl_skrd1;
-        $jenis = $request->jenis;
-        $channel_bayar = $request->channel_bayar;
-        $rincian_pendapatan_id = $request->rincian_pendapatan_id;
-
         $data = TransaksiOPD::queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar, $rincian_pendapatan_id);
 
         return DataTables::of($data)
@@ -216,8 +223,8 @@ class ReportController extends Controller
         $jenis_pendapatan_id = $request->jenis_pendapatan_id;
         $rincian_pendapatan_id = $request->rincian_pendapatan_id;
         $status_bayar = $request->status_bayar;
-        $from = $request->tgl_skrd;
-        $to = $request->tgl_skrd1;
+        $from = $request->from;
+        $to = $request->to;
         $jenis = $request->jenis;
         $channel_bayar = $request->channel_bayar;
 
@@ -319,8 +326,8 @@ class ReportController extends Controller
         $jenis_pendapatan_id = $request->jenis_pendapatan_id;
         $rincian_pendapatan_id = $request->rincian_pendapatan_id;
         $status_bayar = $request->status_bayar;
-        $from = $request->tgl_skrd;
-        $to = $request->tgl_skrd1;
+        $from = $request->from;
+        $to = $request->to;
         $jenis = $request->jenis;
         $channel_bayar = $request->channel_bayar;
 

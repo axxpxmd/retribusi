@@ -26,6 +26,8 @@
             <div class="tab-pane animated fadeInUpShort show active" id="semua-data" role="tabpanel">
                 <div class="card no-b mb-2">
                     <div class="card-body">
+                        <input type="hidden" id="year" value="{{ $tahun }}">
+                        <input type="hidden" id="status" value="{{ $status }}">
                         <div class="container col-md-8">
                             <div class="row mb-2">
                                 <label for="jenis" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">Jenis </label>
@@ -96,10 +98,10 @@
                                 <div class="col-sm-8">
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <input type="date" placeholder="MM/DD/YYYY" value="{{ $today }}" name="tgl_skrd" id="tgl_skrd" class="form-control r-0 light s-12 mb-5-m" autocomplete="off"/>
+                                            <input type="date" placeholder="MM/DD/YYYY" value="{{ $today }}" name="from" id="from" class="form-control r-0 light s-12 mb-5-m" autocomplete="off"/>
                                         </div>
                                         <div class="col-md-6">
-                                            <input type="date" placeholder="MM/DD/YYYY" value="{{ $today }}" name="tgl_skrd1" id="tgl_skrd1" class="form-control r-0 light s-12" autocomplete="off"/>
+                                            <input type="date" placeholder="MM/DD/YYYY" value="{{ $today }}" name="to" id="to" class="form-control r-0 light s-12" autocomplete="off"/>
                                         </div>
                                     </div>
                                 </div>
@@ -191,17 +193,19 @@
         order: [ 0, 'asc' ],
         pageLength: 25,
         ajax: {
-            url: "{{ route($route.'api') }}",
-            method: 'POST',
+            url: "{{ route($route.'index') }}",
+            method: 'GET',
             data: function (data) {
-                data.tgl_skrd = $('#tgl_skrd').val();
-                data.tgl_skrd1 = $('#tgl_skrd1').val();
+                data.from = $('#from').val();
+                data.to = $('#to').val();
                 data.opd_id = $('#opd_id').val();
                 data.jenis_pendapatan_id = $('#jenis_pendapatan_id').val();
                 data.status_bayar = $('#status_bayar').val();
                 data.jenis = $('#jenis').val();
                 data.channel_bayar = $('#channel_bayar').val();
                 data.rincian_pendapatan_id = $('#rincian_pendapatan_id').val();
+                data.year   = $('#year').val();
+                data.status = $('#status').val();
             }
         },
         columns: [
@@ -278,15 +282,15 @@
         jenis_pendapatan_id = $('#jenis_pendapatan_id').val();
         rincian_pendapatan_id = $('#rincian_pendapatan_id').val();
         status_bayar = $('#status_bayar').val();
-        tgl_skrd = $('#tgl_skrd').val();
-        tgl_skrd1 = $('#tgl_skrd1').val();
+        from = $('#from').val();
+        to = $('#to').val();
         jenis = $('#jenis').val();
         channel_bayar = $('#channel_bayar').val();
 
-        params = tgl_skrd + "&tgl_skrd1=" + tgl_skrd1 + "&opd_id=" + opd_id + "&jenis_pendapatan_id=" + jenis_pendapatan_id + "&status_bayar=" + status_bayar + "&jenis=" + jenis + "&channel_bayar=" + channel_bayar + "&rincian_pendapatan_id=" + rincian_pendapatan_id;
+        params = from + "&to=" + to + "&opd_id=" + opd_id + "&jenis_pendapatan_id=" + jenis_pendapatan_id + "&status_bayar=" + status_bayar + "&jenis=" + jenis + "&channel_bayar=" + channel_bayar + "&rincian_pendapatan_id=" + rincian_pendapatan_id;
 
-        url1 = "{{ route('report.cetakSKRD') }}?tgl_skrd=" + params
-        url2 = "{{ route('report.getTotalBayar') }}?tgl_skrd=" + params
+        url1 = "{{ route('report.cetakSKRD') }}?from=" + params
+        url2 = "{{ route('report.getTotalBayar') }}?from=" + params
         
         $('#exportpdf').attr('href', url1)
     

@@ -243,7 +243,7 @@ class HomeController extends Controller
             ->groupBy('id_opd')
             ->get();
 
-        // Channel Bayar
+        //* Channel Bayar
         $qris = TransaksiOPD::select('chanel_bayar', DB::raw("COUNT('id') as total"), DB::raw("SUM(total_bayar_bjb) as total_bayar"))
             ->where('status_bayar', 1)
             ->where('chanel_bayar', 'like', '%qris%')
@@ -271,7 +271,7 @@ class HomeController extends Controller
             ->get()->toArray();
         $totalChannelBayar = array_merge($channelBayar, $qris, $mobileBanking);
 
-        // Notifikasi
+        //* Notifikasi
         $skrdToday = TransaksiOPD::when($opd_id != 0, function ($q) use ($opd_id) {
             $q->where('tmtransaksi_opd.id_opd', $opd_id);
         })->whereDate('created_at', $time)->count();
