@@ -103,7 +103,7 @@ class ReportController extends Controller
                 return Carbon::createFromFormat('Y-m-d', $p->tgl_skrd_awal)->format('d M Y');
             })
             ->editColumn('total_bayar', function ($p) {
-                return 'Rp. ' . number_format($p->total_bayar);
+                return 'Rp. ' . number_format($p->total_bayar_bjb);
             })
             ->editColumn('diskon', function ($p) {
                 $diskonHarga = ((int) $p->diskon / 100) * $p->jumlah_bayar;
@@ -235,23 +235,55 @@ class ReportController extends Controller
 
     public function cetakSKRD(Request $request)
     {
-        $checkOPD = Auth::user()->pengguna->opd_id;
-        if ($checkOPD == 0) {
-            $opd_id = $request->opd_id;
-        } else {
-            $opd_id = $checkOPD;
-        }
+        $opd_id = Auth::user()->pengguna->opd_id == 0 ? $request->opd_id : Auth::user()->pengguna->opd_id;
 
-        $jenis_pendapatan_id = $request->jenis_pendapatan_id;
-        $rincian_pendapatan_id = $request->rincian_pendapatan_id;
-        $status_bayar = $request->status_bayar;
-        $from = $request->from;
-        $to = $request->to;
+        $to    = $request->to;
+        $from  = $request->from;
         $jenis = $request->jenis;
+        $status_bayar  = $request->status_bayar;
         $channel_bayar = $request->channel_bayar;
+        $jenis_pendapatan_id   = $request->jenis_pendapatan_id;
+        $rincian_pendapatan_id = $request->rincian_pendapatan_id;
 
-        $data = TransaksiOPD::queryReportCetak($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar, $rincian_pendapatan_id);
-        $totalBayar = $data->sum('total_bayar');
+        $datas = TransaksiOPD::queryReportCetak($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar, $rincian_pendapatan_id);
+        foreach ($datas as $key => $i) {
+            $tgl_bayar      = $i->tgl_bayar;
+            $status_bayar   = $i->status_bayar;
+            $tgl_skrd_awal  = $i->tgl_skrd_awal;
+            $tgl_skrd_akhir = $i->tgl_skrd_akhir;
+            $jumlah_bayar   = $i->jumlah_bayar;
+
+            $dateNow     = Carbon::now()->format('Y-m-d');
+            $jatuh_tempo = Utility::isJatuhTempo($i->tgl_skrd_akhir, $dateNow);
+
+            //TODO: Get bunga
+            $kenaikan    = 0;
+            $jumlahBunga = 0;
+            if ($status_bayar == 1) {
+                list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_awal, $jumlah_bayar, $tgl_bayar);
+            } else {
+                if ($jatuh_tempo) {
+                    list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar);
+                }
+            }
+
+            $data[$key] = [
+                'no_bayar' => $i->no_bayar,
+                'no_skrd'  => $i->no_skrd,
+                'nm_wajib_pajak' => $i->nm_wajib_pajak,
+                'rincian_pendapatan' => $i->rincian_jenis->rincian_pendapatan,
+                'tgl_skrd_awal' => $i->tgl_skrd_awal,
+                'tgl_bayar' => $i->tgl_bayar,
+                'chanel_bayar' => $i->chanel_bayar,
+                'jumlah_bayar' => $i->jumlah_bayar,
+                'diskon' => $i->diskon,
+                'denda' => $jumlahBunga,
+                'jumlah_bayar' => $i->jumlah_bayar,
+                'status_bayar' => $i->status_bayar,
+                'ntb' => $i->ntb
+            ];
+        }
+        $totalBayar = $datas->sum('total_bayar_bjb');
 
         if ($jenis == 1 || $jenis == 0) {
             $title = 'SKRD (Surat Ketetapan Retribusi Daerah)';
@@ -330,7 +362,8 @@ class ReportController extends Controller
             'rincian_pendapatan',
             'channel_bayar',
             'metode_bayar',
-            'status_bayar'
+            'status_bayar',
+            'datas'
         ))->setPaper('a3', 'landscape');
 
         return $pdf->download('Laporan' . $title . ' ' . $from . ' - ' . $to . ".pdf");
@@ -338,23 +371,18 @@ class ReportController extends Controller
 
     public function getTotalBayar(Request $request)
     {
-        $checkOPD = Auth::user()->pengguna->opd_id;
-        if ($checkOPD == 0) {
-            $opd_id = $request->opd_id;
-        } else {
-            $opd_id = $checkOPD;
-        }
+        $opd_id = Auth::user()->pengguna->opd_id == 0 ? $request->opd_id : Auth::user()->pengguna->opd_id;
 
-        $jenis_pendapatan_id = $request->jenis_pendapatan_id;
-        $rincian_pendapatan_id = $request->rincian_pendapatan_id;
-        $status_bayar = $request->status_bayar;
-        $from = $request->from;
-        $to = $request->to;
+        $to    = $request->to;
+        $from  = $request->from;
         $jenis = $request->jenis;
+        $status_bayar  = $request->status_bayar;
         $channel_bayar = $request->channel_bayar;
+        $jenis_pendapatan_id   = $request->jenis_pendapatan_id;
+        $rincian_pendapatan_id = $request->rincian_pendapatan_id;
 
         $data = TransaksiOPD::queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar, $rincian_pendapatan_id);
-        $totalBayar = $data->sum('total_bayar');
+        $totalBayar = $data->sum('total_bayar_bjb');
 
         $totalBayarJson = [
             'total_bayar' => 'Rp. ' . number_format($totalBayar)
