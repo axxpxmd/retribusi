@@ -117,7 +117,7 @@ class VABJBRes
         if ($resUpdateVABJB->successful()) {
             if (isset($resJson['response_code']) != '0000') {
                 $err = true;
-                $errMsg = isset($resJson['repsonse_code_desc']) ? 'Terjadi kegagalan saat memperbarui Virtual Account. Message : ' . $resJson['repsonse_code_desc'] : 'Terjadi kegagalan saat membuat Virtual Account.';
+                $errMsg = isset($resJson['repsonse_code_desc']) ? 'Terjadi kegagalan saat memperbarui Virtual Account. Message : ' . $resJson['repsonse_code_desc'] : 'Terjadi kegagalan saat memperbarui Virtual Account.';
             } else {
                 $err = false;
                 $VABJB = $resJson['va_number'];
@@ -160,7 +160,7 @@ class VABJBRes
         if ($resCheckVABJB->successful()) {
             if (isset($resJson['response_code']) != '0000') {
                 $err = true;
-                $errMsg = isset($resJson['repsonse_code_desc']) ? 'Terjadi kegagalan saat membuat Virtual Account. Message : ' . $resJson['repsonse_code_desc'] : 'Terjadi kegagalan saat membuat Virtual Account.';
+                $errMsg = isset($resJson['repsonse_code_desc']) ? 'Terjadi kegagalan saat check inquiry Virtual Account. Message : ' . $resJson['repsonse_code_desc'] : 'Terjadi kegagalan saat check inquiry Virtual Account.';
             } else {
                 $err = false;
                 $VABJB  = $resJson['va_number'];
