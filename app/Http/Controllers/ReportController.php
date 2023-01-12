@@ -103,7 +103,7 @@ class ReportController extends Controller
                 return Carbon::createFromFormat('Y-m-d', $p->tgl_skrd_awal)->format('d M Y');
             })
             ->editColumn('total_bayar', function ($p) {
-                return 'Rp. ' . number_format($p->total_bayar);
+                return 'Rp. ' . number_format($p->total_bayar_bjb);
             })
             ->editColumn('diskon', function ($p) {
                 $diskonHarga = ((int) $p->diskon / 100) * $p->jumlah_bayar;
@@ -116,8 +116,7 @@ class ReportController extends Controller
             ->editColumn('denda', function ($p) {
                 $dateNow = Carbon::now()->format('Y-m-d');
 
-                $tgl_skrd_akhir = $p->tgl_skrd_akhir;
-                $jumlah_bayar    = $p->jumlah_bayar;
+                $jumlah_bayar   = $p->jumlah_bayar;
                 $status_bayar   = $p->status_bayar;
                 $denda          = $p->denda;
                 $tgl_skrd_akhir = $p->tgl_skrd_akhir;
@@ -136,9 +135,7 @@ class ReportController extends Controller
                     }
                 }
 
-                // return 'Rp. ' . number_format($jumlahBunga + $denda);
-
-                return number_format($p->denda);
+                return 'Rp. ' . number_format($jumlahBunga);
             })
             ->editColumn('status_bayar', function ($p) {
                 if ($p->status_bayar == 1) {
@@ -384,7 +381,7 @@ class ReportController extends Controller
         $rincian_pendapatan_id = $request->rincian_pendapatan_id;
 
         $data = TransaksiOPD::queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar, $rincian_pendapatan_id);
-        $totalBayar = $data->sum('total_bayar_bjb');
+        $totalBayar = $data->sum('total_bayar');
 
         $totalBayarJson = [
             'total_bayar' => 'Rp. ' . number_format($totalBayar)
