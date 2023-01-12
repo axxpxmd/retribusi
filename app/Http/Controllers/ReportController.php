@@ -103,7 +103,7 @@ class ReportController extends Controller
                 return Carbon::createFromFormat('Y-m-d', $p->tgl_skrd_awal)->format('d M Y');
             })
             ->editColumn('total_bayar', function ($p) {
-                return 'Rp. ' . number_format($p->total_bayar_bjb);
+                return 'Rp. ' . number_format($p->total_bayar);
             })
             ->editColumn('diskon', function ($p) {
                 $diskonHarga = ((int) $p->diskon / 100) * $p->jumlah_bayar;
@@ -136,7 +136,9 @@ class ReportController extends Controller
                     }
                 }
 
-                return 'Rp. ' . number_format($jumlahBunga + $denda);
+                // return 'Rp. ' . number_format($jumlahBunga + $denda);
+
+                return number_format($p->denda);
             })
             ->editColumn('status_bayar', function ($p) {
                 if ($p->status_bayar == 1) {
