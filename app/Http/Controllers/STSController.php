@@ -164,7 +164,7 @@ class STSController extends Controller
         $fileName  = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
         $path_sftp = 'file_ttd_skrd/';
         $tgl_skrd_akhir = $data->tgl_skrd_akhir;
-        $total_bayar    = $data->jumlah_bayar;
+        $jumlah_bayar   = $data->jumlah_bayar;
         $status_ttd     = $data->status_ttd;
         $tgl_bayar      = $data->tgl_bayar;
         $status_bayar   = $data->status_bayar;
@@ -177,10 +177,10 @@ class STSController extends Controller
         $kenaikan    = 0;
         $jumlahBunga = 0;
         if ($status_bayar == 1) {
-            list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $total_bayar, $tgl_bayar);
+            list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar, $tgl_bayar);
         } else {
             if ($jatuh_tempo) {
-                list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $total_bayar);
+                list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar);
             }
         }
 
@@ -245,7 +245,7 @@ class STSController extends Controller
         $va_number = (int) $data->nomor_va_bjb;
         $no_bayar  = $data->no_bayar;
         $tgl_skrd_akhir = $data->tgl_skrd_akhir;
-        $total_bayar    = $data->jumlah_bayar;
+        $jumlah_bayar   = $data->jumlah_bayar;
         $status_bayar   = $data->status_bayar;
 
         //TODO: Check role
@@ -257,7 +257,7 @@ class STSController extends Controller
         $kenaikan    = 0;
         $jumlahBunga = 0;
         if ($jatuh_tempo) {
-            list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $total_bayar);
+            list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar);
         }
 
         //* Check status bayar
@@ -358,7 +358,7 @@ class STSController extends Controller
         $dateNow = Carbon::now()->format('Y-m-d');
 
         $tgl_skrd_akhir = $data->tgl_skrd_akhir;
-        $total_bayar    = $data->jumlah_bayar;
+        $jumlah_bayar   = $data->jumlah_bayar;
         $status_bayar   = $data->status_bayar;
         $denda          = $data->denda; 
         $text_qris      = $data->text_qris;
@@ -378,15 +378,15 @@ class STSController extends Controller
         $kenaikan    = 0;
         $jumlahBunga = 0;
         if ($status_bayar == 1) {
-            list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_awal, $total_bayar, $tgl_bayar);
+            list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_awal, $jumlah_bayar, $tgl_bayar);
         } else {
             if ($jatuh_tempo) {
-                list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $total_bayar);
+                list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar);
             }
         }
 
         //TODO: Total Bayar + Bunga
-        $total_bayar = Utility::createDenda($status_bayar, $total_bayar, $denda, $jumlahBunga);
+        $total_bayar = Utility::createDenda($status_bayar, $jumlah_bayar, $denda, $jumlahBunga);
 
         $terbilang = Html_number::terbilang($total_bayar) . 'rupiah';
         $tgl_jatuh_tempo = Utility::tglJatuhTempo($tgl_strd_akhir, $tgl_skrd_akhir);
