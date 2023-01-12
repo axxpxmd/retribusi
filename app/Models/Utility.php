@@ -36,12 +36,13 @@ class Utility extends Model
         //TODO: Create Bunga (kenaikan 2% tiap bulan)
         list($dayDiff, $monthDiff) = self::getDiffDate($tgl_skrd_akhir, $tgl_bayar);
 
+        // dd($dayDiff, $monthDiff);
         //TODO: Check status bayar
         if ($tgl_bayar) {
             if ($monthDiff == 0) {
                 $kenaikan = 0;
             } else {
-                $kenaikan = ((int) $monthDiff + 1) * 2;
+                $kenaikan = ((int) $monthDiff) * 2;
             }
         } else {
             $kenaikan = ((int) $monthDiff + 1) * 2;

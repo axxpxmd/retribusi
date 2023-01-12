@@ -360,12 +360,13 @@ class STSController extends Controller
         $tgl_skrd_akhir = $data->tgl_skrd_akhir;
         $total_bayar    = $data->jumlah_bayar;
         $status_bayar   = $data->status_bayar;
-        $denda          = $data->denda;
+        $denda          = $data->denda; 
         $text_qris      = $data->text_qris;
         $nm_wajib_pajak = $data->nm_wajib_pajak;
         $no_skrd        = $data->no_skrd;
         $tgl_strd_akhir = $data->tgl_strd_akhir;
         $tgl_skrd_akhir = $data->tgl_skrd_akhir;
+        $tgl_skrd_awal  = $data->tgl_skrd_awal;
         $tgl_bayar      = $data->tgl_bayar;
 
         $fileName = str_replace(' ', '', $nm_wajib_pajak) . '-' . $no_skrd . ".pdf";
@@ -377,7 +378,7 @@ class STSController extends Controller
         $kenaikan    = 0;
         $jumlahBunga = 0;
         if ($status_bayar == 1) {
-            list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $total_bayar, $tgl_bayar);
+            list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_awal, $total_bayar, $tgl_bayar);
         } else {
             if ($jatuh_tempo) {
                 list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $total_bayar);
