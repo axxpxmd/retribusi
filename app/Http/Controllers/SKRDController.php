@@ -644,27 +644,27 @@ class SKRDController extends Controller
         $va_number    = (int) $data->nomor_va_bjb;
         $clientRefnum = $data->no_bayar;
 
-        if ($va_number) {
-            $expiredDate = Carbon::now()->addMinutes(5)->format('Y-m-d H:i:s');
+        // if ($va_number) {
+        //     $expiredDate = Carbon::now()->addMinutes(5)->format('Y-m-d H:i:s');
 
-            //TODO: Get Token VA
-            list($err, $errMsg, $tokenBJB) = $this->vabjbres->getTokenBJBres();
-            if ($err) {
-                DB::rollback(); //* DB Transaction Failed
-                return response()->json([
-                    'message' => $errMsg
-                ], 500);
-            }
+        //     //TODO: Get Token VA
+        //     list($err, $errMsg, $tokenBJB) = $this->vabjbres->getTokenBJBres();
+        //     if ($err) {
+        //         DB::rollback(); //* DB Transaction Failed
+        //         return response()->json([
+        //             'message' => $errMsg
+        //         ], 500);
+        //     }
 
-            //TODO: Update VA BJB (make Va expired)
-            list($err, $errMsg, $VABJB) = $this->vabjbres->updateVABJBres($tokenBJB, $amount, $expiredDate, $customerName, $va_number, 2, $clientRefnum);
-            if ($err) {
-                DB::rollback(); //* DB Transaction Failed
-                return response()->json([
-                    'message' => $errMsg
-                ], 500);
-            }
-        }
+        //     //TODO: Update VA BJB (make Va expired)
+        //     list($err, $errMsg, $VABJB) = $this->vabjbres->updateVABJBres($tokenBJB, $amount, $expiredDate, $customerName, $va_number, 2, $clientRefnum);
+        //     if ($err) {
+        //         DB::rollback(); //* DB Transaction Failed
+        //         return response()->json([
+        //             'message' => $errMsg
+        //         ], 500);
+        //     }
+        // }
 
         //* LOG
         Log::channel('skrd_delete')->info('Hapus Data SRKD | ' . 'Oleh:' . Auth::user()->pengguna->full_name, $data->toArray());
