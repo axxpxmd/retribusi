@@ -282,7 +282,7 @@ class ReportController extends Controller
                 'ntb' => $i->ntb
             ];
         }
-        $totalBayar = $datas->sum('total_bayar_bjb');
+        $totalBayar = $datas->sum('total_bayar');
 
         if ($jenis == 1 || $jenis == 0) {
             $title = 'SKRD (Surat Ketetapan Retribusi Daerah)';
