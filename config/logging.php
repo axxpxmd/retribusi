@@ -45,56 +45,56 @@ return [
             'driver' => 'daily',
             'path' => storage_path('logs/skrd/create.log'),
             'level' => 'info',
-            'days' => 30,
+            'days' => 0,
         ],
 
         'skrd_edit' => [
             'driver' => 'daily',
             'path' => storage_path('logs/skrd/edit.log'),
             'level' => 'info',
-            'days' => 30,
+            'days' => 0,
         ],
 
         'skrd_delete' => [
             'driver' => 'daily',
             'path' => storage_path('logs/skrd/delete.log'),
             'level' => 'info',
-            'days' => 30,
+            'days' => 0,
         ],
 
         'create_qris' => [
             'driver' => 'daily',
             'path' => storage_path('logs/qris/create_qris.log'),
             'level' => 'info',
-            'days' => 30,
+            'days' => 0,
         ],
 
         'token' => [
             'driver' => 'daily',
             'path' => storage_path('logs/va/token.log'),
             'level' => 'info',
-            'days' => 30,
+            'days' => 0,
         ],
 
         'create_va' => [
             'driver' => 'daily',
             'path' => storage_path('logs/va/create_va.log'),
             'level' => 'info',
-            'days' => 30,
+            'days' => 0,
         ],
 
         'update_va' => [
             'driver' => 'daily',
             'path' => storage_path('logs/va/update_va.log'),
             'level' => 'info',
-            'days' => 30,
+            'days' => 0,
         ],
 
         'check_va' => [
             'driver' => 'daily',
             'path' => storage_path('logs/va/check_va.log'),
             'level' => 'info',
-            'days' => 30,
+            'days' => 0,
         ],
 
         'single' => [
