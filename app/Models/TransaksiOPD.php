@@ -52,7 +52,7 @@ class TransaksiOPD extends Model
     {
         $date  = Carbon::now()->format('Y-m-d');
 
-        /** Status
+        /** Status from dashboard
          * 1. SKRD
          * 2. STS
          */
@@ -289,12 +289,14 @@ class TransaksiOPD extends Model
     }
 
     // 
-    public static function querySTRD($from, $to, $opd_id, $no_skrd, $status_ttd)
+    public static function querySTRD($from, $to, $opd_id, $no_skrd, $status_ttd, $status = null, $tahun = null)
     {
-        $now = Carbon::now();
-        $date = $now->format('Y-m-d');
+        $date = Carbon::now()->format('Y-m-d');
 
-        $data = TransaksiOPD::with('opd', 'jenis_pendapatan')->where('status_bayar', 0)->where('tgl_skrd_akhir', '<', $date);
+        $data = TransaksiOPD::select('id', 'id_opd', 'no_skrd', 'no_bayar', 'nm_wajib_pajak', 'id_jenis_pendapatan', 'tgl_skrd_awal', 'tgl_skrd_akhir', 'status_ttd', 'jumlah_bayar', 'history_ttd')
+            ->with('opd', 'jenis_pendapatan')
+            ->where('status_bayar', 0)
+            ->where('tgl_skrd_akhir', '<', $date);
 
         if ($opd_id != 0) {
             $data->where('id_opd', $opd_id);
@@ -308,12 +310,22 @@ class TransaksiOPD extends Model
             $data->where('status_ttd', $status_ttd);
         }
 
-        if ($from != null ||  $to != null) {
-            if ($from != null && $to == null) {
-                $data->whereDate('tgl_skrd_akhir', '<', $from);
-            } else {
-                $data->whereBetween('tgl_skrd_akhir', [$from, $to]);
-            }
+        switch ($status) {
+            case '1':
+                $data->whereYear('tmtransaksi_opd.created_at', $tahun);
+                break;
+            case '2':
+                return $data->orderBy('id', 'DESC')->get();
+                break;
+            default:
+                if ($from != null ||  $to != null) {
+                    if ($from != null && $to == null) {
+                        $data->whereDate('tgl_skrd_akhir', '<', $from);
+                    } else {
+                        $data->whereBetween('tgl_skrd_akhir', [$from, $to]);
+                    }
+                }
+                break;
         }
 
         return $data->orderBy('id', 'DESC')->get();

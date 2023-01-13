@@ -34,7 +34,7 @@
                                 <div class="col-sm-8">
                                     <select class="select2 form-control r-0 light s-12" id="jenis" name="jenis">
                                         <option value="0">Pilih</option>
-                                        <option value="1">SKRD</option>
+                                        <option value="1" {{ $status == 1 ? 'selected' : '' }}>SKRD</option>
                                         <option value="2" {{ $status == 2 ? 'selected' : '' }}>STS</option>
                                     </select>
                                 </div>

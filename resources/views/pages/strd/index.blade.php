@@ -27,6 +27,8 @@
             <div class="tab-pane animated fadeInUpShort show active" id="semua-data" role="tabpanel">
                 <div class="card no-b mb-2">
                     <div class="card-body">
+                        <input type="hidden" id="year" value="{{ $tahun }}">
+                        <input type="hidden" id="status" value="{{ $status }}">
                         <div class="col-md-8 container">
                             @if ($opd_id == 0)
                             <div class="row mb-2">
@@ -35,7 +37,7 @@
                                     <select name="opd" id="opd" class="select2 form-control r-0 s-12">
                                         <option value="0">Semua</option>
                                         @foreach ($opds as $i)
-                                            <option value="{{ $i->id }}">{{ $i->n_opd }}</option>
+                                            <option value="{{ $i->id }}" {{ $i->id == $opd_id ? 'selected' : ''}}>{{ $i->n_opd }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -60,10 +62,10 @@
                             <div class="row mb-2">
                                 <label for="no_skrd" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">Tanggal Jatuh Tempo</label>
                                 <div class="col-md-4 mb-5-m">
-                                    <input type="date" placeholder="MM/DD/YYYY" value="{{ $today }}" name="tgl_skrd" id="tgl_skrd" class="form-control light r-0 s-12" autocomplete="off"/>
+                                    <input type="date" placeholder="MM/DD/YYYY" value="{{ $today }}" name="from" id="from" class="form-control light r-0 s-12" autocomplete="off"/>
                                 </div>
                                 <div class="col-md-4">
-                                    <input type="date" placeholder="MM/DD/YYYY" value="{{ $today }}" name="tgl_skrd1" id="tgl_skrd1" class="form-control light r-0 s-12" autocomplete="off"/>
+                                    <input type="date" placeholder="MM/DD/YYYY" value="{{ $today }}" name="to" id="to" class="form-control light r-0 s-12" autocomplete="off"/>
                                 </div>
                             </div>
                             <div class="row mb-4">
@@ -182,14 +184,16 @@
         order: [ 0, 'asc' ],
         pageLength: 25,
         ajax: {
-            url: "{{ route($route.'api') }}",
-            method: 'POST',
+            url: "{{ route($route.'index') }}",
+            method: 'GET',
             data: function (data) {
-                data.tgl_skrd   = $('#tgl_skrd').val();
-                data.tgl_skrd1  = $('#tgl_skrd1').val();
+                data.from   = $('#from').val();
+                data.to     = $('#to').val();
                 data.opd_id     = $('#opd').val();
                 data.no_skrd    = $('#no_skrd').val();
                 data.status_ttd = $('#status_ttd').val();
+                data.year   = $('#year').val();
+                data.status = $('#status').val();
             }
         },
         columns: [

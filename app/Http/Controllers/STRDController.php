@@ -46,43 +46,42 @@ class STRDController extends Controller
         $this->middleware(['permission:STRD']);
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $route = $this->route;
         $title = $this->title;
 
-        $opd_id   = Auth::user()->pengguna->opd_id;
+        $today    = Carbon::yesterday()->format('Y-m-d');
+        $opd_id   = $request->opd_id ? $request->opd_id : Auth::user()->pengguna->opd_id;
         $opdArray = OPDJenisPendapatan::select('id_opd')->get()->toArray();
         $opds     = OPD::getAll($opdArray, $opd_id);
 
-        $today = Carbon::yesterday()->format('Y-m-d');
+        $to    = $request->to;
+        $from  = $request->from;
+        $no_skrd    = $request->no_skrd;
+        $status_ttd = $request->status_ttd;
+
+        $status = $request->status;
+        $tahun  = $request->year;
+
+        if ($request->ajax()) {
+            return $this->dataTable($from, $to, $opd_id, $no_skrd, $status_ttd, $today, $status, $tahun);
+        }
 
         return view($this->view . 'index', compact(
             'route',
             'title',
             'opds',
             'opd_id',
-            'today'
+            'today',
+            'status',
+            'tahun'
         ));
     }
 
-    public function api(Request $request)
+    public function dataTable($from, $to, $opd_id, $no_skrd, $status_ttd, $dateNow, $status, $tahun)
     {
-        $from  = $request->tgl_skrd;
-        $to    = $request->tgl_skrd1;
-        $no_skrd    = $request->no_skrd;
-        $status_ttd = $request->status_ttd;
-
-        $dateNow  = Carbon::now()->format('Y-m-d');
-        $checkOPD = Auth::user()->pengguna->opd_id;
-
-        if ($checkOPD == 0) {
-            $opd_id = $request->opd_id;
-        } else {
-            $opd_id = $checkOPD;
-        }
-
-        $data = TransaksiOPD::querySTRD($from, $to, $opd_id, $no_skrd, $status_ttd);
+        $data = TransaksiOPD::querySTRD($from, $to, $opd_id, $no_skrd, $status_ttd, $status, $tahun);
 
         return DataTables::of($data)
             ->addColumn('action', function ($p) use ($dateNow) {
