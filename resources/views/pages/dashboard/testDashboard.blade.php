@@ -151,7 +151,7 @@
                                 <div class="mb-2">
                                     <i class="icon-notebook-text fs-24 text-success mr-2"></i>
                                     <span class="m-0 font-weight-bold fs-16">{{ $totalKeseluruhan->total_skrd }}</span>
-                                    <a href="#" class="ml-2" title="Lihat Data"><i class="icon-external-link"></i></a>
+                                    {{-- <a href="#" class="ml-2" title="Lihat Data"><i class="icon-external-link"></i></a> --}}
                                 </div>
                                 <p class="m-0 fs-14">@currency($totalKeseluruhan->total_bayar)</p>
                             </div>
