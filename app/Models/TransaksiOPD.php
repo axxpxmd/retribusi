@@ -37,17 +37,6 @@ class TransaksiOPD extends Model
         return $this->belongsTo(Kecamatan::class, 'kecamatan_id');
     }
 
-    public static function checkStatusTTD($status_ttd)
-    {
-        if ($status_ttd == 1 || $status_ttd == 3) {
-            $status_ttd = true;
-        } else {
-            $status_ttd = false;
-        }
-
-        return $status_ttd;
-    }
-
     public static function checkDenda($denda)
     {
         if ($denda == 0 || $denda == null) {
@@ -59,203 +48,139 @@ class TransaksiOPD extends Model
         return $status_denda;
     }
 
-    public static function getDiffDate($tgl_jatuh_tempo)
+    public static function queryReportDashboard($opd_id, $status, $tahun)
     {
-        $startDate = Carbon::parse($tgl_jatuh_tempo . ' 23:59:59');
-        $endDate   = Carbon::now();
+        $date  = Carbon::now()->format('Y-m-d');
 
-        $dayDiff = $startDate->diffInDays($endDate);
-        $monthDiff = $startDate->diffInMonths()($endDate);
+        /** Status
+         * 1. SKRD
+         * 2. STS
+         */
 
-        return [$dayDiff, $monthDiff];
-    }
-
-    // 
-    public static function queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar, $rincian_pendapatan_id)
-    {
         $data = TransaksiOPD::select('id', 'id_opd', 'id_rincian_jenis_pendapatan', 'no_skrd', 'no_bayar', 'nm_wajib_pajak', 'id_jenis_pendapatan', 'tgl_skrd_awal', 'status_ttd', 'ntb', 'tgl_bayar', 'total_bayar', 'total_bayar_bjb', 'jumlah_bayar', 'status_bayar', 'chanel_bayar', 'rincian_jenis_pendapatan', 'tgl_skrd_akhir', 'tgl_skrd_awal')
-            ->with(['jenis_pendapatan', 'opd', 'rincian_jenis'])->orderBy('id', 'DESC');
+            ->with(['jenis_pendapatan', 'opd', 'rincian_jenis'])
+            ->when($opd_id != 0, function ($q) use ($opd_id) {
+                $q->where('tmtransaksi_opd.id_opd', $opd_id);
+            })
+            ->whereYear('tmtransaksi_opd.created_at', $tahun);
 
-        if ($opd_id != 0) {
-            $data->where('id_opd', $opd_id);
-        }
-
-        if ($jenis_pendapatan_id != 0) {
-            $data->where('id_jenis_pendapatan', $jenis_pendapatan_id);
-        }
-
-        if ($rincian_pendapatan_id != 0) {
-            $data->where('id_rincian_jenis_pendapatan', $rincian_pendapatan_id);
-        }
-
-        if ($jenis == 1 || $jenis == 0) {
-            if ($status_bayar != 0 || $status_bayar != null) {
-                $data->where('status_bayar', $status_bayar);
-            }
-
-            if ($from != null || $to != null) {
-                if ($from != null && $to == null) {
-                    $data->whereDate('tgl_skrd_awal', $from);
-                } else {
-                    $data->whereBetween('tgl_skrd_awal', [$from, $to]);
-                }
-            }
-        } elseif ($jenis == 2) {
-            $from = $from . ' ' . '00:00:01';
-            $to = $to . ' ' . '23:59:59';
-
-            $data->where('status_bayar', 1);
-
-            if ($from != null || $to != null) {
-                if ($from != null && $to == null) {
-                    $data->whereDate('tgl_bayar', $from);
-                } else {
-                    $data->whereBetween('tgl_bayar', [$from, $to]);
-                }
-            }
-        }
-
-        /**
-         * 1. VA
-         * 2. ATM
-         * 3. BJB Mobile
-         * 4. Teller
-         * 5. QRIS
-         * 6. Bendahara OPD
-         * 7. Transfer RKUD
-         * 8. RTGS/SKN
-         * 9. Lainnya
-         */
-
-        if ($channel_bayar != 0) {
-            switch ($channel_bayar) {
-                case "1":
-                    $data->where('chanel_bayar', 'like', '%Virtual Account%');
-                    break;
-                case 2:
-                    $data->where('chanel_bayar', 'like', '%ATM%');
-                    break;
-                case 3;
-                    $data->where('chanel_bayar', 'like', '%MOBIL%');
-                    break;
-                case 4;
-                    $data->where('chanel_bayar', 'like', '%TELLER%');
-                    break;
-                case 5;
-                    $data->where('chanel_bayar', 'like', '%QRIS%');
-                    break;
-                case 6;
-                    $data->where('chanel_bayar', 'like', '%Bendahara%');
-                    break;
-                case 7;
-                    $data->where('chanel_bayar', 'like', '%Transfer RKUD%');
-                    break;
-                case 8;
-                    $data->where('chanel_bayar', 'like', '%RTGS/SKN%');
-                    break;
-                case 9;
-                    $data->where('chanel_bayar', 'like', '%Lainnya%');
-                    break;
-                default:
-                    $data->where('chanel_bayar', 'like', '%Lainnya%');
-                    break;
-            }
-        }
-
-        return $data->get();
-    }
-
-    // 
-    public static function queryReportCetak($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar, $rincian_pendapatan_id)
-    {
-        $data = TransaksiOPD::select('id', 'id_opd', 'id_rincian_jenis_pendapatan', 'no_skrd', 'no_bayar', 'nm_wajib_pajak', 'id_jenis_pendapatan', 'tgl_skrd_awal', 'status_ttd', 'ntb', 'tgl_bayar', 'total_bayar', 'total_bayar_bjb', 'jumlah_bayar', 'status_bayar', 'chanel_bayar', 'tgl_skrd_akhir')
-            ->with(['jenis_pendapatan']);
-
-        if ($opd_id != 0) {
-            $data->where('id_opd', $opd_id);
-        }
-
-        if ($jenis_pendapatan_id != 0) {
-            $data->where('id_jenis_pendapatan', $jenis_pendapatan_id);
-        }
-
-        if ($rincian_pendapatan_id != 0) {
-            $data->where('id_rincian_jenis_pendapatan', $rincian_pendapatan_id);
-        }
-
-        if ($jenis == 1 || $jenis == 0) {
-            if ($status_bayar != 0 || $status_bayar != null) {
-                $data->where('status_bayar', $status_bayar);
-            }
-
-            if ($from != null || $to != null) {
-                if ($from != null && $to == null) {
-                    $data->whereDate('tgl_skrd_awal', $from);
-                } else {
-                    $data->whereBetween('tgl_skrd_awal', [$from, $to]);
-                }
-            }
-        } elseif ($jenis == 2) {
-            $from = $from . ' ' . '00:00:01';
-            $to = $to . ' ' . '23:59:59';
-
-            if ($from != null || $to != null) {
-                if ($from != null && $to == null) {
-                    $data->whereDate('tgl_bayar', $from);
-                } else {
-                    $data->whereBetween('tgl_bayar', [$from, $to]);
-                }
-            }
-        }
-
-        /**
-         * 1. VA
-         * 2. ATM
-         * 3. BJB Mobile
-         * 4. Teller
-         * 5. QRIS
-         * 6. Bendahara OPD
-         * 7. Transfer RKUD
-         * 8. RTGS/SKN
-         * 9. Lainnya
-         */
-
-        if ($channel_bayar != 0) {
-            switch ($channel_bayar) {
-                case "1":
-                    $data->where('chanel_bayar', 'like', '%Virtual Account%');
-                    break;
-                case 2:
-                    $data->where('chanel_bayar', 'like', '%ATM%');
-                    break;
-                case 3;
-                    $data->where('chanel_bayar', 'like', '%MOBIL%');
-                    break;
-                case 4;
-                    $data->where('chanel_bayar', 'like', '%TELLER%');
-                    break;
-                case 5;
-                    $data->where('chanel_bayar', 'like', '%QRIS%');
-                    break;
-                case 6;
-                    $data->where('chanel_bayar', 'like', '%Bendahara%');
-                    break;
-                case 7;
-                    $data->where('chanel_bayar', 'like', '%Transfer RKUD%');
-                    break;
-                case 8;
-                    $data->where('chanel_bayar', 'like', '%RTGS/SKN%');
-                    break;
-                case 9;
-                    $data->where('chanel_bayar', 'like', '%Lainnya%');
-                    break;
-                default:
-                    $data->where('chanel_bayar', 'like', '%Lainnya%');
-                    break;
-            }
+        switch ($status) {
+            case '1':
+                $data->where('status_bayar', 0)->where('tgl_skrd_akhir', '>=', $date);
+                break;
+            case '2':
+                $data->where('status_bayar', 1);
+                break;
+            default:
+                # code...
+                break;
         }
 
         return $data->orderBy('id', 'DESC')->get();
+    }
+
+    // 
+    public static function queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar, $rincian_pendapatan_id, $status = null, $tahun = null)
+    {
+        switch ($status) {
+            case '1':
+                return self::queryReportDashboard($opd_id, $status, $tahun);
+                break;
+            case '2':
+                return self::queryReportDashboard($opd_id, $status, $tahun);
+                break;
+            default:
+                $data = TransaksiOPD::select('id', 'id_opd', 'id_rincian_jenis_pendapatan', 'no_skrd', 'no_bayar', 'nm_wajib_pajak', 'id_jenis_pendapatan', 'tgl_skrd_awal', 'status_ttd', 'ntb', 'tgl_bayar', 'total_bayar', 'total_bayar_bjb', 'jumlah_bayar', 'status_bayar', 'chanel_bayar', 'rincian_jenis_pendapatan', 'tgl_skrd_akhir', 'tgl_skrd_awal')
+                    ->with(['jenis_pendapatan', 'opd', 'rincian_jenis']);
+                if ($opd_id != 0) {
+                    $data->where('id_opd', $opd_id);
+                }
+
+                if ($jenis_pendapatan_id != 0) {
+                    $data->where('id_jenis_pendapatan', $jenis_pendapatan_id);
+                }
+
+                if ($rincian_pendapatan_id != 0) {
+                    $data->where('id_rincian_jenis_pendapatan', $rincian_pendapatan_id);
+                }
+
+                if ($jenis == 1 || $jenis == 0) {
+                    if ($status_bayar != 0 || $status_bayar != null) {
+                        $data->where('status_bayar', $status_bayar);
+                    }
+
+                    if ($from != null || $to != null) {
+                        if ($from != null && $to == null) {
+                            $data->whereDate('tgl_skrd_awal', $from);
+                        } else {
+                            $data->whereBetween('tgl_skrd_awal', [$from, $to]);
+                        }
+                    }
+                } elseif ($jenis == 2) {
+                    $from = $from . ' ' . '00:00:01';
+                    $to = $to . ' ' . '23:59:59';
+
+                    $data->where('status_bayar', 1);
+
+                    if ($from != null || $to != null) {
+                        if ($from != null && $to == null) {
+                            $data->whereDate('tgl_bayar', $from);
+                        } else {
+                            $data->whereBetween('tgl_bayar', [$from, $to]);
+                        }
+                    }
+                }
+
+                /**
+                 * 1. VA
+                 * 2. ATM
+                 * 3. BJB Mobile
+                 * 4. Teller
+                 * 5. QRIS
+                 * 6. Bendahara OPD
+                 * 7. Transfer RKUD
+                 * 8. RTGS/SKN
+                 * 9. Lainnya
+                 */
+
+                if ($channel_bayar != 0) {
+                    switch ($channel_bayar) {
+                        case "1":
+                            $data->where('chanel_bayar', 'like', '%Virtual Account%');
+                            break;
+                        case 2:
+                            $data->where('chanel_bayar', 'like', '%ATM%');
+                            break;
+                        case 3;
+                            $data->where('chanel_bayar', 'like', '%MOBIL%');
+                            break;
+                        case 4;
+                            $data->where('chanel_bayar', 'like', '%TELLER%');
+                            break;
+                        case 5;
+                            $data->where('chanel_bayar', 'like', '%QRIS%');
+                            break;
+                        case 6;
+                            $data->where('chanel_bayar', 'like', '%Bendahara%');
+                            break;
+                        case 7;
+                            $data->where('chanel_bayar', 'like', '%Transfer RKUD%');
+                            break;
+                        case 8;
+                            $data->where('chanel_bayar', 'like', '%RTGS/SKN%');
+                            break;
+                        case 9;
+                            $data->where('chanel_bayar', 'like', '%Lainnya%');
+                            break;
+                        default:
+                            $data->where('chanel_bayar', 'like', '%Lainnya%');
+                            break;
+                    }
+                }
+
+                return $data->orderBy('id', 'DESC')->get();
+                break;
+        }
     }
 
     // 

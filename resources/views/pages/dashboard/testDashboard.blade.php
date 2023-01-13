@@ -136,7 +136,7 @@
                                 <div class="mb-2">
                                     <i class="icon-notebook-text fs-24 text-primary mr-2"></i>
                                     <span class="m-0 font-weight-bold fs-16">{{ $totalSTS->total_skrd }}</span>
-                                    <a href="#" class="ml-2" title="Lihat Data"><i class="icon-external-link"></i></a>
+                                    <a href="{{ route('report.index', ['year' => $year, 'status' => 2, 'opd_id' => $n_opd->id]) }}" target="_blank" class="ml-2" title="Lihat Data"><i class="icon-external-link"></i></a>
                                 </div>
                                 <p class="m-0 fs-14">@currency($totalSTS->total_bayar)</p>
                             </div>

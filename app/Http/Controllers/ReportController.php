@@ -65,7 +65,7 @@ class ReportController extends Controller
         $tahun  = $request->year;
 
         if ($request->ajax()) {
-            return $this->dataTable($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar, $rincian_pendapatan_id);
+            return $this->dataTable($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar, $rincian_pendapatan_id, $status, $tahun);
         }
 
         return view($this->view . 'index', compact(
@@ -74,13 +74,14 @@ class ReportController extends Controller
             'opds',
             'today',
             'status',
-            'tahun'
+            'tahun',
+            'opd_id'
         ));
     }
 
-    public function dataTable($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar, $rincian_pendapatan_id)
+    public function dataTable($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar, $rincian_pendapatan_id, $status, $tahun)
     {
-        $data = TransaksiOPD::queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar, $rincian_pendapatan_id);
+        $data = TransaksiOPD::queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar, $rincian_pendapatan_id, $status, $tahun);
 
         return DataTables::of($data)
             ->editColumn('no_bayar', function ($p) {
@@ -118,7 +119,6 @@ class ReportController extends Controller
 
                 $jumlah_bayar   = $p->jumlah_bayar;
                 $status_bayar   = $p->status_bayar;
-                $denda          = $p->denda;
                 $tgl_skrd_akhir = $p->tgl_skrd_akhir;
                 $tgl_skrd_awal  = $p->tgl_skrd_awal;
                 $tgl_bayar      = $p->tgl_bayar;
@@ -239,12 +239,16 @@ class ReportController extends Controller
         $to    = $request->to;
         $from  = $request->from;
         $jenis = $request->jenis;
+        $status = $request->status;
+        $tahun  = $request->year;
         $status_bayar  = $request->status_bayar;
         $channel_bayar = $request->channel_bayar;
         $jenis_pendapatan_id   = $request->jenis_pendapatan_id;
         $rincian_pendapatan_id = $request->rincian_pendapatan_id;
 
-        $datas = TransaksiOPD::queryReportCetak($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar, $rincian_pendapatan_id);
+        $datas = TransaksiOPD::queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar, $rincian_pendapatan_id, $status, $tahun);
+        $data  = [];
+        $totalDenda = [0];
         foreach ($datas as $key => $i) {
             $tgl_bayar      = $i->tgl_bayar;
             $status_bayar   = $i->status_bayar;
@@ -284,7 +288,7 @@ class ReportController extends Controller
                 'ntb' => $i->ntb
             ];
         }
-        
+
         $totalBayar = $datas->sum('total_bayar') + array_sum($totalDenda);
 
         if ($jenis == 1 || $jenis == 0) {
@@ -378,12 +382,15 @@ class ReportController extends Controller
         $to    = $request->to;
         $from  = $request->from;
         $jenis = $request->jenis;
+        $status = $request->status;
+        $tahun  = $request->year;
         $status_bayar  = $request->status_bayar;
         $channel_bayar = $request->channel_bayar;
         $jenis_pendapatan_id   = $request->jenis_pendapatan_id;
         $rincian_pendapatan_id = $request->rincian_pendapatan_id;
 
-        $datas = TransaksiOPD::queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar, $rincian_pendapatan_id);
+        $datas = TransaksiOPD::queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar, $rincian_pendapatan_id, $status, $tahun);
+        $totalDenda = [0];
         foreach ($datas as $key => $i) {
             $tgl_bayar      = $i->tgl_bayar;
             $status_bayar   = $i->status_bayar;
@@ -407,7 +414,7 @@ class ReportController extends Controller
 
             $totalDenda[$key] = $jumlahBunga;
         }
-        
+
         $totalBayar = $datas->sum('total_bayar') + array_sum($totalDenda);
 
         $totalBayarJson = [

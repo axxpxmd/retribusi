@@ -19,18 +19,6 @@ class Utility extends Model
         return [$dayDiff, $monthDiff];
     }
 
-    public static function checkBunga($dayDiff, $tgl_skrd_akhir, $total_bayar)
-    {
-        if ($dayDiff >= 0) {
-            $kenaikan    = 0;
-            $jumlahBunga = 0;
-        } else {
-            list($jumlahBunga, $kenaikan) = self::createBunga($tgl_skrd_akhir, $total_bayar);
-        }
-
-        return [$jumlahBunga, $kenaikan];
-    }
-
     public static function createBunga($tgl_skrd_akhir, $total_bayar, $tgl_bayar = null)
     {
         //TODO: Create Bunga (kenaikan 2% tiap bulan)

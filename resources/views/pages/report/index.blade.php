@@ -35,7 +35,7 @@
                                     <select class="select2 form-control r-0 light s-12" id="jenis" name="jenis">
                                         <option value="0">Pilih</option>
                                         <option value="1">SKRD</option>
-                                        <option value="2">STS</option>
+                                        <option value="2" {{ $status == 2 ? 'selected' : '' }}>STS</option>
                                     </select>
                                 </div>
                             </div>
@@ -45,7 +45,7 @@
                                     <select class="select2 form-control r-0 light s-12" id="opd_id" name="opd_id">
                                         <option value="0">Semua</option>
                                         @foreach ($opds as $i)
-                                            <option value="{{ $i->id }}">{{ $i->n_opd }}</option>
+                                            <option value="{{ $i->id }}" {{ $i->id == $opd_id ? 'selected' : ''}}>{{ $i->n_opd }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -158,11 +158,18 @@
 @endsection
 @section('script')
 <script type="text/javascript">
- 
     $('#status_bayar_display').hide(); 
     $('#display_channel_bayar').hide(); 
-
     $('#tgl_skrd_text').html('Tanggal SKRD');
+
+    if ("{{ $status }}" == 2) {
+        console.log('jalan');
+        $('#status_bayar_display').hide(); 
+        $("#status_bayar").val(0).trigger("change.select2");
+        $('#display_channel_bayar').show(); 
+        $('#tgl_skrd_text').html('Tanggal Bayar');
+    }
+
     $('#jenis').change(function(){
         if($('#jenis').val() === "1") {
             $('#status_bayar_display').show(); 
@@ -286,8 +293,10 @@
         to = $('#to').val();
         jenis = $('#jenis').val();
         channel_bayar = $('#channel_bayar').val();
+        year   = $('#year').val();
+        status = $('#status').val();
 
-        params = from + "&to=" + to + "&opd_id=" + opd_id + "&jenis_pendapatan_id=" + jenis_pendapatan_id + "&status_bayar=" + status_bayar + "&jenis=" + jenis + "&channel_bayar=" + channel_bayar + "&rincian_pendapatan_id=" + rincian_pendapatan_id;
+        params = from + "&to=" + to + "&opd_id=" + opd_id + "&jenis_pendapatan_id=" + jenis_pendapatan_id + "&status_bayar=" + status_bayar + "&jenis=" + jenis + "&channel_bayar=" + channel_bayar + "&rincian_pendapatan_id=" + rincian_pendapatan_id + "&year=" + year + "&status=" + status;
 
         url1 = "{{ route('report.cetakSKRD') }}?from=" + params
         url2 = "{{ route('report.getTotalBayar') }}?from=" + params
