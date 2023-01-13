@@ -168,10 +168,10 @@
                                 <p style="margin-bottom: -5px !important" class="fs-12"><i class="icon icon-data_usage text-danger mr-2"></i><a href="{{ route('strd.index', ['year' => $year, 'status' => 2, 'opd_id' => $n_opd->id]) }}" target="_blank" title="Lihat Data">Terdapat {{ $strdToday }} SKRD telah jatuh tempo.</a></p>
                                 @endcan
                                 @can('SKRD')
-                                <p style="margin-bottom: -5px !important" class="fs-12"><i class="icon icon-data_usage amber-text mr-2"></i><a href="#" title="Lihat Data">Terdapat {{ $skrdToday }} SKRD terbuat pada hari ini.</a></p>
+                                <p style="margin-bottom: -5px !important" class="fs-12"><i class="icon icon-data_usage amber-text mr-2"></i><a href="{{ route('skrd.index') }}" target="_blank" title="Lihat Data">Terdapat {{ $skrdToday }} SKRD terbuat pada hari ini.</a></p>
                                 @endcan
                                 @can('STS')
-                                <p style="margin-bottom: -5px !important" class="fs-12"><i class="icon icon-data_usage text-success mr-2"></i><a href="#" title="Lihat Data">Terdapat {{ $stsToday }} SKRD telah dibayar pada hari ini.</a></p>
+                                <p style="margin-bottom: -5px !important" class="fs-12"><i class="icon icon-data_usage text-success mr-2"></i><a href="{{ route('sts.index', ['status' => 1]) }}" title="Lihat Data">Terdapat {{ $stsToday }} SKRD telah dibayar pada hari ini.</a></p>
                                 @endcan
                             </div>
                         </div>

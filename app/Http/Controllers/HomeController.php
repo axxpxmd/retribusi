@@ -284,7 +284,7 @@ class HomeController extends Controller
         //* Notifikasi
         $skrdToday = TransaksiOPD::when($opd_id != 0, function ($q) use ($opd_id) {
             $q->where('tmtransaksi_opd.id_opd', $opd_id);
-        })->whereDate('created_at', $time)->count();
+        })->where('tgl_skrd_awal', $date)->count();
         $stsToday = TransaksiOPD::when($opd_id != 0, function ($q) use ($opd_id) {
             $q->where('tmtransaksi_opd.id_opd', $opd_id);
         })->whereDate('tgl_bayar', $time)
