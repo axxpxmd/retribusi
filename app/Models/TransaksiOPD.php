@@ -37,17 +37,6 @@ class TransaksiOPD extends Model
         return $this->belongsTo(Kecamatan::class, 'kecamatan_id');
     }
 
-    public static function checkDenda($denda)
-    {
-        if ($denda == 0 || $denda == null) {
-            $status_denda = 0;
-        } else {
-            $status_denda = 1;
-        }
-
-        return $status_denda;
-    }
-
     public static function queryReportDashboard($opd_id, $status, $tahun)
     {
         $date  = Carbon::now()->format('Y-m-d');

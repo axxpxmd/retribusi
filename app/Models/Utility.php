@@ -101,4 +101,15 @@ class Utility extends Model
 
         return $status_ttd;
     }
+
+    public static function checkDenda($denda)
+    {
+        if ($denda == 0 || $denda == null) {
+            $status_denda = 0;
+        } else {
+            $status_denda = 1;
+        }
+
+        return $status_denda;
+    }
 }

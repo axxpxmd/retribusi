@@ -325,7 +325,7 @@ class STSController extends Controller
         $tgl_bayar    = $request->tgl_bayar;
 
         //TODO: Check denda
-        $status_denda = TransaksiOPD::checkDenda($request->denda);
+        $status_denda = Utility::checkDenda($request->denda);
 
         // Check 
         if ($status_bayar == 1) {
