@@ -293,6 +293,10 @@ class HomeController extends Controller
             $q->where('tmtransaksi_opd.id_opd', $opd_id);
         })->where('tgl_skrd_akhir', '<', $date)
             ->where('status_bayar', 0)->count();
+        $tandaTanganToday = TransaksiOPD::when($opd_id != 0, function ($q) use ($opd_id) {
+            $q->where('tmtransaksi_opd.id_opd', $opd_id);
+        })->where('tgl_ttd', $date)
+            ->whereIn('status_ttd', [2,4])->count();
 
         //*
         $dataTahun = TransaksiOPD::select(DB::raw('YEAR(tmtransaksi_opd.tgl_skrd_awal) as tahun'))
@@ -316,7 +320,8 @@ class HomeController extends Controller
             'stsToday',
             'strdToday',
             'role',
-            'dataPieChartChanelBayar'
+            'dataPieChartChanelBayar',
+            'tandaTanganToday'
         ));
     }
 }

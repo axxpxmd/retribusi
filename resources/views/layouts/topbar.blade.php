@@ -43,8 +43,8 @@
                             <i class="icon-notifications "></i>
                             <span class="badge text-white font-weight-bold badge-mini">{{ $dataTTD ? $dataTTD : 0 }}</span>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-right">
-                            <li class="header">{{ $dataTTD ? 'Terdapat ' . $dataTTD . ' SKRD belum di TTD' : 'Tidak ada notifikasi' }}</li>
+                        <ul class="dropdown-menu dropdown-menu-right" style="width: 300px !important">
+                            <li class="header">{{ $dataTTD ? 'Terdapat ' . $dataTTD . ' SKRD belum ditanda tangani' : 'Tidak ada notifikasi' }}</li>
                             <li>
                                 @if ($dataTTD)
                                 <ul class="menu">
