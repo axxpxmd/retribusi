@@ -70,7 +70,7 @@
                                     <th>Target</th>
                                     <th>Ketetapan</th>
                                     <th>Diterima</th>
-                                    {{-- <th>Denda</th> --}}
+                                    <th>Jumlah</th>
                                     <th>Realisasi</th>
                                 </tr>
                             </thead>
@@ -83,7 +83,7 @@
                                     <td>@currency($i->target_pendapatan)</td>
                                     <td>@currency($i->ketetapan)</td>
                                     <td>@currency($i->diterima)</td>
-                                    {{-- <td>@currency($i->denda)</td> --}}
+                                    <td class="text-center">{{ $i->jumlah }}</td>
                                     <td class="text-center">{{ $i->realisasi ? $i->realisasi : '0' }} %</td>
                                 </tr>
                                 @endforeach
@@ -91,8 +91,8 @@
                             <tfoot>
                                 <tr>
                                     <td colspan="4"></td>
-                                    <td colspan="1" class="font-weight-bold">Total Bayar</td>
-                                    <td colspan="2">@currency($targetPendapatan->sum('diterima'))</td>
+                                    <td colspan="1" class="font-weight-bold">Total</td>
+                                    <td colspan="3">@currency($targetPendapatan->sum('diterima'))</td>
                                 </tr>
                             </tfoot>
                         </table>
@@ -227,7 +227,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 mb-5-m">
                 <div class="card r-15 no-b" style="height: 300px !important">
                     <h6 class="card-header bg-success text-white font-weight-bold" style="border-top-right-radius: 15px; border-top-left-radius: 15px">Metode Pembayaran <i class="icon-payment ml-2"></i></h6>
                     <div class="card-body p-0">
@@ -249,6 +249,15 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-12">
+                <div class="card no-b r-15">
+                    <div class="card-body">
+
                     </div>
                 </div>
             </div>
@@ -320,7 +329,7 @@
             "bPaginate": false,
             "bInfo": false,
             "searching": false,
-            "order": [[2, 'desc']],
+            "order": [[1, 'desc']],
         });
         $('.dataTables_length').addClass('bs-select');
     });
