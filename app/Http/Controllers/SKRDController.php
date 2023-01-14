@@ -506,8 +506,10 @@ class SKRDController extends Controller
          * 2. QRIS
          * 3. tmtransaksi_opd
          */
-
-        $amount = \strval((int) str_replace(['.', 'Rp', ' '], '', $request->jumlah_bayar));
+        $no_hp   = $request->no_hp;
+        $no_telp = $request->no_telp;
+        $email   = $request->email;
+        $amount  = \strval((int) str_replace(['.', 'Rp', ' '], '', $request->jumlah_bayar));
         $expiredDate  = $request->tgl_skrd_akhir . ' 23:59:59';
         $customerName = $request->nm_wajib_pajak;
         $va_number    = (int) $data->nomor_va_bjb;
@@ -516,9 +518,6 @@ class SKRDController extends Controller
         $textQRIS     = $data->text_qris;
         $clientRefnum = $data->no_bayar;
         $productCode  = $request->kd_jenis;
-        $no_hp   = $request->no_hp;
-        $no_telp = $request->no_telp;
-        $email   = $request->email;
 
         //*: Check Expired Date (jika tgl_skrd_akhir kurang dari tanggal sekarang maka VA dan QRIS tidak terbuat)
         //*: Check Amount (jika nominal 0 rupiah makan VA dan QRIS tidak terbuat)
