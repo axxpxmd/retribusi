@@ -46,43 +46,40 @@ class STSController extends Controller
         $this->middleware(['permission:STS']);
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $route = $this->route;
         $title = $this->title;
 
-        $opd_id   = Auth::user()->pengguna->opd_id;
+        $today    = Carbon::now()->format('Y-m-d');
+        $opd_id   = Auth::user()->pengguna->opd_id == 0 ? $request->opd_id : Auth::user()->pengguna->opd_id;
         $opdArray = OPDJenisPendapatan::select('id_opd')->get()->toArray();
         $opds     = OPD::getAll($opdArray, $opd_id);
 
-        //TODO: Set filters to date now
-        $time = Carbon::now();
-        $today = $time->format('Y-m-d');
+        $from     = $request->from;
+        $to       = $request->to;
+        $no_bayar = $request->no_bayar;
+        $status_bayar  = $request->status_bayar;
+        $jenis_tanggal = $request->jenis_tanggal;
+
+        $status = $request->status;
+
+        if ($request->ajax()) {
+            return $this->dataTable($from, $to, $opd_id, $status_bayar, $jenis_tanggal, $no_bayar);
+        }
 
         return view($this->view . 'index', compact(
             'route',
             'title',
             'opd_id',
             'opds',
-            'today'
+            'today',
+            'status'
         ));
     }
 
-    public function api(Request $request)
+    public function dataTable($from, $to, $opd_id, $status_bayar, $jenis_tanggal, $no_bayar)
     {
-        $from = $request->tgl_bayar;
-        $to   = $request->tgl_bayar1;
-        $status_bayar  = $request->status_bayar;
-        $jenis_tanggal = $request->jenis_tanggal;
-        $no_bayar = $request->no_bayar;
-       
-        $checkOPD = Auth::user()->pengguna->opd_id;
-        if ($checkOPD == 0) {
-            $opd_id = $request->opd_id;
-        } else {
-            $opd_id = $checkOPD;
-        }
-
         $data = TransaksiOPD::querySTS($from, $to, $opd_id, $status_bayar, $jenis_tanggal, $no_bayar);
 
         return DataTables::of($data)
@@ -360,7 +357,7 @@ class STSController extends Controller
         $tgl_skrd_akhir = $data->tgl_skrd_akhir;
         $jumlah_bayar   = $data->jumlah_bayar;
         $status_bayar   = $data->status_bayar;
-        $denda          = $data->denda; 
+        $denda          = $data->denda;
         $text_qris      = $data->text_qris;
         $nm_wajib_pajak = $data->nm_wajib_pajak;
         $no_skrd        = $data->no_skrd;

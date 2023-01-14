@@ -62,14 +62,14 @@
                                 <div class="col-md-2 mb-5-m">
                                     <select name="jenis_tanggal" id="jenis_tanggal" class="select2 form-control r-0 s-12">
                                         <option value="1">SKRD</option>
-                                        <option value="2">Bayar</option>
+                                        <option value="2" {{ $status == 1 ? 'selected' : '' }}>Bayar</option>
                                     </select>
                                 </div>
                                 <div class="col-md-3">
-                                    <input type="date" name="tgl_bayar" id="tgl_bayar" value="{{ $today }}" placeholder="" class="form-control light r-0 s-12 mb-5-m" autocomplete="off"/>
+                                    <input type="date" name="from" id="from" value="{{ $today }}" placeholder="" class="form-control light r-0 s-12 mb-5-m" autocomplete="off"/>
                                 </div>
                                 <div class="col-md-3">
-                                    <input type="date" name="tgl_bayar1" id="tgl_bayar1" value="{{ $today }}" placeholder="" class="form-control light r-0 s-12 mb-5-m" autocomplete="off"/>
+                                    <input type="date" name="to" id="to" value="{{ $today }}" placeholder="" class="form-control light r-0 s-12 mb-5-m" autocomplete="off"/>
                                 </div>
                             </div>
                             <div class="row mb-4">
@@ -128,11 +128,11 @@
         order: [ 0, 'asc' ],
         pageLength: 25,
         ajax: {
-            url: "{{ route($route.'api') }}",
-            method: 'POST',
+            url: "{{ route($route.'index') }}",
+            method: 'GET',
             data: function (data) {
-                data.tgl_bayar = $('#tgl_bayar').val();
-                data.tgl_bayar1 = $('#tgl_bayar1').val();
+                data.from = $('#from').val();
+                data.to = $('#to').val();
                 data.opd_id = $('#opd').val();
                 data.status_bayar = $('#status_bayar').val();
                 data.jenis_tanggal = $('#jenis_tanggal').val();
@@ -158,25 +158,6 @@
     pressOnChange();
     function pressOnChange(){
         table.api().ajax.reload();
-
-        var opd_id = $('#opd_id').val();
-        var jenis_pendapatan_id = $('#jenis_pendapatan_id').val();
-        var status_bayar = $('#status_bayar').val();
-        var tgl_skrd = $('#tgl_skrd').val();
-        var tgl_skrd1 = $('#tgl_skrd1').val();
-        var jenis = $('#jenis').val();
-
-        params = tgl_skrd + "&tgl_skrd1=" + tgl_skrd1 + "&opd_id=" + opd_id + "&jenis_pendapatan_id=" + jenis_pendapatan_id + "&status_bayar=" + status_bayar + "&jenis=" + jenis;
-
-        url1 = "{{ route('report.cetakSKRD') }}?tgl_skrd=" + params
-        url2 = "{{ route('report.getTotalBayar') }}?tgl_skrd=" + params
-        
-        $('#exportpdf').attr('href', url1)
-    
-        // total bayar
-        $.get(url2, function(data){
-            $('#total_bayar').html(data.total_bayar)
-        }, 'JSON');
     }
 
     function remove(id){
