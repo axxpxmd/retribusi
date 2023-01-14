@@ -49,7 +49,7 @@
                                 @if ($dataTTD)
                                 <ul class="menu">
                                     <li>
-                                        <a href="{{ route('tanda-tangan.index', ['belum_ttd' => 1]) }}">
+                                        <a class="text-primary text-center" href="{{ route('tanda-tangan.index', ['belum_ttd' => 1]) }}">
                                             <i class="icon icon-data_usage text-success"></i> Lihat semua.
                                         </a>
                                     </li>

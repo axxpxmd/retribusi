@@ -83,7 +83,7 @@
                                     <td>@currency($i->target_pendapatan)</td>
                                     <td>@currency($i->ketetapan)</td>
                                     <td>@currency($i->diterima)</td>
-                                    <td class="text-center">{{ $i->jumlah }}</td>
+                                    <td class="text-center">{{ number_format($i->jumlah) }}</td>
                                     <td class="text-center">{{ $i->realisasi ? $i->realisasi : '0' }} %</td>
                                 </tr>
                                 @endforeach
@@ -107,7 +107,7 @@
                             <div class="card-body text-center">
                                 <div class="mb-2">
                                     <i class="icon-notebook-text fs-24 amber-text mr-2"></i>
-                                    <span class="m-0 font-weight-bold fs-16">{{ $totalSKRD->total_skrd }}</span>
+                                    <span class="m-0 font-weight-bold fs-16">{{ number_format($totalSKRD->total_skrd) }}</span>
                                     <a href="{{ route('report.index', ['year' => $year, 'status' => 1, 'opd_id' => $n_opd->id]) }}" target="_blank" class="ml-2" title="Lihat Data"><i class="icon-external-link"></i></a>
                                 </div>
                                 <p class="m-0 fs-14">@currency($totalSKRD->total_bayar)</p>
@@ -120,7 +120,7 @@
                             <div class="card-body text-center">
                                 <div class="mb-2">
                                     <i class="icon-notebook-text fs-24 text-danger mr-2"></i>
-                                    <span class="m-0 font-weight-bold fs-16">{{ $totalSTRD->total_skrd }}</span>
+                                    <span class="m-0 font-weight-bold fs-16">{{ number_format($totalSTRD->total_skrd) }}</span>
                                     @can('STRD')
                                     <a href="{{ route('strd.index', ['year' => $year, 'status' => 1, 'opd_id' => $n_opd->id]) }}" target="_blank" class="ml-2" title="Lihat Data"><i class="icon-external-link"></i></a>
                                     @endcan
@@ -137,7 +137,7 @@
                             <div class="card-body text-center">
                                 <div class="mb-2">
                                     <i class="icon-notebook-text fs-24 text-primary mr-2"></i>
-                                    <span class="m-0 font-weight-bold fs-16">{{ $totalSTS->total_skrd }}</span>
+                                    <span class="m-0 font-weight-bold fs-16">{{ number_format($totalSTS->total_skrd) }}</span>
                                     <a href="{{ route('report.index', ['year' => $year, 'status' => 2, 'opd_id' => $n_opd->id]) }}" target="_blank" class="ml-2" title="Lihat Data"><i class="icon-external-link"></i></a>
                                 </div>
                                 <p class="m-0 fs-14">@currency($totalSTS->total_bayar)</p>
@@ -150,7 +150,7 @@
                             <div class="card-body text-center">
                                 <div class="mb-2">
                                     <i class="icon-notebook-text fs-24 text-success mr-2"></i>
-                                    <span class="m-0 font-weight-bold fs-16">{{ $totalKeseluruhan->total_skrd }}</span>
+                                    <span class="m-0 font-weight-bold fs-16">{{ number_format($totalKeseluruhan->total_skrd) }}</span>
                                     {{-- <a href="#" class="ml-2" title="Lihat Data"><i class="icon-external-link"></i></a> --}}
                                 </div>
                                 <p class="m-0 fs-14">@currency($totalKeseluruhan->total_bayar)</p>
@@ -185,20 +185,20 @@
                 <div class="lightSlider bg-transparent" data-item="6" data-item-xl="4" data-item-md="2" data-item-sm="1" data-pause="5000" data-pager="false" data-auto="true" data-loop="true">
                     <div class="bg-primary border text-white r-15 py-2 text-center">
                         <p class="font-weight-bold text-primary fs-16 m-0" title="Total Retribusi Seluruh Dinas">Total Retribusi</p>
-                        <p class="fs-16 amber-text m-0">{{ $totalRetribusi->total_skrd }}</p->
+                        <p class="fs-16 amber-text m-0">{{ number_format($totalRetribusi->total_skrd) }}</p->
                         <p class="fs-14 text-black m-0">@currency($totalRetribusi->total_bayar)</p>
                     </div>
                     @foreach ($totalRetribusiOPD as $index => $i)
                         @if ($index % 2 == 0)
                         <div class="bg-white text-center r-15 py-2">
                             <p class="font-weight-bold amber-text fs-16 m-0" title="{{ $i->n_opd }}" style="margin-bottom: 20px">{{ $i->initial }}</p>
-                            <p class="fs-16 amber-text m-0">{{ $i->total }}</p>
+                            <p class="fs-16 amber-text m-0">{{ number_format($i->total) }}</p>
                             <p class="fs-14 amber-text  m-0">@currency($i->total_bayar)</p>
                         </div>
                         @else
                         <div class="text-center py-2 r-15 bg-white">
                             <p class="font-weight-bold text-primary fs-16 m-0" title="{{ $i->n_opd }}" style="margin-bottom: 20px">{{ $i->initial }}</p>
-                            <p class="fs-16 text-primary m-0">{{ $i->total }}</p>
+                            <p class="fs-16 text-primary m-0">{{ number_format($i->total) }}</p>
                             <p class="fs-14 text-primary m-0">@currency($i->total_bayar)</p>
                         </div>
                         @endif
@@ -225,7 +225,7 @@
                                     @if ($i['total'])
                                     <tr>
                                         <td><a href="#" title="Lihat Data">{{ str_contains($i['chanel_bayar'], 'QRIS') ? 'QRIS' : $i['chanel_bayar'] }}</a></td>
-                                        <td>{{ $i['total'] }}</td>
+                                        <td>{{ number_format($i['total']) }}</td>
                                         <td>@currency($i['total_bayar'])</td>
                                     </tr>
                                     @endif
