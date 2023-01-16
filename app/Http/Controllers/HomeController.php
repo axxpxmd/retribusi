@@ -116,7 +116,7 @@ class HomeController extends Controller
         $totalRetribusiOPD = OPD::whereIn('id', $existedOPD)->withCount('transaksi_opd')->get();
 
         //* Diagram Chart (Role: super-admin)
-        $higherIncome = TransaksiOPD::select(DB::raw("SUM(total_bayar) as y"), 'tmopds.n_opd as name', 'tmopds.n_opd as drilldown', 'id_opd')
+        $pendapatanOPD = TransaksiOPD::select(DB::raw("SUM(total_bayar) as y"), 'tmopds.n_opd as name', 'tmopds.n_opd as drilldown', 'id_opd')
             ->join('tmopds', 'tmopds.id', '=', 'tmtransaksi_opd.id_opd')
             ->where(DB::raw('YEAR(tmtransaksi_opd.created_at)'), '=', $time->year)
             ->groupBy('id_opd')
@@ -126,35 +126,35 @@ class HomeController extends Controller
         $parents = [];
         $childs  = [];
 
-        foreach ($higherIncome as $key => $value) {
+        foreach ($pendapatanOPD as $keyOPD => $opd) {
             $color = ['#26a69a', '#26c6da', '#42a5f5', '#ef5350', '#ff7043', '#5c6bc0', '#ffee58', '#bdbdbd', '#66bb6a ', '#ec407a', '#42a5f5', '#26a69a', '#ff7043'];
 
-            $parents[$key] = [
-                'y'    => $value->y,
-                'name' => $value->name,
-                'drilldown' => $value->drilldown,
-                'id_opd'    => $value->id_opd,
-                'color'     => $color[$key]
+            $parents[$keyOPD] = [
+                'y'    => $opd->y,
+                'name' => $opd->name,
+                'drilldown' => $opd->drilldown,
+                'id_opd'    => $opd->id_opd,
+                'color'     => $color[$keyOPD]
             ];
 
-            $higherIncomeRetribution = TransaksiOPD::select(DB::raw("SUM(total_bayar) as y"), 'id_jenis_pendapatan', 'id_opd')
-                ->where('id_opd', $value->id_opd)
+            $jenisPendapatan = TransaksiOPD::select(DB::raw("SUM(total_bayar) as y"), 'id_jenis_pendapatan', 'id_opd')
+                ->where('id_opd', $opd->id_opd)
                 ->where(DB::raw('YEAR(tmtransaksi_opd.created_at)'), '=', $time->year)
                 ->groupBy('id_jenis_pendapatan')
                 ->orderBy('y', 'DESC')
                 ->get();
 
-            foreach ($higherIncomeRetribution as $key1 => $value1) {
+            foreach ($jenisPendapatan as $key1 => $value1) {
                 $dataChills[$key1] = [
                     'name' => $value1->jenis_pendapatan->jenis_pendapatan,
                     'y'    => $value1->y
                 ];
 
-                $childs[$key] = [
+                $childs[$keyOPD] = [
                     'name'  => 'Jenis Pendapatan',
                     'id'    => $value1->opd->n_opd,
                     'data'  => $dataChills,
-                    'color' => $color[$key]
+                    'color' => $color[$keyOPD]
                 ];
             }
         }
@@ -276,12 +276,12 @@ class HomeController extends Controller
             if ($i['chanel_bayar']) {
                 if (str_contains($i['chanel_bayar'], 'QRIS')) {
                     $chanel_bayar = 'QRIS';
-                } else if (str_contains($i['chanel_bayar'], 'Virtual Account')) { 
+                } else if (str_contains($i['chanel_bayar'], 'Virtual Account')) {
                     $chanel_bayar = 'VA';
-                }else{
+                } else {
                     $chanel_bayar = $i['chanel_bayar'];
                 }
-    
+
                 $dataPieChartChanelBayar[$key] = [
                     'y'    => $i['total'],
                     'name' => $chanel_bayar,
@@ -308,25 +308,47 @@ class HomeController extends Controller
         })->where('tgl_ttd', $date)
             ->whereIn('status_ttd', [2, 4])->count();
 
-        $JenisPendapatanDiagram = TransaksiOPD::select(DB::raw("SUM(total_bayar_bjb) as y"), 'tmopds.n_opd as name', 'tmopds.n_opd as drilldown', 'id_opd')
+        //* Diagram Chart (Role: super-admin)
+        $pendapatanOPD = TransaksiOPD::select(DB::raw("SUM(total_bayar_bjb) as y"), 'tmopds.n_opd as name', 'id_opd', 'tmtransaksi_opd.id as id')
             ->join('tmopds', 'tmopds.id', '=', 'tmtransaksi_opd.id_opd')
-            ->where(DB::raw('YEAR(tmtransaksi_opd.created_at)'), '=', $year)
+            ->where('status_bayar', 1)
+            ->whereYear('tmtransaksi_opd.created_at', $year)
             ->groupBy('id_opd')
-            ->orderBy('y', 'DESC')
             ->get();
 
         $parents = [];
         $childs  = [];
-        $color = ['#26a69a', '#26c6da', '#42a5f5', '#ef5350', '#ff7043', '#5c6bc0', '#ffee58', '#bdbdbd', '#66bb6a ', '#ec407a', '#42a5f5', '#26a69a', '#ff7043'];
+        $color   = ['#26a69a', '#26c6da', '#42a5f5', '#ef5350', '#ff7043', '#5c6bc0', '#ffee58', '#bdbdbd', '#66bb6a ', '#ec407a', '#42a5f5', '#26a69a', '#ff7043'];
 
-        foreach ($JenisPendapatanDiagram as $key => $value) {
-            $parents[$key] = [
-                'y'    => $value->y,
-                'name' => $value->name,
-                'drilldown' => $value->drilldown,
-                'id_opd'    => $value->id_opd,
-                'color'     => $color[$key]
+        foreach ($pendapatanOPD as $keyOPD => $opd) {
+            $parents[$keyOPD] = [
+                'name' => $opd->name,
+                'y'    => $opd->y,
+                'drilldown' => $opd->name,
+                'color'     => $color[$keyOPD]
             ];
+
+            $jenisPendapatan = TransaksiOPD::select(DB::raw("SUM(total_bayar_bjb) as y"), 'id_jenis_pendapatan', 'id_opd', 'tmopds.n_opd as name')
+                ->join('tmopds', 'tmopds.id', '=', 'tmtransaksi_opd.id_opd')
+                ->where('tmopds.id', $opd->id_opd)
+                ->where('status_bayar', 1)
+                ->whereYear('tmtransaksi_opd.created_at', $year)
+                ->groupBy('id_jenis_pendapatan')
+                ->get();
+
+            foreach ($jenisPendapatan as $keyJenisPendapatan => $rincian) {
+                $dataChills[$keyJenisPendapatan] = [
+                    $rincian->jenis_pendapatan->jenis_pendapatan,
+                    $rincian->y
+                ];
+
+                $childs[$keyOPD] = [
+                    'name'  => $rincian->name,
+                    'id'    => $rincian->name,
+                    'data'  => $dataChills,
+                    'color' => $color[$keyOPD]
+                ];
+            }
         }
 
         $parentJson = json_encode($parents);

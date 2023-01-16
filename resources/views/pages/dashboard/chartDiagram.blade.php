@@ -115,6 +115,11 @@
             }
         }],
         drilldown: {
+            breadcrumbs: {
+                position: {
+                    align: 'right'
+                }
+            },
             series: childs
         }
     });
