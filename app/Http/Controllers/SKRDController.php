@@ -92,7 +92,7 @@ class SKRDController extends Controller
     }
 
     public function dataTable($from, $to, $opd_id, $no_skrd, $status_ttd, $status, $year)
-    {   
+    {
         $data = TransaksiOPD::querySKRD($from, $to, $opd_id, $no_skrd, $status_ttd, $status, $year);
 
         return DataTables::of($data)
@@ -120,6 +120,11 @@ class SKRDController extends Controller
             })
             ->editColumn('no_skrd', function ($p) {
                 return "<a href='" . route($this->route . 'show', Crypt::encrypt($p->id)) . "' class='text-primary' title='Menampilkan Data'>" . $p->no_skrd . "</a>";
+            })
+            ->editColumn('no_bayar', function ($p) {
+                $status_ttd = Utility::checkStatusTTD($p->status_ttd);
+
+                return $status_ttd ? $p->no_bayar : substr($p->no_bayar, 0, 6) . 'xxxxxxxx';
             })
             ->editColumn('id_opd', function ($p) {
                 return $p->opd->n_opd;

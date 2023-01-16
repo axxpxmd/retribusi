@@ -130,8 +130,8 @@
                                     <table id="dataTable" class="table display nowrap table-striped table-bordered" style="width:100%">
                                         <thead>
                                             <th>No</th>
-                                            <th>Nomor Bayar </th>
                                             <th>Nomor SKRD </th>
+                                            <th>Nomor Bayar </th>
                                             <th>Nama Pembayar</th>
                                             <th>Rincian Pendapatan</th>
                                             <th>Tanggal SKRD </th>
@@ -217,8 +217,8 @@
         },
         columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false, align: 'center', className: 'text-center'},
-            {data: 'no_bayar', name: 'no_bayar'},
             {data: 'no_skrd', name: 'no_skrd'},
+            {data: 'no_bayar', name: 'no_bayar'},
             {data: 'nm_wajib_pajak', name: 'nm_wajib_pajak'},
             {data: 'rincian_pendapatan', name: 'rincian_pendapatan'},
             {data: 'tgl_skrd', name: 'tgl_skrd'},

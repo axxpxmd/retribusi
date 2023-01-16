@@ -84,8 +84,13 @@ class ReportController extends Controller
         $data = TransaksiOPD::queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar, $rincian_pendapatan_id, $status, $tahun);
 
         return DataTables::of($data)
+            ->editColumn('no_skrd', function ($p) {
+                return "<a href='" . route($this->route . 'show', Crypt::encrypt($p->id)) . "' class='text-primary' title='Menampilkan Data'>" . $p->no_skrd . "</a>";
+            })
             ->editColumn('no_bayar', function ($p) {
-                return "<a href='" . route($this->route . 'show', Crypt::encrypt($p->id)) . "' class='text-primary' title='Menampilkan Data'>" . $p->no_bayar . "</a>";
+                $status_ttd = Utility::checkStatusTTD($p->status_ttd);
+
+                return $status_ttd ? $p->no_bayar : substr($p->no_bayar, 0, 6) . 'xxxxxxxx';
             })
             ->editColumn('opd_id', function ($p) {
                 return $p->opd->n_opd;
@@ -164,7 +169,7 @@ class ReportController extends Controller
                 }
             })
             ->addIndexColumn()
-            ->rawColumns(['no_bayar', 'opd_id', 'id_jenis_pendapatan', 'tgl_skrd', 'masa_berlaku', 'status_bayar', 'diskon', 'cetak_skrd', 'cetak_sts'])
+            ->rawColumns(['no_skrd', 'opd_id', 'id_jenis_pendapatan', 'tgl_skrd', 'masa_berlaku', 'status_bayar', 'diskon', 'cetak_skrd', 'cetak_sts'])
             ->toJson();
     }
 

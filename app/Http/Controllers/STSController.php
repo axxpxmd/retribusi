@@ -96,8 +96,13 @@ class STSController extends Controller
                     return "<span>-</span>";
                 }
             })
+            ->editColumn('no_skrd', function ($p) {
+                return "<a href='" . route($this->route . 'show', Crypt::encrypt($p->id)) . "' class='text-primary' title='Menampilkan Data'>" . $p->no_skrd . "</a>";
+            })
             ->editColumn('no_bayar', function ($p) {
-                return "<a href='" . route($this->route . 'show', Crypt::encrypt($p->id)) . "' class='text-primary' title='Menampilkan Data'>" . $p->no_bayar . "</a>";
+                $status_ttd = Utility::checkStatusTTD($p->status_ttd);
+
+                return $status_ttd ? $p->no_bayar : substr($p->no_bayar, 0, 6) . 'xxxxxxxx';
             })
             ->editColumn('opd_id', function ($p) {
                 return $p->opd->n_opd;
@@ -143,7 +148,7 @@ class STSController extends Controller
                 }
             })
             ->addIndexColumn()
-            ->rawColumns(['action', 'no_bayar', 'opd_id', 'id_jenis_pendapatan', 'tgl_skrd', 'masa_berlaku', 'status_bayar', 'file_sts'])
+            ->rawColumns(['action', 'no_skrd', 'opd_id', 'id_jenis_pendapatan', 'tgl_skrd', 'masa_berlaku', 'status_bayar', 'file_sts'])
             ->toJson();
     }
 

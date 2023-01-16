@@ -41,10 +41,10 @@
                     <li class="dropdown custom-dropdown notifications-menu">
                         <a href="#" class="nav-link" data-toggle="dropdown" aria-expanded="false">
                             <i class="icon-notifications "></i>
-                            <span class="badge text-white font-weight-bold badge-mini">{{ $dataTTD ? $dataTTD : 0 }}</span>
+                            <span class="badge text-white font-weight-bold badge-mini">{{ $dataTTD ? number_format($dataTTD) : 0 }}</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-right" style="width: 300px !important">
-                            <li class="header">{{ $dataTTD ? 'Terdapat ' . $dataTTD . ' SKRD belum ditanda tangani' : 'Tidak ada notifikasi' }}</li>
+                            <li class="header">{{ $dataTTD ? 'Terdapat ' . number_format($dataTTD) . ' SKRD belum ditanda tangani' : 'Tidak ada notifikasi' }}</li>
                             <li>
                                 @if ($dataTTD)
                                 <ul class="menu">
