@@ -273,11 +273,21 @@ class HomeController extends Controller
             ->get()->toArray();
         $totalChannelBayar = array_merge($channelBayar, $qris, $mobileBanking);
         foreach ($totalChannelBayar as $key => $i) {
-            $dataPieChartChanelBayar[$key] = [
-                'y'    => $i['total'],
-                'name' => str_contains($i['chanel_bayar'], 'QRIS') ? 'QRIS' : $i['chanel_bayar'],
-                'color'     => $color[$key]
-            ];
+            if ($i['chanel_bayar']) {
+                if (str_contains($i['chanel_bayar'], 'QRIS')) {
+                    $chanel_bayar = 'QRIS';
+                } else if (str_contains($i['chanel_bayar'], 'Virtual Account')) { 
+                    $chanel_bayar = 'VA';
+                }else{
+                    $chanel_bayar = $i['chanel_bayar'];
+                }
+    
+                $dataPieChartChanelBayar[$key] = [
+                    'y'    => $i['total'],
+                    'name' => $chanel_bayar,
+                    'color' => $color[$key]
+                ];
+            }
         }
         $dataPieChartChanelBayar = json_encode($dataPieChartChanelBayar);
 
@@ -321,7 +331,7 @@ class HomeController extends Controller
 
         $parentJson = json_encode($parents);
         $childJson  = json_encode($childs);
-        
+
         return view('pages.dashboard.testDashboard', compact(
             'totalSKRD',
             'targetPendapatan',
