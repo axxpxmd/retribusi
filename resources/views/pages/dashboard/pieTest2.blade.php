@@ -1,26 +1,12 @@
 <style>
-    .highcharts-root {
-        height: 320px !important;
-        margin-top: 20px !important;
-    }
-
-    .highcharts-container {
-        height: 320px !important;
-        margin-top: 20px !important;
-    }
-
     .highcharts-background {
         background: transparent !important;
     }
 </style>
-<figure class="highcharts-figure">
+<figure class="highcharts-figure" style="margin-top: -70px !important">
     <div id="pieChartChanelBayar"></div>
 </figure>
-@push('script')
-<script src="https://code.highcharts.com/highcharts.js"></script>
-<script src="https://code.highcharts.com/modules/exporting.js"></script>
-<script src="https://code.highcharts.com/modules/export-data.js"></script>
-<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+@push('scriptDashboard')
 <script type="text/javascript">
     var parents = <?php echo $dataPieChartChanelBayar?>;
 
@@ -53,7 +39,7 @@
         plotOptions: {
             pie: {
                 allowPointSelect: true,
-                size: '50%',
+                size: '35%',
                 cursor: 'pointer',
                 dataLabels: {
                     crop: false,
@@ -61,7 +47,7 @@
                     overflow: "none",
                     format: '<b>{point.name}</b>: {point.percentage:.1f} %',
                     style: {
-                        fontSize: '100%'
+                        fontSize: '80%'
                     }
                 },
                 center: ["50%", "50%"]

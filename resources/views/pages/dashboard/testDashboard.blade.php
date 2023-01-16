@@ -238,7 +238,7 @@
             <div class="col-md-3 mb-5-m">
                 <div class="card r-15 no-b" style="height: 300px !important">
                     <h6 class="card-header bg-success text-white font-weight-bold" style="border-top-right-radius: 15px; border-top-left-radius: 15px">Metode Pembayaran <i class="icon-payment ml-2"></i></h6>
-                    <div class="card-body p-0">
+                    <div class="card-body py-0 px-1">
                         @include('pages.dashboard.pieTest2')
                     </div>
                 </div>
@@ -262,10 +262,11 @@
             </div>
         </div>
         <div class="row mt-3">
-            <div class="col-md-12">
+            <div class="col-md-7">
                 <div class="card no-b r-15">
-                    <div class="card-body">
-
+                    <h6 class="card-header text-white font-weight-bold" style="background: #FFCE3B; border-top-right-radius: 15px; border-top-left-radius: 15px">Pendapatan OPD</h6>
+                    <div class="card-body p-0">
+                        @include('pages.dashboard.chartDiagram')
                     </div>
                 </div>
             </div>
@@ -317,7 +318,14 @@
     </div>
 </div>
 @endsection
-@push('script')
+@section('script')
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/data.js"></script>
+<script src="https://code.highcharts.com/modules/drilldown.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+@stack('scriptDashboard')
 <script type="text/javascript">
     $(document).ready(function () {
         $('#dtHorizontalVerticalExample').DataTable({
@@ -364,4 +372,4 @@
         $('#filterData').attr('href', url);
     }
 </script>
-@endpush
+@endsection

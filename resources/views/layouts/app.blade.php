@@ -87,6 +87,7 @@ $template = App\Models\Template::select('id', 'logo', 'logo_title', 'logo_auth')
     <script type="text/javascript">
         $.ajaxSetup({headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});
     </script>
+
     @yield('script')
     @stack('script')
 </html>

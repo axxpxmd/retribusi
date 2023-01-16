@@ -11,6 +11,16 @@
         height: auto;
     }
 
+    .highcharts-root {
+        height: auto !important;
+        margin-top: auto !important;
+    }
+
+    .highcharts-container {
+        height: auto !important;
+        margin-top: auto !important;
+    }
+
     .highcharts-data-table table {
         font-family: Verdana, sans-serif;
         border-collapse: collapse;
@@ -46,28 +56,15 @@
     .highcharts-data-table tr:hover {
         background: #f1f7ff;
     }
-
 </style>
-<div class="card no-b">
-    <h6 class="card-header bg-white font-weight-bold text-black">Total Pendapatan Tiap Dinas</h6>
-    <div class="card-body">
-        <figure class="highcharts-figure">
-            <div id="container"></div>
-        </figure>
-    </div>
-</div> 
-<script src="https://code.highcharts.com/highcharts.js"></script>
-<script src="https://code.highcharts.com/modules/data.js"></script>
-<script src="https://code.highcharts.com/modules/drilldown.js"></script>
-<script src="https://code.highcharts.com/modules/exporting.js"></script>
-<script src="https://code.highcharts.com/modules/export-data.js"></script>
-<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<figure class="highcharts-figure">
+    <div id="container"></div>
+</figure>
+@push('scriptDashboard')
 <script type="text/javascript">
-    var parents = <?php echo $parentJson?>;
-    var childs = <?php echo $childJson?>;
+    var parents = <?php echo $parentJson; ?>;
+    var childs = <?php echo $childJson; ?>;
 
-    var year =  new Date().getFullYear();
-    
     Highcharts.chart('container', {
         chart: {
             type: 'column'
@@ -76,7 +73,7 @@
             enabled: false
         },
         title: {
-            text: 'Tahun '+ year
+            text: 'Total Pendapatan Tiap Dinas'
         },
         accessibility: {
             announceNewData: {
@@ -108,19 +105,18 @@
         },
 
         series: [{
-                name: "Nama Dinas",
-                data: parents,
-                dataLabels: {
-                    enabled: true,
-                    formatter: function() {
-                        return 'Rp.'+ Highcharts.numberFormat(this.y, 0);
-                    }
+            name: "Nama Dinas",
+            data: parents,
+            dataLabels: {
+                enabled: true,
+                formatter: function() {
+                    return 'Rp.' + Highcharts.numberFormat(this.y, 0);
                 }
             }
-        ],
+        }],
         drilldown: {
             series: childs
         }
     });
-
 </script>
+@endpush

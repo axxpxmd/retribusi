@@ -296,13 +296,32 @@ class HomeController extends Controller
         $tandaTanganToday = TransaksiOPD::when($opd_id != 0, function ($q) use ($opd_id) {
             $q->where('tmtransaksi_opd.id_opd', $opd_id);
         })->where('tgl_ttd', $date)
-            ->whereIn('status_ttd', [2,4])->count();
+            ->whereIn('status_ttd', [2, 4])->count();
 
-        //*
-        $dataTahun = TransaksiOPD::select(DB::raw('YEAR(tmtransaksi_opd.tgl_skrd_awal) as tahun'))
-            ->where(DB::raw('YEAR(tmtransaksi_opd.tgl_skrd_awal)'), '>=', '2021')
-            ->groupBy(DB::raw('YEAR(tmtransaksi_opd.tgl_skrd_awal)'))->get();
+        $JenisPendapatanDiagram = TransaksiOPD::select(DB::raw("SUM(total_bayar_bjb) as y"), 'tmopds.n_opd as name', 'tmopds.n_opd as drilldown', 'id_opd')
+            ->join('tmopds', 'tmopds.id', '=', 'tmtransaksi_opd.id_opd')
+            ->where(DB::raw('YEAR(tmtransaksi_opd.created_at)'), '=', $year)
+            ->groupBy('id_opd')
+            ->orderBy('y', 'DESC')
+            ->get();
 
+        $parents = [];
+        $childs  = [];
+        $color = ['#26a69a', '#26c6da', '#42a5f5', '#ef5350', '#ff7043', '#5c6bc0', '#ffee58', '#bdbdbd', '#66bb6a ', '#ec407a', '#42a5f5', '#26a69a', '#ff7043'];
+
+        foreach ($JenisPendapatanDiagram as $key => $value) {
+            $parents[$key] = [
+                'y'    => $value->y,
+                'name' => $value->name,
+                'drilldown' => $value->drilldown,
+                'id_opd'    => $value->id_opd,
+                'color'     => $color[$key]
+            ];
+        }
+
+        $parentJson = json_encode($parents);
+        $childJson  = json_encode($childs);
+        
         return view('pages.dashboard.testDashboard', compact(
             'totalSKRD',
             'targetPendapatan',
@@ -321,7 +340,9 @@ class HomeController extends Controller
             'strdToday',
             'role',
             'dataPieChartChanelBayar',
-            'tandaTanganToday'
+            'tandaTanganToday',
+            'parentJson',
+            'childJson'
         ));
     }
 }
