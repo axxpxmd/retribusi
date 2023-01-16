@@ -43,9 +43,21 @@
                             <i class="icon-notifications "></i>
                             <span class="badge text-white font-weight-bold badge-mini">{{ $dataTTD ? number_format($dataTTD) : 0 }}</span>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-right" style="width: 300px !important">
-                            <li class="header">{{ $dataTTD ? 'Terdapat ' . number_format($dataTTD) . ' SKRD belum ditanda tangani' : 'Tidak ada notifikasi' }}</li>
-                            <li>
+                        <ul class="dropdown-menu dropdown-menu-right bg-transparent" style="width: 300px !important">
+                            <p class="header px-3 py-2 m-0 bg-success  text-white font-weight-bold fs-14" style="border-top-right-radius: 15px; border-top-left-radius: 15px">Notifikasi <i class="icon-notifications ml-2"></i></p>
+                            <li class="bg-white px-3 py-2" style="border-bottom-right-radius: 15px; border-bottom-left-radius: 15px">
+                                @if ($dataTTD)
+                                <p class="fs-12 text-black m-0"><i class="icon icon-data_usage text-primary mr-2"></i>{{ $dataTTD ? 'Terdapat ' . number_format($dataTTD) . ' SKRD belum ditanda tangani' : 'Tidak ada notifikasi' }}</p>
+                                <hr class="m-0 mt-2">
+                                <div class="mt-2 text-center bg-transparent">
+                                    <button class="btn btn-sm btn-primary">Lihat Semua</button>
+                                </div>
+                                @else
+                                <p class="fs-12 text-black text-center m-0">Tidak ada notifikasi</p>
+                                @endif
+                            </li>
+                            {{-- <li class="header">{{ $dataTTD ? 'Terdapat ' . number_format($dataTTD) . ' SKRD belum ditanda tangani' : 'Tidak ada notifikasi' }}</li> --}}
+                            {{-- <li>
                                 @if ($dataTTD)
                                 <ul class="menu">
                                     <li>
@@ -56,7 +68,7 @@
                                 </ul>
                                 @endif
                             </li>
-                            <li class="footer p-2 text-center"><a href="#">{{ $dataTTD ? '' : 'Kosong' }}</a></li>
+                            <li class="footer p-2 text-center"><a href="#">{{ $dataTTD ? '' : 'Kosong' }}</a></li> --}}
                         </ul>
                     </li>
                     @endcan
