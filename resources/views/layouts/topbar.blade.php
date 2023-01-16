@@ -56,19 +56,6 @@
                                 <p class="fs-12 text-black text-center m-0">Tidak ada notifikasi</p>
                                 @endif
                             </li>
-                            {{-- <li class="header">{{ $dataTTD ? 'Terdapat ' . number_format($dataTTD) . ' SKRD belum ditanda tangani' : 'Tidak ada notifikasi' }}</li> --}}
-                            {{-- <li>
-                                @if ($dataTTD)
-                                <ul class="menu">
-                                    <li>
-                                        <a class="text-primary text-center" href="{{ route('tanda-tangan.index', ['belum_ttd' => 1]) }}">
-                                            <i class="icon icon-data_usage text-success"></i> Lihat semua.
-                                        </a>
-                                    </li>
-                                </ul>
-                                @endif
-                            </li>
-                            <li class="footer p-2 text-center"><a href="#">{{ $dataTTD ? '' : 'Kosong' }}</a></li> --}}
                         </ul>
                     </li>
                     @endcan
