@@ -241,7 +241,7 @@ class TransaksiOPD extends Model
     }
 
     //* Query get data SKRD
-    public static function querySKRD($from, $to, $opd_id, $no_skrd, $status_ttd, $status, $year)
+    public static function querySKRD($from, $to, $opd_id, $no_skrd, $status_ttd, $status, $year, $getDuplicate)
     {
         $date =  Carbon::now()->format('Y-m-d');
         if ($date != $from) {
@@ -252,6 +252,7 @@ class TransaksiOPD extends Model
             ->with('opd', 'jenis_pendapatan')
             ->where('status_bayar', 0)
             ->where('tgl_skrd_akhir', '>=', $date)
+            // ->whereNotIn('no_bayar', $getDuplicate)
             ->when($opd_id != 0, function ($q) use ($opd_id) {
                 return $q->where('id_opd', $opd_id);
             })
@@ -275,6 +276,27 @@ class TransaksiOPD extends Model
         }
 
         return $data->orderBy('id', 'DESC')->get();
+    }
+
+    public static function checkDuplicateNoBayar($date, $opd_id)
+    {
+        $getDuplicate = TransaksiOPD::select('no_bayar')
+            ->when($opd_id != 0, function ($q) use ($opd_id) {
+                return $q->where('id_opd', $opd_id);
+            })
+            ->whereDate('created_at', $date)
+            ->where('status_ttd', 0)
+            ->groupBy('no_bayar')
+            ->havingRaw("COUNT(no_bayar) > 1")
+            ->get()->toArray();
+
+        $data = TransaksiOPD::select('id', 'id_opd', 'no_skrd', 'no_bayar', 'nm_wajib_pajak', 'id_jenis_pendapatan', 'tgl_skrd_awal', 'tgl_skrd_akhir', 'status_ttd', 'jumlah_bayar', 'history_ttd')
+            ->with('opd', 'jenis_pendapatan')
+            ->whereIn('no_bayar', $getDuplicate)
+            ->where('status_ttd', 0)
+            ->get();
+
+        return [$getDuplicate, $data];
     }
 
     // 

@@ -34,7 +34,7 @@ class HomeController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
+    public function index1()
     {
         // Time
         $time  = Carbon::now();
@@ -179,7 +179,7 @@ class HomeController extends Controller
         ));
     }
 
-    public function testDashboard(Request $request)
+    public function index(Request $request)
     {
         $time  = Carbon::now();
         $date  = $time->format('Y-m-d');

@@ -32,6 +32,7 @@
                     <div class="card-body">
                         <input type="hidden" id="year" value="{{ $year }}">
                         <input type="hidden" id="status" value="{{ $status }}">
+                        <input type="hidden" id="status_duplicate" value="{{ $status_duplicate }}">
                         <div class="col-md-8 container">
                             <div class="row mb-2">
                                 <label for="opd" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">OPD</label>
@@ -80,6 +81,9 @@
                                 <div class="col-sm-2"></div>
                                 <div class="col-sm-8">
                                     <button class="btn btn-success btn-sm" onclick="pressOnChange()"><i class="icon-filter mr-2"></i>Filter</button>
+                                    @if ($getDuplicate)
+                                    <a target="_blank" href="{{ route('skrd.index', ['status_duplicate' => 1]) }}" class="btn btn-sm btn-danger ml-2" id="exportpdf"><i class="icon-content_copy mr-2"></i>Cek Duplikat</a>
+                                    @endif
                                 </div> 
                             </div>
                         </div>
@@ -87,6 +91,9 @@
                 </div>
                 <div class="row mt-2">
                     <div class="col-md-12">
+                        @if ($getDuplicate)
+                        <div class="alert text-center font-weight-bold alert-danger mb-2">Terdapat {{ count($getDuplicate) }} Nomor Bayar duplikat!. Silahkan klik button Cek Duplikat untuk memuat data.</div>
+                        @endif
                         <div class="card no-b">
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -201,6 +208,7 @@
                 data.opd_id     = $('#opd').val();
                 data.no_skrd    = $('#no_skrd').val();
                 data.status_ttd = $('#status_ttd').val();
+                data.status_duplicate = $('#status_duplicate').val();
             }
         },
         columns: [

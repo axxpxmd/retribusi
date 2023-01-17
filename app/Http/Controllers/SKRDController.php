@@ -74,8 +74,13 @@ class SKRDController extends Controller
         $no_skrd    = $request->no_skrd;
         $status_ttd = $request->status_ttd;
 
+        //* Check Duplicate
+        $date = Carbon::now();
+        $status_duplicate = $request->status_duplicate;
+        list($getDuplicate, $data) = TransaksiOPD::checkDuplicateNoBayar($date, $opd_id);
+
         if ($request->ajax()) {
-            return $this->dataTable($from, $to, $opd_id, $no_skrd, $status_ttd, $status, $year);
+            return $this->dataTable($from, $to, $opd_id, $no_skrd, $status_ttd, $status, $year, $status_duplicate, $date, $getDuplicate);
         }
 
         return view($this->view . 'index', compact(
@@ -87,13 +92,19 @@ class SKRDController extends Controller
             'year',
             'status',
             'opd_id',
-            'role'
+            'role',
+            'getDuplicate',
+            'status_duplicate'
         ));
     }
 
-    public function dataTable($from, $to, $opd_id, $no_skrd, $status_ttd, $status, $year)
+    public function dataTable($from, $to, $opd_id, $no_skrd, $status_ttd, $status, $year, $status_duplicate, $date, $getDuplicate)
     {
-        $data = TransaksiOPD::querySKRD($from, $to, $opd_id, $no_skrd, $status_ttd, $status, $year);
+        if ($status_duplicate) {
+            list($getDuplicate, $data) = TransaksiOPD::checkDuplicateNoBayar($date, $opd_id);
+        } else {
+            $data = TransaksiOPD::querySKRD($from, $to, $opd_id, $no_skrd, $status_ttd, $status, $year, $getDuplicate);
+        }
 
         return DataTables::of($data)
             ->addColumn('action', function ($p) {
@@ -121,10 +132,22 @@ class SKRDController extends Controller
             ->editColumn('no_skrd', function ($p) {
                 return "<a href='" . route($this->route . 'show', Crypt::encrypt($p->id)) . "' class='text-primary' title='Menampilkan Data'>" . $p->no_skrd . "</a>";
             })
-            ->editColumn('no_bayar', function ($p) {
+            ->editColumn('no_bayar', function ($p) use ($getDuplicate) {
                 $status_ttd = Utility::checkStatusTTD($p->status_ttd);
 
-                return $status_ttd ? $p->no_bayar : substr($p->no_bayar, 0, 6) . 'xxxxxxxx';
+                $no_bayar = $status_ttd ? $p->no_bayar : substr($p->no_bayar, 0, 6) . 'xxxxxxxx';
+
+                if ($getDuplicate) {
+                    foreach ($getDuplicate as $value) {
+                        if ($value['no_bayar'] == $p->no_bayar) {
+                            return "<span class='text-danger font-weight-bold'>" . $p->no_bayar . "</span>";
+                        } else {
+                            return $no_bayar;
+                        }
+                    }
+                } else {
+                    return $no_bayar;
+                }
             })
             ->editColumn('id_opd', function ($p) {
                 return $p->opd->n_opd;
@@ -151,7 +174,7 @@ class SKRDController extends Controller
                 }
             })
             ->addIndexColumn()
-            ->rawColumns(['action', 'no_skrd', 'id_opd', 'id_jenis_pendapatan', 'tgl_skrd', 'masa_berlaku', 'status_ttd'])
+            ->rawColumns(['action', 'no_skrd', 'id_opd', 'id_jenis_pendapatan', 'tgl_skrd', 'masa_berlaku', 'status_ttd', 'no_bayar'])
             ->toJson();
     }
 
