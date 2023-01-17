@@ -261,6 +261,7 @@
                 </div>
             </div>
         </div>
+        @hasanyrole('super-admin|admin-bjb')
         <div class="row mt-3">
             <div class="col-md-7">
                 <div class="card no-b r-15">
@@ -271,6 +272,7 @@
                 </div>
             </div>
         </div>
+        @endhasanyrole
     </div>
 </div>
 <div class="modal fade" id="modalFilter" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -367,7 +369,7 @@
         tahun =  $("#tahun_filter").val(); 
         opd_id = $("#opd_filter").val();
        
-        url = "{{ route('test-home') }}?tahun=" + tahun + "&opd_id=" + opd_id;
+        url = "{{ route('home') }}?tahun=" + tahun + "&opd_id=" + opd_id;
 
         $('#filterData').attr('href', url);
     }

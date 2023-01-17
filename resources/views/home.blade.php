@@ -245,7 +245,7 @@
             </div>
             <div class="col-md-5">
                 <div class="card r-15 no-b" style="height: 300px !important">
-                    <h6 class="card-header text-white font-weight-bold" style="background: #FFCE3B; border-top-right-radius: 15px; border-top-left-radius: 15px">Total Retribusi</h6>
+                    <h6 class="card-header text-white bg-cyan font-weight-bold" style="border-top-right-radius: 15px; border-top-left-radius: 15px">Total Retribusi</h6>
                     <div class="card-body p-0">
                         <div class="row p-0">
                             <div class="col-md-6 p-0">
@@ -261,6 +261,7 @@
                 </div>
             </div>
         </div>
+        @hasanyrole('super-admin|admin-bjb')
         <div class="row mt-3">
             <div class="col-md-7">
                 <div class="card no-b r-15">
@@ -270,7 +271,16 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-5">
+                <div class="card no-b r-15" style="height: 475px !important">
+                    <h6 class="card-header text-white font-weight-bold bg-blue-grey" style="border-top-right-radius: 15px; border-top-left-radius: 15px">Pendapatan OPD</h6>
+                    <div class="card-body">
+
+                    </div>
+                </div>
+            </div>
         </div>
+        @endhasanyrole
     </div>
 </div>
 <div class="modal fade" id="modalFilter" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -367,7 +377,7 @@
         tahun =  $("#tahun_filter").val(); 
         opd_id = $("#opd_filter").val();
        
-        url = "{{ route('test-home') }}?tahun=" + tahun + "&opd_id=" + opd_id;
+        url = "{{ route('home') }}?tahun=" + tahun + "&opd_id=" + opd_id;
 
         $('#filterData').attr('href', url);
     }
