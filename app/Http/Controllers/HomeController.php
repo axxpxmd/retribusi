@@ -314,6 +314,7 @@ class HomeController extends Controller
             ->where('status_bayar', 1)
             ->whereYear('tmtransaksi_opd.created_at', $year)
             ->groupBy('id_opd')
+            ->orderBy('y', 'DESC')
             ->get();
 
         $parents = [];
@@ -327,28 +328,6 @@ class HomeController extends Controller
                 'drilldown' => $opd->name,
                 'color'     => $color[$keyOPD]
             ];
-
-            $jenisPendapatan = TransaksiOPD::select(DB::raw("SUM(total_bayar_bjb) as y"), 'id_jenis_pendapatan', 'id_opd', 'tmopds.n_opd as name')
-                ->join('tmopds', 'tmopds.id', '=', 'tmtransaksi_opd.id_opd')
-                ->where('tmopds.id', $opd->id_opd)
-                ->where('status_bayar', 1)
-                ->whereYear('tmtransaksi_opd.created_at', $year)
-                ->groupBy('id_jenis_pendapatan')
-                ->get();
-
-            foreach ($jenisPendapatan as $keyJenisPendapatan => $rincian) {
-                $dataChills[$keyJenisPendapatan] = [
-                    $rincian->jenis_pendapatan->jenis_pendapatan,
-                    $rincian->y
-                ];
-
-                $childs[$keyOPD] = [
-                    'name'  => $rincian->name,
-                    'id'    => $rincian->name,
-                    'data'  => $dataChills,
-                    'color' => $color[$keyOPD]
-                ];
-            }
         }
 
         $parentJson = json_encode($parents);
