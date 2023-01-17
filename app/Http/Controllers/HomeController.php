@@ -127,6 +127,7 @@ class HomeController extends Controller
             ->groupBy('chanel_bayar')
             ->get()->toArray();
         $totalChannelBayar = array_merge($channelBayar, $qris, $mobileBanking);
+        $dataPieChartChanelBayar = [];
         foreach ($totalChannelBayar as $key => $i) {
             if ($i['chanel_bayar']) {
                 if (str_contains($i['chanel_bayar'], 'QRIS')) {
@@ -175,6 +176,7 @@ class HomeController extends Controller
         $parents = [];
         $childs  = [];
 
+        // shuffle($color);
         foreach ($pendapatanOPD as $keyOPD => $opd) {
             $parents[$keyOPD] = [
                 'name' => $opd->name,
