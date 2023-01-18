@@ -2,10 +2,13 @@
 
 namespace App\Libraries;
 
+use Auth;
+
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 // Models
+use App\Models\Pengguna;
 use App\Models\TransaksiOPD;
 
 class GenerateNumber
@@ -13,9 +16,28 @@ class GenerateNumber
     public static function generate($opd_id, $jenis_pendapatan_id, $jenisGenerate)
     {
         $time  = carbon::now();
-        $date  = $time->day;
         $month = $time->month;
         $year  = substr($time->year, 2);
+
+        //TODO: get id_operator
+        $user = Pengguna::select('full_name')->join('model_has_roles', 'model_has_roles.model_id', '=', 'tmpenggunas.user_id')
+            ->where('opd_id', $opd_id)
+            ->where('role_id', 9)
+            ->get()->toArray();
+
+        $full_name = Auth::user()->pengguna->full_name;
+        foreach ($user as $key => $i) {
+            if ($i['full_name'] == $full_name) {
+                $id_operator = $key + 1;
+            } else {
+                $id_operator = mt_rand(0, 90) + 1;
+            }
+        }
+        if (strlen($id_operator) == 1) {
+            $generateIdOperator = '0' . $id_operator;
+        } else {
+            $generateIdOperator = $id_operator + 1;
+        }
 
         //TODO: Generate no_skrd (Data melanjutkan nomor terakhir)
         $totalSKRD = TransaksiOPD::where('id_opd', $opd_id)
@@ -82,13 +104,6 @@ class GenerateNumber
             $generateIdJenisPendapatan = $jenis_pendapatan_id;
         }
 
-        //TODO: Generate Date
-        if (\strlen($date) == 1) {
-            $generateDay = '0' . $date;
-        } elseif (\strlen($date) == 2) {
-            $generateDay = $date;
-        }
-
         //TODO: Generate Month
         if (\strlen($month) == 1) {
             $generateMonth = '0' . $month;
@@ -98,10 +113,10 @@ class GenerateNumber
 
         //TODO: Check jenis return
         if ($jenisGenerate == 'no_skrd') {
-            $no_skrd = $generateIdOPD . '.' . $generateIdJenisPendapatan . '.'  . $year . '.'  . $generateSKRD; // id_skpd,id_jenis_pendapatan,tahun,no_urut
+            $no_skrd = $generateIdOPD . '.' . $generateIdOperator . '.'  . $year . '.'  . $generateSKRD; // id_skpd,id_operator,tahun,no_urut
             return $no_skrd;
         } else if ($jenisGenerate == 'no_bayar') {
-            $no_bayar = $generateDay . $generateMonth .  $year .  $generateIdOPD . $generateNoBayar; // tanggal,bulan,tahun,id_skpd,no_urut
+            $no_bayar = $generateIdOperator . $generateMonth .  $year .  $generateIdOPD . $generateNoBayar; // id_operator,bulan,tahun,id_skpd,no_urut
             return $no_bayar;
         }
     }
