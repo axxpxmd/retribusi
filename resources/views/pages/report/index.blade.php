@@ -43,7 +43,9 @@
                                 <label for="opd_id" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">OPD </label>
                                 <div class="col-sm-8">
                                     <select class="select2 form-control r-0 light s-12" id="opd_id" name="opd_id">
-                                        <option value="0">Semua</option>
+                                        @if ($role == 'super-admin' || $role == 'admin-bjb')
+                                            <option value="0">Semua</option>
+                                        @endif
                                         @foreach ($opds as $i)
                                             <option value="{{ $i->id }}" {{ $i->id == $opd_id ? 'selected' : ''}}>{{ $i->n_opd }}</option>
                                         @endforeach

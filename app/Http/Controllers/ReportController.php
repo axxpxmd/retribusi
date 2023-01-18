@@ -75,7 +75,8 @@ class ReportController extends Controller
             'today',
             'status',
             'tahun',
-            'opd_id'
+            'opd_id',
+            'role'
         ));
     }
 

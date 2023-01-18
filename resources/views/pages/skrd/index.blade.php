@@ -30,8 +30,6 @@
             <div class="tab-pane animated fadeInUpShort show active" id="semua-data" role="tabpanel">
                 <div class="card no-b mb-2">
                     <div class="card-body">
-                        <input type="hidden" id="year" value="{{ $year }}">
-                        <input type="hidden" id="status" value="{{ $status }}">
                         <input type="hidden" id="status_duplicate" value="{{ $status_duplicate }}">
                         <div class="col-md-8 container">
                             <div class="row mb-2">
@@ -207,8 +205,6 @@
             data: function (data) {
                 data.from = $('#from').val();
                 data.to   = $('#to').val();
-                data.year   = $('#year').val();
-                data.status = $('#status').val();
                 data.opd_id     = $('#opd').val();
                 data.no_skrd    = $('#no_skrd').val();
                 data.status_ttd = $('#status_ttd').val();

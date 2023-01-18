@@ -52,6 +52,7 @@ class STSController extends Controller
         $title = $this->title;
 
         $today    = Carbon::now()->format('Y-m-d');
+        $role     = Auth::user()->pengguna->modelHasRole->role->name;
         $opd_id   = Auth::user()->pengguna->opd_id == 0 ? $request->opd_id : Auth::user()->pengguna->opd_id;
         $opdArray = OPDJenisPendapatan::select('id_opd')->get()->toArray();
         $opds     = OPD::getAll($opdArray, $opd_id);
@@ -65,7 +66,7 @@ class STSController extends Controller
         $status = $request->status;
 
         if ($request->ajax()) {
-            return $this->dataTable($from, $to, $opd_id, $status_bayar, $jenis_tanggal, $no_bayar);
+            return $this->dataTable($from, $to, $opd_id, $status_bayar, $jenis_tanggal, $no_bayar, $status);
         }
 
         return view($this->view . 'index', compact(
@@ -74,13 +75,14 @@ class STSController extends Controller
             'opd_id',
             'opds',
             'today',
-            'status'
+            'status',
+            'role'
         ));
     }
 
-    public function dataTable($from, $to, $opd_id, $status_bayar, $jenis_tanggal, $no_bayar)
+    public function dataTable($from, $to, $opd_id, $status_bayar, $jenis_tanggal, $no_bayar, $status)
     {
-        $data = TransaksiOPD::querySTS($from, $to, $opd_id, $status_bayar, $jenis_tanggal, $no_bayar);
+        $data = TransaksiOPD::querySTS($from, $to, $opd_id, $status_bayar, $jenis_tanggal, $no_bayar, $status);
 
         return DataTables::of($data)
             ->addColumn('action', function ($p) {

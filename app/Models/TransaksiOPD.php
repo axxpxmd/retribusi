@@ -241,12 +241,9 @@ class TransaksiOPD extends Model
     }
 
     //* Query get data SKRD
-    public static function querySKRD($from, $to, $opd_id, $no_skrd, $status_ttd, $status, $year, $getDuplicate)
+    public static function querySKRD($from, $to, $opd_id, $no_skrd, $status_ttd, $getDuplicate)
     {
         $date =  Carbon::now()->format('Y-m-d');
-        if ($date != $from) {
-            $status = 0;
-        }
 
         $data = TransaksiOPD::select('id', 'id_opd', 'no_skrd', 'no_bayar', 'nm_wajib_pajak', 'id_jenis_pendapatan', 'tgl_skrd_awal', 'tgl_skrd_akhir', 'status_ttd', 'jumlah_bayar', 'history_ttd')
             ->with('opd', 'jenis_pendapatan')
@@ -263,15 +260,11 @@ class TransaksiOPD extends Model
                 return $q->where('status_ttd', $status_ttd);
             });
 
-        if ($status == 1) {
-            $data->where(DB::raw('YEAR(tmtransaksi_opd.created_at)'), '=', $year);
-        } else {
-            if ($from != null ||  $to != null) {
-                if ($from != null && $to == null) {
-                    $data->whereDate('tgl_skrd_awal', $from);
-                } else {
-                    $data->whereBetween('tgl_skrd_awal', [$from, $to]);
-                }
+        if ($from != null ||  $to != null) {
+            if ($from != null && $to == null) {
+                $data->whereDate('tgl_skrd_awal', $from);
+            } else {
+                $data->whereBetween('tgl_skrd_awal', [$from, $to]);
             }
         }
 
@@ -343,7 +336,7 @@ class TransaksiOPD extends Model
     }
 
     // 
-    public static function querySTS($from, $to, $opd_id, $status_bayar, $jenis_tanggal, $no_bayar)
+    public static function querySTS($from, $to, $opd_id, $status_bayar, $jenis_tanggal, $no_bayar, $status)
     {
         $now = Carbon::now();
         $date = $now->format('Y-m-d');
@@ -363,25 +356,36 @@ class TransaksiOPD extends Model
             $data->where('no_bayar', 'like', '%' . $no_bayar . '%');
         }
 
-        if ($jenis_tanggal == 1) {
-            if ($from != null || $to != null) {
-                if ($from != null && $to == null) {
-                    $data->whereDate('tgl_skrd_awal', $from);
-                } else {
-                    $data->whereBetween('tgl_skrd_awal', [$from, $to]);
-                }
-            }
-        } elseif ($jenis_tanggal == 2) {
-            $from = $from . ' ' . '00:00:01';
-            $to = $to . ' ' . '23:59:59';
+        switch ($status) {
+            case '1':
+                $data->where('tgl_bayar', $now);
+                break;
+            case '2':
+                $data->whereDate('tgl_skrd_awal', $date);
+                break;
 
-            if ($from != null || $to != null) {
-                if ($from != null && $to == null) {
-                    $data->whereDate('tgl_bayar', $from);
-                } else {
-                    $data->whereBetween('tgl_bayar', [$from, $to]);
+            default:
+                if ($jenis_tanggal == 1) {
+                    if ($from != null || $to != null) {
+                        if ($from != null && $to == null) {
+                            $data->whereDate('tgl_skrd_awal', $from);
+                        } else {
+                            $data->whereBetween('tgl_skrd_awal', [$from, $to]);
+                        }
+                    }
+                } elseif ($jenis_tanggal == 2) {
+                    $from = $from . ' ' . '00:00:01';
+                    $to = $to . ' ' . '23:59:59';
+
+                    if ($from != null || $to != null) {
+                        if ($from != null && $to == null) {
+                            $data->whereDate('tgl_bayar', $from);
+                        } else {
+                            $data->whereBetween('tgl_bayar', [$from, $to]);
+                        }
+                    }
                 }
-            }
+                break;
         }
 
         return $data->orderBy('id', 'DESC')->get();

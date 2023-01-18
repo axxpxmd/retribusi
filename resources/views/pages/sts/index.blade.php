@@ -28,19 +28,19 @@
                 <div class="card no-b mb-2">
                     <div class="card-body">
                         <div class="col-md-8 container">
-                            @if ($opd_id == 0)
                             <div class="row mb-2">
                                 <label for="opd" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">OPD</label>
                                 <div class="col-sm-8">
-                                    <select name="opd" id="opd" class="select2 form-control r-0 s-12">
-                                        <option value="0">Semua</option>
+                                    <select id="opd" class="select2 form-control r-0 s-12">
+                                        @if ($role == 'super-admin' || $role == 'admin-bjb')
+                                            <option value="0">Semua</option>
+                                        @endif
                                         @foreach ($opds as $i)
-                                            <option value="{{ $i->id }}">{{ $i->n_opd }}</option>
+                                            <option value="{{ $i->id }}" {{ $opd_id == $i->id ? 'selected' : '' }}>{{ $i->n_opd }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
-                            @endif
                             <div class="row mb-2">
                                 <label for="status_bayar" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">Status Bayar</label>
                                 <div class="col-sm-8">

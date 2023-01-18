@@ -51,6 +51,7 @@ class STRDController extends Controller
         $title = $this->title;
 
         $today    = Carbon::yesterday()->format('Y-m-d');
+        $role     = Auth::user()->pengguna->modelHasRole->role->name;
         $opd_id   = $request->opd_id ? $request->opd_id : Auth::user()->pengguna->opd_id;
         $opdArray = OPDJenisPendapatan::select('id_opd')->get()->toArray();
         $opds     = OPD::getAll($opdArray, $opd_id);
@@ -74,7 +75,8 @@ class STRDController extends Controller
             'opd_id',
             'today',
             'status',
-            'tahun'
+            'tahun',
+            'role'
         ));
     }
 
