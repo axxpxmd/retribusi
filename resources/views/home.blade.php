@@ -248,10 +248,10 @@
                     <h6 class="card-header text-white bg-cyan font-weight-bold" style="border-top-right-radius: 15px; border-top-left-radius: 15px">Total Retribusi</h6>
                     <div class="card-body p-0">
                         <div class="row p-0">
-                            <div class="col-md-6 p-0">
+                            <div class="col-md-7 p-0">
                                 @include('pages.dashboard.pieTest')
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-5">
                                 <div class="my-3">
                                     <p class="text-black text-center fs-14 font-weight-bold">Total Retribusi</p>
                                 </div>

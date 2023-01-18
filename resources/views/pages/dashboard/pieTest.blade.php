@@ -38,7 +38,7 @@
         plotOptions: {
             pie: {
                 allowPointSelect: true,
-                size: '45%',
+                size: '35%',
                 cursor: 'pointer',
                 dataLabels: {
                     crop: false,
