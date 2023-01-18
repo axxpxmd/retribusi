@@ -273,7 +273,7 @@
             </div>
             <div class="col-md-5">
                 <div class="card no-b r-15" style="height: 475px !important">
-                    <h6 class="card-header text-white font-weight-bold bg-blue-grey" style="border-top-right-radius: 15px; border-top-left-radius: 15px">Pendapatan OPD</h6>
+                    <h6 class="card-header text-white font-weight-bold bg-blue-grey" style="border-top-right-radius: 15px; border-top-left-radius: 15px">Pembayaran hari ini</h6>
                     <div class="card-body">
 
                     </div>

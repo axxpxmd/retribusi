@@ -176,7 +176,6 @@ class HomeController extends Controller
         $parents = [];
         $childs  = [];
 
-        // shuffle($color);
         foreach ($pendapatanOPD as $keyOPD => $opd) {
             $parents[$keyOPD] = [
                 'name' => $opd->name,
@@ -188,6 +187,8 @@ class HomeController extends Controller
 
         $parentJson = json_encode($parents);
         $childJson  = json_encode($childs);
+
+        //*
 
         return view('home', compact(
             'totalSKRD',
