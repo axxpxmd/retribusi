@@ -93,7 +93,7 @@ class HomeController extends Controller
 
         $totalRetribusi = TransaksiOPD::select(DB::raw("SUM(tmtransaksi_opd.total_bayar) as total_bayar"), DB::raw("COUNT(tmtransaksi_opd.id) as total_skrd"))->whereYear('created_at', $year)->first();
         $existedOPD = OPDJenisPendapatan::select('id_opd')->get()->toArray();
-        $totalRetribusiOPD = TransaksiOPD::select(DB::raw("COUNT('id') as total"), DB::raw("SUM(total_bayar) as total_bayar"), 'initial')
+        $totalRetribusiOPD = TransaksiOPD::select(DB::raw("COUNT('id') as total"), DB::raw("SUM(total_bayar) as total_bayar"), 'initial', 'n_opd')
             ->join('tmopds', 'tmopds.id', '=', 'tmtransaksi_opd.id_opd')
             ->whereIn('id_opd', $existedOPD)
             ->whereYear('tmtransaksi_opd.created_at', $year)
