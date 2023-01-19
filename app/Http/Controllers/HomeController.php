@@ -196,7 +196,7 @@ class HomeController extends Controller
             })->whereDate('tgl_bayar', $time)
             ->orderBy('tgl_bayar', 'DESC')->get();
 
-        //*
+        //* Chart Pendapatan per Tahun
         $retribusiPerTahun = TransaksiOPD::select(DB::raw('YEAR(created_at) as tahun'), DB::raw("SUM(total_bayar_bjb) as total_bayar"))
             ->when($opd_id != 0, function ($q) use ($opd_id) {
                 $q->where('tmtransaksi_opd.id_opd', $opd_id);

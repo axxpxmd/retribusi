@@ -283,7 +283,7 @@
                                 @foreach ($pembayaranHariIni as $index => $i)
                                 <tr>
                                     <td class="text-center">{{ $index+1 }}</td>
-                                    <td><a href="{{ route('sts.show', Crypt::encrypt($i->id)) }}">{{ $i->no_bayar }}</a></td>
+                                    <td><a href="{{ route('sts.show', Crypt::encrypt($i->id)) }}" title="Lihat Detail">{{ $i->no_bayar }}</a></td>
                                     <td title="{{ $i->n_opd }}">{{ $i->initial }}</td>
                                     <td>{{ str_contains($i->chanel_bayar, 'QRIS') ? 'QRIS' : $i->chanel_bayar }}</td>
                                     <td>@currency($i->total_bayar_bjb)</td>
