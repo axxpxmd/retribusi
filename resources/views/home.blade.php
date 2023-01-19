@@ -226,7 +226,8 @@
                                 @foreach ($totalChannelBayar as $index => $i)
                                     @if ($i['total'])
                                     <tr>
-                                        <td><a href="#" title="Lihat Data">{{ str_contains($i['chanel_bayar'], 'QRIS') ? 'QRIS' : $i['chanel_bayar'] }}</a></td>
+                                        {{-- <td><a href="#" title="Lihat Data">{{ str_contains($i['chanel_bayar'], 'QRIS') ? 'QRIS' : $i['chanel_bayar'] }}</a></td> --}}
+                                        <td>{{ str_contains($i['chanel_bayar'], 'QRIS') ? 'QRIS' : $i['chanel_bayar'] }}</td>
                                         <td>{{ number_format($i['total']) }}</td>
                                         <td>@currency($i['total_bayar'])</td>
                                     </tr>
