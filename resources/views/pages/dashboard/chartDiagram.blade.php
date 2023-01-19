@@ -73,6 +73,9 @@
             enabled: false
         },
         title: {
+            style: {
+                fontSize: '16px'
+            },
             text: 'Total Pendapatan Tiap Dinas'
         },
         accessibility: {
