@@ -26,13 +26,19 @@ class GenerateNumber
             ->get()->toArray();
 
         $full_name = Auth::user()->pengguna->full_name;
+        $status    = false;
         foreach ($user as $key => $i) {
             if ($i['full_name'] == $full_name) {
-                $id_operator = $key + 1;
-            } else {
-                $id_operator = mt_rand(0, 90) + 1;
+                $status = true;
             }
         }
+
+        if ($status) {
+            $id_operator = $key + 1;
+        } else {
+            $id_operator = mt_rand(0, 90) + 1;
+        }
+
         if (strlen($id_operator) == 1) {
             $generateIdOperator = '0' . $id_operator;
         } else {
