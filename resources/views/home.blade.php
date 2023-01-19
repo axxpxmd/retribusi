@@ -266,7 +266,7 @@
         @hasanyrole('super-admin|admin-bjb')
         <div class="row mt-3">
             <div class="col-md-7">
-                <div class="card no-b r-15">
+                <div class="card no-b r-15" style="height: 475px !important">
                     <h6 class="card-header text-white font-weight-bold" style="background: #FFCE3B; border-top-right-radius: 15px; border-top-left-radius: 15px">Pendapatan OPD</h6>
                     <div class="card-body p-0">
                         @include('pages.dashboard.chartDiagram')
@@ -277,7 +277,35 @@
                 <div class="card no-b r-15" style="height: 475px !important">
                     <h6 class="card-header text-white font-weight-bold bg-blue-grey" style="border-top-right-radius: 15px; border-top-left-radius: 15px">Pembayaran hari ini</h6>
                     <div class="card-body">
-
+                        <table id="tablePembayaran" class="table table-hover fs-12 mt-2" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>No Bayar</th>
+                                    <th>OPD</th>
+                                    <th>Channel Bayar</th>
+                                    <th>Total Bayar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($pembayaranHariIni as $index => $i)
+                                <tr>
+                                    <td class="text-center">{{ $index+1 }}</td>
+                                    <td><a href="{{ route('sts.show', Crypt::encrypt($i->id)) }}">{{ $i->no_bayar }}</a></td>
+                                    <td title="{{ $i->n_opd }}">{{ $i->initial }}</td>
+                                    <td>{{ str_contains($i->chanel_bayar, 'QRIS') ? 'QRIS' : $i->chanel_bayar }}</td>
+                                    <td>@currency($i->total_bayar_bjb)</td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="3"></td>
+                                    <td colspan="1" class="font-weight-bold">Total</td>
+                                    <td colspan="1">@currency($pembayaranHariIni->sum('total_bayar_bjb'))</td>
+                                </tr>
+                            </tfoot>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -358,6 +386,17 @@
             "bInfo": false,
             "searching": false,
             "order": [[1, 'desc']],
+        });
+        $('.dataTables_length').addClass('bs-select');
+    });
+
+    $(document).ready(function () {
+        $('#tablePembayaran').DataTable({
+            "scrollX": true,
+            "scrollY": 300,
+            "bPaginate": false,
+            "bInfo": false,
+            "searching": false
         });
         $('.dataTables_length').addClass('bs-select');
     });
