@@ -6,7 +6,7 @@
         margin: 1em auto;
     }
 
-    #container {
+    #chartDiagramPendapatanOPD {
         width: auto;
         height: auto;
     }
@@ -58,14 +58,14 @@
     }
 </style>
 <figure class="highcharts-figure">
-    <div id="container"></div>
+    <div id="chartDiagramPendapatanOPD"></div>
 </figure>
 @push('scriptDashboard')
 <script type="text/javascript">
     var parents = <?php echo $parentJson; ?>;
     var childs = <?php echo $childJson; ?>;
 
-    Highcharts.chart('container', {
+    Highcharts.chart('chartDiagramPendapatanOPD', {
         chart: {
             type: 'column'
         },

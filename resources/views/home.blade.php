@@ -241,31 +241,22 @@
                 <div class="card r-15 no-b" style="height: 300px !important">
                     <h6 class="card-header bg-success text-white font-weight-bold" style="border-top-right-radius: 15px; border-top-left-radius: 15px">Metode Pembayaran <i class="icon-payment ml-2"></i></h6>
                     <div class="card-body py-0 px-1">
-                        @include('pages.dashboard.pieTest2')
+                        @include('pages.dashboard.pieMetodePembayaran')
                     </div>
                 </div>
             </div>
             <div class="col-md-5">
                 <div class="card r-15 no-b" style="height: 300px !important">
-                    <h6 class="card-header text-white bg-cyan font-weight-bold" style="border-top-right-radius: 15px; border-top-left-radius: 15px">Total Retribusi</h6>
-                    <div class="card-body p-0">
-                        <div class="row p-0">
-                            <div class="col-md-7 p-0">
-                                @include('pages.dashboard.pieTest')
-                            </div>
-                            <div class="col-md-5">
-                                <div class="my-3">
-                                    <p class="text-black text-center fs-14 font-weight-bold">Total Retribusi</p>
-                                </div>
-                            </div>
-                        </div>
+                    {{-- <h6 class="card-header text-white bg-cyan font-weight-bold" style="border-top-right-radius: 15px; border-top-left-radius: 15px">Total Retribusi</h6> --}}
+                    <div class="card-body py-1 px-2">
+                        @include('pages.dashboard.chartTest')
                     </div>
                 </div>
             </div>
         </div>
         @hasanyrole('super-admin|admin-bjb')
         <div class="row mt-3">
-            <div class="col-md-7">
+            <div class="col-md-7 mb-5-m">
                 <div class="card no-b r-15" style="height: 475px !important">
                     <h6 class="card-header text-white font-weight-bold" style="background: #FFCE3B; border-top-right-radius: 15px; border-top-left-radius: 15px">Pendapatan OPD</h6>
                     <div class="card-body p-0">
@@ -365,6 +356,7 @@
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 <script src="https://code.highcharts.com/modules/export-data.js"></script>
 <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<script src="https://code.highcharts.com/modules/series-label.js"></script>
 @stack('scriptDashboard')
 <script type="text/javascript">
     $(document).ready(function () {

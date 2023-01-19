@@ -196,6 +196,21 @@ class HomeController extends Controller
             })->whereDate('tgl_bayar', $time)
             ->orderBy('tgl_bayar', 'DESC')->get();
 
+        //*
+        $retribusiPerTahun = TransaksiOPD::select(DB::raw('YEAR(created_at) as tahun'), DB::raw("SUM(total_bayar_bjb) as total_bayar"))
+            ->when($opd_id != 0, function ($q) use ($opd_id) {
+                $q->where('tmtransaksi_opd.id_opd', $opd_id);
+            })
+            ->where('status_bayar', 1)
+            ->whereIn(DB::raw('YEAR(created_at)'),  [2021, 2022, 2023])
+            ->groupBy('tahun')->get();
+        $tahunMulai = $retribusiPerTahun[0]['tahun'];
+        $parentsRetribusiPerTahun = [];
+        foreach ($retribusiPerTahun as $keyretribusiPerTahun => $retribusiPerTahun) {
+            $parentsRetribusiPerTahun[$keyretribusiPerTahun] = $retribusiPerTahun->total_bayar;
+        }
+        $parentJsonRetribusiPerTahun = json_encode($parentsRetribusiPerTahun);
+
         return view('home', compact(
             'totalSKRD',
             'targetPendapatan',
@@ -217,7 +232,9 @@ class HomeController extends Controller
             'tandaTanganToday',
             'parentJson',
             'childJson',
-            'pembayaranHariIni'
+            'pembayaranHariIni',
+            'parentJsonRetribusiPerTahun',
+            'tahunMulai'
         ));
     }
 }
