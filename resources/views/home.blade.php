@@ -164,7 +164,7 @@
                             <h6 class="card-header bg-primary text-white font-weight-bold" style="border-top-right-radius: 15px; border-top-left-radius: 15px">Notifikasi <i class="icon-notifications ml-2"></i></h6>
                             <div class="card-body px-4 py-1">
                                 @can('Tanda Tangan')
-                                <p style="margin-bottom: -5px !important" class="fs-12"><i class="icon icon-data_usage text-primary mr-2"></i><a href="#" title="Lihat Data">Terdapat {{ $tandaTanganToday }} SKRD yang belum ditanda tangani hari ini.</a></p>
+                                <p style="margin-bottom: -5px !important" class="fs-12"><i class="icon icon-data_usage text-primary mr-2"></i><a href="{{ route('tanda-tangan.index') }}" title="Lihat Data">Terdapat {{ $tandaTanganToday }} SKRD yang belum ditanda tangani hari ini.</a></p>
                                 @endcan
                                 @can('STRD')
                                 <p style="margin-bottom: -5px !important" class="fs-12"><i class="icon icon-data_usage text-danger mr-2"></i><a href="{{ route('strd.index', ['year' => $year, 'status' => 2, 'opd_id' => $n_opd->id]) }}" target="_blank" title="Lihat Data">Terdapat {{ $strdToday }} SKRD telah jatuh tempo.</a></p>
