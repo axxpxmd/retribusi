@@ -19,13 +19,13 @@ use DataTables;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\JenisPendapatan;
 use Illuminate\Support\Facades\Crypt;
 
 // Models
 use App\Models\OPD;
 use App\Models\Utility;
 use App\Models\TransaksiOPD;
+use App\Models\JenisPendapatan;
 use App\Models\OPDJenisPendapatan;
 use App\Models\RincianJenisPendapatan;
 
