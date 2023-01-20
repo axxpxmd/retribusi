@@ -69,7 +69,7 @@
                                     <th>OPD</th>
                                     <th>Target</th>
                                     <th>Diterima</th>
-                                    <th>Ketetapan</th>
+                                    <th>Denda</th>
                                     <th>Jumlah</th>
                                     <th>Realisasi</th>
                                 </tr>
@@ -82,7 +82,7 @@
                                     <td title="{{ $i->n_opd }}">{{ $i->initial }}</td>
                                     <td>@currency($i->target_pendapatan)</td>
                                     <td>@currency($i->diterima)</td>
-                                    <td>@currency($i->denda)</td>
+                                    <td>@currency($i->totalDenda)</td>
                                     <td class="text-center">{{ number_format($i->jumlah) }}</td>
                                     <td class="text-center">{{ $i->realisasi ? $i->realisasi : '0' }} %</td>
                                 </tr>
@@ -90,9 +90,9 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <td colspan="4"></td>
+                                    <td colspan="3"></td>
                                     <td colspan="1" class="font-weight-bold">Total</td>
-                                    <td colspan="3">@currency($targetPendapatan->sum('diterima'))</td>
+                                    <td colspan="4">@currency($targetPendapatan->sum('diterima'))</td>
                                 </tr>
                             </tfoot>
                         </table>

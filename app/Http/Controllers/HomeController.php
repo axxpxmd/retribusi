@@ -49,7 +49,7 @@ class HomeController extends Controller
         $color = ['#26a69a', '#26c6da', '#42a5f5', '#ef5350', '#ff7043', '#5c6bc0', '#ffee58', '#bdbdbd', '#66bb6a ', '#ec407a', '#42a5f5', '#26a69a', '#ff7043'];
 
         //* Tabel Target Pendapatan
-        $targetPendapatan = JenisPendapatan::select(DB::raw("COUNT(tmtransaksi_opd.id) as jumlah"), DB::raw("SUM(tmtransaksi_opd.total_bayar) as diterima"), DB::raw("SUM(tmtransaksi_opd.total_bayar_bjb-tmtransaksi_opd.jumlah_bayar) as denda"), DB::raw("round((SUM(tmtransaksi_opd.total_bayar) / target_pendapatan * 100), 2) as realisasi"), 'denda', 'jenis_pendapatan', 'target_pendapatan', 'tmopds.initial', 'tmopds.n_opd')
+        $targetPendapatan = JenisPendapatan::select(DB::raw("COUNT(tmtransaksi_opd.id) as jumlah"), DB::raw("SUM(tmtransaksi_opd.total_bayar) as diterima"), DB::raw("SUM(tmtransaksi_opd.total_bayar_bjb-tmtransaksi_opd.jumlah_bayar) as totalDenda"), DB::raw("round((SUM(tmtransaksi_opd.total_bayar) / target_pendapatan * 100), 2) as realisasi"), 'denda', 'jenis_pendapatan', 'target_pendapatan', 'tmopds.initial', 'tmopds.n_opd')
             ->join('tmtransaksi_opd', 'tmtransaksi_opd.id_jenis_pendapatan', '=', 'tmjenis_pendapatan.id')
             ->join('tmopds', 'tmopds.id', '=', 'tmtransaksi_opd.id_opd')
             ->whereYear('tmtransaksi_opd.created_at', $year)

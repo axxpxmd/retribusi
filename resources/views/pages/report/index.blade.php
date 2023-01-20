@@ -118,7 +118,7 @@
                             <div class="row">
                                 <div class="col-sm-2"></div>
                                 <div class="col-sm-8">
-                                    <p class="mb-0 font-weight-bold">Total Bayar : <span id="total_bayar"></span></p>
+                                    <p class="mb-0 font-weight-bold">Total Ketetapan : <span id="total_bayar"></span></p>
                                 </div> 
                             </div>
                         </div>
