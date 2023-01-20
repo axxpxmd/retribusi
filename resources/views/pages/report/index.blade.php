@@ -139,7 +139,7 @@
                                             <th>Tanggal SKRD </th>
                                             <th>Tanggal Bayar</th>
                                             <th>NTB </th>
-                                            <th>Diskon </th>
+                                            <th>Ketetapan </th>
                                             <th>Denda </th>
                                             <th>Total Bayar </th>
                                             <th>Status Bayar</th>
@@ -226,7 +226,7 @@
             {data: 'tgl_skrd', name: 'tgl_skrd'},
             {data: 'tgl_bayar', name: 'tgl_bayar'},
             {data: 'ntb', name: 'ntb'},
-            {data: 'diskon', name: 'diskon'},
+            {data: 'ketetapan', name: 'ketetapan'},
             {data: 'denda', name: 'denda'},
             {data: 'total_bayar', name: 'total_bayar'},
             {data: 'status_bayar', name: 'status_bayar'},

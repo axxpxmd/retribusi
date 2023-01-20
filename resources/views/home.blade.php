@@ -68,8 +68,8 @@
                                     <th>Jenis Pendapatan</th>
                                     <th>OPD</th>
                                     <th>Target</th>
-                                    <th>Ketetapan</th>
                                     <th>Diterima</th>
+                                    <th>Ketetapan</th>
                                     <th>Jumlah</th>
                                     <th>Realisasi</th>
                                 </tr>
@@ -81,8 +81,8 @@
                                     <td>{{ $i->jenis_pendapatan }}</td>
                                     <td title="{{ $i->n_opd }}">{{ $i->initial }}</td>
                                     <td>@currency($i->target_pendapatan)</td>
-                                    <td>@currency($i->ketetapan)</td>
                                     <td>@currency($i->diterima)</td>
+                                    <td>@currency($i->denda)</td>
                                     <td class="text-center">{{ number_format($i->jumlah) }}</td>
                                     <td class="text-center">{{ $i->realisasi ? $i->realisasi : '0' }} %</td>
                                 </tr>

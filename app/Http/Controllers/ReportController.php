@@ -112,13 +112,8 @@ class ReportController extends Controller
             ->editColumn('total_bayar', function ($p) {
                 return 'Rp. ' . number_format($p->total_bayar);
             })
-            ->editColumn('diskon', function ($p) {
-                $diskonHarga = ((int) $p->diskon / 100) * $p->jumlah_bayar;
-                if ($p->status_diskon == 0) {
-                    return "-";
-                } else {
-                    return '( ' . $p->diskon . '% )' . ' Rp. ' . number_format($diskonHarga);
-                }
+            ->editColumn('ketetapan', function ($p) {
+                return 'Rp. ' . number_format($p->jumlah_bayar);
             })
             ->editColumn('denda', function ($p) {
                 $dateNow = Carbon::now()->format('Y-m-d');
@@ -396,32 +391,7 @@ class ReportController extends Controller
         $rincian_pendapatan_id = $request->rincian_pendapatan_id;
 
         $datas = TransaksiOPD::queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar, $rincian_pendapatan_id, $status, $tahun);
-        $totalDenda = [0];
-        foreach ($datas as $key => $i) {
-            $tgl_bayar      = $i->tgl_bayar;
-            $status_bayar   = $i->status_bayar;
-            $tgl_skrd_awal  = $i->tgl_skrd_awal;
-            $tgl_skrd_akhir = $i->tgl_skrd_akhir;
-            $jumlah_bayar   = $i->jumlah_bayar;
-
-            $dateNow     = Carbon::now()->format('Y-m-d');
-            $jatuh_tempo = Utility::isJatuhTempo($i->tgl_skrd_akhir, $dateNow);
-
-            //TODO: Get bunga
-            $kenaikan    = 0;
-            $jumlahBunga = 0;
-            if ($status_bayar == 1) {
-                list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_awal, $jumlah_bayar, $tgl_bayar);
-            } else {
-                if ($jatuh_tempo) {
-                    list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar);
-                }
-            }
-
-            $totalDenda[$key] = $jumlahBunga;
-        }
-
-        $totalBayar = $datas->sum('total_bayar') + array_sum($totalDenda);
+        $totalBayar = $datas->sum('total_bayar');
 
         $totalBayarJson = [
             'total_bayar' => 'Rp. ' . number_format($totalBayar)
