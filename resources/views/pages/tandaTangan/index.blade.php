@@ -86,7 +86,7 @@
                                             <th>No</th>
                                             <th>Nomor SKRD</th>
                                             <th>Nomor Bayar</th>
-                                            <th>Nama WP</th>
+                                            <th>Nama</th>
                                             <th>Jenis Retribusi</th>
                                             <th>Tanggal SKRD</th>
                                             <th>Masa Berlaku SKRD</th>

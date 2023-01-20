@@ -134,7 +134,7 @@
                                             <th>No</th>
                                             <th>Nomor SKRD </th>
                                             <th>Nomor Bayar </th>
-                                            <th>Nama Pembayar</th>
+                                            <th>Nama </th>
                                             <th>Rincian Pendapatan</th>
                                             <th>Tanggal SKRD </th>
                                             <th>Tanggal Bayar</th>

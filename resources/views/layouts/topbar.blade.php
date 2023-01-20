@@ -50,7 +50,7 @@
                                 <p class="fs-12 text-black m-0"><i class="icon icon-data_usage text-primary mr-2"></i>{{ $dataTTD ? 'Terdapat ' . number_format($dataTTD) . ' SKRD belum ditanda tangani' : 'Tidak ada notifikasi' }}</p>
                                 <hr class="m-0 mt-2">
                                 <div class="mt-2 text-center bg-transparent">
-                                    <button class="btn btn-sm btn-primary">Lihat Semua</button>
+                                    <a href="{{ route('tanda-tangan.index', ['belum_ttd' => 1]) }}" target="_blank" class="btn btn-sm btn-primary">Lihat Semua</a>
                                 </div>
                                 @else
                                 <p class="fs-12 text-black text-center m-0">Tidak ada notifikasi</p>
