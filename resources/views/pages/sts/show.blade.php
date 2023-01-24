@@ -252,12 +252,12 @@
                                                 <div class="col-auto p-1">
                                                     <a href="{{ config('app.sftp_src').$path_sftp.$fileName }}" target="blank" class="btn btn-primary btn-sm"><i class="icon-document-file-pdf2 mr-2"></i>File TTD SKRD</a>
                                                 </div>
-                                                <!-- Send Email -->
+                                                {{-- <!-- Send Email -->
                                                 @if ($data->email && $data->status_bayar == 1)
                                                     <div class="col-auto p-1">
                                                         <a href="#" onclick="sendEmailConfirm({{ $data->id }})" class="btn btn-sm btn-success"><i class="icon-envelope mr-2"></i>Kirim STS</a>
                                                     </div>
-                                                @endif
+                                                @endif --}}
                                             @endif
                                         </div>
                                     </div>
@@ -317,7 +317,7 @@
 @section('script')
 <script type="text/javascript">
      // Send Email
-     function sendEmailConfirm(id){
+    function sendEmailConfirm(id){
         $('#sendEmail').modal('show');
         $('#sendEmail').modal({keyboard: false});
     }
