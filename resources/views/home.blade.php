@@ -286,7 +286,7 @@
                                     <td><a href="{{ route('sts.show', Crypt::encrypt($i->id)) }}" title="Lihat Detail">{{ $i->no_bayar }}</a></td>
                                     <td title="{{ $i->n_opd }}">{{ $i->initial }}</td>
                                     <td>{{ str_contains($i->chanel_bayar, 'QRIS') ? 'QRIS' : $i->chanel_bayar }}</td>
-                                    <td>@currency($i->total_bayar_bjb)</td>
+                                    <td>@currency($i->total_bayar)</td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -294,7 +294,7 @@
                                 <tr>
                                     <td colspan="3"></td>
                                     <td colspan="1" class="font-weight-bold">Total</td>
-                                    <td colspan="1">@currency($pembayaranHariIni->sum('total_bayar_bjb'))</td>
+                                    <td colspan="1">@currency($pembayaranHariIni->sum('total_bayar'))</td>
                                 </tr>
                             </tfoot>
                         </table>
