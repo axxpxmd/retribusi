@@ -65,4 +65,50 @@ class Iontentik
 
         return [$err, $errMsg, $tokenGodem];
     }
+
+    public static function iotentikRes($nip, $passphrase, $tokenGodem, $idCert, $qrimage, $file)
+    {
+        $fileTTD = '';
+        $errMsg  = '';
+
+        $data = [
+            'username'   => $nip,
+            'passphrase' => $passphrase,
+            'token'      => $tokenGodem,
+            'urx'  => 177,
+            'ury'  => 840,
+            'llx'  => 1,
+            'lly'  => 795,
+            'page' => 1,
+            'idkeystore' => $idCert,
+            'reason'     => 'Tanda Tangan Digital Retribusi',
+            'location'   => 'Tangerang Selatan',
+            'updated_at' => ''
+        ];
+
+        $url = config('app.signapi_ipserver');
+        $res = Http::withToken(config('app.signapi_bearer'))
+            ->attach('imageSign', $qrimage, 'myimg.png')
+            ->attach('pdf', $file, 'myfile.pdf')
+            ->post($url . 'signPDF', $data);
+
+        if ($res->successful()) {
+            $r = $res->json();
+            if ($r['status'] == 200) {
+                $err = false;
+                $fileTTD = base64_decode($r['data'], true);
+            } elseif ($r['status'] && $r['data']) {
+                $err = true;
+                $errMsg = 'Gagal melakukan tandatangan digital IOTENTIK. Error Code: ' .  $r['status'] . ' Message: ' . $r['data'];
+            } else {
+                $err = true;
+                $errMsg = 'Gagal melakukan tandatangan digital IOTENTIK.';
+            }
+        } else {
+            $err = true;
+            $errMsg = 'Gagal melakukan tandatangan digital IOTENTIK . Error Server';
+        }
+
+        return [$err, $errMsg, $fileTTD];
+    }
 }

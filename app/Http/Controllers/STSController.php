@@ -320,7 +320,8 @@ class STSController extends Controller
         $request->validate([
             'status_bayar' => 'required',
             'chanel_bayar' => 'required',
-            'tgl_bayar' => 'required'
+            'tgl_bayar' => 'required',
+            'total_bayar_bjb' => 'required'
         ]);
 
         $id   = \Crypt::decrypt($id);

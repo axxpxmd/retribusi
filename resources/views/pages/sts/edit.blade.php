@@ -232,7 +232,7 @@
                                             <div class="row mb-2">
                                                 <label for="total_bayar_bjb" class="col-form-label s-12 col-sm-4 text-right">Total Bayar Bank<span class="text-danger ml-1">*</span></label>
                                                 <div class="col-md-8">
-                                                    <input type="text" name="total_bayar_bjb" {{ $data->status_bayar == 1 ? 'readonly' : '' }} value="{{ $data->total_bayar_bjb }}" {{ $readonly }} id="rupiah2" class="form-control s-12" autocomplete="off"/>
+                                                    <input type="text" name="total_bayar_bjb" {{ $data->status_bayar == 1 ? 'readonly' : '' }} value="{{ $data->total_bayar_bjb }}" {{ $readonly }} id="rupiah2" class="form-control s-12" autocomplete="off" required/>
                                                 </div>    
                                             </div>
                                         </div>
