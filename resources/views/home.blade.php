@@ -92,7 +92,8 @@
                                 <tr>
                                     <td colspan="3"></td>
                                     <td colspan="1" class="font-weight-bold">Total</td>
-                                    <td colspan="4">@currency($targetPendapatan->sum('diterima'))</td>
+                                    <td colspan="1" class="font-weight-bold">@currency($targetPendapatan->sum('diterima'))</td>
+                                    <td colspan="3" class="font-weight-bold">@currency($targetPendapatan->sum('totalDenda'))</td>
                                 </tr>
                             </tfoot>
                         </table>
