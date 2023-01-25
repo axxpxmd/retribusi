@@ -236,6 +236,9 @@
         ]
     });
 
+    $(document).ready(function(){
+        $("#opd_id").trigger('change');
+    });
     $('#opd_id').on('change', function(){
         val = $(this).val();
         $("#rincian_pendapatan_id").val(0).trigger("change.select2");

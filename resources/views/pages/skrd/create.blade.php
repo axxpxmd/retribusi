@@ -102,9 +102,9 @@
                                             </div>
                                         </div>
                                         <div class="row mb-2">
-                                            <label for="no_telp" class="col-form-label s-12 col-sm-4 text-right">No Telp<span class="text-danger ml-1">*</span></label>
+                                            <label for="no_telp" class="col-form-label s-12 col-sm-4 text-right">No WA</label>
                                             <div class="col-sm-8">
-                                                <input type="number" name="no_telp" id="no_telp" value="{{ $data_wp != null ? $data_wp->no_telp : '' }}" class="form-control r-0 s-12" autocomplete="off" required>
+                                                <input type="number" name="no_telp" id="no_telp" value="{{ $data_wp != null ? $data_wp->no_telp : '' }}" class="form-control r-0 s-12" autocomplete="off" placeholder="contoh : 08xxxxx">
                                             </div>
                                         </div>
                                         <div class="row mb-1">
