@@ -127,3 +127,5 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('send-email/{id}', 'EmailController@sendEmail')->name('sendEmail');
     Route::get('send-email/skrd/{id}', 'EmailController@skrd')->name('sendEmailSKRD');
 });
+
+Route::get('sts/report/{id}', 'STSController@printDataTTD')->name('sendSTS');

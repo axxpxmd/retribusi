@@ -21,7 +21,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 
 use App\Libraries\VABJBRes;
-use App\Http\Services\VABJB;
+use App\Http\Services\WhatsApp;
 use App\Libraries\Html\Html_number;
 use App\Http\Controllers\Controller;
 
@@ -39,9 +39,10 @@ class STSController extends Controller
     protected $view  = 'pages.sts.';
 
 
-    public function __construct(VABJBRes $vabjbres)
+    public function __construct(VABJBRes $vabjbres, WhatsApp $whatsapp)
     {
-        $this->vabjbres   = $vabjbres;
+        $this->vabjbres = $vabjbres;
+        $this->whatsapp = $whatsapp;
 
         $this->middleware(['permission:STS']);
     }
@@ -320,29 +321,35 @@ class STSController extends Controller
         $request->validate([
             'status_bayar' => 'required',
             'chanel_bayar' => 'required',
-            'tgl_bayar' => 'required',
+            'tgl_bayar'    => 'required',
             'total_bayar_bjb' => 'required'
         ]);
 
         $id   = \Crypt::decrypt($id);
         $data = TransaksiOPD::find($id);
+
+        $no_bku    = $request->no_bku;
+        $ntb       = $request->ntb;
+        $tgl_bayar = $request->tgl_bayar;
+        $denda     = $request->denda;
         $status_bayar = $request->status_bayar;
-        $tgl_bayar    = $request->tgl_bayar;
+        $chanel_bayar = $request->chanel_bayar;
+        $total_bayar_bjb = $request->total_bayar_bjb;
 
         //TODO: Check denda
-        $status_denda = Utility::checkDenda($request->denda);
+        $status_denda = Utility::checkDenda($denda);
 
-        // Check 
+        //* Check status bayar
         if ($status_bayar == 1) {
             $data->update([
                 'status_bayar' => 1,
                 'tgl_bayar'    => $tgl_bayar,
-                'no_bku'       => $request->no_bku,
-                'chanel_bayar' => $request->chanel_bayar,
+                'no_bku'       => $no_bku,
+                'chanel_bayar' => $chanel_bayar,
                 'status_denda' => $status_denda,
-                'ntb'    => $request->ntb,
-                'denda'  => (int) str_replace(['.', 'Rp', ' '], '', $request->denda),
-                'total_bayar_bjb' => $request->total_bayar_bjb == 0 ? null : (int) str_replace(['.', 'Rp', ' '], '', $request->total_bayar_bjb),
+                'ntb'    => $ntb,
+                'denda'  => (int) str_replace(['.', 'Rp', ' '], '', $denda),
+                'total_bayar_bjb' => $total_bayar_bjb == 0 ? null : (int) str_replace(['.', 'Rp', ' '], '', $total_bayar_bjb),
                 'updated_by'      => Auth::user()->pengguna->full_name . ' | Update data menu STS'
             ]);
         } else {
@@ -350,7 +357,9 @@ class STSController extends Controller
                 'message' => 'Pilih status bayar'
             ], 500);
         }
-
+ 
+        $this->whatsapp->sendSTS($tgl_bayar, $ntb, $chanel_bayar, $total_bayar_bjb, $data);
+       
         return response()->json([
             'message' => 'Data ' . $this->title . ' berhasil diperbaharui.'
         ]);

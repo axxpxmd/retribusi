@@ -104,7 +104,7 @@
                                         <div class="row mb-2">
                                             <label for="no_telp" class="col-form-label s-12 col-sm-4 text-right">No WA</label>
                                             <div class="col-sm-8">
-                                                <input type="number" name="no_telp" id="no_telp" value="{{ $data_wp != null ? $data_wp->no_telp : '' }}" class="form-control r-0 s-12" autocomplete="off" placeholder="contoh : 08xxxxx">
+                                                <input type="number" name="no_telp" id="no_telp" value="{{ $data_wp != null ? $data_wp->no_telp : '' }}" class="form-control r-0 s-12" autocomplete="off" placeholder="contoh : 08xxxxx" required>
                                             </div>
                                         </div>
                                         <div class="row mb-1">
