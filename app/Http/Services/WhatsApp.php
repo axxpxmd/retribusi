@@ -15,12 +15,11 @@ class WhatsApp
         $text = "*TRANSAKSI BERHASIL* 
 
 *Tanggal Bayar* : " . Carbon::parse($tgl_bayar)->format('d F Y | H:i:s') . "
-*Nomor Referensi* : " . $ntb . "
+*Nomor Transaksi* : " . $ntb . "
 *Metode Pembayaran* : " . $chanel_bayar . "
 *Nominal* : Rp. " . number_format($total_bayar_bjb) . "
 ------------------------------------------------------
 *Nama Pelanggan* : " . $data->nm_wajib_pajak . "
-*No Bayar* : " . $data->no_bayar . "
 *No Pendaftaran* : " . $data->nmr_daftar . "
 *No SKRD* : " . $data->no_skrd . "
 
