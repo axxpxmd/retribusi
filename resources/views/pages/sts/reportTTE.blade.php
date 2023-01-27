@@ -128,11 +128,26 @@
         .t-blue {
             color: blue
         }
+
+        .bgtext {
+            position: relative;
+        }
+  
+        .bgtext:after {
+            margin-left: -950px !important;
+            margin-top: -1600px !important;
+            content: "L U N A S";
+            font-size: 60px;
+            transform: rotate(310deg);
+            -webkit-transform: rotate(310deg);
+            color: rgb(226, 136, 136);
+            z-index: -1;
+        }
     </style>
 
 </head>
 
-<body>
+<body class="{{ $send_sts ? 'bgtext' : '' }}">
     <table class="d">
         <tr class="d">
             <th width="40%" class="d">

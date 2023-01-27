@@ -357,11 +357,11 @@ class STSController extends Controller
                 'message' => 'Pilih status bayar'
             ], 500);
         }
- 
+
         if ($data->no_telp) {
             $this->whatsapp->sendSTS($tgl_bayar, $ntb, $chanel_bayar, $total_bayar_bjb, $data, $data->no_telp);
         }
-       
+
         return response()->json([
             'message' => 'Data ' . $this->title . ' berhasil diperbaharui.'
         ]);
@@ -369,7 +369,7 @@ class STSController extends Controller
 
     public function printDataTTD(Request $request, $id)
     {
-        $id      = \Crypt::decrypt($id);
+        $id      = $request->send_sts ? base64_decode($id) : Crypt::decrypt($id);
         $data    = TransaksiOPD::find($id);
         $dateNow = Carbon::now()->format('Y-m-d');
 
@@ -384,6 +384,7 @@ class STSController extends Controller
         $tgl_skrd_akhir = $data->tgl_skrd_akhir;
         $tgl_skrd_awal  = $data->tgl_skrd_awal;
         $tgl_bayar      = $data->tgl_bayar;
+        $send_sts       = $request->send_sts;
 
         $fileName = str_replace(' ', '', $nm_wajib_pajak) . '-' . $no_skrd . ".pdf";
         $file_url = config('app.sftp_src') . 'file_ttd_skrd/' . $fileName;
@@ -428,7 +429,8 @@ class STSController extends Controller
             'kenaikan',
             'tgl_jatuh_tempo',
             'img',
-            'imgQRIS'
+            'imgQRIS',
+            'send_sts'
         ));
 
         return $pdf->stream($data->nm_wajib_pajak . ' - ' . $data->no_skrd . ".pdf");
