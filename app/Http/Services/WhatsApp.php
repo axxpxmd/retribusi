@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Crypt;
 
 class WhatsApp
 {
-    public static function sendSTS($tgl_bayar, $ntb, $chanel_bayar, $total_bayar_bjb, $data)
+    public static function sendSTS($tgl_bayar, $ntb, $chanel_bayar, $total_bayar_bjb, $data, $no_telp)
     {
         //* Send message to WA
         $text = "*TRANSAKSI BERHASIL* 
@@ -26,8 +26,8 @@ class WhatsApp
 *Untuk data selengkapnya bisa dilihat pada link dibawah ini*
 " . route('sendSTS', Crypt::encrypt($data->id)) . "
 ";
-        Http::post('https://api.visimediatech.com/wa/' . 'send-text', [
-            'number'  => '083897229273',
+        Http::post('http://192.168.150.153/api_cfa961a9c00c8d795ab9b9d262fcbb01682185be/public/wa/' . 'send-text', [
+            'number'  => $no_telp,
             'api_key' => '1dcb074cfd3dcaaab323082a4ad30e537e07e9de',
             'message' => $text
         ]);

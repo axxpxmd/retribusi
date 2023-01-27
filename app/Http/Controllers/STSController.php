@@ -358,7 +358,9 @@ class STSController extends Controller
             ], 500);
         }
  
-        $this->whatsapp->sendSTS($tgl_bayar, $ntb, $chanel_bayar, $total_bayar_bjb, $data);
+        if ($data->no_telp) {
+            $this->whatsapp->sendSTS($tgl_bayar, $ntb, $chanel_bayar, $total_bayar_bjb, $data, $data->no_telp);
+        }
        
         return response()->json([
             'message' => 'Data ' . $this->title . ' berhasil diperbaharui.'
