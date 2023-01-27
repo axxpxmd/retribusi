@@ -24,7 +24,6 @@ class WhatsApp
 *No SKRD* : " . $data->no_skrd . "
 
 *Untuk data selengkapnya bisa dilihat pada link dibawah ini*
-
 " . route('sendSTS', ['id' => base64_encode($data->id), 'send_sts' => true ]) . "
 ";
         Http::post('http://192.168.150.153/api_cfa961a9c00c8d795ab9b9d262fcbb01682185be/public/wa/' . 'send-text', [
