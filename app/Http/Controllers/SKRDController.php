@@ -282,7 +282,7 @@ class SKRDController extends Controller
         $request->validate([
             'id_opd'  => 'required',
             'tgl_ttd' => 'required',
-            'no_telp' => 'required',
+            'no_telp' => 'required|numeric|digits:10,14',
             'penanda_tangan_id' => 'required',
             'alamat_wp'      => 'required',
             'nmr_daftar'     => 'required|unique:tmtransaksi_opd,nmr_daftar',
@@ -434,16 +434,16 @@ class SKRDController extends Controller
 
         //* Tahap 5
         $data = [
+            'email'   => $request->email,
             'id_opd'  => $request->id_opd,
+            'lokasi'  => $request->lokasi,
+            'no_telp' => $request->no_telp,
+            'alamat_wp'      => $request->alamat_wp,
+            'kelurahan_id'   => $request->kelurahan_id,
+            'kecamatan_id'   => $request->kecamatan_id,
+            'nm_wajib_pajak' => $request->nm_wajib_pajak,
             'id_jenis_pendapatan'         => $request->id_jenis_pendapatan,
             'id_rincian_jenis_pendapatan' => \Crypt::decrypt($request->id_rincian_jenis_pendapatan),
-            'nm_wajib_pajak'   => $request->nm_wajib_pajak,
-            'alamat_wp'        => $request->alamat_wp,
-            'lokasi'           => $request->lokasi,
-            'kelurahan_id'     => $request->kelurahan_id,
-            'kecamatan_id'     => $request->kecamatan_id,
-            'email' => $request->email,
-            'no_telp' => $request->no_telp
         ];
 
         $where = [
