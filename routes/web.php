@@ -128,4 +128,4 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('send-email/skrd/{id}', 'EmailController@skrd')->name('sendEmailSKRD');
 });
 
-Route::get('sts/report/{id}', 'STSController@printDataTTD')->name('sendSTS');
+Route::get('sts/report/{id}', 'UtilityController@printDataTTD')->name('sendSTS');
