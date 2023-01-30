@@ -282,7 +282,7 @@ class SKRDController extends Controller
         $request->validate([
             'id_opd'  => 'required',
             'tgl_ttd' => 'required',
-            'no_telp' => 'required|numeric|digits:10,14',
+            'no_telp' => 'required',
             'penanda_tangan_id' => 'required',
             'alamat_wp'      => 'required',
             'nmr_daftar'     => 'required|unique:tmtransaksi_opd,nmr_daftar',
