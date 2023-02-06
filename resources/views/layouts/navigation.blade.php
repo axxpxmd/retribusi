@@ -147,4 +147,12 @@
         </a>
     </li>
     @endcan
+    @can('Log')
+    <li class="no-b">
+        <a href="{{ route('log.index') }}">
+            <i class="icon icon-documents text-primary s-18"></i> 
+            <span>Log</span>
+        </a>
+    </li>
+    @endcan
 </ul>
