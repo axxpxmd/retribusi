@@ -113,7 +113,8 @@ class TandaTanganController extends Controller
                 return Carbon::createFromFormat('Y-m-d', $p->tgl_skrd_awal)->format('d M Y');
             })
             ->addColumn('masa_berlaku', function ($p) {
-                return Carbon::createFromFormat('Y-m-d', $p->tgl_skrd_akhir)->format('d M Y');
+                $tgl_jatuh_tempo = $p->tgl_strd_akhir ? $p->tgl_strd_akhir : $p->tgl_skrd_akhir; 
+                return Carbon::createFromFormat('Y-m-d', $tgl_jatuh_tempo)->format('d M Y');
             })
             ->editColumn('jumlah_bayar', function ($p) {
                 return 'Rp. ' . number_format($p->jumlah_bayar);
