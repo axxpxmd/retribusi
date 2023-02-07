@@ -6,8 +6,11 @@ use DataTables;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 
 use App\Http\Controllers\Controller;
+
+// Models
 use App\Models\TableLog;
 
 class LogController extends Controller
@@ -58,14 +61,32 @@ class LogController extends Controller
                     return  "<span class='badge badge-danger'>Gagal</span>";
                 }
             })
-            ->editColumn('nomor_va', function($p) {
+            ->editColumn('waktu', function($p) {
+                return "<a href='" . route($this->route . 'show', Crypt::encrypt($p->id)) . "' class='text-primary' title='Menampilkan Data'>" . $p->waktu . "</a>";
+            })
+            ->editColumn('nomor_va', function ($p) {
                 return $p->dataRetribusi ? $p->dataRetribusi->nomor_va_bjb : '-';
             })
-            ->editColumn('invoice_qris', function($p) {
+            ->editColumn('invoice_qris', function ($p) {
                 return $p->dataRetribusi ? $p->dataRetribusi->invoice_id : '-';
             })
             ->addIndexColumn()
-            ->rawColumns(['status'])
+            ->rawColumns(['status', 'waktu'])
             ->toJson();
+    }
+
+    public function show($id)
+    {
+        $route = $this->route;
+        $title = $this->title;
+        
+        $id   = \Crypt::decrypt($id);
+        $data = TableLog::find($id);
+
+        return view($this->view . 'show', compact(
+            'route',
+            'title',
+            'data'
+        ));
     }
 }

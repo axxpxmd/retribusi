@@ -128,6 +128,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('send-email/skrd/{id}', 'EmailController@skrd')->name('sendEmailSKRD');
 
     Route::get('log', 'LogController@index')->name('log.index');
+    Route::get('log/{id}', 'LogController@show')->name('log.show');
 });
 
 Route::get('sts/report/{id}', 'UtilityController@printDataTTD')->name('sendSTS');
