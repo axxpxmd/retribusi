@@ -34,9 +34,10 @@ class LogController extends Controller
         $channel_bayar = $request->channel_bayar;
         $from = $request->from;
         $to = $request->to;
+        $status = $request->status;
 
         if ($request->ajax()) {
-            return $this->dataTable($channel_bayar, $from, $to);
+            return $this->dataTable($channel_bayar, $from, $to, $status);
         }
 
         return view($this->view . 'index', compact(
@@ -46,9 +47,9 @@ class LogController extends Controller
         ));
     }
 
-    public function dataTable($channel_bayar, $from, $to)
+    public function dataTable($channel_bayar, $from, $to, $status)
     {
-        $data = TableLog::queryTable($channel_bayar, $from, $to);
+        $data = TableLog::queryTable($channel_bayar, $from, $to, $status);
 
         return DataTables::of($data)
             ->editColumn('waktu', function ($p) {

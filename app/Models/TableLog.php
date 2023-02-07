@@ -14,13 +14,16 @@ class TableLog extends Model
         return $this->belongsTo(TransaksiOPD::class, 'id_retribusi', 'id');
     }
 
-    public static function queryTable($channel_bayar, $from, $to)
+    public static function queryTable($channel_bayar, $from, $to, $status)
     {
         $from = $from . ' ' . '00:00:01';
         $to = $to . ' ' . '23:59:59';
 
         $data = TableLog::select('id', 'no_bayar', 'id_retribusi', 'ntb', 'waktu', 'jenis', 'waktu', 'status')
-        ->whereBetween('waktu', [$from, $to]);
+            ->whereBetween('waktu', [$from, $to])
+            ->when($status != 0, function ($q) use ($status) {
+                $q->where('status', $status);
+            });
 
         if ($channel_bayar != 0) {
             switch ($channel_bayar) {

@@ -38,6 +38,16 @@
                                 </div>
                             </div>
                             <div class="row mb-2">
+                                <label for="status" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">Status </label>
+                                <div class="col-sm-8">
+                                    <select class="select2 form-control r-0 light s-12" id="status" name="status">
+                                        <option value="0">Semua</option>
+                                        <option value="1">Berhasil</option>
+                                        <option value="2">Gagal</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
                                 <label class="col-form-label s-12 col-md-2 text-right font-weight-bolder">Tanggal</label>
                                 <div class="col-sm-8">
                                     <div class="row">
@@ -101,6 +111,7 @@
             data: function (data) {
                 data.from = $('#from').val();
                 data.to = $('#to').val();
+                data.status = $('#status').val();
                 data.channel_bayar = $('#channel_bayar').val();
             }
         },
