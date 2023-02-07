@@ -149,6 +149,8 @@ return [
     'mail_from' => env('MAIL_USERNAME'),
     'mail_name' => env('MAIL_NAME'),
 
+    'tte_backup' => env('TTE_BACKUP'),
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers

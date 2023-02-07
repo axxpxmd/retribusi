@@ -282,12 +282,15 @@
                 <div class="card">
                     <h6 class="card-header font-weight-bold">Tanda Tangan</h6>
                     <div class="card-body">
+                        @if (config('app.tte_backup') == true)
+                        <form class="needs-validation" method="POST" action="{{ route('tanda-tangan.tteBackup') }}" enctype="multipart/form-data" novalidate>
+                            {{ method_field('POST') }}
+                            {{ csrf_field() }} 
+                        @else
                         <form class="needs-validation" method="POST" action="{{ route('tanda-tangan.tandaTangan') }}" enctype="multipart/form-data" novalidate>
                             {{ method_field('POST') }}
                             {{ csrf_field() }} 
-                        {{-- <form class="needs-validation" method="POST" action="{{ route('tanda-tangan.tteBackup') }}" enctype="multipart/form-data" novalidate>
-                            {{ method_field('POST') }}
-                            {{ csrf_field() }}  --}}
+                        @endif
                             <div class="text-center row">
                                 <div class="col-sm-6">
                                     <div class="justify-content-center row mb-2">
