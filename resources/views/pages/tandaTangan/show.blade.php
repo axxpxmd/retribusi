@@ -282,7 +282,7 @@
                 <div class="card">
                     <h6 class="card-header font-weight-bold">Tanda Tangan</h6>
                     <div class="card-body">
-                        @if (config('app.tte_backup') == true)
+                        @if (config('app.tte_backup') == 1)
                         <form class="needs-validation" method="POST" action="{{ route('tanda-tangan.tteBackup') }}" enctype="multipart/form-data" novalidate>
                             {{ method_field('POST') }}
                             {{ csrf_field() }} 
