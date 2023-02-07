@@ -72,7 +72,7 @@
                                             <th>Nomor VA</th>
                                             <th>Invoice Qris</th>
                                             <th>Waktu </th>
-                                            <th>Channel Bayar </th>
+                                            <th>Metode Bayar </th>
                                             <th>Status</th>
                                         </thead>
                                         <tbody></tbody>
