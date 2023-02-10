@@ -136,7 +136,8 @@ class ReportController extends Controller
                     }
                 }
 
-                return 'Rp. ' . number_format($jumlahBunga);
+                // return 'Rp. ' . number_format($jumlahBunga);
+                return 'Rp. 0';
             })
             ->editColumn('status_bayar', function ($p) {
                 if ($p->status_bayar == 1) {
