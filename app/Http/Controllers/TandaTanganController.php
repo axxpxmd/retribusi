@@ -269,15 +269,6 @@ class TandaTanganController extends Controller
 
         $data =  TransaksiOPD::find($id);
 
-        //* Send WA
-        if ($data->no_telp) {
-            $tgl_jatuh_tempo = Utility::tglJatuhTempo($data->tgl_strd_akhir, $data->tgl_skrd_akhir);
-
-            $this->whatsapp->sendSKRD($data, $tgl_jatuh_tempo);
-        }
-
-        dd('jalan');
-
         $fileName   = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
         $path_local = 'app/public/';
         $path_sftp  = 'file_ttd_skrd/';
@@ -361,6 +352,13 @@ class TandaTanganController extends Controller
                 $message->attachData($file, $fileName);
                 $message->from($mailFrom, $mailName);
             });
+        }
+
+        //* Send WA
+        if ($data->no_telp) {
+            $tgl_jatuh_tempo = Utility::tglJatuhTempo($data->tgl_strd_akhir, $data->tgl_skrd_akhir);
+
+            $this->whatsapp->sendSKRD($data, $tgl_jatuh_tempo);
         }
 
         return redirect()

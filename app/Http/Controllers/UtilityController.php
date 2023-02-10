@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Storage;
 
 use App\Libraries\Html\Html_number;
 use App\Http\Controllers\Controller;
@@ -18,7 +18,7 @@ class UtilityController extends Controller
 {
     public function printDataTTD(Request $request, $id)
     {
-        $id      = $request->send_sts ? base64_decode($id) : Crypt::decrypt($id);
+        $id      = base64_decode($id);
         $data    = TransaksiOPD::find($id);
         $dateNow = Carbon::now()->format('Y-m-d');
 
@@ -85,8 +85,23 @@ class UtilityController extends Controller
         return $pdf->stream($data->nm_wajib_pajak . ' - ' . $data->no_skrd . ".pdf");
     }
 
-    public function redirectDataAwan()
+    public function getDataSKRD($id)
     {
-        return \redirect('');
+        $id = base64_decode($id);
+
+        $data = TransaksiOPD::find($id);
+
+        $path_sftp = 'file_ttd_skrd/';
+        $fileName  = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
+        $timeNow   = Carbon::now()->format('Y-m-d H:i:s');
+
+        //TODO: Update Jumlah Cetak
+        $jumlah_cetak = $data->jumlah_cetak + 1;
+        $data->update([
+            'jumlah_cetak'    => $jumlah_cetak,
+            'tgl_cetak_trkhr' => $timeNow
+        ]);
+
+        return storage::disk('sftp')->download($path_sftp . $fileName);
     }
 }

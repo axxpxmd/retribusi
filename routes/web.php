@@ -132,3 +132,4 @@ Route::group(['middleware' => ['auth']], function () {
 });
 
 Route::get('sts/report/{id}', 'UtilityController@printDataTTD')->name('sendSTS');
+Route::get('skrd/report/{id}', 'UtilityController@getDataSKRD')->name('sendSKRD');

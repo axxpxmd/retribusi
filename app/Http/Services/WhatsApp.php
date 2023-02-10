@@ -13,8 +13,7 @@ class WhatsApp
     {
         $endpoint = config('app.wagateway_ipserver');
         $api_key  = config('app.wagateway_apikey');
-        $url_retribusi = config('app.url_retribusi');
-        $link = $url_retribusi . base64_encode($data->id) . "?send_sts=1";
+        $link = route('sendSTS', base64_encode($data->id));
 
         //* Send message to WA
         $text = "*PEMBAYARAN RETRIBUSI BERHASIL* 
@@ -46,8 +45,7 @@ Retribusi, Tangerang Selatan.
     {
         $endpoint = config('app.wagateway_ipserver');
         $api_key  = config('app.wagateway_apikey');
-        $url_retribusi = config('app.url_retribusi');
-        $link = $url_retribusi . base64_encode($data->id) . "?send_sts=1";
+        $link = route('sendSKRD', base64_encode($data->id));
 
         //* Send message to WA
         $text = "*TAGIHAN PEMBAYARAN RETRIBUSI* 
@@ -58,7 +56,6 @@ Untuk *" . $data->rincian_jenis->rincian_pendapatan . "*
 *Jatuh Tempo* : " . Carbon::parse($tgl_jatuh_tempo)->format('d F Y') . "
 *Nomor Bayar* : " . $data->no_bayar . "
 *Nomor VA* : " . $data->nomor_va_bjb . "
-
 ------------------------------------------------------
 *Nama Pelanggan* : " . $data->nm_wajib_pajak . "
 *No Pendaftaran* : " . $data->nmr_daftar . "

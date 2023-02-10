@@ -369,7 +369,7 @@ class STSController extends Controller
 
     public function printDataTTD(Request $request, $id)
     {
-        $id      = $request->send_sts ? base64_decode($id) : Crypt::decrypt($id);
+        $id      = Crypt::decrypt($id);
         $data    = TransaksiOPD::find($id);
         $dateNow = Carbon::now()->format('Y-m-d');
 
