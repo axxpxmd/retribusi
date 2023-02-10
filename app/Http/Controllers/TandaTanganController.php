@@ -18,6 +18,7 @@ use DataTables;
 use Carbon\Carbon;
 
 use App\Http\Services\BSRE;
+use App\Http\Services\WhatsApp;
 use App\Http\Services\Iontentik;
 use App\Libraries\Html\Html_number;
 use App\Http\Controllers\Controller;
@@ -40,10 +41,11 @@ class TandaTanganController extends Controller
     protected $view  = 'pages.tandaTangan.';
 
     // Check Permission
-    public function __construct(Iontentik $iotentik, BSRE $bsre)
+    public function __construct(Iontentik $iotentik, BSRE $bsre, WhatsApp $whatsapp)
     {
         $this->bsre = $bsre;
         $this->iotentik = $iotentik;
+        $this->whatsapp = $whatsapp;
 
         $this->middleware(['permission:Tanda Tangan']);
     }
@@ -113,7 +115,7 @@ class TandaTanganController extends Controller
                 return Carbon::createFromFormat('Y-m-d', $p->tgl_skrd_awal)->format('d M Y');
             })
             ->addColumn('masa_berlaku', function ($p) {
-                $tgl_jatuh_tempo = $p->tgl_strd_akhir ? $p->tgl_strd_akhir : $p->tgl_skrd_akhir; 
+                $tgl_jatuh_tempo = $p->tgl_strd_akhir ? $p->tgl_strd_akhir : $p->tgl_skrd_akhir;
                 return Carbon::createFromFormat('Y-m-d', $tgl_jatuh_tempo)->format('d M Y');
             })
             ->editColumn('jumlah_bayar', function ($p) {
@@ -266,6 +268,15 @@ class TandaTanganController extends Controller
         $passphrase = $request->passphrase;
 
         $data =  TransaksiOPD::find($id);
+
+        //* Send WA
+        if ($data->no_telp) {
+            $tgl_jatuh_tempo = Utility::tglJatuhTempo($data->tgl_strd_akhir, $data->tgl_skrd_akhir);
+
+            $this->whatsapp->sendSKRD($data, $tgl_jatuh_tempo);
+        }
+
+        dd('jalan');
 
         $fileName   = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
         $path_local = 'app/public/';

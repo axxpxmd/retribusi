@@ -9,10 +9,17 @@ use Illuminate\Support\Facades\Crypt;
 
 class WhatsApp
 {
-    public static function sendSTS($tgl_bayar, $ntb, $chanel_bayar, $total_bayar_bjb, $data, $no_telp)
+    public static function sendSTS($tgl_bayar, $ntb, $chanel_bayar, $total_bayar_bjb, $data)
     {
+        $endpoint = config('app.wagateway_ipserver');
+        $api_key  = config('app.wagateway_apikey');
+        $url_retribusi = config('app.url_retribusi');
+        $link = $url_retribusi . base64_encode($data->id) . "?send_sts=1";
+
         //* Send message to WA
-        $text = "*TRANSAKSI BERHASIL* 
+        $text = "*PEMBAYARAN RETRIBUSI BERHASIL* 
+
+Untuk *" . $data->rincian_jenis->rincian_pendapatan . "*
 
 *Tanggal Bayar* : " . Carbon::parse($tgl_bayar)->format('d F Y | H:i:s') . "
 *Nomor Transaksi* : " . $ntb . "
@@ -23,12 +30,51 @@ class WhatsApp
 *No Pendaftaran* : " . $data->nmr_daftar . "
 *No SKRD* : " . $data->no_skrd . "
 
-*Untuk data selengkapnya bisa dilihat pada link dibawah ini*
-" . route('sendSTS', ['id' => base64_encode($data->id), 'send_sts' => true ]) . "
+*Untuk data selengkapnya bisa dilihat pada link dibawah ini*.
+" . $link . "
+
+Retribusi, Tangerang Selatan.
 ";
-        Http::post('http://192.168.150.153/api_cfa961a9c00c8d795ab9b9d262fcbb01682185be/public/wa/' . 'send-text', [
-            'number'  => $no_telp,
-            'api_key' => '1dcb074cfd3dcaaab323082a4ad30e537e07e9de',
+        Http::post($endpoint . 'send-text', [
+            'number'  => $data->no_telp,
+            'api_key' => $api_key,
+            'message' => $text
+        ]);
+    }
+
+    public static function sendSKRD($data, $tgl_jatuh_tempo)
+    {
+        $endpoint = config('app.wagateway_ipserver');
+        $api_key  = config('app.wagateway_apikey');
+        $url_retribusi = config('app.url_retribusi');
+        $link = $url_retribusi . base64_encode($data->id) . "?send_sts=1";
+
+        //* Send message to WA
+        $text = "*TAGIHAN PEMBAYARAN RETRIBUSI* 
+
+Untuk *" . $data->rincian_jenis->rincian_pendapatan . "*
+
+*Nominal* : Rp. " . number_format($data->total_bayar) . "
+*Jatuh Tempo* : " . Carbon::parse($tgl_jatuh_tempo)->format('d F Y') . "
+*Nomor Bayar* : " . $data->no_bayar . "
+*Nomor VA* : " . $data->nomor_va_bjb . "
+
+------------------------------------------------------
+*Nama Pelanggan* : " . $data->nm_wajib_pajak . "
+*No Pendaftaran* : " . $data->nmr_daftar . "
+*No SKRD* : " . $data->no_skrd . "
+
+*PERHATIAN!*
+*Lakukan pembayaran sebelum tanggal jatuh tempo untuk menghindari denda.*
+
+*Untuk data selengkapnya bisa dilihat pada link dibawah ini*.
+" . $link . "
+
+Retribusi, Tangerang Selatan.
+";
+        Http::post($endpoint . 'send-text', [
+            'number'  => $data->no_telp,
+            'api_key' => $api_key,
             'message' => $text
         ]);
     }

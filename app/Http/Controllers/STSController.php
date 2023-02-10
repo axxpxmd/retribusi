@@ -359,7 +359,7 @@ class STSController extends Controller
         }
 
         if ($data->no_telp) {
-            $this->whatsapp->sendSTS($tgl_bayar, $ntb, $chanel_bayar, $total_bayar_bjb, $data, $data->no_telp);
+            $this->whatsapp->sendSTS($tgl_bayar, $ntb, $chanel_bayar, $total_bayar_bjb, $data);
         }
 
         return response()->json([

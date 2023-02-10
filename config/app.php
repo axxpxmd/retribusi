@@ -151,6 +151,13 @@ return [
 
     'tte_backup' => env('TTE_BACKUP'),
 
+    // Whatsapp
+    'wagateway_ipserver' => env('WAGATEWAY_IPSERVER'),
+    'wagateway_apikey_login' => env('WAGATEWAY_APIKEY_LOGIN'),
+    'wagateway_apikey' => env('WAGATEWAY_APIKEY'),
+
+    'url_retribusi' => env('URL_RETRIBUSI'),
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers

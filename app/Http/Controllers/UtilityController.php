@@ -84,4 +84,9 @@ class UtilityController extends Controller
 
         return $pdf->stream($data->nm_wajib_pajak . ' - ' . $data->no_skrd . ".pdf");
     }
+
+    public function redirectDataAwan()
+    {
+        return \redirect('');
+    }
 }
