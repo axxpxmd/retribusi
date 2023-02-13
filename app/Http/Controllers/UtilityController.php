@@ -44,7 +44,7 @@ class UtilityController extends Controller
         $kenaikan    = 0;
         $jumlahBunga = 0;
         if ($status_bayar == 1) {
-            list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_awal, $jumlah_bayar, $tgl_bayar);
+            list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar, $tgl_bayar);
         } else {
             if ($jatuh_tempo) {
                 list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar);
