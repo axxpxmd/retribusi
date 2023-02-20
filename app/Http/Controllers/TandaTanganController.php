@@ -355,11 +355,11 @@ class TandaTanganController extends Controller
         }
 
         //* Send WA
-        if ($data->no_telp) {
-            $tgl_jatuh_tempo = Utility::tglJatuhTempo($data->tgl_strd_akhir, $data->tgl_skrd_akhir);
+        // if ($data->no_telp) {
+        //     $tgl_jatuh_tempo = Utility::tglJatuhTempo($data->tgl_strd_akhir, $data->tgl_skrd_akhir);
 
-            $this->whatsapp->sendSKRD($data, $tgl_jatuh_tempo);
-        }
+        //     $this->whatsapp->sendSKRD($data, $tgl_jatuh_tempo);
+        // }
 
         return redirect()
             ->route($this->route . 'show', \Crypt::encrypt($id))

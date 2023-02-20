@@ -242,8 +242,6 @@ class STRDController extends Controller
         $tgl_skrd_akhir = $data->tgl_skrd_akhir;
         $tgl_strd_akhir = $data->tgl_strd_akhir;
 
-        $tgl_jatuh_tempo = Utility::tglJatuhTempo($tgl_strd_akhir, $tgl_skrd_akhir);
-
         //TODO: Generate new tgl_jatuh_tempo (+30 day from last jatuh tempo)
         list($dayDiff, $monthDiff) = Utility::getDiffDate($tgl_skrd_akhir);
         $addDays = ($monthDiff + 1) * 30;
