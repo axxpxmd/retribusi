@@ -242,16 +242,24 @@ class TandaTanganController extends Controller
     {
         $id = $request->id;
 
-        $dataSKRD = TransaksiOPD::find($id);
+        $data = TransaksiOPD::find($id);
 
-        if ($dataSKRD->status_ttd == 2) {
-            $dataSKRD->update([
+        $no_telp = $data->no_telp;
+        $tgl_jatuh_tempo = Utility::tglJatuhTempo($data->tgl_strd_akhir, $data->tgl_skrd_akhir);
+
+        if ($data->status_ttd == 2) {
+            $data->update([
                 'status_ttd' => 1,
             ]);
         } else {
-            $dataSKRD->update([
+            $data->update([
                 'status_ttd' => 3,
             ]);
+        }
+
+        //* Send WA
+        if ($no_telp) {
+            $this->whatsapp->sendSKRD($data, $tgl_jatuh_tempo);
         }
 
         return redirect()
@@ -272,6 +280,7 @@ class TandaTanganController extends Controller
         $fileName   = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
         $path_local = 'app/public/';
         $path_sftp  = 'file_ttd_skrd/';
+        $tgl_jatuh_tempo = Utility::tglJatuhTempo($data->tgl_strd_akhir, $data->tgl_skrd_akhir);
 
         $pdf = storage_path($path_local . 'file_skrd/' . $fileName);
         $qrimage_path = storage_path($path_local . 'transparan.png');
@@ -355,11 +364,9 @@ class TandaTanganController extends Controller
         }
 
         //* Send WA
-        // if ($data->no_telp) {
-        //     $tgl_jatuh_tempo = Utility::tglJatuhTempo($data->tgl_strd_akhir, $data->tgl_skrd_akhir);
-
-        //     $this->whatsapp->sendSKRD($data, $tgl_jatuh_tempo);
-        // }
+        if ($data->no_telp) {
+            $this->whatsapp->sendSKRD($data, $tgl_jatuh_tempo);
+        }
 
         return redirect()
             ->route($this->route . 'show', \Crypt::encrypt($id))
