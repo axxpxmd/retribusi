@@ -32,28 +32,7 @@
     </header>
     <div class="container-fluid relative animatedParent animateOnce">
         <div class="tab-content my-3" id="pills-tabContent">
-            @if (session()->has('success'))
-            <div class="alert alert-success alert-dismissible fade show text-center bdr-5 col-md-12 container mb-0 mt-0" id="successAlert" role="alert">
-                {{ session('success') }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            @endif
-            @if (count($errors) > 0)
-            <div class="alert alert-danger mb-0 mt-0" id="errorAlert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <strong>Whoops Error!</strong>&nbsp;
-                <span>You have {{ $errors->count() }} error</span>
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-            @endif 
+            @include('layouts.alerts')
             <div class="tab-pane animated fadeInUpShort show active" id="semua-data" role="tabpanel">
                 <div class="row">
                     <div class="col-md-12">
@@ -284,15 +263,9 @@
                 <div class="card">
                     <h6 class="card-header font-weight-bold">Tanda Tangan</h6>
                     <div class="card-body">
-                        @if (config('app.tte_backup') == 1)
-                        <form class="needs-validation" method="POST" action="{{ route('tanda-tangan.tteBackup') }}" enctype="multipart/form-data" novalidate>
+                        <form class="needs-validation" method="POST" action="{{ $tte_backup == 1 ? route('tanda-tangan.tteBackup') : route('tanda-tangan.tandaTangan') }}" enctype="multipart/form-data" novalidate>
                             {{ method_field('POST') }}
                             {{ csrf_field() }} 
-                        @else
-                        <form class="needs-validation" method="POST" action="{{ route('tanda-tangan.tandaTangan') }}" enctype="multipart/form-data" novalidate>
-                            {{ method_field('POST') }}
-                            {{ csrf_field() }} 
-                        @endif
                             <div class="text-center row">
                                 <div class="col-sm-6">
                                     <div class="justify-content-center row mb-2">

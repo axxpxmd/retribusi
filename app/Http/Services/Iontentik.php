@@ -19,6 +19,7 @@ class Iontentik
         ]);
 
         if ($res->successful()) {
+            $resJson = $res->json();
             if ($res['code'] == 200) {
                 $err = false;
                 $arr = json_decode($res, true);
@@ -27,7 +28,7 @@ class Iontentik
                 $idCert = $idCert['id'];
             } else {
                 $err = true;
-                $errMsg = 'Terjadi kegagalan saat mengambil sertifikat elektronik.';
+                $errMsg = 'Terjadi kegagalan saat mengambil sertifikat elektronik. message : ' . $resJson['message'];
             }
         } else {
             $err = true;

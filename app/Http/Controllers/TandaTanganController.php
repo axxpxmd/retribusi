@@ -154,6 +154,7 @@ class TandaTanganController extends Controller
         $tgl_strd_akhir = $data->tgl_strd_akhir;
         $status_ttd     = $data->status_ttd;
         $text_qris      = $data->text_qris;
+        $tte_backup     = config('app.tte_backup');
 
         $path_sftp   = 'file_ttd_skrd/';
         $path_local  = 'public/file_skrd/';
@@ -234,7 +235,8 @@ class TandaTanganController extends Controller
             'nik',
             'nip',
             'status_ttd',
-            'jatuh_tempo'
+            'jatuh_tempo',
+            'tte_backup'
         ));
     }
 
