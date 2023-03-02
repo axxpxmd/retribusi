@@ -245,9 +245,11 @@
                                                     <button class="btn btn-sm btn-success mr-2" data-toggle="modal" data-target="#preview-file"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</button>
                                                 </div>
                                             @endif
+                                            @if ($data->status_bayar == 0)
                                             <div class="col-auto p-1">
                                                 <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#restore"><i class="icon-refresh2 mr-2"></i>Kembalikan</button> 
                                             </div>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
