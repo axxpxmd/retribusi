@@ -15,7 +15,7 @@ class User extends Authenticatable
     use HasRoles;
 
     protected $table = 'tmusers';
-    protected $fillable = ['username', 'password'];
+    protected $fillable = ['username', 'password', 'session_id'];
     protected $hidden = ['password',];
 
     public function pengguna()

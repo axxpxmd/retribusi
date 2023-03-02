@@ -18,7 +18,7 @@ Auth::routes();
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::group(['middleware' => ['auth']], function () {
+Route::group(['middleware' => ['auth', 'checksinglesession']], function () {
     Route::namespace('Profile')->group(function () {
         Route::resource('profile', 'ProfileController');
         Route::get('profile/{id}/edit-password', 'ProfileController@editPassword')->name('profile.editPassword');

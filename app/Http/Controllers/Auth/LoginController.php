@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Auth;
+
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
+
+use Illuminate\Support\Facades\Session;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
@@ -20,6 +24,16 @@ class LoginController extends Controller
     */
 
     use AuthenticatesUsers;
+
+    protected function authenticated()
+    {
+        $session_id = Session::getId();
+
+        // save session
+        $user = Auth::user();
+        $user->session_id = $session_id;
+        $user->save();
+    }
 
     /**
      * Where to redirect users after login.

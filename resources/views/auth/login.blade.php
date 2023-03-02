@@ -37,6 +37,18 @@
                     <img src="{{ asset('images/template/logo.png') }}" class="mx-auto d-block animate__animated animate__backInDown" width="150" alt=""/>
                 </div>
                 <div class="p-5">
+                    @if (count($errors) > 0)
+                    <div class="alert alert-danger" id="errorAlert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    @endif 
                     <h3 class="font-weight-normal">Selamat Datang</h3>
                     <p>Silahkan masukan username dan password Anda.</p>
                     <form class="needs-validation" novalidate method="POST" action="{{ route('login') }}" autocomplete="off">
