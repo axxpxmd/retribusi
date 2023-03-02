@@ -392,9 +392,13 @@ class TransaksiOPD extends Model
     }
 
     // 
-    public static function queryTandaTangan($belum_ttd, $from, $to, $opd_id, $no_skrd, $status_ttd)
+    public static function queryTandaTangan($belum_ttd, $from, $to, $opd_id, $no_skrd, $status_ttd, $nip)
     {
         $data = TransaksiOPD::with(['jenis_pendapatan', 'opd', 'rincian_jenis'])->orderBy('id', 'ASC')->whereNotIn('status_ttd', [0]);
+
+        if ($nip) {
+            $data->where('nip_ttd', $nip);
+        }
 
         if ($opd_id != 0) {
             $data->where('id_opd', $opd_id);

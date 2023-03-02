@@ -73,7 +73,6 @@ class TandaTanganController extends Controller
         if ($request->ajax()) {
             return $this->dataTable($belum_ttd, $from, $to, $opd_id, $no_skrd, $status_ttd);
         }
-
         return view($this->view . 'index', compact(
             'route',
             'title',
@@ -87,7 +86,8 @@ class TandaTanganController extends Controller
 
     public function dataTable($belum_ttd, $from, $to, $opd_id, $no_skrd, $status_ttd)
     {
-        $data = TransaksiOPD::queryTandaTangan($belum_ttd, $from, $to, $opd_id, $no_skrd, $status_ttd);
+        $nip = Auth::user()->pengguna;        
+        $data = TransaksiOPD::queryTandaTangan($belum_ttd, $from, $to, $opd_id, $no_skrd, $status_ttd, $nip);
 
         return DataTables::of($data)
             ->addColumn('file_ttd', function ($p) {
