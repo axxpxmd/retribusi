@@ -1,10 +1,15 @@
 @php
     $dateNow = Carbon\Carbon::now()->format('Y-m-d');
     $opd_id = Auth::user()->pengguna->opd_id;
+    $nip = Auth::user()->pengguna->nip;
 
     $dataTTD = App\Models\TransaksiOPD::when($opd_id != null, function($q) use($opd_id){
         return $q->where('id_opd', $opd_id);
-    })->whereIn('status_ttd', [2,4])->count();
+    })
+    ->when($nip, function($q) use($nip) {
+        return $q->where('nip_ttd', $nip);
+    })
+    ->whereIn('status_ttd', [2,4])->count();
 
     $dataSTRD = App\Models\TransaksiOPD::when($opd_id != null, function($q) use($opd_id){
         return $q->where('id_opd', $opd_id);

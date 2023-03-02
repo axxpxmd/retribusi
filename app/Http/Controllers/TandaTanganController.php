@@ -58,6 +58,7 @@ class TandaTanganController extends Controller
         $opd_id   = Auth::user()->pengguna->opd_id;
         $opdArray = OPDJenisPendapatan::select('id_opd')->get()->toArray();
         $opds     = OPD::getAll($opdArray, $opd_id);
+        $nip      = Auth::user()->pengguna->nip;     
 
         $time = Carbon::now();
         $today = $time->format('Y-m-d');
@@ -71,7 +72,7 @@ class TandaTanganController extends Controller
         $status_ttd = $request->status_ttd;
 
         if ($request->ajax()) {
-            return $this->dataTable($belum_ttd, $from, $to, $opd_id, $no_skrd, $status_ttd);
+            return $this->dataTable($belum_ttd, $from, $to, $opd_id, $no_skrd, $status_ttd, $nip);
         }
         return view($this->view . 'index', compact(
             'route',
@@ -84,9 +85,8 @@ class TandaTanganController extends Controller
         ));
     }
 
-    public function dataTable($belum_ttd, $from, $to, $opd_id, $no_skrd, $status_ttd)
-    {
-        $nip = Auth::user()->pengguna;        
+    public function dataTable($belum_ttd, $from, $to, $opd_id, $no_skrd, $status_ttd, $nip)
+    {   
         $data = TransaksiOPD::queryTandaTangan($belum_ttd, $from, $to, $opd_id, $no_skrd, $status_ttd, $nip);
 
         return DataTables::of($data)
