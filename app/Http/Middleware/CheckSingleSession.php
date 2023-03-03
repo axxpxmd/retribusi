@@ -18,8 +18,8 @@ class CheckSingleSession
             Auth::logout();
 
             return redirect()
-            ->route('login')
-            ->withErrors('Anda dikeluarkan, Terdapat akun yang sama sedang login pada perangkat lain.');
+                ->route('login')
+                ->withErrors('Anda dikeluarkan, Terdapat akun yang sama sedang login pada perangkat lain.');
         }
 
         return $next($request);
