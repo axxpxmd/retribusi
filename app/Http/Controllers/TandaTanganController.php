@@ -249,15 +249,12 @@ class TandaTanganController extends Controller
         $no_telp = $data->no_telp;
         $tgl_jatuh_tempo = Utility::tglJatuhTempo($data->tgl_strd_akhir, $data->tgl_skrd_akhir);
 
-        if ($data->status_ttd == 2) {
-            $data->update([
-                'status_ttd' => 1,
-            ]);
-        } else {
-            $data->update([
-                'status_ttd' => 3,
-            ]);
-        }
+        //* Update status_ttd
+        $update_ttd = $data->status_ttd == 2 ? 1 : 3;
+        $data->update([
+            'status_ttd'  => $update_ttd,
+            'history_ttd' => 1
+        ]);
 
         //* Send WA
         if ($no_telp) {
