@@ -20,7 +20,8 @@ class GenerateNumber
         $year  = substr($time->year, 2);
 
         //TODO: get id_operator
-        $user = Pengguna::select('full_name')->join('model_has_roles', 'model_has_roles.model_id', '=', 'tmpenggunas.user_id')
+        $user = Pengguna::select('full_name')
+            ->join('model_has_roles', 'model_has_roles.model_id', '=', 'tmpenggunas.user_id')
             ->where('opd_id', $opd_id)
             ->where('role_id', 9)
             ->get()->toArray();
@@ -30,11 +31,12 @@ class GenerateNumber
         foreach ($user as $key => $i) {
             if ($i['full_name'] == $full_name) {
                 $status = true;
+                $urutan = $key;
             }
         }
 
         if ($status) {
-            $id_operator = $key + 1;
+            $id_operator = $urutan + 1;
         } else {
             $id_operator = mt_rand(0, 90) + 1;
         }

@@ -77,6 +77,8 @@ Route::group(['middleware' => ['auth', 'checksinglesession']], function () {
     Route::get('skrd/get-kode-rekening/{id_rincian_jenis_pendapatan}', 'SKRDController@getKodeRekening')->name('skrd.getKodeRekening');
     Route::get('skrd/get-kelurahan/{id}', 'SKRDController@kelurahanByKecamatan')->name('skrd.kelurahanByKecamatan');
     Route::get('update-status-kirim-ttd-skrd/{id}', 'SKRDController@updateStatusKirimTTD')->name('skrd.updateStatusKirimTTD');
+    Route::get('generate/{id}', 'SKRDController@generate')->name('generate');
+    Route::get('check-duplicate', 'SKRDController@checkDuplicate')->name('skrd.checkDuplicate');
 
     // STRD
     Route::resource('strd', 'STRDController');

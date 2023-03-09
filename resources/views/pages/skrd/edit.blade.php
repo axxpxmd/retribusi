@@ -39,6 +39,10 @@
             <div class="tab-pane animated fadeInUpShort show active" id="semua-data" role="tabpanel">
                 <div class="">
                     <div class="col-md-12 p-0">
+                        @if ($checkDuplicate > 1)
+                            <div class="alert font-weight-bold alert-danger mb-2">No Bayar dan No SKRD data ini duplikat, silahkan klik button GENERATE untuk mendapatkan No Bayar dan No SKRD baru.</div>
+                        @endif
+                        @include('layouts.alerts')
                         <div id="alert"></div>
                         <div class="card">
                             <h6 class="card-header"><strong>Edit Data</strong></h6>
@@ -146,6 +150,18 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="row mb-2">
+                                                        <label for="" class="col-form-label s-12 col-sm-4 text-right">No Bayar<span class="text-danger ml-1">*</span></label>
+                                                        <div class="col-md-8">
+                                                            <input type="text" disabled value="{{ $data->no_bayar }}" class="form-control r-0 s-12" autocomplete="off"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-2">
+                                                        <label for="" class="col-form-label s-12 col-sm-4 text-right">No SKRD<span class="text-danger ml-1">*</span></label>
+                                                        <div class="col-md-8">
+                                                            <input type="text" disabled value="{{ $data->no_skrd }}" class="form-control r-0 s-12" autocomplete="off"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-2">
                                                         <label for="tgl_skrd_awal" class="col-form-label s-12 col-sm-4 text-right">Tanggal SKRD<span class="text-danger ml-1">*</span></label>
                                                         <div class="col-md-8">
                                                             <input type="date" onchange="setDate()" value="{{ $data->tgl_skrd_awal }}" name="tgl_skrd_awal" id="tgl_skrd_awal" class="form-control r-0 s-12" autocomplete="off" required/>
@@ -184,6 +200,9 @@
                                                         <label class="col-sm-4"></label>
                                                         <div class="col-md-8">
                                                             <button type="submit" id="action" class="btn btn-block btn-primary btn-sm"><i class="icon-save mr-2"></i>Simpan Perubahan</button>
+                                                            @if ($checkDuplicate > 1)
+                                                                <button type="button" data-toggle="modal" data-target="#generate" class="btn btn-block btn-outline-danger font-weight-bold btn-sm"><i class="icon-refresh2 mr-2"></i>GENERATE</button>
+                                                            @endif
                                                         </div>
                                                     </div>
                                                 </div>
@@ -194,6 +213,20 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="generate" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p class="font-weight-bold fs-14">Apakah sudah yakin untuk generate ulang No Bayar dan No SKRD data ini ?</p>
+                <hr>
+                <div class="text-right">
+                    <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="icon-times mr-2"></i>Batalkan</button>
+                    <a href="{{ route('generate', $data->id) }}" class="btn btn-sm btn-success ml-2" id="kirimTTD"><i class="icon-refresh2 mr-2"></i>Generate</a>
                 </div>
             </div>
         </div>

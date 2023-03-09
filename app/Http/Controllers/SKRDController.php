@@ -75,7 +75,7 @@ class SKRDController extends Controller
         //* Check Duplicate
         $date = Carbon::now();
         $status_duplicate = $request->status_duplicate;
-        list($getDuplicate, $data) = TransaksiOPD::checkDuplicateNoBayar($date, $opd_id);
+        list($getDuplicate, $data) = TransaksiOPD::checkDuplicateNoBayar($date, $opd_id, $from, $to);
 
         if ($request->ajax()) {
             return $this->dataTable($from, $to, $opd_id, $no_skrd, $status_ttd, $status_duplicate, $date, $getDuplicate);
@@ -94,16 +94,31 @@ class SKRDController extends Controller
         ));
     }
 
+    public function checkDuplicate(Request $request)
+    {
+        $from   = $request->from;
+        $to     = $request->to;
+        $date   = Carbon::now();
+        $opd_id = Auth::user()->pengguna->opd_id == 0 ? $request->opd_id : Auth::user()->pengguna->opd_id;
+
+        //* Check Duplicate
+        list($getDuplicate, $data) = TransaksiOPD::checkDuplicateNoBayar($date, $opd_id, $from, $to);
+
+        return response()->json([
+            'dataDuplicate' => $getDuplicate ? count($getDuplicate) : 0
+        ]);
+    }
+
     public function dataTable($from, $to, $opd_id, $no_skrd, $status_ttd, $status_duplicate, $date, $getDuplicate)
     {
         if ($status_duplicate) {
-            list($getDuplicate, $data) = TransaksiOPD::checkDuplicateNoBayar($date, $opd_id);
+            list($getDuplicate, $data) = TransaksiOPD::checkDuplicateNoBayar($date, $opd_id, $from, $to);
         } else {
-            $data = TransaksiOPD::querySKRD($from, $to, $opd_id, $no_skrd, $status_ttd, $getDuplicate);
+            $data = TransaksiOPD::querySKRD($from, $to, $opd_id, $no_skrd, $status_ttd);
         }
 
         return DataTables::of($data)
-            ->addColumn('action', function ($p) {
+            ->addColumn('action', function ($p) use ($getDuplicate) {
                 $filettd = "<a href='" . route('print.download', $p->id) . "' target='_blank' class='cyan-text' title='File TTD'><i class='icon-document-file-pdf2'></i></a>";
                 $sendttd = "<a href='#' onclick='updateStatusTTD(" . $p->id . ")' class='amber-text' title='Kirim Untuk TTD'><i class='icon icon-send'></i></a>";
                 $edit    = "<a href='" . route($this->route . 'edit', Crypt::encrypt($p->id)) . "' class='text-primary mr-2' title='Edit Data'><i class='icon icon-edit'></i></a>";
@@ -115,10 +130,14 @@ class SKRDController extends Controller
                 } else {
                     //* Proses TTD
                     if ($p->status_ttd != 2) {
-                        if ($p->history_ttd == 1) {
-                            return $edit . $sendttd;
+                        if ($getDuplicate) {
+                            return $edit . $delete;
                         } else {
-                            return $edit . $delete . $sendttd;
+                            if ($p->history_ttd == 1) {
+                                return $edit . $sendttd;
+                            } else {
+                                return $edit . $delete . $sendttd;
+                            }
                         }
                     } else {
                         return '-';
@@ -474,13 +493,49 @@ class SKRDController extends Controller
         $penanda_tangans = TtdOPD::where('id_opd', $data->id_opd)->get();
         $rincian_jenis_pendapatans = RincianJenisPendapatan::where('id_jenis_pendapatan', $data->id_jenis_pendapatan)->get();
 
+        // Check Duplicate
+        $checkDuplicate = TransaksiOPD::where('no_bayar', $data->no_bayar)->count();
+
         return view($this->view . 'edit', compact(
             'route',
             'title',
             'data',
             'rincian_jenis_pendapatans',
-            'penanda_tangans'
+            'penanda_tangans',
+            'checkDuplicate'
         ));
+    }
+
+    public function generate($id)
+    {
+        $data = TransaksiOPD::find($id);
+        $id_opd = $data->id_opd;
+        $id_jenis_pendapatan = $data->id_jenis_pendapatan;
+
+        $jenisGenerate = 'no_skrd';
+        $no_skrd = $this->generateNumber->generate($id_opd, $id_jenis_pendapatan, $jenisGenerate);
+
+        $jenisGenerate = 'no_bayar';
+        $no_bayar = $this->generateNumber->generate($id_opd, $id_jenis_pendapatan, $jenisGenerate);
+
+        //TODO: Check Duplikat (no_bayar, no_skrd)
+        $checkGenerate = [
+            'no_skrd'  => $no_skrd,
+            'no_bayar' => $no_bayar
+        ];
+        Validator::make($checkGenerate, [
+            'no_skrd'  => 'required|unique:tmtransaksi_opd,no_skrd',
+            'no_bayar' => 'required|unique:tmtransaksi_opd,no_bayar',
+        ])->validate();
+
+        $data->update([
+            'no_bayar' => $no_bayar,
+            'no_skrd' => $no_skrd
+        ]);
+
+        return redirect()
+            ->route($this->route . 'edit', Crypt::encrypt($id))
+            ->withSuccess('No Bayar dan No SKRD berhasil diperbaharui.');
     }
 
     public function show($id)

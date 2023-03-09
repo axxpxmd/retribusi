@@ -241,7 +241,7 @@ class TransaksiOPD extends Model
     }
 
     //* Query get data SKRD
-    public static function querySKRD($from, $to, $opd_id, $no_skrd, $status_ttd, $getDuplicate)
+    public static function querySKRD($from, $to, $opd_id, $no_skrd, $status_ttd)
     {
         $date =  Carbon::now()->format('Y-m-d');
 
@@ -249,7 +249,6 @@ class TransaksiOPD extends Model
             ->with('opd', 'jenis_pendapatan')
             ->where('status_bayar', 0)
             ->where('tgl_skrd_akhir', '>=', $date)
-            // ->whereNotIn('no_bayar', $getDuplicate)
             ->when($opd_id != 0, function ($q) use ($opd_id) {
                 return $q->where('id_opd', $opd_id);
             })
@@ -271,17 +270,26 @@ class TransaksiOPD extends Model
         return $data->orderBy('id', 'DESC')->get();
     }
 
-    public static function checkDuplicateNoBayar($date, $opd_id)
+    public static function checkDuplicateNoBayar($date, $opd_id, $from, $to)
     {
         $getDuplicate = TransaksiOPD::select('no_bayar')
             ->when($opd_id != 0, function ($q) use ($opd_id) {
                 return $q->where('id_opd', $opd_id);
             })
-            ->whereDate('created_at', $date)
             ->where('status_ttd', 0)
             ->groupBy('no_bayar')
-            ->havingRaw("COUNT(no_bayar) > 1")
-            ->get()->toArray();
+            ->havingRaw("COUNT(no_bayar) > 1");
+
+        if ($from != null ||  $to != null) {
+            if ($from != null && $to == null) {
+                $getDuplicate->whereDate('tgl_skrd_awal', $from);
+            } else {
+                $getDuplicate->whereBetween('tgl_skrd_awal', [$from, $to]);
+            }
+        } else {
+            $getDuplicate->whereDate('created_at', $date);
+        }
+        $getDuplicate = $getDuplicate->get()->toArray();
 
         $data = TransaksiOPD::select('id', 'id_opd', 'no_skrd', 'no_bayar', 'nm_wajib_pajak', 'id_jenis_pendapatan', 'tgl_skrd_awal', 'tgl_skrd_akhir', 'status_ttd', 'jumlah_bayar', 'history_ttd')
             ->with('opd', 'jenis_pendapatan')

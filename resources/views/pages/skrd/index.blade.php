@@ -79,9 +79,7 @@
                                 <div class="col-sm-2"></div>
                                 <div class="col-sm-8">
                                     <button class="btn btn-success btn-sm" onclick="pressOnChange()"><i class="icon-filter mr-2"></i>Filter</button>
-                                    @if ($getDuplicate && !$status_duplicate)
-                                    <a target="_blank" href="{{ route('skrd.index', ['status_duplicate' => 1]) }}" class="btn btn-sm btn-danger ml-2" id="exportpdf"><i class="icon-content_copy mr-2"></i>Cek Duplikat</a>
-                                    @endif
+                                    {{-- <a target="_blank" href="{{ route('skrd.index', ['status_duplicate' => 1]) }}" class="btn btn-sm btn-danger ml-2" style="display: none" id="btnDuplicate"><i class="icon-content_copy mr-2"></i>Cek Duplikat</a> --}}
                                 </div> 
                             </div>
                         </div>
@@ -89,13 +87,14 @@
                 </div>
                 <div class="row mt-2">
                     <div class="col-md-12">
-                        @if ($getDuplicate)
-                        @if (!$status_duplicate)
-                        <div class="alert text-center font-weight-bold alert-danger mb-2">Terdapat {{ count($getDuplicate) }} Nomor Bayar duplikat!. Silahkan klik button Cek Duplikat untuk memuat data.</div>
-                        @else
-                        <div class="alert text-center font-weight-bold alert-danger mb-2">Dibawah ini {{ count($getDuplicate) }} data Nomor Bayar duplikat!..</div>
-                        @endif
-                        @endif
+                        {{-- @if ($getDuplicate)
+                            @if (!$status_duplicate)
+                            <div class="alert text-center font-weight-bold alert-danger mb-2">Terdapat {{ count($getDuplicate) }} Nomor Bayar duplikat!. Silahkan klik button Cek Duplikat untuk memuat data.</div>
+                            @else
+                            <div class="alert text-center font-weight-bold alert-danger mb-2">Terdapat {{ count($getDuplicate) }} data Nomor Bayar dan No SKRD duplikat!. Silahkan Hapus / Edit data terkait.</div>
+                            @endif
+                        @endif --}}
+                        {{-- <div class="alert text-center font-weight-bold alert-danger mb-2" style="display: none" id="alertDuplicate">Terdapat <span id="totalDuplicat"></span> Nomor Bayar duplikat!. Silahkan klik button Cek Duplikat untuk memuat data.</div> --}}
                         <div class="card no-b">
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -227,6 +226,26 @@
 
     function pressOnChange(){
         table.api().ajax.reload();
+
+        $.ajax({
+            url: "{{ route('skrd.checkDuplicate') }}",  
+            method : "GET", 
+            data: {
+                from : $('#from').val(),
+                to   : $('#to').val(),
+                opd_id : $('#opd').val(),
+            },
+            success:function(response){
+                if (response.dataDuplicate > 0) {
+                    $('#alertDuplicate').show();
+                    $('#btnDuplicate').show();
+                    $('#totalDuplicat').html(response.dataDuplicate)
+                } else {
+                    $('#alertDuplicate').hide();
+                    $('#btnDuplicate').hide();
+                }
+            }
+        });
     }
 
     $('#opd_id').on('change', function(){
