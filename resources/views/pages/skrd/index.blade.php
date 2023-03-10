@@ -67,10 +67,10 @@
                                 <div class="col-sm-8">
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <input type="date" placeholder="MM/DD/YYYY" value="{{ $today }}" id="from" class="form-control light r-0 s-12 mb-5-m" autocomplete="off"/>
+                                            <input type="date" placeholder="MM/DD/YYYY" value="{{ $from ? $from : $today }}" id="from" class="form-control light r-0 s-12 mb-5-m" autocomplete="off"/>
                                         </div>
                                         <div class="col-md-6">
-                                            <input type="date" placeholder="MM/DD/YYYY" value="{{ $today }}" id="to" class="form-control light r-0 s-12" autocomplete="off"/>
+                                            <input type="date" placeholder="MM/DD/YYYY" value="{{ $to ? $to : $today }}" id="to" class="form-control light r-0 s-12" autocomplete="off"/>
                                         </div>
                                     </div>
                                 </div>
@@ -79,7 +79,9 @@
                                 <div class="col-sm-2"></div>
                                 <div class="col-sm-8">
                                     <button class="btn btn-success btn-sm" onclick="pressOnChange()"><i class="icon-filter mr-2"></i>Filter</button>
-                                    {{-- <a target="_blank" href="{{ route('skrd.index', ['status_duplicate' => 1]) }}" class="btn btn-sm btn-danger ml-2" style="display: none" id="btnDuplicate"><i class="icon-content_copy mr-2"></i>Cek Duplikat</a> --}}
+                                    @if (!$status_duplicate)
+                                    <a target="_blank" href="#" class="btn btn-sm btn-danger ml-2" style="display: none" id="btnDuplicate"><i class="icon-content_copy mr-2"></i>Cek Duplikat</a>
+                                    @endif
                                 </div> 
                             </div>
                         </div>
@@ -87,14 +89,11 @@
                 </div>
                 <div class="row mt-2">
                     <div class="col-md-12">
-                        {{-- @if ($getDuplicate)
-                            @if (!$status_duplicate)
-                            <div class="alert text-center font-weight-bold alert-danger mb-2">Terdapat {{ count($getDuplicate) }} Nomor Bayar duplikat!. Silahkan klik button Cek Duplikat untuk memuat data.</div>
-                            @else
-                            <div class="alert text-center font-weight-bold alert-danger mb-2">Terdapat {{ count($getDuplicate) }} data Nomor Bayar dan No SKRD duplikat!. Silahkan Hapus / Edit data terkait.</div>
-                            @endif
-                        @endif --}}
-                        {{-- <div class="alert text-center font-weight-bold alert-danger mb-2" style="display: none" id="alertDuplicate">Terdapat <span id="totalDuplicat"></span> Nomor Bayar duplikat!. Silahkan klik button Cek Duplikat untuk memuat data.</div> --}}
+                        @if (!$status_duplicate)
+                        <div class="alert text-center font-weight-bold alert-danger mb-2" style="display: none" id="alertDuplicate">Terdapat <span id="totalDuplicat"></span> Nomor Bayar duplikat!. Silahkan klik button Cek Duplikat untuk memuat data.</div>
+                        @else
+                        <div class="alert text-center font-weight-bold alert-danger mb-2">No Bayar dan No SKRD data dibawah ini duplikat, Silahkan klik button EDIT untuk mendapatkan nomor baru / klik button DELETE untuk menghapus data terkait.</div>
+                        @endif
                         <div class="card no-b">
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -227,13 +226,22 @@
     function pressOnChange(){
         table.api().ajax.reload();
 
+        checkDuplicate();
+    }
+
+    checkDuplicate();
+    function checkDuplicate(){
+        from = $('#from').val();
+        to   = $('#to').val();
+        opd_id = $('#opd').val();
+
         $.ajax({
             url: "{{ route('skrd.checkDuplicate') }}",  
             method : "GET", 
             data: {
-                from : $('#from').val(),
-                to   : $('#to').val(),
-                opd_id : $('#opd').val(),
+                from : from,
+                to   : to,
+                opd_id : opd_id,
             },
             success:function(response){
                 if (response.dataDuplicate > 0) {
@@ -246,6 +254,12 @@
                 }
             }
         });
+
+        params = from + "&to=" + to + "&opd_id=" + opd_id + "&status_duplicate=" + 1;
+
+        url = "{{ route('skrd.index') }}?from=" + params
+        
+        $('#btnDuplicate').attr('href', url)
     }
 
     $('#opd_id').on('change', function(){

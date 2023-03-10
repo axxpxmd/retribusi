@@ -90,7 +90,9 @@ class SKRDController extends Controller
             'opd_id',
             'role',
             'getDuplicate',
-            'status_duplicate'
+            'status_duplicate',
+            'from',
+            'to'
         ));
     }
 
