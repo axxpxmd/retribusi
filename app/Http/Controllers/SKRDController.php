@@ -166,7 +166,7 @@ class SKRDController extends Controller
                 if ($getDuplicate) {
                     foreach ($getDuplicate as $value) {
                         if ($value['no_bayar'] == $p->no_bayar) {
-                            return "<span class='text-danger font-weight-bold'>" . $p->no_bayar . "</span>";
+                            return "<span class='text-danger font-weight-bold'>" . $no_bayar . "</span>";
                         } else {
                             return $no_bayar;
                         }
