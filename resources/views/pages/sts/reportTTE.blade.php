@@ -61,6 +61,14 @@
             margin-left: 5px;
         }
 
+        .m-l-15 {
+            margin-left: 15px;
+        }
+
+        .m-l-25 {
+            margin-left: 25px;
+        }
+
         .text-right {
             text-align: right
         }
@@ -415,7 +423,7 @@
                 @if ($data->tgl_bayar != null)
                     <td>
                         <p class="m-t-0 m-b-0 fs-12">:
-                            {{ Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $data->tgl_bayar)->format('d F Y | H:i:s') }}
+                            {{ Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $data->tgl_bayar)->isoFormat('D MMMM Y | H:m:s') }}
                         </p>
                     </td>
                 @else
