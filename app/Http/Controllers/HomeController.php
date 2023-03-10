@@ -42,6 +42,7 @@ class HomeController extends Controller
         $role  = Auth::user()->pengguna->modelHasRole->role->name;
         $opd_id = $request->opd_id ? $request->opd_id : Auth::user()->pengguna->opd_id;
         $n_opd  = $request->opd_id ? OPD::select('n_opd', 'id')->where('id', $request->opd_id)->first() : Auth::user()->pengguna->opd;
+        $nip    = Auth::user()->pengguna->nip;
 
         $opdArray = OPDJenisPendapatan::select('id_opd')->get()->toArray();
         $opds = OPD::getAll($opdArray, $opd_id);
@@ -172,6 +173,9 @@ class HomeController extends Controller
         $tandaTanganToday = TransaksiOPD::when($opd_id != 0, function ($q) use ($opd_id) {
             $q->where('tmtransaksi_opd.id_opd', $opd_id);
         })->where('tgl_ttd', $date)
+            ->when($nip, function($q) use($nip) {
+                $q->where('nip_ttd', $nip);
+            }) 
             ->whereIn('status_ttd', [2, 4])->count();
 
         //* Diagram Chart (Role: super-admin)

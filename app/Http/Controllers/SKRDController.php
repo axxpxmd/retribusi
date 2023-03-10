@@ -125,12 +125,23 @@ class SKRDController extends Controller
                 $delete  = "<a href='#' onclick='remove(" . $p->id . ")' class='text-danger mr-2' title='Hapus Data'><i class='icon icon-remove'></i></a>";
 
                 //* Sudah TTD
-                if ($p->status_ttd == 1) {
+                if ($p->status_ttd == 1) { 
                     return $filettd;
                 } else {
                     //* Proses TTD
                     if ($p->status_ttd != 2) {
                         if ($getDuplicate) {
+                            foreach ($getDuplicate as $value) {
+                                if ($value['no_bayar'] == $p->no_bayar) {
+                                    return $edit . $sendttd;
+                                }else{
+                                    if ($p->history_ttd == 1) {
+                                        return $edit . $sendttd;
+                                    } else {
+                                        return $edit . $delete . $sendttd;
+                                    }
+                                }
+                            }
                             return $edit . $delete;
                         } else {
                             if ($p->history_ttd == 1) {
