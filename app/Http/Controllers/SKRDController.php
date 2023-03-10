@@ -133,7 +133,7 @@ class SKRDController extends Controller
                         if ($getDuplicate) {
                             foreach ($getDuplicate as $value) {
                                 if ($value['no_bayar'] == $p->no_bayar) {
-                                    return $edit . $sendttd;
+                                    return $edit . $delete;
                                 }else{
                                     if ($p->history_ttd == 1) {
                                         return $edit . $sendttd;
