@@ -41,6 +41,10 @@
             font-size: 15px
         }
 
+        table.z {
+            font-size: 14px
+        }
+
         .t-bold {
             font-weight: bold
         }
@@ -407,28 +411,28 @@
         </table>
     </div>
     <div class="">
-        <table>
-            <tr>
+        <table class="z">
+            <tr class="z">
                 <td>
-                    <p class="m-b-0 fs-12">NTB</p>
+                    <p class="m-b-0">NTB</p>
                 </td>
                 <td>
-                    <p class="m-b-0 fs-12">: {{ $data->ntb != null ? $data->ntb : '' }}</p>
+                    <p class="m-b-0">: {{ $data->ntb != null ? $data->ntb : '' }}</p>
                 </td>
             </tr>
-            <tr>
+            <tr class="z">
                 <td>
-                    <p class="m-t-0 m-b-0 fs-12">TANGGAL BAYAR</p>
+                    <p class="m-t-0 m-b-0">TANGGAL BAYAR</p>
                 </td>
                 @if ($data->tgl_bayar != null)
                     <td>
-                        <p class="m-t-0 m-b-0 fs-12">:
+                        <p class="m-t-0 m-b-0">:
                             {{ Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $data->tgl_bayar)->isoFormat('D MMMM Y | H:m:s') }}
                         </p>
                     </td>
                 @else
                     <td>
-                        <p class="m-t-0 m-b-0 fs-12">: </p>
+                        <p class="m-t-0 m-b-0">: </p>
                     </td>
                 @endif
             </tr>
