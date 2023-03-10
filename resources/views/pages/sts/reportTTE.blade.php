@@ -407,8 +407,8 @@
         </table>
     </div>
     <div class="">
-        <table class="c">
-            <tr class="c">
+        <table>
+            <tr>
                 <td>
                     <p class="m-b-0 fs-12">NTB</p>
                 </td>
@@ -416,7 +416,7 @@
                     <p class="m-b-0 fs-12">: {{ $data->ntb != null ? $data->ntb : '' }}</p>
                 </td>
             </tr>
-            <tr class="c">
+            <tr>
                 <td>
                     <p class="m-t-0 m-b-0 fs-12">TANGGAL BAYAR</p>
                 </td>
