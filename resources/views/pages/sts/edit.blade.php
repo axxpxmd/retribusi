@@ -180,7 +180,7 @@
                                             <div class="row mb-2">
                                                 <label for="tgl_bayar" class="col-form-label s-12 col-sm-4 text-right">Tanggal Bayar<span class="text-danger ml-1">*</span></label>
                                                 <div class="col-md-8">
-                                                    <input type="datetime-local" max='2023-03-07T00:00' name="tgl_bayar" {{ $data->status_bayar == 1 ? 'readonly' : '' }} {{ $readonly }} value="{{ $data->tgl_bayar != null ? date('Y-m-d\TH:i', strtotime($data->tgl_bayar)) : $now }}" class="form-control s-12" autocomplete="off"/>
+                                                    <input type="datetime-local" name="tgl_bayar" {{ $data->status_bayar == 1 ? 'readonly' : '' }} {{ $readonly }} value="{{ $data->tgl_bayar != null ? date('Y-m-d\TH:i', strtotime($data->tgl_bayar)) : $now }}" class="form-control s-12" autocomplete="off"/>
                                                 </div>
                                             </div>
                                             <div class="row mb-2">
