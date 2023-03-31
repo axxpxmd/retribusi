@@ -28,10 +28,10 @@
                     <div class="card-body">
                         <input type="hidden" id="year" value="{{ $tahun }}">
                         <input type="hidden" id="status" value="{{ $status }}">
-                        <div class="container col-md-8">
+                        <div class="container col-md-12">
                             <div class="row mb-2">
-                                <label for="jenis" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">Jenis </label>
-                                <div class="col-sm-8">
+                                <label for="jenis" class="col-form-label s-12 col-sm-4 col-md-4 col-xl-3 text-right font-weight-bolder">Jenis </label>
+                                <div class="col-sm-8 col-md-7 col-xl-6">
                                     <select class="select2 form-control r-0 light s-12" id="jenis" name="jenis">
                                         <option value="0">Pilih</option>
                                         <option value="1" {{ $status == 1 ? 'selected' : '' }}>SKRD</option>
@@ -40,8 +40,8 @@
                                 </div>
                             </div>
                             <div class="row mb-2">
-                                <label for="opd_id" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">OPD </label>
-                                <div class="col-sm-8">
+                                <label for="opd_id" class="col-form-label s-12 col-sm-4 col-md-4 col-xl-3 text-right font-weight-bolder">OPD </label>
+                                <div class="col-sm-8 col-md-7 col-xl-6">
                                     <select class="select2 form-control r-0 light s-12" id="opd_id" name="opd_id">
                                         @if ($role == 'super-admin' || $role == 'admin-bjb')
                                             <option value="0">Semua</option>
@@ -53,24 +53,24 @@
                                 </div>
                             </div>
                             <div class="row mb-2">
-                                <label for="jenis_pendapatan_id" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">Jenis Pendapatan </label>
-                                <div class="col-sm-8">
+                                <label for="jenis_pendapatan_id" class="col-form-label s-12 col-sm-4 col-md-4 col-xl-3 text-right font-weight-bolder">Jenis Pendapatan </label>
+                                <div class="col-sm-8 col-md-7 col-xl-6">
                                     <select class="select2 form-control r-0 light s-12" id="jenis_pendapatan_id" name="jenis_pendapatan_id">
                                         <option value="0"></option>
                                     </select>
                                 </div>
                             </div>
                             <div class="row mb-2">
-                                <label for="rincian_pendapatan_id" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">Rincian Pendapatan </label>
-                                <div class="col-sm-8">
+                                <label for="rincian_pendapatan_id" class="col-form-label s-12 col-sm-4 col-md-4 col-xl-3 text-right font-weight-bolder">Rincian Pendapatan </label>
+                                <div class="col-sm-8 col-md-7 col-xl-6">
                                     <select class="select2 form-control r-0 light s-12" id="rincian_pendapatan_id" name="rincian_pendapatan_id">
                                         <option value="0"></option>
                                     </select>
                                 </div>
                             </div>
                             <div id="status_bayar_display" class="row mb-2">
-                                <label for="status_bayar" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">Status Bayar </label>
-                                <div class="col-sm-8">
+                                <label for="status_bayar" class="col-form-label s-12 col-sm-4 col-md-4 col-xl-3 text-right font-weight-bolder">Status Bayar </label>
+                                <div class="col-sm-8 col-md-7 col-xl-6">
                                     <select class="select2 form-control r-0 light s-12" id="status_bayar" name="status_bayar">
                                         <option value=""></option>
                                         <option value="0">Belum</option>
@@ -79,8 +79,8 @@
                                 </div>
                             </div>
                             <div id="display_channel_bayar" class="row mb-2">
-                                <label for="channel_bayar" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">Metode Bayar </label>
-                                <div class="col-sm-8">
+                                <label for="channel_bayar" class="col-form-label s-12 col-sm-4 col-md-4 col-xl-3 text-right font-weight-bolder">Metode Bayar </label>
+                                <div class="col-sm-8 col-md-7 col-xl-6">
                                     <select class="select2 form-control r-0 light s-12" id="channel_bayar" name="channel_bayar">
                                         <option value="0">Semua</option>
                                         <option value="1">Virtual Account</option>
@@ -96,8 +96,8 @@
                                 </div>
                             </div>
                             <div class="row mb-2">
-                                <label for="channel_bayar" class="col-form-label s-12 col-md-2 text-right font-weight-bolder" id="tgl_skrd_text"></label>
-                                <div class="col-sm-8">
+                                <label for="channel_bayar" class="col-form-label s-12 col-sm-4 col-md-4 col-xl-3 text-right font-weight-bolder" id="tgl_skrd_text"></label>
+                                <div class="col-sm-8 col-md-7 col-xl-6">
                                     <div class="row">
                                         <div class="col-md-6">
                                             <input type="date" placeholder="MM/DD/YYYY" value="{{ $today }}" name="from" id="from" class="form-control r-0 light s-12 mb-5-m" autocomplete="off"/>
@@ -109,15 +109,15 @@
                                 </div>
                             </div>
                             <div class="row mb-4">
-                                <div class="col-sm-2"></div>
-                                <div class="col-sm-8">
+                                <div class="col-sm-4 col-md-4 col-xl-3"></div>
+                                <div class="col-sm-8 col-md-7 col-xl-6">
                                     <button class="btn btn-success btn-sm" onclick="pressOnChange()"><i class="icon-filter mr-2"></i>Filter</button>
                                     <a target="_blank" href="{{ route('report.cetakSKRD') }}" class="btn btn-sm btn-primary ml-2" id="exportpdf"><i class="icon-print mr-2"></i>Print</a>
                                 </div> 
                             </div>
                             <div class="row">
-                                <div class="col-sm-2"></div>
-                                <div class="col-sm-8">
+                                <div class="col-sm-4 col-md-4 col-xl-3"></div>
+                                <div class="col-sm-8 col-md-7 col-xl-6">
                                     <p class="mb-0 font-weight-bold">Total Ketetapan : <span id="total_bayar"></span></p>
                                 </div> 
                             </div>

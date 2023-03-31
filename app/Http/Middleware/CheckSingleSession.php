@@ -13,13 +13,16 @@ class CheckSingleSession
     {
         $session_id   = Session::getId();
         $last_session = Auth::user()->session_id;
+        $role_id = Auth::user()->pengguna->modelHasRole->role_id;
 
-        if ($session_id !== $last_session) {
-            Auth::logout();
+        if ($role_id != 5 && $role_id != 6) {
+            if ($session_id !== $last_session) {
+                Auth::logout();
 
-            return redirect()
-                ->route('login')
-                ->withErrors('Anda dikeluarkan, Terdapat akun yang sama sedang login pada perangkat lain.');
+                return redirect()
+                    ->route('login')
+                    ->withErrors('Anda dikeluarkan, Terdapat akun yang sama sedang login pada perangkat lain.');
+            }
         }
 
         return $next($request);

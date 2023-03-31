@@ -132,7 +132,7 @@
                 </tr>
             @empty
             <tr class="d">
-                <td class="d text-center" colspan="13">Tidak ada disini.</td>
+                <td class="d text-center" colspan="13">Tidak ada data disini.</td>
             </tr>
             @endforelse
         </tbody>
