@@ -1,5 +1,5 @@
 @php
-$template = App\Models\Template::select('id', 'logo', 'logo_title', 'logo_auth')->first();
+    $template = App\Models\Template::select('id', 'logo', 'logo_title', 'logo_auth')->first();
 @endphp
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
@@ -12,7 +12,7 @@ $template = App\Models\Template::select('id', 'logo', 'logo_title', 'logo_auth')
 
     <!-- Title --> 
     <link rel="icon" href="{{ asset('images/logo-png.png') }}" type="image/x-icon">
-    <title>RETRIBUSI @yield('title')</title>
+    <title>{{ config('app.name') }} @yield('title')</title>
 
     <!-- CSS -->
     @yield('style')
