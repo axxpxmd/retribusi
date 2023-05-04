@@ -32,7 +32,7 @@
         },
         tooltip: {
             style: {
-                fontSize: '100%'
+                fontSize: '75%'
             },
             pointFormat: '<b>{point.name}</b>: <b>{point.y}</b>'
         },
@@ -47,7 +47,7 @@
                     overflow: "none",
                     format: '<b>{point.name}</b>: {point.percentage:.1f} %',
                     style: {
-                        fontSize: '80%'
+                        fontSize: '68%'
                     }
                 },
                 center: ["50%", "50%"]

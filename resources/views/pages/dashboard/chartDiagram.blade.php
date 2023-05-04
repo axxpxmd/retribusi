@@ -11,16 +11,6 @@
         height: auto;
     }
 
-    .highcharts-root {
-        height: auto !important;
-        margin-top: auto !important;
-    }
-
-    .highcharts-container {
-        height: auto !important;
-        margin-top: auto !important;
-    }
-
     .highcharts-data-table table {
         font-family: Verdana, sans-serif;
         border-collapse: collapse;
@@ -89,7 +79,7 @@
         yAxis: {
             title: {
                 text: 'Total Pendapatan'
-            }
+            },
         },
         legend: {
             enabled: false

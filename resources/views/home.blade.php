@@ -249,7 +249,6 @@
             </div>
             <div class="col-md-5">
                 <div class="card r-15 no-b" style="height: 300px !important">
-                    {{-- <h6 class="card-header text-white bg-cyan font-weight-bold" style="border-top-right-radius: 15px; border-top-left-radius: 15px">Total Retribusi</h6> --}}
                     <div class="card-body py-1 px-2">
                         @include('pages.dashboard.chartTest')
                     </div>
