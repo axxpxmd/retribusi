@@ -270,7 +270,7 @@
                                 <div class="col-sm-6">
                                     <div class="justify-content-center row mb-2">
                                         <label class="col-md-2 p-0">
-                                            <input type="radio" class="form-control" name="tte" value="iotentik" required disabled style="margin-top: 25px !important">
+                                            <input type="radio" class="form-control" name="tte" value="iotentik" disabled style="margin-top: 25px !important">
                                             <div class="invalid-feedback p-0">
                                                 Pilih TTE.
                                             </div>

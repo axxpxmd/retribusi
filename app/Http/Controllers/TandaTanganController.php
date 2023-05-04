@@ -287,7 +287,7 @@ class TandaTanganController extends Controller
         $file    = fopen($pdf, 'r');
         $qrimage = fopen($qrimage_path, 'r');
 
-        if ($tte != 'iotentik' || $tte != 'bsre') {
+        if (!$tte) {
             return redirect()
                 ->route($this->route . 'show', \Crypt::encrypt($id))
                 ->withErrors('Silahkan pilih jenis TTE');
