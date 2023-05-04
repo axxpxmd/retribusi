@@ -98,6 +98,6 @@
     'normal' => $fontDir . '/nunito_normal_7173294b894229c46ad1835001660d90',
   ),
   'open sans' => array(
-    'normal' => $fontDir . '/open_sans_normal_0c50822862df0e4bc3da7bec4af72b54',
+    'normal' => $fontDir . '/open_sans_normal_58432f442db7592a77647319d9a050fa',
   ),
 ) ?>

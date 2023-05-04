@@ -58,7 +58,7 @@ class TandaTanganController extends Controller
         $opd_id   = Auth::user()->pengguna->opd_id;
         $opdArray = OPDJenisPendapatan::select('id_opd')->get()->toArray();
         $opds     = OPD::getAll($opdArray, $opd_id);
-        $nip      = Auth::user()->pengguna->nip;     
+        $nip      = Auth::user()->pengguna->nip;
 
         $time = Carbon::now();
         $today = $time->format('Y-m-d');
@@ -86,7 +86,7 @@ class TandaTanganController extends Controller
     }
 
     public function dataTable($belum_ttd, $from, $to, $opd_id, $no_skrd, $status_ttd, $nip)
-    {   
+    {
         $data = TransaksiOPD::queryTandaTangan($belum_ttd, $from, $to, $opd_id, $no_skrd, $status_ttd, $nip);
 
         return DataTables::of($data)
@@ -286,6 +286,12 @@ class TandaTanganController extends Controller
 
         $file    = fopen($pdf, 'r');
         $qrimage = fopen($qrimage_path, 'r');
+
+        if ($tte != 'iotentik' || $tte != 'bsre') {
+            return redirect()
+                ->route($this->route . 'show', \Crypt::encrypt($id))
+                ->withErrors('Silahkan pilih jenis TTE');
+        }
 
         //* IOTENTIK
         if ($tte == 'iotentik') {
