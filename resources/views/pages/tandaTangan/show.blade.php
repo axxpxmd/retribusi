@@ -266,22 +266,7 @@
                         <form class="needs-validation" method="POST" action="{{ $tte_backup == 1 ? route('tanda-tangan.tteBackup') : route('tanda-tangan.tandaTangan') }}" enctype="multipart/form-data" novalidate>
                             {{ method_field('POST') }}
                             {{ csrf_field() }} 
-                            <div class="text-center row">
-                                <div class="col-sm-6">
-                                    <div class="justify-content-center row mb-2">
-                                        <label class="col-md-2 p-0">
-                                            <input type="radio" class="form-control" name="tte" value="iotentik" disabled style="margin-top: 25px !important">
-                                            <div class="invalid-feedback p-0">
-                                                Pilih TTE.
-                                            </div>
-                                        </label>
-                                        <div class="col-md-6 p-0">  
-                                            <div class="border py-2" style="background: #F7F7F7">
-                                                <img src="{{ asset('images/iotentik.jpg') }}" width="100" alt="">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="text-center justify-content-center row">
                                 <div class="col-sm-6">
                                     <div class="justify-content-center row mb-2">
                                         <label class="col-md-2 p-0">
@@ -298,6 +283,11 @@
                                     </div>
                                 </div>
                             </div>
+                            @if (!$nik)
+                            <div class="text-center">
+                                <span class="text-danger font-weight-bold fs-12">Anda belum mempunya sertifikat elektronik BSRE, Silahkan hubungi BAPENDA / DISKOMINFO untuk melakukan pengajuan akun BSRE.</span>
+                            </div>
+                            @endif
                             <hr>
                             <input type="hidden" name="id" value="{{ $id }}">
                             <input type="hidden" name="nik" value="{{ $nik }}"> 
@@ -314,7 +304,7 @@
                             <div class="row mb-2">
                                 <label class="col-md-2"></label>
                                 <div class="col-md-10">
-                                    <button class="btn btn-sm btn-primary mr-2"><i class="icon-pencil mr-2"></i>Tandatangani</button>
+                                    <button class="btn btn-sm btn-primary mr-2" {{ !$nik ? 'disabled' : '' }}><i class="icon-pencil mr-2"></i>Tandatangani</button>
                                     <button class="btn btn-sm btn-danger" data-dismiss="modal"><i class="icon-times mr-2"></i>Batalkan</button>
                                 </div>
                             </div>
