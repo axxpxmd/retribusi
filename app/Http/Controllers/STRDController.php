@@ -50,7 +50,8 @@ class STRDController extends Controller
         $route = $this->route;
         $title = $this->title;
 
-        $today    = Carbon::yesterday()->format('Y-m-d');
+        $yesterday    = Carbon::yesterday()->format('Y-m-d');
+        $today    = Carbon::now()->format('Y-m-d');
         $role     = Auth::user()->pengguna->modelHasRole->role->name;
         $opd_id   = $request->opd_id ? $request->opd_id : Auth::user()->pengguna->opd_id;
         $opdArray = OPDJenisPendapatan::select('id_opd')->get()->toArray();
@@ -73,19 +74,19 @@ class STRDController extends Controller
             'title',
             'opds',
             'opd_id',
-            'today',
+            'yesterday',
             'status',
             'tahun',
             'role'
         ));
     }
 
-    public function dataTable($from, $to, $opd_id, $no_skrd, $status_ttd, $dateNow, $status, $tahun)
+    public function dataTable($from, $to, $opd_id, $no_skrd, $status_ttd, $today, $status, $tahun)
     {
         $data = TransaksiOPD::querySTRD($from, $to, $opd_id, $no_skrd, $status_ttd, $status, $tahun);
 
         return DataTables::of($data)
-            ->addColumn('action', function ($p) use ($dateNow) {
+            ->addColumn('action', function ($p) use ($today) {
                 $fileName  = str_replace(' ', '', $p->nm_wajib_pajak) . '-' . $p->no_skrd . ".pdf";
                 $path_sftp = 'file_ttd_skrd/';
 
@@ -96,10 +97,10 @@ class STRDController extends Controller
                 $tgl_strd_akhir = $p->tgl_strd_akhir;
 
                 $tgl_jatuh_tempo = Utility::tglJatuhTempo($tgl_strd_akhir, $tgl_skrd_akhir);
-                $jatuh_tempo = Utility::isJatuhTempo($tgl_jatuh_tempo, $dateNow);
+                $jatuh_tempo = Utility::isJatuhTempo($tgl_jatuh_tempo, $today);
 
-                if ($jatuh_tempo) {
-                    return $sendttd;
+                if (!$jatuh_tempo) {
+                    return $sendttd . $today;
                 } else {
                     if ($p->status_ttd == 3) {
                         return $filettd;
@@ -141,12 +142,12 @@ class STRDController extends Controller
 
                 return 'Rp. ' . number_format($jumlahBunga) . ' (' . $kenaikan . '%)';
             })
-            ->addColumn('status_ttd', function ($p) use ($dateNow) {
+            ->addColumn('status_ttd', function ($p) use ($today) {
                 $tgl_skrd_akhir = $p->tgl_skrd_akhir;
                 $tgl_strd_akhir = $p->tgl_strd_akhir;
 
                 $tgl_jatuh_tempo = Utility::tglJatuhTempo($tgl_strd_akhir, $tgl_skrd_akhir);
-                $jatuh_tempo = Utility::isJatuhTempo($tgl_jatuh_tempo, $dateNow);
+                $jatuh_tempo = Utility::isJatuhTempo($tgl_jatuh_tempo, $today);
 
                 if ($jatuh_tempo) {
                     return "<span class='badge badge-danger'>Belum</span>";
@@ -160,8 +161,8 @@ class STRDController extends Controller
                     }
                 }
             })
-            ->addColumn('status_strd', function ($p) use ($dateNow) {
-                $kadaluarsa = "<span class='badge badge-warning' style='font-size: 10.5px !important'>Kadaluarsa</span>";
+            ->addColumn('status_strd', function ($p) use ($today) {
+                $kadaluarsa = "<span class='badge badge-warning' title='SKRD telah kadaluarsa' style='font-size: 10.5px !important'>Kadaluarsa</span>";
                 $berlaku    = "<span class='badge badge-success' style='font-size: 10.5px !important'>Berlaku</span>";
                 $perbarui   = "<a href='#' onclick='perbaruiSTRD(" . $p->id . ")' class='text-primary mr-2' title='Perbarui STRD'><i class='icon-refresh'></i></a>";
 
@@ -169,7 +170,7 @@ class STRDController extends Controller
                 $tgl_strd_akhir = $p->tgl_strd_akhir;
 
                 $tgl_jatuh_tempo = Utility::tglJatuhTempo($tgl_strd_akhir, $tgl_skrd_akhir);
-                $jatuh_tempo = Utility::isJatuhTempo($tgl_jatuh_tempo, $dateNow);
+                $jatuh_tempo = Utility::isJatuhTempo($tgl_jatuh_tempo, $today);
 
                 if ($p->tgl_strd_akhir != null) {
                     if ($jatuh_tempo !== false) {

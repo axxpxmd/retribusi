@@ -62,10 +62,10 @@
                             <div class="row mb-2">
                                 <label for="no_skrd" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">Tanggal Jatuh Tempo</label>
                                 <div class="col-md-4 mb-5-m">
-                                    <input type="date" placeholder="MM/DD/YYYY" value="{{ $today }}" name="from" id="from" class="form-control light r-0 s-12" autocomplete="off"/>
+                                    <input type="date" placeholder="MM/DD/YYYY" value="{{ $yesterday }}" name="from" id="from" class="form-control light r-0 s-12" autocomplete="off"/>
                                 </div>
                                 <div class="col-md-4">
-                                    <input type="date" placeholder="MM/DD/YYYY" value="{{ $today }}" name="to" id="to" class="form-control light r-0 s-12" autocomplete="off"/>
+                                    <input type="date" placeholder="MM/DD/YYYY" value="{{ $yesterday }}" name="to" id="to" class="form-control light r-0 s-12" autocomplete="off"/>
                                 </div>
                             </div>
                             <div class="row mb-4">
