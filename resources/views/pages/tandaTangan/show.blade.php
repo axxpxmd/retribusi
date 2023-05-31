@@ -266,7 +266,7 @@
                         <form class="needs-validation" method="POST" action="{{ $tte_backup == 1 ? route('tanda-tangan.tteBackup') : route('tanda-tangan.tandaTangan') }}" enctype="multipart/form-data" novalidate>
                             {{ method_field('POST') }}
                             {{ csrf_field() }} 
-                            <div class="text-center justify-content-center row">
+                            {{-- <div class="text-center justify-content-center row">
                                 <div class="col-sm-6">
                                     <div class="justify-content-center row mb-2">
                                         <label class="col-md-2 p-0">
@@ -282,16 +282,74 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div> --}}
+                            <div class="text-center row">
+                                <div class="col-sm-6">
+                                    <div class="justify-content-center row mb-2">
+                                        <label class="col-md-2 p-0">
+                                            <input type="radio" class="form-control" name="tte" value="bsre" {{ $nik ? 'checked' : '' }} {{ $nik ? 'required' : '' }} {{ $nik ? '-' : 'disabled' }} style="margin-top: 25px !important">
+                                            <div class="invalid-feedback p-0">
+                                                Pilih TTE.
+                                            </div>
+                                        </label>
+                                        <div class="col-md-6 p-0">  
+                                            <div class="border py-2" style="background: {{ $nik ? '' : '#F7F7F7' }}">
+                                                <img src="{{ asset('images/bsre.png') }}" width="118" alt="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="justify-content-center row mb-2">
+                                        <label class="col-md-2 p-0">
+                                            <input type="radio" class="form-control" name="tte" value="aurograf" {{ $nik ? 'required' : '' }} {{ $nik ? '-' : 'disabled' }} style="margin-top: 25px !important">
+                                            <div class="invalid-feedback p-0">
+                                                Pilih TTE.
+                                            </div>
+                                        </label>
+                                        <div class="col-md-6 p-0">  
+                                            <div class="border py-2" style="background: {{ $nik ? '' : '#F7F7F7' }}">
+                                                <img src="{{ asset('images/aurograf.png') }}" width="85" alt="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             @if (!$nik)
-                            <div class="text-center">
-                                <span class="text-danger font-weight-bold fs-12">Anda belum mempunya sertifikat elektronik BSRE, Silahkan hubungi BAPENDA / DISKOMINFO untuk melakukan pengajuan akun BSRE.</span>
+                                <div class="text-center">
+                                    <span class="text-danger font-weight-bold fs-12">Anda belum mempunya sertifikat elektronik BSRE, Silahkan hubungi BAPENDA / DISKOMINFO untuk melakukan pengajuan akun BSRE.</span>
+                                </div>
+                            @endif
+                            @if (!$aurografCerts)
+                            <div class="text-center" id="aurograf_msg" style="display: none">
+                                <span class="text-danger font-weight-bold fs-12">Anda belum mempunya sertifikat elektronik AUROGRAF, Silahkan hubungi DISKOMINFO untuk melakukan pengajuan akun AUROGRAF.</span>
                             </div>
                             @endif
                             <hr>
                             <input type="hidden" name="id" value="{{ $id }}">
                             <input type="hidden" name="nik" value="{{ $nik }}"> 
-                            <input type="hidden" name="nip" value="{{ $nip }}">     
+                            <input type="hidden" name="nip" value="{{ $nip }}">    
+                            @if ($aurografCerts)
+                            <div class="row mb-2" id="aurograf_cert" style="display: none">
+                                <label for="password" class="col-form-label s-12 col-md-2 font-weight-bold">Sertifikat</label>
+                                <div class="col-md-10">
+                                    <select class="select2 form-control r-0 s-12" id="aurograf_cert_id" name="aurograf_cert_id" autocomplete="off">
+                                        <option value="">Pilih</option>
+                                        @foreach ($aurografCerts as $i)
+                                            @if (substr($i['cert_expired_at'], 0,10) >= $dateNow)
+                                                {{ $expired = false }}
+                                            @else
+                                                {{ $expired = true }}
+                                            @endif
+                                            <option style="background: black !important" value="{{ $i['cert_id'] }}" {{ $expired ? ' disabled' : '' }}>{{ $i['cn'] }}  {{ $expired ? ' Expired' : '' }}</option>
+                                        @endforeach
+                                    </select>
+                                    <div class="invalid-feedback p-0">
+                                        Silahkan Pilih Sertifikat
+                                    </div>
+                                </div>
+                            </div>
+                            @endif 
                             <div class="row mb-2">
                                 <label for="password" class="col-form-label s-12 col-md-2 font-weight-bold">Passphrase</label>
                                 <div class="col-md-10">
@@ -339,6 +397,19 @@
 @endsection
 @section('script')
 <script type="text/javascript">
+    $(':radio[name="tte"]').change(function() {
+        val = $(this).filter(':checked').val();
+        if (val == 'aurograf') {
+            $('#aurograf_cert').show();
+            $('#aurograf_msg').show();
+            $('#aurograf_cert_id').attr('required', true);
+        } else {
+            $('#aurograf_cert').hide();
+            $('#aurograf_msg').hide();
+            $('#aurograf_cert_id').attr('required', false);
+        }
+    });
+
     (function () {
         'use strict'
 

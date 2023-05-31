@@ -130,6 +130,11 @@ return [
     'signapi_ipserver' => env('SIGNAPI_IPSERVER'),
     'signapi_bearer' => env('SIGNAPI_BEARER'),
 
+    // AUROGRAF
+    'aurografapi' => env('AUROGRAFAPI'),
+    'aurografapi_server' => env('AUROGRAFAPI_IPSERVER'),
+    'aurograf_bearer' => env('AUROGRAFAPI_BEARER'),
+
     // Virtual Account BJB
     'cin_bjb' => env('CIN_BJB'),
     'ip_api_bjb' => env('IP_API_BJB'),

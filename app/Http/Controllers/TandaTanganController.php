@@ -22,7 +22,7 @@ use App\Http\Services\WhatsApp;
 use App\Http\Services\Iontentik;
 use App\Libraries\Html\Html_number;
 use App\Http\Controllers\Controller;
-
+use App\Http\Services\AUROGRAF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Crypt;
@@ -41,11 +41,12 @@ class TandaTanganController extends Controller
     protected $view  = 'pages.tandaTangan.';
 
     // Check Permission
-    public function __construct(Iontentik $iotentik, BSRE $bsre, WhatsApp $whatsapp)
+    public function __construct(Iontentik $iotentik, BSRE $bsre, WhatsApp $whatsapp, AUROGRAF $aurograf)
     {
         $this->bsre = $bsre;
         $this->iotentik = $iotentik;
         $this->whatsapp = $whatsapp;
+        $this->aurograf = $aurograf;
 
         $this->middleware(['permission:Tanda Tangan']);
     }
@@ -181,6 +182,9 @@ class TandaTanganController extends Controller
         $tgl_jatuh_tempo = Utility::tglJatuhTempo($tgl_strd_akhir, $tgl_skrd_akhir);
         $status_ttd = Utility::checkStatusTTD($status_ttd);
 
+        //* Get Sertifikat Aurograf
+        list($err, $errMsg, $aurografCerts) = $this->aurograf->getListCert($nik);
+
         if (!$status_ttd) {
             //TODO: generate QR Code (TTD)
             $img = Utility::createQrTTD($file_url);
@@ -236,7 +240,8 @@ class TandaTanganController extends Controller
             'nip',
             'status_ttd',
             'jatuh_tempo',
-            'tte_backup'
+            'tte_backup',
+            'aurografCerts'
         ));
     }
 
@@ -273,6 +278,7 @@ class TandaTanganController extends Controller
         $nik = $request->nik;
         $nip = $request->nip;
         $passphrase = $request->passphrase;
+        $aurograf_cert_id = $request->aurograf_cert_id;
 
         $data =  TransaksiOPD::find($id);
 
@@ -329,6 +335,16 @@ class TandaTanganController extends Controller
             }
         }
 
+        //* AUROGRAF
+        if ($tte == 'aurograf') {
+            list($err, $errMsg, $fileTTD) = $this->aurograf->sign($aurograf_cert_id, $nik, $passphrase, $file, $qrimage);
+            if ($err) {
+                return redirect()
+                    ->route($this->route . 'show', \Crypt::encrypt($id))
+                    ->withErrors($errMsg);
+            }
+        }
+
         //* Update status_ttd
         $update_ttd = $data->status_ttd == 2 ? 1 : 3;
         $data->update([
@@ -336,7 +352,7 @@ class TandaTanganController extends Controller
             'history_ttd' => 1
         ]);
 
-        //* Save to local storage (file already TTE)
+        //* Save to local estorage (file already TTE)
         file_put_contents($pdf, $fileTTD);
         $local_pdf = Storage::disk('local')->get('public/file_skrd/' . $fileName); // get content pdf from local
 
