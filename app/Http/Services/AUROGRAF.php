@@ -85,7 +85,7 @@ class AUROGRAF
             $fileTTD = $getFileRes->body();
         } else {
             $err = true;
-            $err = 'Terjadi kegagalan saat melakukan TTE. Error Server';
+            $err = 'Terjadi kegagalan saat mengambil file TTE. Error Server';
         }
 
         return [$err, $errMsg, $fileTTD];
