@@ -253,7 +253,8 @@ class STRDController extends Controller
         list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar);
         $total_bayar = $jumlah_bayar + $jumlahBunga;
 
-        $amount = \strval((int) str_replace(['.', 'Rp', ' '], '', $total_bayar));
+       
+        $amount = (int) $total_bayar;
         $expiredDate  = $tgl_jatuh_tempo_baru . ' 23:59:59';
         $customerName = $data->nm_wajib_pajak;
         $va_number    = (int) $data->nomor_va_bjb;
@@ -262,6 +263,7 @@ class STRDController extends Controller
         $productCode  = $data->rincian_jenis->kd_jenis;
         $no_hp        = $data->rincian_jenis->no_hp;
 
+       
         //* Tahap 1
         //TODO: Get Token BJB
         list($err, $errMsg, $tokenBJB) = $this->vabjbres->getTokenBJBres();
