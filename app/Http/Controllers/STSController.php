@@ -396,6 +396,7 @@ class STSController extends Controller
         $jumlahBunga = 0;
         if ($status_bayar == 1) {
             list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar, $tgl_bayar);
+            $denda = $jumlahBunga + $denda;
         } else {
             if ($jatuh_tempo) {
                 list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar);
