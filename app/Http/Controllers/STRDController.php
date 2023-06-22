@@ -77,7 +77,8 @@ class STRDController extends Controller
             'yesterday',
             'status',
             'tahun',
-            'role'
+            'role',
+            'today'
         ));
     }
 
@@ -253,7 +254,6 @@ class STRDController extends Controller
         list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar);
         $total_bayar = $jumlah_bayar + $jumlahBunga;
 
-       
         $amount = (int) $total_bayar;
         $expiredDate  = $tgl_jatuh_tempo_baru . ' 23:59:59';
         $customerName = $data->nm_wajib_pajak;
@@ -263,7 +263,6 @@ class STRDController extends Controller
         $productCode  = $data->rincian_jenis->kd_jenis;
         $no_hp        = $data->rincian_jenis->no_hp;
 
-       
         //* Tahap 1
         //TODO: Get Token BJB
         list($err, $errMsg, $tokenBJB) = $this->vabjbres->getTokenBJBres();
@@ -275,7 +274,7 @@ class STRDController extends Controller
 
         if ($VABJB == null) {
             //TODO: Create VA BJB
-            list($err, $errMsg, $VABJB) = $this->vabjbres->createVABJBres($tokenBJB, $clientRefnum, $amount, $expiredDate, $customerName, $productCode, 3, $clientRefnum);
+            list($err, $errMsg, $VABJB) = $this->vabjbres->createVABJBres($tokenBJB, $clientRefnum, strval($amount), $expiredDate, $customerName, $productCode, 3, $clientRefnum);
             if ($err) {
                 return redirect()
                     ->route($this->route . 'index')
@@ -283,7 +282,7 @@ class STRDController extends Controller
             }
         } else {
             //TODO: Update VA BJB
-            list($err, $errMsg, $VABJB) = $this->vabjbres->updateVABJBres($tokenBJB, $amount, $expiredDate, $customerName, $va_number, 3, $clientRefnum);
+            list($err, $errMsg, $VABJB) = $this->vabjbres->updateVABJBres($tokenBJB, strval($amount), $expiredDate, $customerName, $va_number, 3, $clientRefnum);
             if ($err) {
                 return redirect()
                     ->route($this->route . 'index')
@@ -304,7 +303,7 @@ class STRDController extends Controller
             }
 
             // TODO: Create QRIS
-            list($err, $errMsg, $invoiceId, $textQRIS) = $this->qrisbjbres->createQRISres($tokenQRISBJB, $amount, $no_hp, 3, $clientRefnum);
+            list($err, $errMsg, $invoiceId, $textQRIS) = $this->qrisbjbres->createQRISres($tokenQRISBJB, strval($amount), $no_hp, 3, $clientRefnum);
             if ($err) {
                 return redirect()
                     ->route($this->route . 'index')
