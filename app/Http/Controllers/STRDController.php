@@ -101,7 +101,7 @@ class STRDController extends Controller
                 $jatuh_tempo = Utility::isJatuhTempo($tgl_jatuh_tempo, $today);
 
                 if (!$jatuh_tempo) {
-                    return $sendttd . $today;
+                    return $sendttd;
                 } else {
                     if ($p->status_ttd == 3) {
                         return $filettd;
@@ -293,7 +293,7 @@ class STRDController extends Controller
         //* Tahap 2
         $invoiceId = null;
         $textQRIS = null;
-        if ($amount <= 10000000 && env('STATUS_QRIS') == 1) { //* Nominal QRIS maksimal 10 juta, jika lebih maka tidak terbuat
+        if ($amount <= 10000000) { //* Nominal QRIS maksimal 10 juta, jika lebih maka tidak terbuat
             //TODO: Get Token QRIS
             list($err, $errMsg, $tokenQRISBJB) = $this->qrisbjbres->getTokenQrisres();
             if ($err) {
