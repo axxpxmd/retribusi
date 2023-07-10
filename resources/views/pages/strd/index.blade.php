@@ -52,10 +52,11 @@
                             <div class="row mb-2">
                                 <label for="status_ttd" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">Status TTD</label>
                                 <div class="col-sm-8">
-                                    <select name="status_ttd" id="status_ttd" class="select2 form-control r-0 light s-12">
-                                        <option value=""></option>
-                                        <option value="0">Belum diTTD</option>
-                                        <option value="1">Sudah diTTD</option>
+                                    <select id="status_ttd" class="select2 form-control r-0 s-12">
+                                        <option value="">Semua</option>
+                                        <option value="0">Belum TTD</option>
+                                        <option value="3">Sudah TTD</option>
+                                        <option value="4">Proses TTD</option>
                                     </select>
                                 </div>
                             </div>

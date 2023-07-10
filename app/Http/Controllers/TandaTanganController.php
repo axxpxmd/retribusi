@@ -277,6 +277,7 @@ class TandaTanganController extends Controller
         $id  = $request->id;
         $tte = $request->tte;
         $nik = $request->nik;
+        
         $nip = $request->nip;
         $passphrase = $request->passphrase;
         $aurograf_cert_id = $request->aurograf_cert_id;

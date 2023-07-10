@@ -101,17 +101,17 @@ class STRDController extends Controller
                 $jatuh_tempo = Utility::isJatuhTempo($tgl_jatuh_tempo, $today);
 
                 if (!$jatuh_tempo) {
-                    return $sendttd;
-                } else {
                     if ($p->status_ttd == 3) {
                         return $filettd;
                     }
                     if ($p->status_ttd == 4) {
                         return '-';
                     }
-                    if ($p->status_ttd == 0) {
+                    if ($p->status_ttd == 0 || $p->status_ttd == 1 || $p->status_ttd == 2) {
                         return $sendttd;
                     }
+                } else {
+                    return '-';
                 }
             })
             ->editColumn('no_skrd', function ($p) {

@@ -319,7 +319,11 @@ class TransaksiOPD extends Model
         }
 
         if ($status_ttd != null) {
-            $data->where('status_ttd', $status_ttd);
+            if ($status_ttd == 0) {
+                $data->whereIn('status_ttd', [0,1,2]);
+            }else{
+                $data->where('status_ttd', $status_ttd);
+            }
         }
 
         switch ($status) {
