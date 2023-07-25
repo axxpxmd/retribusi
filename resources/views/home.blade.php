@@ -308,8 +308,8 @@
 <div class="modal fade" id="modalFilter" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content no-b">
-            <div class="modal-header">
-                <h5 class="modal-title font-weight-bold" id="exampleModalLabel">Filter Data</h5>
+            <div class="modal-header py-2 bg-light">
+                <p class="fs-14 m-0 text-uppercase font-weight-bold">Filter Data</p>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

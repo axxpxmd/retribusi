@@ -74,6 +74,9 @@
                     text: 'Pendapatan per Tahun'
                 }
             },
+            tooltip: {
+                pointFormat: 'Total : <b>Rp. {point.y}</b>'
+            },
             legend: {
                 enabled: false
             },
