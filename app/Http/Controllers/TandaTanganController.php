@@ -17,12 +17,13 @@ use Auth;
 use DataTables;
 use Carbon\Carbon;
 
+use App\Http\Services\AUROGRAF;
 use App\Http\Services\BSRE;
 use App\Http\Services\WhatsApp;
 use App\Http\Services\Iontentik;
 use App\Libraries\Html\Html_number;
 use App\Http\Controllers\Controller;
-use App\Http\Services\AUROGRAF;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Crypt;
@@ -184,7 +185,7 @@ class TandaTanganController extends Controller
 
         //* Get Sertifikat Aurograf
         $aurografCerts = [];
-        // list($err, $errMsg, $aurografCerts) = $this->aurograf->getListCert($nik);
+        list($err, $errMsg, $aurografCerts) = $this->aurograf->getListCert($nik);
 
         if (!$status_ttd) {
             //TODO: generate QR Code (TTD)

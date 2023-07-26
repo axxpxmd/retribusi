@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Carbon\Carbon;
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
 class TransaksiOPD extends Model
@@ -80,18 +79,16 @@ class TransaksiOPD extends Model
                 break;
             default:
                 $data = TransaksiOPD::select('id', 'id_opd', 'id_rincian_jenis_pendapatan', 'no_skrd', 'no_bayar', 'nm_wajib_pajak', 'id_jenis_pendapatan', 'tgl_skrd_awal', 'status_ttd', 'ntb', 'tgl_bayar', 'total_bayar', 'total_bayar_bjb', 'jumlah_bayar', 'status_bayar', 'chanel_bayar', 'rincian_jenis_pendapatan', 'tgl_skrd_akhir', 'tgl_skrd_awal')
-                    ->with(['jenis_pendapatan', 'opd', 'rincian_jenis']);
-                if ($opd_id != 0) {
-                    $data->where('id_opd', $opd_id);
-                }
-
-                if ($jenis_pendapatan_id != 0) {
-                    $data->where('id_jenis_pendapatan', $jenis_pendapatan_id);
-                }
-
-                if ($rincian_pendapatan_id != 0) {
-                    $data->where('id_rincian_jenis_pendapatan', $rincian_pendapatan_id);
-                }
+                    ->with(['jenis_pendapatan', 'opd', 'rincian_jenis'])
+                    ->when($opd_id != 0, function ($q) use ($opd_id) {
+                        $q->where('id_opd', $opd_id);
+                    })
+                    ->when($jenis_pendapatan_id != 0, function ($q) use ($jenis_pendapatan_id) {
+                        $q->where('id_jenis_pendapatan', $jenis_pendapatan_id);
+                    })
+                    ->when($rincian_pendapatan_id != 0, function ($q) use ($rincian_pendapatan_id) {
+                        $q->where('id_rincian_jenis_pendapatan', $rincian_pendapatan_id);
+                    });
 
                 if ($jenis == 1 || $jenis == 0) {
                     if ($status_bayar != 0 || $status_bayar != null) {
@@ -177,23 +174,19 @@ class TransaksiOPD extends Model
     {
         $data = TransaksiOPD::with(['jenis_pendapatan', 'opd', 'rincian_jenis'])->where('status_bayar', 0)
             ->where('status_ttd', 0)
-            ->orderBy('id', 'DESC');
-
-        if ($opd_id != 0) {
-            $data->where('id_opd', $opd_id);
-        }
-
-        if ($jenis_pendapatan_id) {
-            $data->where('id_jenis_pendapatan', $jenis_pendapatan_id);
-        }
-
-        if ($status_diskon != null) {
-            $data->where('status_diskon', $status_diskon);
-        }
-
-        if ($no_skrd != null) {
-            $data->where('no_skrd', 'like', '%' . $no_skrd . '%');
-        }
+            ->orderBy('id', 'DESC')
+            ->when($opd_id != 0, function ($q) use ($opd_id) {
+                $q->where('id_opd', $opd_id);
+            })
+            ->when($jenis_pendapatan_id, function ($q) use ($jenis_pendapatan_id) {
+                $q->where('id_jenis_pendapatan', $jenis_pendapatan_id);
+            })
+            ->when($status_diskon != null, function ($q) use ($status_diskon) {
+                $q->where('status_diskon', $status_diskon);
+            })
+            ->when($no_skrd != null, function ($q) use ($no_skrd) {
+                $q->where('no_skrd', 'like', '%' . $no_skrd . '%');
+            });
 
         if ($from != null ||  $to != null) {
             if ($from != null && $to == null) {
@@ -211,23 +204,19 @@ class TransaksiOPD extends Model
     {
         $data = TransaksiOPD::with(['jenis_pendapatan', 'opd', 'rincian_jenis'])->where('status_bayar', 0)
             ->where('status_ttd', 0)
-            ->orderBy('id', 'DESC');
-
-        if ($opd_id != 0) {
-            $data->where('id_opd', $opd_id);
-        }
-
-        if ($jenis_pendapatan_id) {
-            $data->where('id_jenis_pendapatan', $jenis_pendapatan_id);
-        }
-
-        if ($status_denda_filter != null) {
-            $data->where('status_denda', $status_denda_filter);
-        }
-
-        if ($no_skrd != null) {
-            $data->where('no_skrd', 'like', '%' . $no_skrd . '%');
-        }
+            ->orderBy('id', 'DESC')
+            ->when($opd_id != 0, function ($q) use ($opd_id) {
+                $q->where('id_opd', $opd_id);
+            })
+            ->when($jenis_pendapatan_id != 0, function ($q) use ($jenis_pendapatan_id) {
+                $q->where('id_jenis_pendapatan', $jenis_pendapatan_id);
+            })
+            ->when($status_denda_filter != null, function ($q) use ($status_denda_filter) {
+                $q->where('status_denda', $status_denda_filter);
+            })
+            ->when($no_skrd != null, function ($q) use ($no_skrd) {
+                $q->where('no_skrd', 'like', '%' . $no_skrd . '%');
+            });
 
         if ($from != null ||  $to != null) {
             if ($from != null && $to == null) {
@@ -308,20 +297,18 @@ class TransaksiOPD extends Model
         $data = TransaksiOPD::select('id', 'id_opd', 'no_skrd', 'no_bayar', 'nm_wajib_pajak', 'id_jenis_pendapatan', 'tgl_skrd_awal', 'tgl_skrd_akhir', 'status_ttd', 'jumlah_bayar', 'history_ttd', 'tgl_strd_akhir')
             ->with('opd', 'jenis_pendapatan')
             ->where('status_bayar', 0)
-            ->where('tgl_skrd_akhir', '<', $date);
-
-        if ($opd_id != 0) {
-            $data->where('id_opd', $opd_id);
-        }
-
-        if ($no_skrd != null) {
-            $data->where('no_skrd', 'like', '%' . $no_skrd . '%');
-        }
+            ->where('tgl_skrd_akhir', '<', $date)
+            ->when($opd_id != 0, function ($q) use ($opd_id) {
+                $q->where('id_opd', $opd_id);
+            })
+            ->when($no_skrd != null, function ($q) use ($no_skrd) {
+                $q->where('no_skrd', 'like', '%' . $no_skrd . '%');
+            });
 
         if ($status_ttd != null) {
             if ($status_ttd == 0) {
-                $data->whereIn('status_ttd', [0,1,2]);
-            }else{
+                $data->whereIn('status_ttd', [0, 1, 2]);
+            } else {
                 $data->where('status_ttd', $status_ttd);
             }
         }
@@ -354,19 +341,16 @@ class TransaksiOPD extends Model
         $date = $now->format('Y-m-d');
 
         $data = TransaksiOPD::select('id', 'id_opd', 'no_skrd', 'no_bayar', 'nm_wajib_pajak', 'id_jenis_pendapatan', 'tgl_skrd_awal', 'status_ttd', 'ntb', 'tgl_bayar', 'total_bayar_bjb', 'status_bayar', 'chanel_bayar')
-            ->with('opd', 'jenis_pendapatan');
-
-        if ($opd_id != 0) {
-            $data->where('id_opd', $opd_id);
-        }
-
-        if ($status_bayar != null) {
-            $data->where('status_bayar', $status_bayar);
-        }
-
-        if ($no_bayar != null) {
-            $data->where('no_bayar', 'like', '%' . $no_bayar . '%');
-        }
+            ->with('opd', 'jenis_pendapatan')
+            ->when($opd_id != 0, function ($q) use ($opd_id) {
+                $q->where('id_opd', $opd_id);
+            })
+            ->when($status_bayar != null, function ($q) use ($status_bayar) {
+                $q->where('status_bayar', $status_bayar);
+            })
+            ->when($no_bayar != null, function ($q) use ($no_bayar) {
+                $q->where('no_bayar', 'like', '%' . $no_bayar . '%');
+            });
 
         switch ($status) {
             case '1':
@@ -406,31 +390,22 @@ class TransaksiOPD extends Model
     // 
     public static function queryTandaTangan($belum_ttd, $from, $to, $opd_id, $no_skrd, $status_ttd, $nip)
     {
-        $data = TransaksiOPD::with(['jenis_pendapatan', 'opd', 'rincian_jenis'])->whereNotIn('status_ttd', [0]);
-
-        if ($nip) {
-            $data->where('nip_ttd', $nip);
-        }
-
-        if ($opd_id != 0) {
-            $data->where('id_opd', $opd_id);
-        }
-
-        if ($no_skrd != null) {
-            $data->where('no_skrd', 'like', '%' . $no_skrd . '%');
-        }
-
-        if ($status_ttd == 2) {
-            $data->whereIn('status_ttd', [0, 2, 4]);
-        }
-
-        if ($status_ttd == 1) {
-            $data->whereIn('status_ttd', [1, 3]);
-        }
-
-        if ($status_ttd == null) {
-            $data->whereIn('status_ttd', [0, 2, 4]);
-        }
+        $data = TransaksiOPD::with(['jenis_pendapatan', 'opd', 'rincian_jenis'])->whereNotIn('status_ttd', [0])
+            ->when($nip, function ($q) use ($nip) {
+                $q->where('nip_ttd', $nip);
+            })
+            ->when($opd_id != 0, function ($q) use ($opd_id) {
+                $q->where('id_opd', $opd_id);
+            })
+            ->when($no_skrd != null, function ($q) use ($no_skrd) {
+                $q->where('no_skrd', 'like', '%' . $no_skrd . '%');
+            })
+            ->when($status_ttd == 2 || $status_ttd == null, function ($q) {
+                $q->whereIn('status_ttd', [0, 2, 4]);
+            })
+            ->when($status_ttd == 1, function ($q) {
+                $q->whereIn('status_ttd', [1, 3]);
+            });
 
         if ($belum_ttd != 1) {
             if ($from != null ||  $to != null) {
