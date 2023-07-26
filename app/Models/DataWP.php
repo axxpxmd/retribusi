@@ -34,22 +34,29 @@ class DataWP extends Model
         return $this->belongsTo(Kecamatan::class, 'kecamatan_id');
     }
 
-    public function totalRetribusi()
+    public function riwayatRetribusi($data)
     {
-        return $this->hasMany(TransaksiOPD::class, 'nm_wajib_pajak', 'nm_wajib_pajak');
+        return TransaksiOPD::where('id_opd', $data->id_opd)
+            ->where('id_jenis_pendapatan', $data->id_jenis_pendapatan)
+            ->where('id_rincian_jenis_pendapatan', $data->id_rincian_jenis_pendapatan)
+            ->where('kecamatan_id', $data->kecamatan_id)
+            ->where('kelurahan_id', $data->kelurahan_id)
+            ->where('nm_wajib_pajak', $data->nm_wajib_pajak)
+            ->orderBy('tgl_skrd_awal', 'ASC')
+            ->get();
     }
 
     public static function queryTable($opd_id, $jenis_pendapatan_id)
     {
-        $data = DataWP::with(['jenis_pendapatan', 'rincian_jenis', 'opd'])->orderBy('id', 'DESC');
-
-        if ($opd_id != 0) {
-            $data->where('id_opd', $opd_id);
-        }
-
-        if ($jenis_pendapatan_id) {
-            $data->where('id_jenis_pendapatan', $jenis_pendapatan_id);
-        }
+        $data = DataWP::select('id', 'id_opd', 'id_jenis_pendapatan', 'nm_wajib_pajak', 'no_telp', 'email')
+            ->with(['jenis_pendapatan', 'opd'])
+            ->when($opd_id != 0, function ($q) use ($opd_id) {
+                $q->where('id_opd', $opd_id);
+            })
+            ->when($jenis_pendapatan_id, function ($q) use ($jenis_pendapatan_id) {
+                $q->where('id_jenis_pendapatan', $jenis_pendapatan_id);
+            })
+            ->orderBy('id', 'DESC');
 
         return $data->get();
     }

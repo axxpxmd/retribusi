@@ -8,7 +8,7 @@
 </figure>
 @push('scriptDashboard')
 <script type="text/javascript">
-    var parents = <?php echo $dataPieChartChanelBayar?>;
+    var data = <?php echo $dataPieChartChanelBayar?>;
 
     Highcharts.chart('pieChartChanelBayar', {
         chart: {
@@ -34,7 +34,7 @@
             style: {
                 fontSize: '75%'
             },
-            pointFormat: '<b>{point.name}</b>: <b>{point.y}</b>'
+            pointFormat: 'Total Data: <b>{point.y}</b>'
         },
         plotOptions: {
             pie: {
@@ -47,7 +47,7 @@
                     overflow: "none",
                     format: '<b>{point.name}</b>: {point.percentage:.1f} %',
                     style: {
-                        fontSize: '68%'
+                        fontSize: '60%'
                     }
                 },
                 center: ["50%", "50%"]
@@ -55,7 +55,7 @@
         },
         series: [{
             colorByPoint: true,
-            data: parents
+            data: data
         }]
     });
 </script>

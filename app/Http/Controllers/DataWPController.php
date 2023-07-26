@@ -46,11 +46,11 @@ class DataWPController extends Controller
         $opd_id = Auth::user()->pengguna->opd_id;
         $opdArray = OPDJenisPendapatan::select('id_opd')->get()->toArray();
 
-        if ($opd_id == 0) {
-            $opds = OPD::select('id', 'n_opd')->whereIn('id', $opdArray)->get();
-        } else {
-            $opds = OPD::where('id', $opd_id)->whereIn('id', $opdArray)->get();
-        }
+        $opds = OPD::select('id', 'n_opd')
+            ->when($opd_id != 0, function ($q) use ($opd_id) {
+                $q->where('id', $opd_id);
+            })
+            ->whereIn('id', $opdArray)->get();
 
         return view($this->view . 'index', compact(
             'route',
@@ -89,7 +89,7 @@ class DataWPController extends Controller
                 return $p->jenis_pendapatan->jenis_pendapatan;
             })
             ->addIndexColumn()
-            ->rawColumns(['action', 'nm_wajib_pajak', 'jumlah_skrd'])
+            ->rawColumns(['action', 'nm_wajib_pajak'])
             ->toJson();
     }
 
@@ -102,10 +102,13 @@ class DataWPController extends Controller
 
         $data = DataWP::find($id);
 
+        $riwayatRetribusi = $data->riwayatRetribusi($data);
+
         return view($this->view . 'show', compact(
             'route',
             'title',
-            'data'
+            'data',
+            'riwayatRetribusi'
         ));
     }
 

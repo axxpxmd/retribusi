@@ -51,6 +51,14 @@
                                         <label class="col-md-8 s-12">{{ $data->nm_wajib_pajak }}</label>
                                     </div>
                                     <div class="row">
+                                        <label class="col-md-2 text-right s-12 font-weight-bold">Email :</label>
+                                        <label class="col-md-8 s-12">{{ $data->email }}</label>
+                                    </div>
+                                    <div class="row">
+                                        <label class="col-md-2 text-right s-12 font-weight-bold">No Telp :</label>
+                                        <label class="col-md-8 s-12">{{ $data->no_telp }}</label>
+                                    </div>
+                                    <div class="row">
                                         <label class="col-md-2 text-right s-12 font-weight-bold">Alamat :</label>
                                         <label class="col-md-8 s-12">{{ $data->alamat_wp }}</label>
                                     </div>
@@ -66,32 +74,40 @@
                                         <label class="col-md-2 text-right s-12 font-weight-bold">Kelurahan :</label>
                                         <label class="col-md-8 s-12">{{ $data->kelurahan->n_kelurahan }}</label>
                                     </div>
-                                    <div class="row">
-                                        <label class="col-md-2 text-right s-12 font-weight-bold">Total Retribusi :</label>
-                                        <label class="col-md-8 s-12">{{ $data->totalRetribusi->count() }} Retribusi</label>
-                                    </div>
-                                    <div class="row">
-                                        <label class="col-md-2 text-right s-12"></label>
-                                        <label class="col-md-8 s-12">
-                                            @foreach ($data->totalRetribusi as $i)
-                                                <li class="mt-2">
-                                                    <a target="_blank" href="{{ route('sts.show', Crypt::encrypt($i->id)) }}">{{ $i->no_skrd }}</a>
-                                                    &nbsp;&nbsp; ( {{ Carbon\Carbon::createFromFormat('Y-m-d', $i->tgl_skrd_awal)->format('d F Y') }} ) &nbsp;&nbsp;
-                                                    @if ($i->status_bayar)
-                                                        <span class="badge badge-success">Sudah Bayar</span>
-                                                    @else
-                                                        <span class="badge badge-danger">Belum Bayar</span>
-                                                    @endif
-                                                </li>
-                                            @endforeach
-                                        </label>
-                                    </div>
                                     <div class="row mt-2">
                                         <label class="col-md-2 text-right s-12"></label>
                                         <label class="col-md-3 s-12">
                                             <a href="{{ route('skrd.create', array('data_wp_id' =>  Crypt::encrypt($data->id))) }}" class="btn btn-sm btn-primary"><i class="icon-arrow_forward mr-2"></i>Buat SKRD</a>
                                         </label>
                                     </div> 
+                                    <hr>
+                                    <div class="container col-md-4">
+                                        <p style="border-radius: 5px; background: #F7F7F7" class="font-weight-bold p-1 m-0"><i class="icon icon-document-file-pdf mr-2"></i>Riwayat Retribusi</p>
+                                        <table class="table table-bordered table-striped mt-2">
+                                            <thead>
+                                                <th class="text-center">#</th>
+                                                <th>No SKRD</th>
+                                                <th>Tanggal SKRD</th>
+                                                <th>Status Bayar</th>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($riwayatRetribusi as $key => $i)
+                                                    <tr>
+                                                        <td class="text-center">{{ $key+1 }}</td>
+                                                        <td> <a target="_blank" href="{{ route('sts.show', Crypt::encrypt($i->id)) }}">{{ $i->no_skrd }}</a></td>
+                                                        <td class="text-center">{{ Carbon\Carbon::createFromFormat('Y-m-d', $i->tgl_skrd_awal)->format('d F Y') }}</td>
+                                                        <td class="text-center">
+                                                            @if ($i->status_bayar)
+                                                                <span class="badge badge-success">Sudah Bayar</span>
+                                                            @else
+                                                                <span class="badge badge-danger">Belum Bayar</span>
+                                                            @endif
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>

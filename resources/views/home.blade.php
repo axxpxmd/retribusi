@@ -43,7 +43,7 @@
                     <div class="card-body p-2">
                         <div class="row">
                             <div class="col-auto mb-5-m">
-                                <a href="#" data-toggle="modal" data-target="#modalFilter" class="btn btn-sm btn-success fs-14">Pilih Filter<i class="icon-filter_list ml-2"></i></a>
+                                <a href="#" data-toggle="modal" data-target="#modalFilter" class="btn btn-sm btn-outline-success fs-14">Pilih Filter<i class="icon-filter_list ml-2"></i></a>
                             </div>
                             <div class="col-auto mt-2">
                                 <div class="row">

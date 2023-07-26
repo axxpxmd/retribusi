@@ -67,8 +67,9 @@
                                             <th>No</th>
                                             <th>Nama WP</th>
                                             <th>Nama Dinas</th>
-                                            <th>Jenis Retribusi</th>
-                                            <th>Alamat WP</th>
+                                            <th>Jenis Pendapatan</th>
+                                            <th>No Telp</th>
+                                            <th>Email</th>
                                             <th></th>
                                         </thead>
                                         <tbody></tbody>
@@ -110,8 +111,8 @@
             {data: 'nm_wajib_pajak', name: 'nm_wajib_pajak'},
             {data: 'id_opd', name: 'id_opd'},
             {data: 'id_jenis_pendapatan', name: 'id_jenis_pendapatan'},
-            {data: 'alamat_wp', name: 'alamat_wp'},
-            // {data: 'jumlah_skrd', name: 'jumlah_skrd'},
+            {data: 'no_telp', name: 'no_telp'},
+            {data: 'email', name: 'email'},
             {data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center'}
         ]
     });
