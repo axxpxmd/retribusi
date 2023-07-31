@@ -45,12 +45,7 @@ class DataWPController extends Controller
 
         $opd_id = Auth::user()->pengguna->opd_id;
         $opdArray = OPDJenisPendapatan::select('id_opd')->get()->toArray();
-
-        $opds = OPD::select('id', 'n_opd')
-            ->when($opd_id != 0, function ($q) use ($opd_id) {
-                $q->where('id', $opd_id);
-            })
-            ->whereIn('id', $opdArray)->get();
+        $opds     = OPD::getAll($opdArray, $opd_id);
 
         return view($this->view . 'index', compact(
             'route',

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BookingController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -131,6 +132,9 @@ Route::group(['middleware' => ['auth', 'checksinglesession']], function () {
 
     Route::get('log', 'LogController@index')->name('log.index');
     Route::get('log/{id}', 'LogController@show')->name('log.show');
+
+    Route::resource('booking', 'BookingController');
+    Route::post('booking/api', 'BookingController@api')->name('booking.api');
 });
 
 Route::get('sts/report/{id}', 'UtilityController@printDataTTD')->name('sendSTS');
