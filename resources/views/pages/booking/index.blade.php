@@ -40,6 +40,25 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="row mb-2">
+                                <label for="no_skrd" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">No Booking</label>
+                                <div class="col-sm-8">
+                                    <input type="text" id="no_skrd" class="form-control r-0 s-12 col-md-12" autocomplete="off"/>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <label class="col-form-label s-12 col-md-2 text-right font-weight-bolder">Tanggal SKRD</label>
+                                <div class="col-sm-8">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <input type="date" placeholder="MM/DD/YYYY" value="{{ $today }}" id="from" class="form-control light r-0 s-12 mb-5-m" autocomplete="off"/>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="date" placeholder="MM/DD/YYYY" value="{{ $today }}" id="to" class="form-control light r-0 s-12" autocomplete="off"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="row mb-4">
                                 <div class="col-sm-2"></div>
                                 <div class="col-sm-8">

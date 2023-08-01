@@ -133,8 +133,14 @@ Route::group(['middleware' => ['auth', 'checksinglesession']], function () {
     Route::get('log', 'LogController@index')->name('log.index');
     Route::get('log/{id}', 'LogController@show')->name('log.show');
 
-    Route::resource('booking', 'BookingController');
+    Route::get('booking', 'BookingController@index')->name('booking.index');
     Route::post('booking/api', 'BookingController@api')->name('booking.api');
+    Route::get('booking/cari-no-booking', 'BookingController@searchNoBooking')->name('booking.search');
+
+    Route::get('booking/kuota-booking', 'BookingController@kuotaBooking')->name('booking.kuotaBooking');
+    Route::post('booking/api-kuota-booking', 'BookingController@apiKuotaBooking')->name('booking.apiKuotaBooking');
+    Route::get('booking/get-detail-kuota-booking/{id}', 'BookingController@getDetailKuotaBooking')->name('booking.getDetailKuotaBooking');
+    Route::patch('booking/update-kuota-booking/{id}', 'BookingController@updatekuotaBooking')->name('booking.updatekuotaBooking');
 });
 
 Route::get('sts/report/{id}', 'UtilityController@printDataTTD')->name('sendSTS');

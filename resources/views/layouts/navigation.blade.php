@@ -89,7 +89,7 @@
     <!-- Booking -->
     <li class="header light"><strong>MASTER BOOKING</strong></li>
     <li class="no-b">
-        <a href="{{ route('datawp.index') }}">
+        <a href="{{ route('booking.kuotaBooking') }}">
             <i class="icon icon-document-list amber-text s-18"></i>
             <span>Kuota Booking</span>
         </a>
@@ -101,7 +101,7 @@
         </a>
     </li>
     <li class="no-b">
-        <a href="{{ route('datawp.index') }}">
+        <a href="{{ route('booking.search') }}">
             <i class="icon icon-document-list text-success s-18"></i>
             <span>Cari No Booking</span>
         </a>

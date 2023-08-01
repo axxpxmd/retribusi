@@ -48,7 +48,7 @@
                             <div class="row mb-2">
                                 <label for="no_skrd" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">NO SKRD</label>
                                 <div class="col-sm-8">
-                                    <input type="text" id="no_skrd" class="form-control r-0 s-12 col-md-12" autocomplete="off" required/>
+                                    <input type="text" id="no_skrd" class="form-control r-0 s-12 col-md-12" autocomplete="off"/>
                                 </div>
                             </div>
                             <div class="row mb-2">
