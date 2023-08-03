@@ -309,8 +309,8 @@
                 </td>
                 <td class="a">
                     <p class="m-l-5 m-b-0">{{ $data->jenis_pendapatan->jenis_pendapatan }}</p>
-                    <p class="m-l-15 m-b-0 m-t-0">{{ $data->rincian_jenis != null ? $data->rincian_jenis->rincian_pendapatan : '-' }}</p>
-                    <p class="m-l-25 m-t-0">{{ $data->uraian_retribusi }}</p>
+                    <p class="m-l-15 m-b-0 m-t-0 m-l-10">{{ $data->rincian_jenis != null ? $data->rincian_jenis->rincian_pendapatan : '-' }}</p>
+                    <p class="m-l-25 m-t-0 m-l-15">{{ $data->uraian_retribusi }}</p>
                 </td>
                 <td class="a">
                     <p class="m-l-5 text-right m-r-10">@currency($data->jumlah_bayar),-</p>

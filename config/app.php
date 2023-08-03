@@ -135,6 +135,9 @@ return [
     'aurografapi_server' => env('AUROGRAFAPI_IPSERVER'),
     'aurograf_bearer' => env('AUROGRAFAPI_BEARER'),
 
+    // BSRE
+    'bsre_ip' => env('BSRE_IP'),
+
     // Virtual Account BJB
     'cin_bjb' => env('CIN_BJB'),
     'ip_api_bjb' => env('IP_API_BJB'),

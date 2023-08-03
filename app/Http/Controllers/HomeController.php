@@ -53,7 +53,7 @@ class HomeController extends Controller
         $targetPendapatan = JenisPendapatan::select(
             DB::raw("COUNT(tmtransaksi_opd.id) as jumlah"),
             DB::raw("SUM(tmtransaksi_opd.total_bayar) as diterima"),
-            DB::raw("SUM(tmtransaksi_opd.total_bayar_bjb-tmtransaksi_opd.jumlah_bayar) as totalDenda"),
+            DB::raw("SUM(tmtransaksi_opd.total_bayar_bjb - tmtransaksi_opd.jumlah_bayar) as totalDenda"),
             DB::raw("round((SUM(tmtransaksi_opd.total_bayar) / target_pendapatan * 100), 2) as realisasi"),
             'denda',
             'jenis_pendapatan',
@@ -173,9 +173,9 @@ class HomeController extends Controller
         $tandaTanganToday = TransaksiOPD::when($opd_id != 0, function ($q) use ($opd_id) {
             $q->where('tmtransaksi_opd.id_opd', $opd_id);
         })->where('tgl_ttd', $date)
-            ->when($nip, function($q) use($nip) {
+            ->when($nip, function ($q) use ($nip) {
                 $q->where('nip_ttd', $nip);
-            }) 
+            })
             ->whereIn('status_ttd', [2, 4])->count();
 
         //* Diagram Chart (Role: super-admin)

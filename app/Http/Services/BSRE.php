@@ -25,7 +25,7 @@ class BSRE
             'location'   => 'Tangerang Selatan'
         ];
 
-        $url = 'http://192.168.150.79/';
+        $url = config('app.bsre_ip');
         $res = Http::attach('file', $file, 'myfile.pdf')
             ->attach('imageTTD', $qrimage, 'myimg.png')
             ->withBasicAuth('esign', 'qwerty')
