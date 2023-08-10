@@ -90,7 +90,7 @@
     <li class="header light"><strong>MASTER BOOKING</strong></li>
     <li class="no-b">
         <a href="{{ route('booking.kuotaBooking') }}">
-            <i class="icon icon-document-list amber-text s-18"></i>
+            <i class="icon icon-document-list text-primary s-18"></i>
             <span>Kuota Booking</span>
         </a>
     </li>
@@ -104,6 +104,21 @@
         <a href="{{ route('booking.search') }}">
             <i class="icon icon-document-list text-success s-18"></i>
             <span>Cari No Booking</span>
+        </a>
+    </li>
+ 
+    <!-- Batal Bayar -->
+    <li class="header light"><strong>MASTER BATAL SKRD</strong></li>
+    <li class="no-b">
+        <a href="{{ route('batalSkrd.cari') }}">
+            <i class="icon icon-document-list text-primary s-18"></i>
+            <span>Cari No SKRD</span>
+        </a>
+    </li>
+    <li class="no-b">
+        <a href="{{ route('batalSkrd.index') }}">
+            <i class="icon icon-document-list text-danger s-18"></i>
+            <span>Data Batal SKRD</span>
         </a>
     </li>
 

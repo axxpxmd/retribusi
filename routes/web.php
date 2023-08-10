@@ -140,6 +140,11 @@ Route::group(['middleware' => ['auth', 'checksinglesession']], function () {
     Route::post('booking/api-kuota-booking', 'BookingController@apiKuotaBooking')->name('booking.apiKuotaBooking');
     Route::get('booking/get-detail-kuota-booking/{id}', 'BookingController@getDetailKuotaBooking')->name('booking.getDetailKuotaBooking');
     Route::patch('booking/update-kuota-booking/{id}', 'BookingController@updatekuotaBooking')->name('booking.updatekuotaBooking');
+
+    Route::get('batal-skrd/cari', 'BatalSKRDController@cari')->name('batalSkrd.cari');
+    Route::get('batal-skrd', 'BatalSKRDController@index')->name('batalSkrd.index');
+    Route::post('batal-skrd/api', 'BatalSKRDController@api')->name('batalSkrd.api');
+    Route::get('batal-skrd/{id}', 'BatalSKRDController@show')->name('batalSkrd.show');
 });
 
 Route::get('sts/report/{id}', 'UtilityController@printDataTTD')->name('sendSTS');

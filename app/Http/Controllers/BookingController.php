@@ -18,9 +18,9 @@ use App\Models\OPDJenisPendapatan;
 
 class BookingController extends Controller
 {
-    protected $route  = 'booking.';
-    protected $title  = 'Booking';
-    protected $view   = 'pages.booking.';
+    protected $route = 'booking.';
+    protected $title = 'Booking';
+    protected $view  = 'pages.booking.';
 
     public function index()
     {
