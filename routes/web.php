@@ -143,7 +143,6 @@ Route::group(['middleware' => ['auth', 'checksinglesession']], function () {
 
     Route::get('batal-skrd/cari', 'BatalSKRDController@cari')->name('batalSkrd.cari');
     Route::get('batal-skrd', 'BatalSKRDController@index')->name('batalSkrd.index');
-    Route::post('batal-skrd/api', 'BatalSKRDController@api')->name('batalSkrd.api');
     Route::get('batal-skrd/{id}', 'BatalSKRDController@show')->name('batalSkrd.show');
 });
 

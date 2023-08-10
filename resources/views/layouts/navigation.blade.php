@@ -118,7 +118,7 @@
     <li class="no-b">
         <a href="{{ route('batalSkrd.index') }}">
             <i class="icon icon-document-list text-danger s-18"></i>
-            <span>Data Batal SKRD</span>
+            <span>Batal SKRD</span>
         </a>
     </li>
 

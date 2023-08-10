@@ -761,7 +761,7 @@ class SKRDController extends Controller
         $data->delete();
 
         return response()->json([
-            'message' => 'Data ' . $this->title . ' berhasil dihapus.'
+            'message' => 'Data ' . $this->title . ' berhasil dibatalkan.'
         ]);
     }
 
