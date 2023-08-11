@@ -86,41 +86,55 @@
         </li>
     @endcan
 
-    <!-- Booking -->
-    <li class="header light"><strong>MASTER BOOKING</strong></li>
-    <li class="no-b">
-        <a href="{{ route('booking.kuotaBooking') }}">
-            <i class="icon icon-document-list text-primary s-18"></i>
-            <span>Kuota Booking</span>
-        </a>
-    </li>
-    <li class="no-b">
-        <a href="{{ route('booking.index') }}">
-            <i class="icon icon-document-list purple-text s-18"></i>
-            <span>Data Booking</span>
-        </a>
-    </li>
-    <li class="no-b">
-        <a href="{{ route('booking.search') }}">
-            <i class="icon icon-document-list text-success s-18"></i>
-            <span>Cari No Booking</span>
-        </a>
-    </li>
+    <!-- Permission : Kuota Booking|Data Booking|Cari No Booking -->
+    @canany(['Kuota Booking', 'Data Booking', 'Cari No Booking'])
+        <li class="header light"><strong>MASTER BOOKING</strong></li>
+    @endcanany
+    @can('Kuota Booking')
+        <li class="no-b">
+            <a href="{{ route('booking.kuotaBooking') }}">
+                <i class="icon icon-document-list text-primary s-18"></i>
+                <span>Kuota Booking</span>
+            </a>
+        </li>
+    @endcan
+    @can('Data Booking')
+        <li class="no-b">
+            <a href="{{ route('booking.index') }}">
+                <i class="icon icon-document-list purple-text s-18"></i>
+                <span>Data Booking</span>
+            </a>
+        </li>
+    @endcan
+    @can('Cari No Booking')
+        <li class="no-b">
+            <a href="{{ route('booking.search') }}">
+                <i class="icon icon-document-list text-success s-18"></i>
+                <span>Cari No Booking</span>
+            </a>
+        </li>
+    @endcan
  
-    <!-- Batal Bayar -->
-    <li class="header light"><strong>MASTER BATAL SKRD</strong></li>
-    <li class="no-b">
-        <a href="{{ route('batalSkrd.cari') }}">
-            <i class="icon icon-document-list text-primary s-18"></i>
-            <span>Cari No SKRD</span>
-        </a>
-    </li>
-    <li class="no-b">
-        <a href="{{ route('batalSkrd.index') }}">
-            <i class="icon icon-document-list text-danger s-18"></i>
-            <span>Batal SKRD</span>
-        </a>
-    </li>
+    <!-- Permission : Cari No SKRD|Batal SKRD -->
+    @canany(['Cari No SKRD', 'Batal SKRD'])
+        <li class="header light"><strong>MASTER BATAL SKRD</strong></li>
+    @endcanany
+    @can('Cari No SKRD')
+        <li class="no-b">
+            <a href="{{ route('batalSkrd.cari') }}">
+                <i class="icon icon-document-list text-primary s-18"></i>
+                <span>Cari No SKRD</span>
+            </a>
+        </li>
+    @endcan
+    @can('Batal SKRD')
+        <li class="no-b">
+            <a href="{{ route('batalSkrd.index') }}">
+                <i class="icon icon-document-list text-danger s-18"></i>
+                <span>Batal SKRD</span>
+            </a>
+        </li>
+    @endcan
 
     <!-- Permission : Data WP|SKRD|STS|Diskon|Denda|Laporan -->
     @canany(['Data WP', 'SKRD', 'STS', 'Diskon', 'Denda', 'Laporan', 'Tanda Tangan'])
