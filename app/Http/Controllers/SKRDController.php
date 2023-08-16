@@ -20,6 +20,7 @@ use Carbon\Carbon;
 
 use App\Libraries\VABJBRes;
 use App\Libraries\QRISBJBRes;
+// use Explorin\Tebot\Service\Tebot; 
 use App\Libraries\GenerateNumber;
 use App\Http\Controllers\Controller;
 
@@ -40,6 +41,7 @@ use App\Models\TransaksiDelete;
 use App\Models\JenisPendapatan;
 use App\Models\OPDJenisPendapatan;
 use App\Models\RincianJenisPendapatan;
+use Explorin\Tebot\Services\Tebot;
 
 class SKRDController extends Controller
 {
@@ -350,10 +352,16 @@ class SKRDController extends Controller
             'no_skrd'  => $no_skrd,
             'no_bayar' => $no_bayar
         ];
-        Validator::make($checkGenerate, [
+        
+        $validator = Validator::make($checkGenerate, [
             'no_skrd'  => 'required|unique:tmtransaksi_opd,no_skrd',
             'no_bayar' => 'required|unique:tmtransaksi_opd,no_bayar',
-        ])->validate();
+        ]);
+
+        if ($validator->fails()) {
+            Tebot::alert('Terdapat No SKRD duplikat', $checkGenerate)->channel('check_no_skrd');
+            $validator->validate();
+        } 
 
         //* Tahap 2
         DB::beginTransaction(); //* DB Transaction Begin

@@ -210,6 +210,7 @@ return [
         Yajra\DataTables\DataTablesServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
         SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
+        Explorin\Tebot\TebotServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -272,6 +273,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
+        'Tebot' => \Explorin\Tebot\Facades\TebotFacade::class,
     ],
 
 ];

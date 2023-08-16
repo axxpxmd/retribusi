@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "21c5f57b8bfa5625a12c2a5af1d7eb36",
+    "content-hash": "08d119f5cdf7b147135e72c6b6a48833",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -662,6 +662,50 @@
                 }
             ],
             "time": "2020-12-29T14:50:06+00:00"
+        },
+        {
+            "name": "explorin/tebot",
+            "version": "v1.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/imamnurhy/explorin-tebot.git",
+                "reference": "e422d8edf9912a0672eb22dcb52526f0b8340680"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/imamnurhy/explorin-tebot/zipball/e422d8edf9912a0672eb22dcb52526f0b8340680",
+                "reference": "e422d8edf9912a0672eb22dcb52526f0b8340680",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^6.3.1|^7.0.1",
+                "php": "^7.2.5|^8.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/helpers/helpers.php"
+                ],
+                "psr-4": {
+                    "Explorin\\Tebot\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Imam Nurhy",
+                    "email": "imamnurhy@gmail.com"
+                }
+            ],
+            "description": "Bot for notification log",
+            "support": {
+                "issues": "https://github.com/imamnurhy/explorin-tebot/issues",
+                "source": "https://github.com/imamnurhy/explorin-tebot/tree/v1.0.3"
+            },
+            "time": "2023-08-01T05:33:09+00:00"
         },
         {
             "name": "ezyang/htmlpurifier",
@@ -9186,5 +9230,5 @@
         "php": "^7.2.5"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.3.0"
 }
