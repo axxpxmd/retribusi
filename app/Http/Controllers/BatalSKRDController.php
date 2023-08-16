@@ -158,6 +158,10 @@ class BatalSKRDController extends Controller
 
         $data = TransaksiOPD::find($id);
 
+        if (!$data) {
+            $data = TransaksiDelete::find($id);
+        }
+
         $status_ttd = $data->status_ttd;
         $status_ttd = Utility::checkStatusTTD($status_ttd);
 
