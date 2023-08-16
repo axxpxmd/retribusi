@@ -275,7 +275,7 @@
             $("#kecamatan_id").prop("disabled", false);
             $("#kelurahan_id").prop("disabled", false);
             $("#id_rincian_jenis_pendapatan").prop("disabled", false);
-            // $('#action').attr('disabled', true);
+            $('#action').attr('disabled', true);
             $('#loading').modal('show');
             url = "{{ route($route.'store') }}";
             $.ajax({
@@ -286,25 +286,25 @@
                 processData: false,
                 success : function(data) {
                     $('#loading').modal('toggle');
-                    // $.confirm({
-                    //     title: 'Success',
-                    //     content: data.message,
-                    //     icon: 'icon icon-check', 
-                    //     theme: 'modern',
-                    //     animation: 'scale',
-                    //     autoClose: 'ok|3000',
-                    //     type: 'green',
-                    //     buttons: {
-                    //         ok: {
-                    //             text: "ok!",
-                    //             btnClass: 'btn-primary',
-                    //             keys: ['enter'],
-                    //             action: function () {
-                    //                 window.location.href = "{{ route('skrd.index')}}";
-                    //             }
-                    //         }
-                    //     }
-                    // });
+                    $.confirm({
+                        title: 'Success',
+                        content: data.message,
+                        icon: 'icon icon-check', 
+                        theme: 'modern',
+                        animation: 'scale',
+                        autoClose: 'ok|3000',
+                        type: 'green',
+                        buttons: {
+                            ok: {
+                                text: "ok!",
+                                btnClass: 'btn-primary',
+                                keys: ['enter'],
+                                action: function () {
+                                    window.location.href = "{{ route('skrd.index')}}";
+                                }
+                            }
+                        }
+                    });
                 },
                 error : function(data){
                     $('#loading').modal('toggle');
