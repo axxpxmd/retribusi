@@ -41,15 +41,15 @@
                                                 <label class="col-md-8 s-12">{{ $data->opd->n_opd }}</label>
                                             </div>
                                             <div class="row">
-                                                <label class="col-md-4 text-right font-weight-bold s-12"><strong>Jenis Pendapatan:</strong></label>
+                                                <label class="col-md-4 text-right font-weight-bold s-12"><strong>Jenis Pendapatan :</strong></label>
                                                 <label class="col-md-8 s-12">{{ $data->jenis_pendapatan->jenis_pendapatan }}</label>
                                             </div>  
                                             <div class="row">
-                                                <label class="col-md-4 text-right font-weight-bold s-12"><strong>Rincian Jenis Retribusi:</strong></label>
+                                                <label class="col-md-4 text-right font-weight-bold s-12"><strong>Rincian Jenis Retribusi :</strong></label>
                                                 <label class="col-md-8 s-12">{{ $data->rincian_jenis != null ? $data->rincian_jenis->rincian_pendapatan : '-' }}</label>
                                             </div>
                                             <div class="row">
-                                                <label class="col-md-4 text-right font-weight-bold s-12"><strong>Uraian Retribusi:</strong></label>
+                                                <label class="col-md-4 text-right font-weight-bold s-12"><strong>Uraian Retribusi :</strong></label>
                                                 <label class="col-md-8 s-12">{{ $data->uraian_retribusi }}</label>
                                             </div>
                                         </div>
@@ -84,11 +84,11 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="row">
-                                                <label class="col-md-4 text-right font-weight-bold s-12"><strong>Nomor Daftar:</strong></label>
+                                                <label class="col-md-4 text-right font-weight-bold s-12"><strong>Nomor Daftar :</strong></label>
                                                 <label class="col-md-8 s-12">{{ $data->nmr_daftar }}</label>
                                             </div>
                                             <div class="row">
-                                                <label class="col-md-4 text-right font-weight-bold s-12"><strong>Nama Wajib Retribusi:</strong></label>
+                                                <label class="col-md-4 text-right font-weight-bold s-12"><strong>Nama Wajib Retribusi :</strong></label>
                                                 <label class="col-md-8 s-12">{{ $data->nm_wajib_pajak }}</label>
                                             </div>
                                             <div class="row">
@@ -108,7 +108,7 @@
                                                 <label class="col-md-8 s-12">{{ $data->lokasi }}</label>
                                             </div>
                                             <div class="row">
-                                                <label class="col-md-4 text-right font-weight-bold s-12"><strong>Tanggal SKRD:</strong></label>
+                                                <label class="col-md-4 text-right font-weight-bold s-12"><strong>Tanggal SKRD :</strong></label>
                                                 <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_awal)->format('d F Y') }}</label>
                                             </div>
                                             <div class="row">
@@ -118,7 +118,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="row">
-                                                <label class="col-md-4 text-right font-weight-bold s-12"><strong>Nomor SKRD:</strong></label>
+                                                <label class="col-md-4 text-right font-weight-bold s-12"><strong>Nomor SKRD :</strong></label>
                                                 <label class="col-md-8 s-12">{{ $data->no_skrd }}</label>
                                             </div>
                                             <div class="row">
@@ -169,7 +169,7 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="row">
-                                                <label class="col-md-4 text-right font-weight-bold s-12"><strong>Status Bayar:</strong></label>
+                                                <label class="col-md-4 text-right font-weight-bold s-12"><strong>Status Bayar :</strong></label>
                                                 <label class="col-md-8">
                                                     @if ($data->status_bayar == 1)
                                                     <span class="badge badge-success">Sudah bayar</span>
@@ -179,7 +179,7 @@
                                                 </label>
                                             </div>
                                             <div class="row">
-                                                <label class="col-md-4 text-right font-weight-bold s-12"><strong>Tanggal Bayar:</strong></label>
+                                                <label class="col-md-4 text-right font-weight-bold s-12"><strong>Tanggal Bayar :</strong></label>
                                                 @if ($data->tgl_bayar != null)
                                                 <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $data->tgl_bayar)->format('d F Y | H:i:s') }}</label>
                                                 @else
@@ -201,7 +201,7 @@
                                                 <label class="col-md-8 s-12">{{ $data->ntb != null ? $data->ntb : '-'}}</label>
                                             </div> 
                                             <div class="row">
-                                                <label class="col-md-4 text-right font-weight-bold s-12"><strong>Total Bayar BJB:</strong></label>
+                                                <label class="col-md-4 text-right font-weight-bold s-12"><strong>Total Bayar BJB :</strong></label>
                                                 @if ($data->total_bayar_bjb != null)
                                                 <label class="col-md-8 s-12">@currency($data->total_bayar_bjb)</label>
                                                 @else
