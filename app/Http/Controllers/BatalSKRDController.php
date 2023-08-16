@@ -156,7 +156,7 @@ class BatalSKRDController extends Controller
 
         $id = \Crypt::decrypt($id);
 
-        $data = TransaksiDelete::find($id);
+        $data = TransaksiOPD::find($id);
 
         $status_ttd = $data->status_ttd;
         $status_ttd = Utility::checkStatusTTD($status_ttd);
