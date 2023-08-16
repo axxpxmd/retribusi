@@ -19,9 +19,9 @@ use DataTables;
 use Carbon\Carbon;
 
 use App\Libraries\VABJBRes;
-use App\Libraries\QRISBJBRes;
-// use Explorin\Tebot\Service\Tebot; 
+use App\Libraries\QRISBJBRes; 
 use App\Libraries\GenerateNumber;
+use Explorin\Tebot\Services\Tebot;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
@@ -41,7 +41,6 @@ use App\Models\TransaksiDelete;
 use App\Models\JenisPendapatan;
 use App\Models\OPDJenisPendapatan;
 use App\Models\RincianJenisPendapatan;
-use Explorin\Tebot\Services\Tebot;
 
 class SKRDController extends Controller
 {
