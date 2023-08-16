@@ -22,7 +22,7 @@ class BatalSKRDController extends Controller
 {
     protected $route  = 'batalSkrd.';
     protected $title  = 'Batal SKRD';
-    protected $view   = 'pages.batalSKrd.';
+    protected $view   = 'pages.batalSkrd.';
 
     public function cari(Request $request)
     {
