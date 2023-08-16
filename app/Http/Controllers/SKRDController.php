@@ -359,7 +359,7 @@ class SKRDController extends Controller
         ]);
 
         if ($validator->fails()) {
-            Tebot::alert('Terdapat No SKRD duplikat', $checkGenerate)->channel('check_no_skrd');
+            Tebot::alert($validator->errors()->first(), array_merge($checkGenerate, ['user_id' => Auth::user()->id]))->channel('check_no_skrd');
             $validator->validate();
         } 
 
