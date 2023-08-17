@@ -334,7 +334,7 @@
                         </li>
                         <li>Pembayaran dilakukan melalui transfer VA (virtual account) bank BJB atau transfer antar bank
                             online menggunakan nomor virtual account bank BJB
-                            <b>{{ $data->nomor_va_bjb }}</b>. (mengikuti ketentuan limit
+                            <b>{{ $data->nomor_va_bjb ? $data->nomor_va_bjb  : '-' }}</b>. (mengikuti ketentuan limit
                             transaksi transfer yang berlaku, dan tidak berlaku untuk transaksi SKN & RTGS) ,berlaku
                             sampai
                             <b>{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_akhir)->isoFormat('D MMMM Y') }}</b>.
