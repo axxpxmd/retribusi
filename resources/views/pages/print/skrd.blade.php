@@ -260,7 +260,7 @@
                 </td>
                 <td><span>:</span></td>
                 <td>
-                    <p class="m-t-0 m-b-0">{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_akhir)->format('d F Y') }}</p>
+                    <p class="m-t-0 m-b-0">{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_akhir)->isoFormat('D MMMM Y') }}</p>
                 </td>
                 <td>&nbsp;</td>
             </tr>
@@ -338,7 +338,7 @@
                             <b>{{ $data->status_ttd == 1 ? $data->nomor_va_bjb : '-' }}</b>. (mengikuti ketentuan limit
                             transaksi transfer yang berlaku, dan tidak berlaku untuk transaksi SKN & RTGS) ,berlaku
                             sampai
-                            <b>{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_akhir)->format('d F Y') }}</b>.
+                            <b>{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_akhir)->isoFormat('D MMMM Y') }}</b>.
                         </li>
                         <li>Untuk pembayaran melalui SKN dan RTGS atau yang melebihi limit transaksi transfer online
                             dapat menghubungi perangkat daerah penerbit SKRD.</li>
@@ -362,7 +362,7 @@
                 </td>
                 <td colspan="3" class="a" style="border-left: none !important">
                     <div style="text-align:center; margin-right: -500px !important">
-                        <p>Tangerang Selatan, {{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_ttd)->format('d F Y') }}</p>
+                        <p>Tangerang Selatan, {{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_ttd)->isoFormat('D MMMM Y') }}</p>
                         <br>
                         <br>
                         <br>

@@ -53,7 +53,7 @@ Retribusi, Tangerang Selatan.
 Untuk *" . $data->rincian_jenis->rincian_pendapatan . "*
 
 *Nominal* : Rp. " . number_format($data->total_bayar) . "
-*Jatuh Tempo* : " . Carbon::parse($tgl_jatuh_tempo)->format('d F Y') . "
+*Jatuh Tempo* : " . Carbon::parse($tgl_jatuh_tempo)->isoFormat('D MMMM Y') . "
 *Nomor Bayar* : " . $data->no_bayar . "
 *Nomor VA* : " . $data->nomor_va_bjb . "
 ------------------------------------------------------

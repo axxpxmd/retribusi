@@ -76,7 +76,7 @@
                                             </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right font-weight-bold s-12"><strong>Tanggal TTD :</strong></label>
-                                                <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_ttd)->format('d F Y') }}</label>
+                                                <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_ttd)->isoFormat('D MMMM Y') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -113,7 +113,7 @@
                                             </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right font-weight-bold s-12"><strong>Jatuh Tempo :</strong></label>
-                                                <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_akhir)->format('d F Y') }}</label>
+                                                <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_akhir)->isoFormat('D MMMM Y') }}</label>
                                             </div>
                                         </div>
                                         <div class="col-md-6">

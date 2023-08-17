@@ -373,7 +373,7 @@ class TandaTanganController extends Controller
                 'nama'     => $data->nm_wajib_pajak,
                 'no_bayar' => $data->no_bayar,
                 'jumlah_bayar'    => 'Rp. ' . number_format($data->jumlah_bayar),
-                'tgl_jatuh_tempo' => Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_akhir)->format('d F Y')
+                'tgl_jatuh_tempo' => Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_akhir)->isoFormat('D MMMM Y')
             );
 
             $fileName  = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";

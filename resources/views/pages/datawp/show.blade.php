@@ -95,7 +95,7 @@
                                                     <tr>
                                                         <td class="text-center">{{ $key+1 }}</td>
                                                         <td> <a target="_blank" href="{{ route('sts.show', Crypt::encrypt($i->id)) }}">{{ $i->no_skrd }}</a></td>
-                                                        <td class="text-center">{{ Carbon\Carbon::createFromFormat('Y-m-d', $i->tgl_skrd_awal)->format('d F Y') }}</td>
+                                                        <td class="text-center">{{ Carbon\Carbon::createFromFormat('Y-m-d', $i->tgl_skrd_awal)->isoFormat('D MMMM Y') }}</td>
                                                         <td class="text-center">
                                                             @if ($i->status_bayar)
                                                                 <span class="badge badge-success">Sudah Bayar</span>
