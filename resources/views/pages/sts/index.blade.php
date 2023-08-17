@@ -61,8 +61,8 @@
                                 <label for="status_bayar" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">Tanggal</label>
                                 <div class="col-md-2 mb-5-m">
                                     <select name="jenis_tanggal" id="jenis_tanggal" class="select2 form-control r-0 s-12">
-                                        <option value="1">SKRD</option>
                                         <option value="2" {{ $status == 1 ? 'selected' : '' }}>Bayar</option>
+                                        <option value="1">SKRD</option>
                                     </select>
                                 </div>
                                 <div class="col-md-3">
