@@ -6,9 +6,11 @@ use Auth;
 use DataTables;
 use Carbon\Carbon;
 
+use App\Libraries\VABJBRes;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Crypt;
 
 // Models
@@ -23,6 +25,11 @@ class BatalSKRDController extends Controller
     protected $route  = 'batalSkrd.';
     protected $title  = 'Batal SKRD';
     protected $view   = 'pages.batalSkrd.';
+
+    public function __construct(VABJBRes $vabjbres)
+    {
+        $this->vabjbres   = $vabjbres;
+    }
 
     public function cari(Request $request)
     {
@@ -55,7 +62,7 @@ class BatalSKRDController extends Controller
 
         return Datatables::of($data)
             ->addColumn('action', function ($p) {
-                $delete  = "<a href='#' onclick='remove(" . $p->id . ")' class='text-danger mr-2' title='Batal SKRD'><i class='icon icon-remove'></i></a>";
+                $delete  = "<a href='#' onclick='batalSkrd(" . $p->id . ")' class='text-danger mr-2' title='Batal SKRD'><i class='icon icon-remove'></i></a>";
 
                 return $delete;
             })
@@ -171,5 +178,66 @@ class BatalSKRDController extends Controller
             'data',
             'status_ttd'
         ));
+    }
+
+    public function batalSKRD(Request $request)
+    {
+        /* Tahapan :
+         * 1. tmtransaksi_opd (delete)
+         * 2. Backup Data (Store)
+         * 3. Update VA (make va expired)
+         */
+
+        //* Params
+        $id = $request->id;
+        $keterangan = $request->keterangan;
+
+        //* Tahap 1
+        $data = TransaksiOPD::where('id', $id)->first();
+
+        //* Tahap 2
+        $dataBackup = $data->toArray();
+        $dataKet = [
+            'updated_by' => Auth::user()->pengguna->full_name . ' | Batal SKRD', 
+            'keterangan' => $keterangan
+        ];
+        TransaksiDelete::create(array_merge($dataBackup, $dataKet));
+
+        //* Tahap 3
+        $amount = \strval((int) str_replace(['.', 'Rp', ' '], '', $data->jumlah_bayar));
+        $customerName = $data->nm_wajib_pajak;
+        $va_number    = (int) $data->nomor_va_bjb;
+        $clientRefnum = $data->no_bayar;
+
+        if ($va_number) {
+            $expiredDate = Carbon::now()->addMinutes(20)->format('Y-m-d H:i:s');
+
+            //TODO: Get Token VA
+            list($err, $errMsg, $tokenBJB) = $this->vabjbres->getTokenBJBres();
+            if ($err) {
+                DB::rollback(); //* DB Transaction Failed
+                return response()->json([
+                    'message' => $errMsg
+                ], 500);
+            }
+
+            //TODO: Update VA BJB (make Va expired)
+            list($err, $errMsg, $VABJB) = $this->vabjbres->updateVABJBres($tokenBJB, $amount, $expiredDate, $customerName, $va_number, 2, $clientRefnum);
+            if ($err) {
+                DB::rollback(); //* DB Transaction Failed
+                return response()->json([
+                    'message' => $errMsg
+                ], 500);
+            }
+        }
+
+        //* LOG
+        Log::channel('skrd_delete')->info('Batal Data SRKD | ' . 'Oleh:' . Auth::user()->pengguna->full_name, $data->toArray());
+
+        $data->delete();
+
+        return response()->json([
+            'message' => 'SKRD berhasil dibatalkan.'
+        ]);
     }
 }

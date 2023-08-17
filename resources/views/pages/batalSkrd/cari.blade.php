@@ -22,6 +22,7 @@
         </div>
     </header>
     <div class="container-fluid my-3 relative animatedParent animateOnce">
+        <div id="alert"></div>
         <div class="tab-content " id="pills-tabContent">
             <div class="tab-pane animated fadeInUpShort show active" id="semua-data" role="tabpanel">
                 <div class="card no-b mb-2">
@@ -43,7 +44,7 @@
                             <div class="row mb-2">
                                 <label for="no_skrd" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">No SKRD</label>
                                 <div class="col-sm-8">
-                                    <input type="text" name="no_skrd" id="no_skrd" class="form-control r-0 s-12" placeholder="Masukan No SKRD" autocomplete="off">
+                                    <input type="text" name="no_skrd" id="no_skrd" value="16.04.23.16657" class="form-control r-0 s-12" placeholder="Masukan No SKRD" autocomplete="off">
                                 </div>
                             </div>
                             <div class="row">
@@ -82,6 +83,37 @@
         </div>
     </div>
 </div>
+<!-- Send TTD -->
+<div class="modal fade" id="batalSkrd" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form class="needs-validation" id="form" method="POST"  enctype="multipart/form-data" novalidate>
+                {{ method_field('POST') }}
+                <input type="hidden" name="id" id="id">
+                <div class="modal-body">
+                    <div class="col-md-12">
+                        <div class="text-center">
+                            <i class="icon-exclamation-triangle fs-40 text-danger"></i>
+                            <p class="fs-14 font-weight-bold">Apakah Anda yakin akan membatalkan data SKRD ini ?</p>
+                        </div>
+                        <hr>
+                        <div class="row mb-2">
+                            <label for="keterangan" class="col-form-label font-weight-bold s-12 col-md-3">Keterangan<span class="text-danger ml-1">*</span></label>
+                            <div class="col-md-9">
+                                <textarea type="text" rows="3" name="keterangan" id="keterangan" placeholder="Berikan keterangan" class="form-control r-0 s-12" autocomplete="off" required></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="text-right">
+                        <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal"><i class="icon-times mr-2"></i>Tutup</button>
+                        <button type="submit" class="btn btn-sm btn-danger ml-2"><i class="icon-exclamation mr-2"></i>Batal SKRD</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection
 @section('script')
 <script type="text/javascript">
@@ -114,48 +146,48 @@
         table.api().ajax.reload();
     }
 
-    function remove(id){
-        $.confirm({
-            title: '',
-            content: 'Apakah Anda yakin akan membatalkan data SKRD ini ?',
-            icon: 'icon icon-question amber-text',
-            theme: 'modern',
-            closeIcon: true,
-            animation: 'scale',
-            type: 'red',
-            buttons: {
-                ok: {
-                    text: "ok!",
-                    btnClass: 'btn-primary',
-                    keys: ['enter'],
-                    action: function(){
-                        $.post("{{ route('skrd.destroy', ':id') }}".replace(':id', id), {'_method' : 'DELETE'}, function(data) {
-                            $('#dataTable').DataTable().ajax.reload();
-                            $.confirm({
-                                title: 'Sukses',
-                                content: data.message,
-                                icon: 'icon icon-check',
-                                theme: 'modern',
-                                closeIcon: true,
-                                animation: 'scale',
-                                autoClose: 'ok|3000',
-                                type: 'green',
-                                buttons: {
-                                    ok: {
-                                        text: "ok!",
-                                        btnClass: 'btn-primary',
-                                        keys: ['enter']
-                                    }
-                                }
-                            });
-                        }, "JSON").fail(function(){
-                            reload();
+    function batalSkrd(id){
+        $('#batalSkrd').modal('show');
+        $('#batalSkrd').modal({keyboard: false});
+
+        $('#id').val(id);
+    }
+
+    $('#form').on('submit', function (e) {
+        if ($(this)[0].checkValidity() === false) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        else{
+            $('#alert').html('');
+            url = "{{ route('batalSkrd.batal') }}";
+            $.ajax({
+                url : url,
+                type : 'POST',
+                data: new FormData(($(this)[0])),
+                contentType: false,
+                processData: false,
+                success : function(data) {
+                    $('#alert').html("<div class='alert alert-success alert-dismissible' role='alert'><strong>Sukses!</strong> " + data.message + "</div>");
+                    $('#form').removeClass('was-validated');
+                    $('#batalSkrd').modal('toggle');
+                    pressOnChange();
+                },
+                error : function(data){
+                    err = '';
+                    respon = data.responseJSON;
+                    if(respon.errors){
+                        $.each(respon.errors, function( index, value ) {
+                            err = err + "<li>" + value +"</li>";
                         });
                     }
-                },
-                cancel: function(){}
-            }
-        });
-    }
+                    $('#alert').html("<div role='alert' class='alert alert-danger alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button><strong>Error!</strong> " + respon.message + "<ol class='pl-3 m-0'>" + err + "</ol></div>");
+                    $('#action').removeAttr('disabled');
+                }
+            });
+            return false;
+        }
+        $(this).addClass('was-validated');
+    });
 </script>
 @endsection
