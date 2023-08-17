@@ -93,8 +93,8 @@
         order: [ 0, 'asc' ],
         pageLength: 15,
         ajax: {
-            url: "{{ route($route.'apiKuotaBooking') }}",
-            method: 'POST',
+            url: "{{ route('booking.kuotaBooking') }}",
+            method: 'GET',
             data: function (data) {
                 // 
             }

@@ -98,19 +98,19 @@
             </a>
         </li>
     @endcan
-    @can('Data Booking')
-        <li class="no-b">
-            <a href="{{ route('booking.index') }}">
-                <i class="icon icon-document-list purple-text s-18"></i>
-                <span>Data Booking</span>
-            </a>
-        </li>
-    @endcan
     @can('Cari No Booking')
         <li class="no-b">
             <a href="{{ route('booking.search') }}">
                 <i class="icon icon-document-list text-success s-18"></i>
                 <span>Cari No Booking</span>
+            </a>
+        </li>
+    @endcan
+    @can('Data Booking')
+        <li class="no-b">
+            <a href="{{ route('booking.index') }}">
+                <i class="icon icon-document-list purple-text s-18"></i>
+                <span>Data Booking</span>
             </a>
         </li>
     @endcan

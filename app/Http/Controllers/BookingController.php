@@ -22,7 +22,7 @@ class BookingController extends Controller
     protected $title = 'Booking';
     protected $view  = 'pages.booking.';
 
-    public function index()
+    public function index(Request $request)
     {
         $route = $this->route;
         $title = $this->title;
@@ -31,6 +31,10 @@ class BookingController extends Controller
         $opd_id = Auth::user()->pengguna->opd_id;
         $opdArray = OPDJenisPendapatan::select('id_opd')->get()->toArray();
         $opds     = OPD::getAll($opdArray, $opd_id);
+
+        if ($request->ajax()) {
+            return $this->dataTableBooking();
+        }
 
         return view($this->view . 'index', compact(
             'route',
@@ -41,7 +45,7 @@ class BookingController extends Controller
         ));
     }
 
-    public function api()
+    public function dataTableBooking()
     {
         $data = Booking::queryBooking();
 
@@ -72,10 +76,14 @@ class BookingController extends Controller
             ->toJson();
     }
 
-    public function searchNoBooking()
+    public function searchNoBooking(Request $request)
     {
         $route = $this->route;
         $title = $this->title;
+
+        if ($request->ajax()) {
+            return $this->dataTableSearchNoBooking();
+        }
 
         return view($this->view . 'cari', compact(
             'route',
@@ -83,10 +91,45 @@ class BookingController extends Controller
         ));
     }
 
-    public function kuotaBooking()
+    public function dataTableSearchNoBooking()
+    {
+        $data = Booking::queryBooking();
+
+        return DataTables::of($data)
+            ->addColumn('action', function ($p) {
+                return "-";
+            })
+            ->editColumn('no_booking', function ($p) {
+                return $p->no_booking;
+            })
+            ->editColumn('nama', function ($p) {
+                return $p->nama;
+            })
+            ->editColumn('no_hp', function ($p) {
+                return $p->no_telp;
+            })
+            ->editColumn('email', function ($p) {
+                return $p->email;
+            })
+            ->editColumn('status_booking', function ($p) {
+                return '-';
+            })
+            ->editColumn('tgl_booking', function ($p) {
+                return $p->tgl_booking;
+            })
+            ->addIndexColumn()
+            ->rawColumns(['action'])
+            ->toJson();
+    }
+
+    public function kuotaBooking(Request $request)
     {
         $route = $this->route;
         $title = $this->title;
+
+        if ($request->ajax()) {
+            return $this->dataTableKuotaBooking();
+        }
 
         return view($this->view . 'kuotaBooking', compact(
             'route',
@@ -94,7 +137,7 @@ class BookingController extends Controller
         ));
     }
 
-    public function apiKuotaBooking()
+    public function dataTableKuotaBooking()
     {
         $data = KuotaBooking::queryKuotaBooking();
 

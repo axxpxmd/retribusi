@@ -42,6 +42,28 @@
                         </div>
                     </div>
                 </div>
+                <div class="row mt-2">
+                    <div class="col-md-12">
+                        <div class="card no-b">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table id="dataTable" class="table display nowrap table-striped table-bordered" style="width:100%">
+                                        <thead>
+                                            <th>No</th>
+                                            <th>No Booking</th>
+                                            <th>Nama</th>
+                                            <th>No Telp</th>
+                                            <th>Tanggal Booking</th>
+                                            <th>Status Booking</th>
+                                            <th></th>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -62,8 +84,8 @@
         order: [ 0, 'asc' ],
         pageLength: 15,
         ajax: {
-            url: "{{ route($route.'api') }}",
-            method: 'POST',
+            url: "{{ route('booking.search') }}",
+            method: 'GET',
             data: function (data) {
                 // 
             }
@@ -73,7 +95,7 @@
             {data: 'no_booking', name: 'no_booking'},
             {data: 'nama', name: 'nama'},
             {data: 'no_hp', name: 'no_hp'},
-            {data: 'email', name: 'email'},
+            {data: 'tgl_booking', name: 'tgl_booking'},
             {data: 'status_booking', name: 'status_booking'},
             {data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center'}
         ]
