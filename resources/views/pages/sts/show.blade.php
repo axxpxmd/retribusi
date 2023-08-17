@@ -110,7 +110,7 @@
                                             </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12 font-weight-bold">Tanggal SKRD :</label>
-                                                <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_awal)->format('d F Y') }}</label>
+                                                <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_awal)->isoFormat('D MMMM Y') }}</label>
                                             </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12 font-weight-bold">Jatuh Tempo :</label>
