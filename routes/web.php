@@ -129,15 +129,18 @@ Route::group(['middleware' => ['auth', 'checksinglesession']], function () {
     Route::get('send-email/{id}', 'EmailController@sendEmail')->name('sendEmail');
     Route::get('send-email/skrd/{id}', 'EmailController@skrd')->name('sendEmailSKRD');
 
+    // Log
     Route::get('log', 'LogController@index')->name('log.index');
     Route::get('log/{id}', 'LogController@show')->name('log.show');
 
+    // Booking
     Route::get('booking', 'BookingController@index')->name('booking.index');
     Route::get('booking/cari-no-booking', 'BookingController@searchNoBooking')->name('booking.search');
     Route::get('booking/kuota-booking', 'BookingController@kuotaBooking')->name('booking.kuotaBooking');
     Route::get('booking/get-detail-kuota-booking/{id}', 'BookingController@getDetailKuotaBooking')->name('booking.getDetailKuotaBooking');
     Route::patch('booking/update-kuota-booking/{id}', 'BookingController@updatekuotaBooking')->name('booking.updatekuotaBooking');
 
+    // Batal SKRD
     Route::get('batal-skrd/cari', 'BatalSKRDController@cari')->name('batalSkrd.cari');
     Route::get('batal-skrd', 'BatalSKRDController@index')->name('batalSkrd.index');
     Route::get('batal-skrd/{id}', 'BatalSKRDController@show')->name('batalSkrd.show');

@@ -44,7 +44,7 @@
                             <div class="row mb-2">
                                 <label for="no_skrd" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">No SKRD</label>
                                 <div class="col-sm-8">
-                                    <input type="text" name="no_skrd" id="no_skrd" value="16.04.23.16657" class="form-control r-0 s-12" placeholder="Masukan No SKRD" autocomplete="off">
+                                    <input type="text" name="no_skrd" id="no_skrd" class="form-control r-0 s-12" placeholder="Masukan No SKRD" autocomplete="off">
                                 </div>
                             </div>
                             <div class="row">

@@ -683,6 +683,7 @@ class SKRDController extends Controller
                 $invoiceId = null;
                 $textQRIS = null;
             }
+            
         } else {
             $VABJB = null;
             $invoiceId = null;
