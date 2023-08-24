@@ -191,6 +191,23 @@ class BatalSKRDController extends Controller
         //* Params
         $id = $request->id;
         $keterangan = $request->keterangan;
+        $file_pendukung = $request->file_pendukung;
+
+        if ($file_pendukung) {
+            $ext = $request->file('file_pendukung')->extension();
+            if ($ext) {
+                $ext = $request->file_pendukung;
+            }
+        }
+
+        $filename = $file_pendukung;
+        $ext = pathinfo($filename, PATHINFO_EXTENSION);
+        dd();
+        // if ($file_pendukung) {
+        //     $request->validate([
+        //         'file_pendukung' => ''
+        //     ])
+        // }
 
         //* Tahap 1
         $data = TransaksiOPD::where('id', $id)->first();
@@ -198,7 +215,7 @@ class BatalSKRDController extends Controller
         //* Tahap 2
         $dataBackup = $data->toArray();
         $dataKet = [
-            'updated_by' => Auth::user()->pengguna->full_name . ' | Batal SKRD', 
+            'updated_by' => Auth::user()->pengguna->full_name . ' | Batal SKRD',
             'keterangan' => $keterangan
         ];
         TransaksiDelete::create(array_merge($dataBackup, $dataKet));

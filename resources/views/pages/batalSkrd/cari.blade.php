@@ -44,7 +44,7 @@
                             <div class="row mb-2">
                                 <label for="no_skrd" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">No SKRD</label>
                                 <div class="col-sm-8">
-                                    <input type="text" name="no_skrd" id="no_skrd" class="form-control r-0 s-12" placeholder="Masukan No SKRD" autocomplete="off">
+                                    <input type="text" name="no_skrd" id="no_skrd" value="16.34.23.17124" class="form-control r-0 s-12" placeholder="Masukan No SKRD" autocomplete="off">
                                 </div>
                             </div>
                             <div class="row">
@@ -97,17 +97,27 @@
                             <p class="fs-14 font-weight-bold">Apakah Anda yakin akan membatalkan data SKRD ini ?</p>
                         </div>
                         <hr>
-                        <div class="row mb-2">
+                        <div class="row mb-1">
                             <label for="keterangan" class="col-form-label font-weight-bold s-12 col-md-3">Keterangan<span class="text-danger ml-1">*</span></label>
                             <div class="col-md-9">
                                 <textarea type="text" rows="3" name="keterangan" id="keterangan" placeholder="Berikan keterangan" class="form-control r-0 s-12" autocomplete="off" required></textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="file_pendukung" class="col-form-label font-weight-bold s-12 col-md-3">File</label>
+                            <div class="col-sm-9">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" name="file_pendukung" id="inputGroupFile"/>
+                                    <label for="inputGroupFile" class="custom-file-label">File Pendukung</label>
+                                    <span class="text-danger fs-10">format : PDF, JPG, PNG, JPEG</span>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <hr>
                     <div class="text-right">
                         <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal"><i class="icon-times mr-2"></i>Tutup</button>
-                        <button type="submit" class="btn btn-sm btn-danger ml-2"><i class="icon-exclamation mr-2"></i>Batal SKRD</button>
+                        <button type="submit" id="action" class="btn btn-sm btn-danger ml-2"><i class="icon-exclamation mr-2"></i>Batal SKRD</button>
                     </div>
                 </div>
             </form>
@@ -159,6 +169,7 @@
             event.stopPropagation();
         }
         else{
+            // $('#action').attr('disabled', true);
             $('#alert').html('');
             url = "{{ route('batalSkrd.batal') }}";
             $.ajax({
@@ -170,7 +181,7 @@
                 success : function(data) {
                     $('#alert').html("<div class='alert alert-success alert-dismissible' role='alert'><strong>Sukses!</strong> " + data.message + "</div>");
                     $('#form').removeClass('was-validated');
-                    $('#batalSkrd').modal('toggle');
+                    // $('#batalSkrd').modal('toggle');
                     pressOnChange();
                 },
                 error : function(data){
@@ -189,5 +200,15 @@
         }
         $(this).addClass('was-validated');
     });
+
+  
+    $('#inputGroupFile').on('change',function(){
+        // get the file name
+        var fileName = $(this).val();
+        text = fileName.substring(fileName.lastIndexOf("\\") + 1, fileName.length);
+        // replace the "Choose a file" label
+        $(this).next('.custom-file-label').html(text);
+    })
+    
 </script>
 @endsection

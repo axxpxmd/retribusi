@@ -424,6 +424,7 @@ class TransaksiOPD extends Model
     public static function querySearchNoSkrd($no_skrd)
     {
         $data = TransaksiOPD::select('id', 'id_opd', 'no_skrd', 'no_bayar', 'nm_wajib_pajak', 'id_jenis_pendapatan', 'tgl_skrd_awal', 'tgl_skrd_akhir', 'status_ttd', 'jumlah_bayar', 'history_ttd')
+            ->where('status_bayar', 0)
             ->with('opd', 'jenis_pendapatan')
             ->where('no_skrd',  $no_skrd);
 
