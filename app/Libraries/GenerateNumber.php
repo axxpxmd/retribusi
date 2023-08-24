@@ -37,6 +37,7 @@ class GenerateNumber
 
         if ($status) {
             $incr = $full_name == 'Ratna Sari' ? 31 : 1;
+            $incr = $full_name == 'Zetro Silaban S.Hut' ? 31 : 1;
             $id_operator = $urutan + $incr;
         } else {
             $id_operator = mt_rand(0, 90) + 1;
