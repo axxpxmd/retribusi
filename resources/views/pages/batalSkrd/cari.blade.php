@@ -44,7 +44,7 @@
                             <div class="row mb-2">
                                 <label for="no_skrd" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">No SKRD</label>
                                 <div class="col-sm-8">
-                                    <input type="text" name="no_skrd" id="no_skrd" value="16.34.23.17124" class="form-control r-0 s-12" placeholder="Masukan No SKRD" autocomplete="off">
+                                    <input type="text" name="no_skrd" id="no_skrd" class="form-control r-0 s-12" placeholder="Masukan No SKRD" autocomplete="off">
                                 </div>
                             </div>
                             <div class="row">
@@ -97,6 +97,7 @@
                             <p class="fs-14 font-weight-bold">Apakah Anda yakin akan membatalkan data SKRD ini ?</p>
                         </div>
                         <hr>
+                        <div id="alertError"></div>
                         <div class="row mb-1">
                             <label for="keterangan" class="col-form-label font-weight-bold s-12 col-md-3">Keterangan<span class="text-danger ml-1">*</span></label>
                             <div class="col-md-9">
@@ -169,8 +170,9 @@
             event.stopPropagation();
         }
         else{
-            // $('#action').attr('disabled', true);
+            $('#action').attr('disabled', true);
             $('#alert').html('');
+            $('#alertError').html('');
             url = "{{ route('batalSkrd.batal') }}";
             $.ajax({
                 url : url,
@@ -181,7 +183,7 @@
                 success : function(data) {
                     $('#alert').html("<div class='alert alert-success alert-dismissible' role='alert'><strong>Sukses!</strong> " + data.message + "</div>");
                     $('#form').removeClass('was-validated');
-                    // $('#batalSkrd').modal('toggle');
+                    $('#batalSkrd').modal('toggle');
                     pressOnChange();
                 },
                 error : function(data){
@@ -192,7 +194,7 @@
                             err = err + "<li>" + value +"</li>";
                         });
                     }
-                    $('#alert').html("<div role='alert' class='alert alert-danger alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button><strong>Error!</strong> " + respon.message + "<ol class='pl-3 m-0'>" + err + "</ol></div>");
+                    $('#alertError').html("<div role='alert' class='alert alert-danger alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button><strong>Error!</strong> " + respon.message + "<ol class='pl-3 m-0'>" + err + "</ol></div>");
                     $('#action').removeAttr('disabled');
                 }
             });

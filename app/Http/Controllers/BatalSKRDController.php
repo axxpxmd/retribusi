@@ -12,6 +12,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Storage;
 
 // Models
 use App\Models\OPD;
@@ -188,35 +189,33 @@ class BatalSKRDController extends Controller
          * 3. Update VA (make va expired)
          */
 
+        //* Tahap 1
+        $data = TransaksiOPD::where('id', $request->id)->first();
+
         //* Params
-        $id = $request->id;
         $keterangan = $request->keterangan;
         $file_pendukung = $request->file_pendukung;
 
         if ($file_pendukung) {
             $ext = $request->file('file_pendukung')->extension();
-            if ($ext) {
-                $ext = $request->file_pendukung;
-            }
+            if (!in_array($ext, ['pdf', 'png', 'jpeg', 'jpg']))
+                return response()->json([
+                    'message' => 'Format file tidak diperbolehkan'
+                ], 500);
+
+
+            //TODO: Saved to storage
+            $file     = $request->file('file_pendukung');
+            $fileName = time() . "-" . $data->no_bayar . "." . $file->extension();
+            $request->file('file_pendukung')->storeAs('file_pendukung/', $fileName, 'sftp', 'public');
         }
-
-        $filename = $file_pendukung;
-        $ext = pathinfo($filename, PATHINFO_EXTENSION);
-        dd();
-        // if ($file_pendukung) {
-        //     $request->validate([
-        //         'file_pendukung' => ''
-        //     ])
-        // }
-
-        //* Tahap 1
-        $data = TransaksiOPD::where('id', $id)->first();
 
         //* Tahap 2
         $dataBackup = $data->toArray();
         $dataKet = [
             'updated_by' => Auth::user()->pengguna->full_name . ' | Batal SKRD',
-            'keterangan' => $keterangan
+            'keterangan' => $keterangan,
+            'file_pendukung' => $fileName
         ];
         TransaksiDelete::create(array_merge($dataBackup, $dataKet));
 
