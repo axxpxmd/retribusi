@@ -266,25 +266,9 @@
                         <form class="needs-validation" method="POST" action="{{ $tte_backup == 1 ? route('tanda-tangan.tteBackup') : route('tanda-tangan.tandaTangan') }}" enctype="multipart/form-data" novalidate>
                             {{ method_field('POST') }}
                             {{ csrf_field() }} 
-                            {{-- <div class="text-center justify-content-center row">
-                                <div class="col-sm-6">
-                                    <div class="justify-content-center row mb-2">
-                                        <label class="col-md-2 p-0">
-                                            <input type="radio" class="form-control" name="tte" value="bsre" {{ $nik ? 'required' : '' }} {{ $nik ? '-' : 'disabled' }} style="margin-top: 25px !important">
-                                            <div class="invalid-feedback p-0">
-                                                Pilih TTE.
-                                            </div>
-                                        </label>
-                                        <div class="col-md-6 p-0">  
-                                            <div class="border py-2" style="background: {{ $nik ? '' : '#F7F7F7' }}">
-                                                <img src="{{ asset('images/bsre.png') }}" width="118" alt="">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> --}}
+                            <input type="hidden" name="nip" value="{{ $nip }}">
                             <div class="text-center row">
-                                <div class="col-sm-6">
+                                <div class="col-sm-4">
                                     <div class="justify-content-center row mb-2">
                                         <label class="col-md-2 p-0">
                                             <input type="radio" class="form-control" name="tte" value="bsre" {{ $nik ? 'checked' : '' }} {{ $nik ? 'required' : '' }} {{ $nik ? '-' : 'disabled' }} style="margin-top: 25px !important">
@@ -292,14 +276,14 @@
                                                 Pilih TTE.
                                             </div>
                                         </label>
-                                        <div class="col-md-6 p-0">  
+                                        <div class="col-md-8 p-0">  
                                             <div class="border py-2" style="background: {{ $nik ? '' : '#F7F7F7' }}">
                                                 <img src="{{ asset('images/bsre.png') }}" width="118" alt="">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
+                                <div class="col-sm-4">
                                     <div class="justify-content-center row mb-2">
                                         <label class="col-md-2 p-0">
                                             <input type="radio" class="form-control" name="tte" value="aurograf" {{ $nik ? 'required' : '' }} {{ $nik ? '-' : 'disabled' }} style="margin-top: 25px !important">
@@ -307,9 +291,24 @@
                                                 Pilih TTE.
                                             </div>
                                         </label>
-                                        <div class="col-md-6 p-0">  
+                                        <div class="col-md-8 p-0">  
                                             <div class="border py-2" style="background: {{ $nik ? '' : '#F7F7F7' }}">
                                                 <img src="{{ asset('images/aurograf.png') }}" width="85" alt="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="justify-content-center row mb-2">
+                                        <label class="col-md-2 p-0">
+                                            <input type="radio" class="form-control" name="tte" value="iotentik" style="margin-top: 25px !important">
+                                            <div class="invalid-feedback p-0">
+                                                Pilih TTE.
+                                            </div>
+                                        </label>
+                                        <div class="col-md-8 p-0">  
+                                            <div class="border py-2" style="background: {{ $nik ? '' : '#F7F7F7' }}">
+                                                <img src="{{ asset('images/iotentik.jpg') }}" width="105" alt="">
                                             </div>
                                         </div>
                                     </div>
