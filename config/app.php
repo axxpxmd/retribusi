@@ -129,14 +129,17 @@ return [
     'signapi' => env('SIGNAPI'),
     'signapi_ipserver' => env('SIGNAPI_IPSERVER'),
     'signapi_bearer' => env('SIGNAPI_BEARER'),
+    'iotentik_status' => env('IOTENTIK_STATUS'),
 
     // AUROGRAF
     'aurografapi' => env('AUROGRAFAPI'),
     'aurografapi_server' => env('AUROGRAFAPI_IPSERVER'),
     'aurograf_bearer' => env('AUROGRAFAPI_BEARER'),
+    'aurograf_status' => env('AUROGRAF_STATUS'),
 
     // BSRE
     'bsre_ip' => env('BSRE_IP'),
+    'bsre_status' => env('BSRE_STATUS'),
 
     // Virtual Account BJB
     'cin_bjb' => env('CIN_BJB'),

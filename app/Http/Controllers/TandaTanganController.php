@@ -158,6 +158,11 @@ class TandaTanganController extends Controller
         $text_qris      = $data->text_qris;
         $tte_backup     = config('app.tte_backup');
 
+        //* TTD
+        $iotentik_status = config('app.iotentik_status');
+        $aurograf_status = config('app.aurograf_status');
+        $bsre_status = config('app.bsre_status');
+
         $path_sftp   = 'file_ttd_skrd/';
         $path_local  = 'public/file_skrd/';
         $fileName    = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
@@ -243,7 +248,10 @@ class TandaTanganController extends Controller
             'status_ttd',
             'jatuh_tempo',
             'tte_backup',
-            'aurografCerts'
+            'aurografCerts',
+            'iotentik_status',
+            'aurograf_status',
+            'bsre_status'
         ));
     }
 

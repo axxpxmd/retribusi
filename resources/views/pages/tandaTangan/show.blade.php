@@ -268,7 +268,7 @@
                             {{ csrf_field() }} 
                             <input type="hidden" name="nip" value="{{ $nip }}">
                             <div class="text-center row">
-                                <div class="col-sm-4">
+                                <div class="col {{ $bsre_status == 'OFF' ? 'd-none' : '' }}">
                                     <div class="justify-content-center row mb-2">
                                         <label class="col-md-2 p-0">
                                             <input type="radio" class="form-control" name="tte" value="bsre" {{ $nik ? 'checked' : '' }} {{ $nik ? 'required' : '' }} {{ $nik ? '-' : 'disabled' }} style="margin-top: 25px !important">
@@ -283,7 +283,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-4">
+                                <div class="col {{ $aurograf_status == 'OFF' ? 'd-none' : '' }}">
                                     <div class="justify-content-center row mb-2">
                                         <label class="col-md-2 p-0">
                                             <input type="radio" class="form-control" name="tte" value="aurograf" {{ $nik ? 'required' : '' }} {{ $nik ? '-' : 'disabled' }} style="margin-top: 25px !important">
@@ -298,7 +298,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-4">
+                                <div class="col {{ $iotentik_status == 'OFF' ? 'd-none' : '' }}">
                                     <div class="justify-content-center row mb-2">
                                         <label class="col-md-2 p-0">
                                             <input type="radio" class="form-control" name="tte" value="iotentik" style="margin-top: 25px !important">
