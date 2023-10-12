@@ -40,6 +40,7 @@ class GenerateNumber
             $incr = $full_name == 'Zetro Silaban S.Hut' ? 31 : 1;
             $incr = $full_name == 'Fifi Nur Indahsari, S.T' ? 51 : 1;
             $incr = $full_name == 'Lukman Hakim S.Kom' ? 39 : 1;
+            $incr = $full_name == 'Gilang Fakhry R. S.IP' ? 69 : 1;
             $id_operator = $urutan + $incr;
         } else {
             $id_operator = mt_rand(0, 90) + 1;
