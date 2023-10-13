@@ -197,7 +197,7 @@
                                     <div class="col-md-6">
                                         <div class="row">
                                             <label class="col-md-4 font-weight-bold text-right s-12">Dibuat Oleh :</label>
-                                            <label class="col-md-8 s-12">{{ $data->created_by }}</label>
+                                            <label class="col-md-8 s-12">{{ $data->created_by }} | {{ $data->created_at }}</label>
                                         </div>
                                         <div class="row">
                                             <label class="col-md-4 font-weight-bold text-right s-12">Diupdate Oleh :</label>
