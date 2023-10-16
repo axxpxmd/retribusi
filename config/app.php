@@ -214,6 +214,7 @@ return [
         Spatie\Permission\PermissionServiceProvider::class,
         SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
         Explorin\Tebot\TebotServiceProvider::class,
+        
         /*
          * Application Service Providers...
          */

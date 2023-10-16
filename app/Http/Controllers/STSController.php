@@ -241,7 +241,7 @@ class STSController extends Controller
         $route = $this->route;
         $title = $this->title;
 
-        $id   = \Crypt::decrypt($id);
+        $id = is_numeric($id) ? $id : \Crypt::decrypt($id);
         $role = Auth::user()->pengguna->modelHasRole->role->name;
         $now  = Carbon::now()->format('Y-m-d\TH:i');
         $data = TransaksiOPD::find($id);

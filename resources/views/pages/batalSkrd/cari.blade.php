@@ -92,33 +92,51 @@
                 <input type="hidden" name="id" id="id">
                 <div class="modal-body">
                     <div class="col-md-12">
-                        <div class="text-center">
-                            <i class="icon-exclamation-triangle fs-40 text-danger"></i>
-                            <p class="fs-14 font-weight-bold">Apakah Anda yakin akan membatalkan data SKRD ini ?</p>
+                        <div id="displayBelumBayarAlert">
+                            <div class="text-center">
+                                <i class="icon-exclamation-triangle fs-40 text-danger"></i>
+                                <p class="fs-14 font-weight-bold">Apakah Anda yakin akan membatalkan data SKRD ini ?</p>
+                            </div>
+                            <hr>
                         </div>
-                        <hr>
                         <div id="alertError"></div>
-                        <div class="row mb-1">
-                            <label for="keterangan" class="col-form-label font-weight-bold s-12 col-md-3">Keterangan<span class="text-danger ml-1">*</span></label>
-                            <div class="col-md-9">
-                                <textarea type="text" rows="3" name="keterangan" id="keterangan" placeholder="Berikan keterangan" class="form-control r-0 s-12" autocomplete="off" required></textarea>
+                        <div class="row mb-2">
+                            <label for="status_bayar" class="col-form-label font-weight-bold s-12 col-md-3">Status Bayar<span class="text-danger ml-1">*</span></label>
+                            <div class="col-sm-9">
+                                <select class="select2 form-control r-0 s-12" id="status_bayar">
+                                    <option value="0" selected>Belum Dibayar</option>
+                                    <option value="1">Sudah Dibayar</option>
+                                </select>
                             </div>
                         </div>
-                        <div class="row">
-                            <label for="file_pendukung" class="col-form-label font-weight-bold s-12 col-md-3">File</label>
-                            <div class="col-sm-9">
-                                <div class="custom-file">
-                                    <input type="file" class="custom-file-input" name="file_pendukung" id="inputGroupFile"/>
-                                    <label for="inputGroupFile" class="custom-file-label">File Pendukung</label>
-                                    <span class="text-danger fs-10">format : PDF, JPG, PNG, JPEG</span>
+                        <div id="displayBelumBayarForm">
+                            <div class="row mb-1">
+                                <label for="keterangan" class="col-form-label font-weight-bold s-12 col-md-3">Keterangan<span class="text-danger ml-1">*</span></label>
+                                <div class="col-md-9">
+                                    <textarea type="text" rows="3" name="keterangan" id="keterangan" placeholder="Berikan keterangan" class="form-control r-0 s-12" autocomplete="off" required></textarea>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label for="file_pendukung" class="col-form-label font-weight-bold s-12 col-md-3">File</label>
+                                <div class="col-sm-9">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" name="file_pendukung" id="inputGroupFile"/>
+                                        <label for="inputGroupFile" class="custom-file-label">File Pendukung</label>
+                                        <span class="text-danger fs-10">format : PDF, JPG, PNG, JPEG</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <hr>
                     <div class="text-right">
-                        <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal"><i class="icon-times mr-2"></i>Tutup</button>
-                        <button type="submit" id="action" class="btn btn-sm btn-danger ml-2"><i class="icon-exclamation mr-2"></i>Batal SKRD</button>
+                        <div id="displayBelumBayarButton">
+                            <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal"><i class="icon-times mr-2"></i>Tutup</button>
+                            <button type="submit" id="action" class="btn btn-sm btn-danger ml-2"><i class="icon-exclamation mr-2"></i>Batal SKRD</button>
+                        </div>
+                        <div id="displaySudahBayarButton">
+                            <a href="#" id="editsts" target="_blank" class="btn btn-sm btn-primary"><i class="icon-arrow-right mr-2"></i>Proses SKRD</a>
+                        </div>
                     </div>
                 </div>
             </form>
@@ -128,6 +146,25 @@
 @endsection
 @section('script')
 <script type="text/javascript">
+     $(function() {
+        $('#displaySudahBayarButton').hide(); 
+
+        $('#status_bayar').change(function(){
+            var status_bayar = $('#status_bayar').val();
+            if (status_bayar == 0) {
+                $('#displayBelumBayarForm').show(); 
+                $('#displayBelumBayarAlert').show(); 
+                $('#displayBelumBayarButton').show(); 
+                $('#displaySudahBayarButton').hide(); 
+            }else{
+                $('#displayBelumBayarForm').hide(); 
+                $('#displayBelumBayarAlert').hide(); 
+                $('#displayBelumBayarButton').hide(); 
+                $('#displaySudahBayarButton').show(); 
+            }
+        });
+    });
+
     var table = $('#dataTable').dataTable({
         scrollX: true,
         processing: true,
@@ -160,6 +197,10 @@
     function batalSkrd(id){
         $('#batalSkrd').modal('show');
         $('#batalSkrd').modal({keyboard: false});
+
+        url = "{{ route('sts.edit', ':id') }}".replace(':id', id);
+        console.log(url);
+        $('#editsts').attr('href', url)
 
         $('#id').val(id);
     }
