@@ -206,19 +206,21 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="col-md-6">
                                             <div class="row mb-2">
                                                 <label for="ntb" class="col-form-label s-12 col-sm-4 text-right">NTB</label>
                                                 <div class="col-md-8">
                                                     <input type="text" name="ntb" value="{{ $data->ntb }}" {{ $readonly }} id="ntb" class="form-control s-12" autocomplete="off"/>
                                                 </div>    
                                             </div>
+                                        </div>
+                                        <div class="col-md-6">
                                             <div class="row mb-2">
                                                 <label for="denda" class="col-form-label s-12 col-sm-4 text-right">Denda</label>
                                                 <div class="col-md-8">
                                                     <input type="text" name="denda" value="{{ $jumlahBunga }}" {{ $readonly }} id="rupiah1" onkeyup="totalBayarBJB()" class="form-control s-12" autocomplete="off"/>
+                                                    @if ($jumlahBunga != 0)
                                                     <span class="text-danger fs-10">ubah jadi 0 jika ingin menghapus denda</span>
+                                                    @endif
                                                 </div>    
                                             </div>
                                             <div class="row mb-2">
