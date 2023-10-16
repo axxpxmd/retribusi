@@ -182,12 +182,14 @@
                                                 <label class="col-md-4 text-right s-12 font-weight-bold">NO BKU :</label>
                                                 <label class="col-md-8 s-12">{{ $data->no_bku != null ? $data->no_bku : '-'}}</label>
                                             </div>
+                                            @if ($data->file_pendukung)
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12 font-weight-bold">File Pendukung :</label>
                                                 <label class="col-md-8 s-12">
                                                     <a href="{{ config('app.sftp_src').'file_pendukung/'.$data->file_pendukung }}" target="blank" class="fs-16"><span class="badge badge-primary"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</span></a>
                                                 </label>
                                             </div> 
+                                            @endif
                                         </div>
                                         <div class="col-md-6">
                                             <div class="row">
