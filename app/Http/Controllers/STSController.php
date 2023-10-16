@@ -322,7 +322,8 @@ class STSController extends Controller
             'status_bayar' => 'required',
             'chanel_bayar' => 'required',
             'tgl_bayar'    => 'required',
-            'total_bayar_bjb' => 'required'
+            'total_bayar_bjb' => 'required',
+            'file_pendukung'  => 'required'
         ]);
 
         $id   = \Crypt::decrypt($id);
@@ -335,12 +336,26 @@ class STSController extends Controller
         $status_bayar = $request->status_bayar;
         $chanel_bayar = $request->chanel_bayar;
         $total_bayar_bjb = $request->total_bayar_bjb;
+        $file_pendukung  = $request->file_pendukung;
 
         //TODO: Check denda
         $status_denda = Utility::checkDenda($denda);
 
         //* Check status bayar
         if ($status_bayar == 1) {
+            if ($file_pendukung) {
+                $ext = $request->file('file_pendukung')->extension();
+                if (!in_array($ext, ['pdf', 'png', 'jpeg', 'jpg']))
+                    return response()->json([
+                        'message' => 'Format file tidak diperbolehkan'
+                    ], 500);
+
+                //TODO: Saved to storage
+                $file     = $request->file('file_pendukung');
+                $fileName = time() . "-" . $data->no_bayar . "." . $file->extension();
+                $request->file('file_pendukung')->storeAs('file_pendukung/', $fileName, 'sftp', 'public');
+            }
+
             $data->update([
                 'status_bayar' => 1,
                 'tgl_bayar'    => $tgl_bayar,
@@ -350,7 +365,8 @@ class STSController extends Controller
                 'ntb'    => $ntb,
                 'denda'  => (int) str_replace(['.', 'Rp', ' '], '', $denda),
                 'total_bayar_bjb' => $total_bayar_bjb == 0 ? null : (int) str_replace(['.', 'Rp', ' '], '', $total_bayar_bjb),
-                'updated_by'      => Auth::user()->pengguna->full_name . ' | Update data menu STS'
+                'updated_by'      => Auth::user()->pengguna->full_name . ' | Update data menu STS',
+                'file_pendukung'  => $fileName
             ]);
         } else {
             return response()->json([
@@ -398,7 +414,7 @@ class STSController extends Controller
             list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar, $tgl_bayar);
             if ($denda) {
                 $denda = $denda;
-            }else{
+            } else {
                 $denda = $jumlahBunga;
             }
         } else {

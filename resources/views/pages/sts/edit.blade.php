@@ -218,6 +218,7 @@
                                                 <label for="denda" class="col-form-label s-12 col-sm-4 text-right">Denda</label>
                                                 <div class="col-md-8">
                                                     <input type="text" name="denda" value="{{ $jumlahBunga }}" {{ $readonly }} id="rupiah1" onkeyup="totalBayarBJB()" class="form-control s-12" autocomplete="off"/>
+                                                    <span class="text-danger fs-10">ubah jadi 0 jika ingin menghapus denda</span>
                                                 </div>    
                                             </div>
                                             <div class="row mb-2">
@@ -235,11 +236,17 @@
                                                     <input type="text" name="total_bayar_bjb" {{ $data->status_bayar == 1 ? 'readonly' : '' }} value="{{ $data->total_bayar_bjb }}" {{ $readonly }} id="rupiah2" class="form-control s-12" autocomplete="off" required/>
                                                 </div>    
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="row mb-2">
+                                            <div class="row">
+                                                <label for="file_pendukung" class="col-form-label s-12 col-sm-4 text-right">File Pendukung<span class="text-danger ml-1">*</span></label>
+                                                <div class="col-sm-8">
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input" name="file_pendukung" id="inputGroupFile"/>
+                                                        <label for="inputGroupFile" class="custom-file-label">File Pendukung</label>
+                                                        <span class="text-danger fs-10">format : PDF, JPG, PNG, JPEG</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row mt-3">
                                                 <div class="col-md-4"></div>
                                                 <div class="col-md-8">
                                                     <button type="submit" class="btn btn-primary btn-sm btn-block"><i class="icon-save mr-2"></i>Simpan Perubahan</button>
