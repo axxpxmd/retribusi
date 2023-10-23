@@ -293,7 +293,7 @@ class STRDController extends Controller
         //* Tahap 2
         $invoiceId = null;
         $textQRIS = null;
-        if ($amount <= 10000000) { //* Nominal QRIS maksimal 10 juta, jika lebih maka tidak terbuat
+        if ($amount <= 10000000 && config('app.status_qris')) { //* Nominal QRIS maksimal 10 juta, jika lebih maka tidak terbuat
             //TODO: Get Token QRIS
             list($err, $errMsg, $tokenQRISBJB) = $this->qrisbjbres->getTokenQrisres();
             if ($err) {
