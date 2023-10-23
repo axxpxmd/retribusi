@@ -99,6 +99,12 @@
                             </div>
                             <hr>
                         </div>
+                        <div id="displaySudahBayarAlert">
+                            <div class="text-center">
+                                <p class="fs-12 text-danger">SKRD Belum di TTD, Silahkan TTD terlebih dahulu untuk dapat diproses.</p>
+                            </div>
+                            <hr>
+                        </div>
                         <div id="alertError"></div>
                         <div class="row mb-2">
                             <label for="status_bayar" class="col-form-label font-weight-bold s-12 col-md-3">Status Bayar<span class="text-danger ml-1">*</span></label>
@@ -135,7 +141,8 @@
                             <button type="submit" id="action" class="btn btn-sm btn-danger ml-2"><i class="icon-exclamation mr-2"></i>Batal SKRD</button>
                         </div>
                         <div id="displaySudahBayarButton">
-                            <a href="#" id="editsts" target="_blank" class="btn btn-sm btn-primary"><i class="icon-arrow-right mr-2"></i>Proses SKRD</a>
+                            <button type="button" class="btn btn-sm btn-primary mr-2" data-dismiss="modal"><i class="icon-times mr-2"></i>Tutup</button>
+                            <a href="#" id="editsts" target="_blank" class="btn btn-sm btn-success"><i class="icon-arrow-right mr-2"></i>Proses SKRD</a>
                         </div>
                     </div>
                 </div>
@@ -147,7 +154,8 @@
 @section('script')
 <script type="text/javascript">
      $(function() {
-        $('#displaySudahBayarButton').hide(); 
+        $('#displaySudahBayarButton').hide();
+        $('#displaySudahBayarAlert').hide();  
 
         $('#status_bayar').change(function(){
             var status_bayar = $('#status_bayar').val();
@@ -199,10 +207,26 @@
         $('#batalSkrd').modal({keyboard: false});
 
         url = "{{ route('sts.edit', ':id') }}".replace(':id', id);
-        console.log(url);
         $('#editsts').attr('href', url)
-
         $('#id').val(id);
+
+        urlGetDataSKRD = "{{ route('skrd.getDataSKRD', ':id') }}".replace(':id', id);
+        $.get(urlGetDataSKRD, function(data){
+            status_ttd = data.status_ttd; 
+
+            if (status_ttd != 1 || status_ttd != 3) {
+                $("#editsts").removeAttr('href');
+
+                $('#status_bayar').change(function(){
+                    var status_bayar = $('#status_bayar').val();
+                    if (status_bayar == 0) {
+                        $('#displaySudahBayarAlert').hide(); 
+                    }else{
+                        $('#displaySudahBayarAlert').show(); 
+                    }
+                });
+            }
+        }, 'JSON');
     }
 
     $('#form').on('submit', function (e) {
