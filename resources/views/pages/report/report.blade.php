@@ -121,7 +121,7 @@
                         @elseif(strpos($i['chanel_bayar'], 'ATM BJB') !== false)
                             | ATM
                         @else
-                            | {{ $i['chanel_bayar'] }}
+                            {{ $i['chanel_bayar'] }} ? | {{ $i['chanel_bayar'] }} : ''
                         @endif
                     </td>
                     <td width="10%" class="d p-l-5">@currency($i['jumlah_bayar'])</td>
