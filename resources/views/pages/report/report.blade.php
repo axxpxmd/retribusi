@@ -11,7 +11,7 @@
 		table.d {
             border-collapse: collapse;
             width: 100%
-        } 
+        }
 
         table.d tr.d,th.d,td.d{
             table-layout: fixed;
@@ -38,7 +38,7 @@
     <table class="fs-14" style="margin-bottom: 10px">
         <tr>
             <td>Jenis</td>
-            <td>: 
+            <td>:
                 @if ($jenis == 0)
                     -
                 @endif
@@ -116,12 +116,12 @@
                         {{ $i['ntb'] }}
                         @if (strpos($i['chanel_bayar'], 'QRIS') !== false)
                             | QRIS
-                        @endif
-                        @if (strpos($i['chanel_bayar'], 'Virtual Account') !== false)
+                        @elseif(strpos($i['chanel_bayar'], 'Virtual Account') !== false)
                             | VA
-                        @endif
-                        @if (strpos($i['chanel_bayar'], 'ATM BJB') !== false)
+                        @elseif(strpos($i['chanel_bayar'], 'ATM BJB') !== false)
                             | ATM
+                        @else
+                            | {{ $i['chanel_bayar'] }}
                         @endif
                     </td>
                     <td width="10%" class="d p-l-5">@currency($i['jumlah_bayar'])</td>
