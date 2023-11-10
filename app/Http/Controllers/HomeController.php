@@ -67,6 +67,7 @@ class HomeController extends Controller
             ->when($opd_id != 0, function ($q) use ($opd_id) {
                 $q->where('tmtransaksi_opd.id_opd', $opd_id);
             })
+            ->where('status_bayar', 1)
             ->groupBy('tmtransaksi_opd.id_jenis_pendapatan')
             ->orderBy('diterima', 'DESC')
             ->get();

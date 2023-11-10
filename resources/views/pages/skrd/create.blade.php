@@ -153,6 +153,7 @@
                                             <label for="tgl_skrd_akhir" class="col-form-label s-12 col-sm-4 text-right">Jatuh Tempo<span class="text-danger ml-1">*</span></label>
                                             <div class="col-md-8">
                                                 <input type="date" name="tgl_skrd_akhir" id="tgl_skrd_akhir" readonly class="form-control r-0 s-12" autocomplete="off" required/>
+                                                <span id="checkBackDate" class="text-danger fs-12">tanggal SKRD ini backdate, data akan langsung masuk STRD</span>
                                             </div>
                                         </div>
                                         <div class="row mb-2">
@@ -185,7 +186,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div> 
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -199,13 +200,26 @@
 @section('script')
 <script type="text/javascript">
     // set tgl_skrd_akhir 30 days from tgl_skrd_awal
+    $('#checkBackDate').hide();
     function setDate(){
         var date = document.getElementById('tgl_skrd_awal').value
         var someDate = new Date(date);
         someDate.setDate(someDate.getDate() + 30); // number  of days to add, e.x. 30 days
         var dateFormated = someDate.toISOString().substr(0,10);
         $('#tgl_skrd_akhir').val(dateFormated);
+
+        var dateNow = new Date().toISOString().substr(0,10)
+        console.log(dateFormated, dateNow)
+        if (dateFormated < dateNow) {
+            console.log('ini backdate')
+            $('#checkBackDate').show();
+        } else {
+            $('#checkBackDate').hide();
+            console.log('ini bukan backdate')
+        }
     }
+
+
 
     $('#id_rincian_jenis_pendapatan').on('change', function(){
         val = $(this).val();
@@ -214,7 +228,7 @@
             $('#kode_rekening').val(data.nmr_rekening);
             $('#kd_jenis').val(data.kd_jenis);
             $('#no_hp').val(data.no_hp);
-        }, 'JSON');    
+        }, 'JSON');
     });
 
     $('#kecamatan_id').on('change', function(){
@@ -236,7 +250,7 @@
                 }else{
                     $('#kelurahan_id').html(option);
                 }
-            }, 'JSON'); 
+            }, 'JSON');
         }
     });
 
@@ -289,7 +303,7 @@
                     $.confirm({
                         title: 'Success',
                         content: data.message,
-                        icon: 'icon icon-check', 
+                        icon: 'icon icon-check',
                         theme: 'modern',
                         animation: 'scale',
                         autoClose: 'ok|3000',
@@ -323,6 +337,6 @@
         }
         $(this).addClass('was-validated');
     });
-    
+
 </script>
 @endsection

@@ -19,7 +19,7 @@ use DataTables;
 use Carbon\Carbon;
 
 use App\Libraries\VABJBRes;
-use App\Libraries\QRISBJBRes; 
+use App\Libraries\QRISBJBRes;
 use App\Libraries\GenerateNumber;
 use Explorin\Tebot\Services\Tebot;
 use App\Http\Controllers\Controller;
@@ -128,7 +128,7 @@ class SKRDController extends Controller
                 $delete  = "<a href='#' onclick='remove(" . $p->id . ")' class='text-danger mr-2' title='Hapus Data'><i class='icon icon-remove'></i></a>";
 
                 //* Sudah TTD
-                if ($p->status_ttd == 1) { 
+                if ($p->status_ttd == 1) {
                     return $filettd;
                 } else {
                     //* Proses TTD
@@ -323,15 +323,17 @@ class SKRDController extends Controller
             'kelurahan_id'   => 'required',
             'kode_rekening'  => 'required',
             'nm_wajib_pajak' => 'required',
-            'tgl_skrd_awal'  => 'required|date_format:Y-m-d',
+            'tgl_skrd_awal'  => 'required|date_format:Y-m-d|after:2021',
             'tgl_skrd_akhir' => 'required|date_format:Y-m-d',
             'jumlah_bayar'   => 'required',
             'uraian_retribusi'    => 'required',
             'id_jenis_pendapatan' => 'required',
             'id_rincian_jenis_pendapatan' => 'required'
+        ],[
+            'tgl_skrd_awal.after' => 'Tanggal SKRD tidak sesuai'
         ]);
 
-        /* Tahapan : 
+        /* Tahapan :
          * 1. Generate Nomor (no_skrd & no_bayar)
          * 2. tmtransaksi_opd (store)
          * 3. Create Virtual Account
@@ -351,7 +353,7 @@ class SKRDController extends Controller
             'no_skrd'  => $no_skrd,
             'no_bayar' => $no_bayar
         ];
-        
+
         $validator = Validator::make($checkGenerate, [
             'no_skrd'  => 'required|unique:tmtransaksi_opd,no_skrd',
             'no_bayar' => 'required|unique:tmtransaksi_opd,no_bayar',
@@ -360,7 +362,7 @@ class SKRDController extends Controller
         if ($validator->fails()) {
             Tebot::alert($validator->errors()->first(), array_merge($checkGenerate, ['user_id' => Auth::user()->id]))->channel('check_no_skrd');
             $validator->validate();
-        } 
+        }
 
         //* Tahap 2
         DB::beginTransaction(); //* DB Transaction Begin
@@ -601,7 +603,7 @@ class SKRDController extends Controller
             'id_rincian_jenis_pendapatan' => 'required',
         ]);
 
-        /* Tahapan : 
+        /* Tahapan :
          * 1. VA
          * 2. QRIS
          * 3. tmtransaksi_opd
@@ -683,7 +685,7 @@ class SKRDController extends Controller
                 $invoiceId = null;
                 $textQRIS = null;
             }
-            
+
         } else {
             $VABJB = null;
             $invoiceId = null;
