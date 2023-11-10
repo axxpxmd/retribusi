@@ -323,7 +323,7 @@ class SKRDController extends Controller
             'kelurahan_id'   => 'required',
             'kode_rekening'  => 'required',
             'nm_wajib_pajak' => 'required',
-            'tgl_skrd_awal'  => 'required|date_format:Y-m-d',
+            'tgl_skrd_awal'  => 'required|date_format:Y-m-d|after:2021-01-01',
             'tgl_skrd_akhir' => 'required|date_format:Y-m-d',
             'jumlah_bayar'   => 'required',
             'uraian_retribusi'    => 'required',
