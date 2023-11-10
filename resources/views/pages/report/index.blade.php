@@ -100,7 +100,7 @@
                                 <div class="col-sm-8 col-md-7 col-xl-6">
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <input type="date" placeholder="MM/DD/YYYY" value="{{ $today }}" name="from" id="from" class="form-control r-0 light s-12 mb-5-m" autocomplete="off"/>
+                                            <input type="date" placeholder="MM/DD/YYYY" value="{{ $today }}" name="from" id="from" class="form-control light r-0 s-12 mb-5-m" autocomplete="off"/>
                                         </div>
                                         <div class="col-md-6">
                                             <input type="date" placeholder="MM/DD/YYYY" value="{{ $today }}" name="to" id="to" class="form-control r-0 light s-12" autocomplete="off"/>
@@ -113,13 +113,13 @@
                                 <div class="col-sm-8 col-md-7 col-xl-6">
                                     <button class="btn btn-success btn-sm" onclick="pressOnChange()"><i class="icon-filter mr-2"></i>Filter</button>
                                     <a target="_blank" href="{{ route('report.cetakSKRD') }}" class="btn btn-sm btn-primary ml-2" id="exportpdf"><i class="icon-print mr-2"></i>Print</a>
-                                </div> 
+                                </div>
                             </div>
                             <div class="row">
                                 <div class="col-sm-4 col-md-4 col-xl-3"></div>
                                 <div class="col-sm-8 col-md-7 col-xl-6">
                                     <p class="mb-0 font-weight-bold">Total Ketetapan : <span id="total_bayar"></span></p>
-                                </div> 
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -160,39 +160,39 @@
 @endsection
 @section('script')
 <script type="text/javascript">
-    $('#status_bayar_display').hide(); 
-    $('#display_channel_bayar').hide(); 
+    $('#status_bayar_display').hide();
+    $('#display_channel_bayar').hide();
     $('#tgl_skrd_text').html('Tanggal SKRD');
 
     if ("{{ $status }}" == 2) {
         console.log('jalan');
-        $('#status_bayar_display').hide(); 
+        $('#status_bayar_display').hide();
         $("#status_bayar").val(0).trigger("change.select2");
-        $('#display_channel_bayar').show(); 
+        $('#display_channel_bayar').show();
         $('#tgl_skrd_text').html('Tanggal Bayar');
     }
 
     $('#jenis').change(function(){
         if($('#jenis').val() === "1") {
-            $('#status_bayar_display').show(); 
-            $('#display_channel_bayar').hide(); 
+            $('#status_bayar_display').show();
+            $('#display_channel_bayar').hide();
             $("#channel_bayar").val(0).trigger("change.select2");
             $('#tgl_skrd_text').html('Tanggal SKRD');
         } else {
-            $('#status_bayar_display').hide(); 
+            $('#status_bayar_display').hide();
             $("#status_bayar").val(0).trigger("change.select2");
-            $('#display_channel_bayar').show(); 
+            $('#display_channel_bayar').show();
             $('#tgl_skrd_text').html('Tanggal Bayar');
-        } 
+        }
     });
 
     $('#status_bayar').change(function(){
         if($('#status_bayar').val() === "1") {
-            $('#display_channel_bayar').show(); 
+            $('#display_channel_bayar').show();
         } else {
-            $('#display_channel_bayar').hide(); 
+            $('#display_channel_bayar').hide();
             $("#channel_bayar").val(0).trigger("change.select2");
-        } 
+        }
     });
 
     var table = $('#dataTable').dataTable({
@@ -305,9 +305,9 @@
 
         url1 = "{{ route('report.cetakSKRD') }}?from=" + params
         url2 = "{{ route('report.getTotalBayar') }}?from=" + params
-        
+
         $('#exportpdf').attr('href', url1)
-    
+
         // total bayar
         $.get(url2, function(data){
             $('#total_bayar').html(data.total_bayar)

@@ -50,7 +50,7 @@
                                         <option value="1">Sudah Dibayar</option>
                                     </select>
                                 </div>
-                            </div> 
+                            </div>
                             <div class="row mb-2">
                                 <label for="no_bayar" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">NO Bayar</label>
                                 <div class="col-sm-8">
@@ -76,7 +76,7 @@
                                 <div class="col-sm-2"></div>
                                 <div class="col-sm-8">
                                     <button class="btn btn-success btn-sm" onclick="pressOnChange()"><i class="icon-filter mr-2"></i>Filter</button>
-                                </div> 
+                                </div>
                             </div>
                         </div>
                     </div>

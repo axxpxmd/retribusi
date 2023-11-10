@@ -82,7 +82,7 @@
                                     @if (!$status_duplicate)
                                     <a target="_blank" href="#" class="btn btn-sm btn-danger ml-2" style="display: none" id="btnDuplicate"><i class="icon-content_copy mr-2"></i>Cek Duplikat</a>
                                     @endif
-                                </div> 
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -236,8 +236,8 @@
         opd_id = $('#opd').val();
 
         $.ajax({
-            url: "{{ route('skrd.checkDuplicate') }}",  
-            method : "GET", 
+            url: "{{ route('skrd.checkDuplicate') }}",
+            method : "GET",
             data: {
                 from : from,
                 to   : to,
@@ -258,7 +258,7 @@
         params = from + "&to=" + to + "&opd_id=" + opd_id + "&status_duplicate=" + 1;
 
         url = "{{ route('skrd.index') }}?from=" + params
-        
+
         $('#btnDuplicate').attr('href', url)
     }
 
@@ -284,7 +284,7 @@
             }, 'JSON');
         }
     });
-  
+
     function remove(id){
         $.confirm({
             title: '',
@@ -345,7 +345,7 @@
                 sisa 	= number_string.length % 3,
                 rupiah 	= number_string.substr(0, sisa),
                 ribuan 	= number_string.substr(sisa).match(/\d{3}/g);
-                                    
+
             if (ribuan) {
                 separator = sisa ? '.' : '';
                 rupiah += separator + ribuan.join('.');
