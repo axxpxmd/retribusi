@@ -123,7 +123,7 @@
                         @elseif($i['chanel_bayar'])
                             | {{ $i['chanel_bayar'] }}
                         @else
-                        
+
                         @endif
                     </td>
                     <td width="10%" class="d p-l-5">@currency($i['jumlah_bayar'])</td>
