@@ -153,7 +153,11 @@
                                             <label for="tgl_skrd_akhir" class="col-form-label s-12 col-sm-4 text-right">Jatuh Tempo<span class="text-danger ml-1">*</span></label>
                                             <div class="col-md-8">
                                                 <input type="date" name="tgl_skrd_akhir" id="tgl_skrd_akhir" readonly class="form-control r-0 s-12" autocomplete="off" required/>
-                                                <span id="checkBackDate" class="text-danger fs-12">tanggal SKRD ini backdate, data akan langsung masuk STRD</span>
+                                                <span id="checkBackDate" class="text-danger fs-11">
+                                                    <span>tanggal SKRD ini backdate, data akan langsung masuk STRD.</span>
+                                                    <br>
+                                                    <span>QRIS dan VA tidak bisa terbuat.</span>
+                                                </span>
                                             </div>
                                         </div>
                                         <div class="row mb-2">
