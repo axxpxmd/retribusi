@@ -37,7 +37,7 @@ class GenerateNumber
 
         if ($status) {
             $incr = $full_name == 'Ratna Sari' ? 31 : 1;
-            $incr = $full_name == 'Zetro Silaban S.Hut' ? 48 : 1;
+            $incr = $full_name == 'Zetro Silaban S.Hut' ? 97 : 1;
             $incr = $full_name == 'Fifi Nur Indahsari, S.T' ? 51 : 1;
             $incr = $full_name == 'Lukman Hakim S.Kom' ? 39 : 1;
             $incr = $full_name == 'Gilang Fakhry R. S.IP' ? 69 : 1;
