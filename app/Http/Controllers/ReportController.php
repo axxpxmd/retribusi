@@ -403,8 +403,20 @@ class ReportController extends Controller
         return $totalBayarJson;
     }
 
-    public function reportToExcel()
+    public function reportToExcel(Request $request)
     {
+        $opd_id = Auth::user()->pengguna->opd_id == 0 ? $request->opd_id : Auth::user()->pengguna->opd_id;
+
+        $to    = $request->to;
+        $from  = $request->from;
+        $jenis = $request->jenis;
+        $status = $request->status;
+        $tahun  = $request->year;
+        $status_bayar  = $request->status_bayar;
+        $channel_bayar = $request->channel_bayar;
+        $jenis_pendapatan_id   = $request->jenis_pendapatan_id;
+        $rincian_pendapatan_id = $request->rincian_pendapatan_id;
+
         $writer = SimpleExcelWriter::streamDownload('report.csv');
         $query = TransaksiOPD::select(
             'no_bayar',
@@ -426,11 +438,28 @@ class ReportController extends Controller
             ->join('tmopds', 'tmopds.id', '=', 'tmtransaksi_opd.id_opd')
             ->join('tmjenis_pendapatan', 'tmjenis_pendapatan.id', '=', 'tmtransaksi_opd.id_jenis_pendapatan')
             ->join('tmrincian_jenis_pendapatans', 'tmrincian_jenis_pendapatans.id', '=', 'tmtransaksi_opd.id_rincian_jenis_pendapatan')
-            ->orderBy('tgl_bayar', 'DESC')->whereYear('tmtransaksi_opd.created_at', 2023)->get();
+            ->orderBy('tgl_bayar', 'DESC')->whereYear('tmtransaksi_opd.created_at', 2021)->get();
+        $query1 = TransaksiOPD::queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar, $rincian_pendapatan_id, $status, $tahun);
 
         $i = 0;
-        foreach ($query->lazy(1000) as $user) {
-            $writer->addRow($user->toArray());
+        foreach ($query1->lazy(1000) as $q) {
+            $writer->addRow([
+                'no_bayar' => $q->no_bayar,
+                'no_skrd'  => $q->no_skrd,
+                'nm_wajib_pajak' => $q->nm_wajib_pajak,
+                'opd' => $q->opd->n_opd,
+                'jenis_pendapatan' => $q->jenis_pendapatan->jenis_pendapatan,
+                'rincian_pendapatan' => $q->rincian_jenis->rincian_pendapatan,
+                'tgl_skrd_awal' => $q->tgl_skrd_awal,
+                'tgl_bayar' => $q->tgl_bayar,
+                'ntb' => $q->ntb,
+                'chanel_bayar' => $q->chanel_bayar,
+                'jumlah_bayar' => $q->jumlah_bayar,
+                'diskon' => $q->diskon,
+                'denda' => $q->denda,
+                'total_bayar_bjb' => $q->total_bayar_bjb,
+                'status_bayar' => $q->status_bayar,
+            ]);
 
             if ($i % 1000 === 0) {
                 flush(); // Flush the buffer every 1000 rows

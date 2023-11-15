@@ -100,10 +100,10 @@
                                 <div class="col-sm-8 col-md-7 col-xl-6">
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <input type="date" placeholder="MM/DD/YYYY" value="{{ $today }}" name="from" id="from" class="form-control light r-0 s-12 mb-5-m" autocomplete="off"/>
+                                            <input type="date" placeholder="MM/DD/YYYY" value="{{ $today }}" onchange="getParams()" name="from" id="from" class="form-control light r-0 s-12 mb-5-m" autocomplete="off"/>
                                         </div>
                                         <div class="col-md-6">
-                                            <input type="date" placeholder="MM/DD/YYYY" value="{{ $today }}" name="to" id="to" class="form-control r-0 light s-12" autocomplete="off"/>
+                                            <input type="date" placeholder="MM/DD/YYYY" value="{{ $today }}" onchange="getParams()" name="to" id="to" class="form-control r-0 light s-12" autocomplete="off"/>
                                         </div>
                                     </div>
                                 </div>
@@ -113,7 +113,7 @@
                                 <div class="col-sm-8 col-md-7 col-xl-6">
                                     <button class="btn btn-success btn-sm" onclick="pressOnChange()"><i class="icon-filter mr-2"></i>Filter</button>
                                     <a target="_blank" href="{{ route('report.cetakSKRD') }}" class="btn btn-sm btn-primary ml-2" id="exportpdf"><i class="icon-print mr-2"></i>Print</a>
-                                    <a target="_blank" href="{{ route('report.reportToExcel') }}" class="btn btn-sm btn-secondary ml-2"><i class="icon-print mr-2"></i>Print CSV</a>
+                                    <a target="_blank" href="{{ route('report.reportToExcel') }}" class="btn btn-sm btn-secondary ml-2" id="exportcsv"><i class="icon-print mr-2"></i>Print CSV</a>
                                 </div>
                             </div>
                             <div class="row">
@@ -286,6 +286,26 @@
             }, 'JSON');
         }
     });
+
+    getParams();
+    function getParams(){
+        opd_id = $('#opd_id').val();
+        jenis_pendapatan_id = $('#jenis_pendapatan_id').val();
+        rincian_pendapatan_id = $('#rincian_pendapatan_id').val();
+        status_bayar = $('#status_bayar').val();
+        from = $('#from').val();
+        to = $('#to').val();
+        jenis = $('#jenis').val();
+        channel_bayar = $('#channel_bayar').val();
+        year   = $('#year').val();
+        status = $('#status').val();
+
+        params = from + "&to=" + to + "&opd_id=" + opd_id + "&jenis_pendapatan_id=" + jenis_pendapatan_id + "&status_bayar=" + status_bayar + "&jenis=" + jenis + "&channel_bayar=" + channel_bayar + "&rincian_pendapatan_id=" + rincian_pendapatan_id + "&year=" + year + "&status=" + status;
+
+        url1 = "{{ route('report.reportToExcel') }}?from=" + params
+
+        $('#exportcsv').attr('href', url1)
+    }
 
     pressOnChange();
     function pressOnChange(){
