@@ -111,7 +111,7 @@ Route::group(['middleware' => ['auth', 'checksinglesession']], function () {
     Route::post('tanda-tangan/tte-bsre', 'TandaTanganController@tteBSRE')->name('tanda-tangan.tteBSRE');
     Route::post('tanda-tangan/', 'TandaTanganController@tandaTangan')->name('tanda-tangan.tandaTangan');
 
-    // Print 
+    // Print
     Route::get('print/skrd/{id}', 'PrintController@printSKRD')->name('print.skrd');
     Route::get('print/strd/{id}', 'PrintController@printSTRD')->name('print.strd');
     Route::get('print/download/{id}', 'PrintController@download')->name('print.download');
@@ -124,6 +124,7 @@ Route::group(['middleware' => ['auth', 'checksinglesession']], function () {
     Route::get('report/get-jenis-pendapatan/{opd_id}', 'ReportController@getJenisPendapatanByOpd')->name('report.getJenisPendapatan');
     Route::get('report/get-rincian-pendapatan/{jenis_pendapatan_id}', 'ReportController@getRincianByJenisPendapatan')->name('report.getRincianByJenisPendapatan');
     Route::get('get-total-bayar', 'ReportController@getTotalBayar')->name('report.getTotalBayar');
+    Route::get('report-to-excel', 'ReportController@reportToExcel')->name('report.reportToExcel');
 
     // Send Email
     Route::get('send-email/{id}', 'EmailController@sendEmail')->name('sendEmail');

@@ -29,6 +29,9 @@ use App\Models\JenisPendapatan;
 use App\Models\OPDJenisPendapatan;
 use App\Models\RincianJenisPendapatan;
 
+use Maatwebsite\Excel\Facades\Excel;
+use Spatie\SimpleExcel\SimpleExcelWriter;
+
 class ReportController extends Controller
 {
     protected $route = 'report.';
@@ -398,5 +401,43 @@ class ReportController extends Controller
         ];
 
         return $totalBayarJson;
+    }
+
+    public function reportToExcel()
+    {
+        $writer = SimpleExcelWriter::streamDownload('report.csv');
+        $query = TransaksiOPD::select(
+            'no_bayar',
+            'no_skrd',
+            'nm_wajib_pajak',
+            'tmopds.n_opd as nama_opd',
+            'tmjenis_pendapatan.jenis_pendapatan as jenis_pendapatan',
+            'tmrincian_jenis_pendapatans.rincian_pendapatan as rincian_pendapatan',
+            'tgl_skrd_awal',
+            'tgl_bayar',
+            'ntb',
+            'chanel_bayar',
+            'jumlah_bayar',
+            'diskon',
+            'denda',
+            'total_bayar_bjb',
+            'status_bayar'
+        )
+            ->join('tmopds', 'tmopds.id', '=', 'tmtransaksi_opd.id_opd')
+            ->join('tmjenis_pendapatan', 'tmjenis_pendapatan.id', '=', 'tmtransaksi_opd.id_jenis_pendapatan')
+            ->join('tmrincian_jenis_pendapatans', 'tmrincian_jenis_pendapatans.id', '=', 'tmtransaksi_opd.id_rincian_jenis_pendapatan')
+            ->orderBy('tgl_bayar', 'DESC')->whereYear('tmtransaksi_opd.created_at', 2023)->get();
+
+        $i = 0;
+        foreach ($query->lazy(1000) as $user) {
+            $writer->addRow($user->toArray());
+
+            if ($i % 1000 === 0) {
+                flush(); // Flush the buffer every 1000 rows
+            }
+            $i++;
+        }
+
+        return $writer->toBrowser();
     }
 }
