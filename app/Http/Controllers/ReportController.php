@@ -417,7 +417,10 @@ class ReportController extends Controller
         $jenis_pendapatan_id   = $request->jenis_pendapatan_id;
         $rincian_pendapatan_id = $request->rincian_pendapatan_id;
 
-        $writer = SimpleExcelWriter::streamDownload('report' . $from . '-' . $to . '.csv');
+        $awal  = Carbon::createFromFormat('Y-m-d', $from)->isoFormat('D MMMM Y');
+        $akhir =  Carbon::createFromFormat('Y-m-d', $to)->isoFormat('D MMMM Y');
+
+        $writer = SimpleExcelWriter::streamDownload('report ' . $awal . ' - ' . $akhir . '.csv');
         $query1 = TransaksiOPD::queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar, $rincian_pendapatan_id, $status, $tahun);
 
         $i = 0;
