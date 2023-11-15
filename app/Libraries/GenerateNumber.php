@@ -46,6 +46,8 @@ class GenerateNumber
                 $incr = 69;
             } else if ($full_name == 'Zetro Silaban S.Hut') {
                 $incr = 69;
+            }else{
+                $incr = 1;
             }
             $id_operator = $urutan + $incr;
         } else {
