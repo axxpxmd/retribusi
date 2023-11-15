@@ -417,28 +417,7 @@ class ReportController extends Controller
         $jenis_pendapatan_id   = $request->jenis_pendapatan_id;
         $rincian_pendapatan_id = $request->rincian_pendapatan_id;
 
-        $writer = SimpleExcelWriter::streamDownload('report.csv');
-        $query = TransaksiOPD::select(
-            'no_bayar',
-            'no_skrd',
-            'nm_wajib_pajak',
-            'tmopds.n_opd as nama_opd',
-            'tmjenis_pendapatan.jenis_pendapatan as jenis_pendapatan',
-            'tmrincian_jenis_pendapatans.rincian_pendapatan as rincian_pendapatan',
-            'tgl_skrd_awal',
-            'tgl_bayar',
-            'ntb',
-            'chanel_bayar',
-            'jumlah_bayar',
-            'diskon',
-            'denda',
-            'total_bayar_bjb',
-            'status_bayar'
-        )
-            ->join('tmopds', 'tmopds.id', '=', 'tmtransaksi_opd.id_opd')
-            ->join('tmjenis_pendapatan', 'tmjenis_pendapatan.id', '=', 'tmtransaksi_opd.id_jenis_pendapatan')
-            ->join('tmrincian_jenis_pendapatans', 'tmrincian_jenis_pendapatans.id', '=', 'tmtransaksi_opd.id_rincian_jenis_pendapatan')
-            ->orderBy('tgl_bayar', 'DESC')->whereYear('tmtransaksi_opd.created_at', 2021)->get();
+        $writer = SimpleExcelWriter::streamDownload('report' . $from . '-' . $to . '.csv');
         $query1 = TransaksiOPD::queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar, $rincian_pendapatan_id, $status, $tahun);
 
         $i = 0;
