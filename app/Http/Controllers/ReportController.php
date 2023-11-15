@@ -438,9 +438,9 @@ class ReportController extends Controller
                 'chanel_bayar' => $q->chanel_bayar,
                 'jumlah_bayar' => $q->jumlah_bayar,
                 'diskon' => $q->diskon,
-                'denda' => $q->denda,
+                'denda' => $q->total_bayar_bjb - $q->jumlah_bayar,
                 'total_bayar_bjb' => $q->total_bayar_bjb,
-                'status_bayar' => $q->status_bayar,
+                'status_bayar' => $q->status_bayar == 1 ? 'Sudah Bayar' : 'Belum Bayar',
             ]);
 
             if ($i % 1000 === 0) {
