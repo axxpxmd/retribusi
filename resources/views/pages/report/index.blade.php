@@ -112,8 +112,8 @@
                                 <div class="col-sm-4 col-md-4 col-xl-3"></div>
                                 <div class="col-sm-8 col-md-7 col-xl-6">
                                     <button class="btn btn-success btn-sm" onclick="pressOnChange()"><i class="icon-filter mr-2"></i>Filter</button>
-                                    <a target="_blank" href="{{ route('report.cetakSKRD') }}" class="btn btn-sm btn-primary ml-2" id="exportpdf"><i class="icon-print mr-2"></i>Print</a>
-                                    <a target="_blank" href="{{ route('report.reportToExcel') }}" class="btn btn-sm btn-secondary ml-2" id="exportcsv"><i class="icon-print mr-2"></i>Print CSV</a>
+                                    <a target="_blank" href="{{ route('report.cetakSKRD') }}" class="btn btn-sm btn-primary ml-2" id="exportpdf"><i class="icon-print mr-2"></i>Print PDF</a>
+                                    <a target="_blank" href="{{ route('report.reportToExcel') }}" class="btn btn-sm btn-secondary ml-2" id="exportcsv"><i class="icon-print mr-2"></i>Print Excel</a>
                                 </div>
                             </div>
                             <div class="row">
@@ -289,6 +289,8 @@
 
     getParams();
     function getParams(){
+        pressOnChange();
+
         opd_id = $('#opd_id').val();
         jenis_pendapatan_id = $('#jenis_pendapatan_id').val();
         rincian_pendapatan_id = $('#rincian_pendapatan_id').val();
