@@ -36,11 +36,17 @@ class GenerateNumber
         }
 
         if ($status) {
-            $incr = $full_name == 'Ratna Sari' ? 31 : 1;
-            $incr = $full_name == 'Zetro Silaban S.Hut' ? 55 : 1;
-            $incr = $full_name == 'Fifi Nur Indahsari, S.T' ? 51 : 1;
-            $incr = $full_name == 'Lukman Hakim S.Kom' ? 39 : 1;
-            $incr = $full_name == 'Gilang Fakhry R. S.IP' ? 69 : 1;
+            if ($full_name == 'Ratna Sari') {
+                $incr = 31;
+            } else if ($full_name == 'Fifi Nur Indahsari, S.T') {
+                $incr = 52;
+            } else if ($full_name == 'Lukman Hakim S.Kom') {
+                $incr = 39;
+            } else if ($full_name == 'Gilang Fakhry R. S.IP') {
+                $incr = 69;
+            } else if ($full_name == 'Zetro Silaban S.Hut') {
+                $incr = 69;
+            }
             $id_operator = $urutan + $incr;
         } else {
             $id_operator = mt_rand(0, 90) + 1;
