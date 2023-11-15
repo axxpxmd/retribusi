@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Explorin\Tebot\Services\Tebot;
 
 class Handler extends ExceptionHandler
 {
@@ -36,6 +37,8 @@ class Handler extends ExceptionHandler
      */
     public function report(Throwable $exception)
     {
+        $logError = 'Message : ' . $exception->getMessage() . ' | File : ' . $exception->getFile() . ' | Line : ' . $exception->getLine() . '| URL : ' . request()->url();
+        Tebot::alert($logError)->channel('log_skrd');
         parent::report($exception);
     }
 
