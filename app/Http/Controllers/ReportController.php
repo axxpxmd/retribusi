@@ -420,7 +420,7 @@ class ReportController extends Controller
         $awal  = Carbon::createFromFormat('Y-m-d', $from)->isoFormat('D MMMM Y');
         $akhir =  Carbon::createFromFormat('Y-m-d', $to)->isoFormat('D MMMM Y');
 
-        $writer = SimpleExcelWriter::streamDownload('Report ' . $awal . ' - ' . $akhir . '.csv');
+        $writer = SimpleExcelWriter::streamDownload('Report ' . $awal . ' - ' . $akhir . '.xlsx');
         $query1 = TransaksiOPD::queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar, $rincian_pendapatan_id, $status, $tahun);
 
         $i = 0;
