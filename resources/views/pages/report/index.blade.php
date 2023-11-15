@@ -32,7 +32,7 @@
                             <div class="row mb-2">
                                 <label for="jenis" class="col-form-label s-12 col-sm-4 col-md-4 col-xl-3 text-right font-weight-bolder">Jenis </label>
                                 <div class="col-sm-8 col-md-7 col-xl-6">
-                                    <select class="select2 form-control r-0 light s-12" id="jenis" name="jenis">
+                                    <select class="select2 form-control r-0 light s-12" id="jenis" onchange="getParams()" name="jenis">
                                         <option value="0">Pilih</option>
                                         <option value="1" {{ $status == 1 ? 'selected' : '' }}>SKRD</option>
                                         <option value="2" {{ $status == 2 ? 'selected' : '' }}>STS</option>
@@ -42,7 +42,7 @@
                             <div class="row mb-2">
                                 <label for="opd_id" class="col-form-label s-12 col-sm-4 col-md-4 col-xl-3 text-right font-weight-bolder">OPD </label>
                                 <div class="col-sm-8 col-md-7 col-xl-6">
-                                    <select class="select2 form-control r-0 light s-12" id="opd_id" name="opd_id">
+                                    <select class="select2 form-control r-0 light s-12" id="opd_id" onchange="getParams()" name="opd_id">
                                         @if ($role == 'super-admin' || $role == 'admin-bjb')
                                             <option value="0">Semua</option>
                                         @endif
@@ -55,7 +55,7 @@
                             <div class="row mb-2">
                                 <label for="jenis_pendapatan_id" class="col-form-label s-12 col-sm-4 col-md-4 col-xl-3 text-right font-weight-bolder">Jenis Pendapatan </label>
                                 <div class="col-sm-8 col-md-7 col-xl-6">
-                                    <select class="select2 form-control r-0 light s-12" id="jenis_pendapatan_id" name="jenis_pendapatan_id">
+                                    <select class="select2 form-control r-0 light s-12" id="jenis_pendapatan_id" onchange="getParams()" name="jenis_pendapatan_id">
                                         <option value="0"></option>
                                     </select>
                                 </div>
@@ -63,7 +63,7 @@
                             <div class="row mb-2">
                                 <label for="rincian_pendapatan_id" class="col-form-label s-12 col-sm-4 col-md-4 col-xl-3 text-right font-weight-bolder">Rincian Pendapatan </label>
                                 <div class="col-sm-8 col-md-7 col-xl-6">
-                                    <select class="select2 form-control r-0 light s-12" id="rincian_pendapatan_id" name="rincian_pendapatan_id">
+                                    <select class="select2 form-control r-0 light s-12" id="rincian_pendapatan_id" onchange="getParams()" name="rincian_pendapatan_id">
                                         <option value="0"></option>
                                     </select>
                                 </div>
@@ -71,7 +71,7 @@
                             <div id="status_bayar_display" class="row mb-2">
                                 <label for="status_bayar" class="col-form-label s-12 col-sm-4 col-md-4 col-xl-3 text-right font-weight-bolder">Status Bayar </label>
                                 <div class="col-sm-8 col-md-7 col-xl-6">
-                                    <select class="select2 form-control r-0 light s-12" id="status_bayar" name="status_bayar">
+                                    <select class="select2 form-control r-0 light s-12" id="status_bayar" onchange="getParams()" name="status_bayar">
                                         <option value=""></option>
                                         <option value="0">Belum</option>
                                         <option value="1">Sudah</option>
@@ -81,7 +81,7 @@
                             <div id="display_channel_bayar" class="row mb-2">
                                 <label for="channel_bayar" class="col-form-label s-12 col-sm-4 col-md-4 col-xl-3 text-right font-weight-bolder">Metode Bayar </label>
                                 <div class="col-sm-8 col-md-7 col-xl-6">
-                                    <select class="select2 form-control r-0 light s-12" id="channel_bayar" name="channel_bayar">
+                                    <select class="select2 form-control r-0 light s-12" id="channel_bayar" onchange="getParams()" name="channel_bayar">
                                         <option value="0">Semua</option>
                                         <option value="1">Virtual Account</option>
                                         <option value="2">ATM</option>
