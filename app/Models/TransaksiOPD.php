@@ -83,7 +83,7 @@ class TransaksiOPD extends Model
                 break;
             default:
                 $data = TransaksiOPD::select('id', 'id_opd', 'id_rincian_jenis_pendapatan', 'no_skrd', 'no_bayar', 'nm_wajib_pajak', 'id_jenis_pendapatan', 'tgl_skrd_awal', 'status_ttd', 'ntb', 'tgl_bayar', 'total_bayar', 'total_bayar_bjb', 'jumlah_bayar', 'status_bayar', 'chanel_bayar', 'rincian_jenis_pendapatan', 'tgl_skrd_akhir', 'tgl_skrd_awal', 'kelurahan_id', 'kecamatan_id')
-                    ->with(['jenis_pendapatan', 'opd', 'rincian_jenis'])
+                    ->with(['jenis_pendapatan', 'opd', 'rincian_jenis', 'kelurahan', 'kecamatan'])
                     ->when($opd_id != 0, function ($q) use ($opd_id) {
                         $q->where('id_opd', $opd_id);
                     })
