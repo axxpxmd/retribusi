@@ -29,7 +29,6 @@ use App\Models\JenisPendapatan;
 use App\Models\OPDJenisPendapatan;
 use App\Models\RincianJenisPendapatan;
 
-use Maatwebsite\Excel\Facades\Excel;
 use Spatie\SimpleExcel\SimpleExcelWriter;
 
 class ReportController extends Controller
@@ -421,10 +420,10 @@ class ReportController extends Controller
         $akhir =  Carbon::createFromFormat('Y-m-d', $to)->isoFormat('D MMMM Y');
 
         $writer = SimpleExcelWriter::streamDownload('Report ' . $awal . ' - ' . $akhir . '.xlsx');
-        $query1 = TransaksiOPD::queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar, $rincian_pendapatan_id, $status, $tahun);
+        $data = TransaksiOPD::queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar, $rincian_pendapatan_id, $status, $tahun);
 
         $i = 0;
-        foreach ($query1->lazy(1000) as $q) {
+        foreach ($data->lazy(1000) as $q) {
             $writer->addRow([
                 'no_bayar' => $q->no_bayar,
                 'no_skrd'  => $q->no_skrd,
@@ -432,6 +431,8 @@ class ReportController extends Controller
                 'opd' => $q->opd->n_opd,
                 'jenis_pendapatan' => $q->jenis_pendapatan->jenis_pendapatan,
                 'rincian_pendapatan' => $q->rincian_jenis->rincian_pendapatan,
+                'kelurahan' => $q->kelurahan->n_kelurahan,
+                'kecamatan' => $q->kecamatan->n_kecamatan,
                 'tgl_skrd_awal' => $q->tgl_skrd_awal,
                 'tgl_bayar' => $q->tgl_bayar,
                 'ntb' => $q->ntb,
