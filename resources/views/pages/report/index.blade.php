@@ -289,8 +289,6 @@
 
     getParams();
     function getParams(){
-        pressOnChange();
-
         opd_id = $('#opd_id').val();
         jenis_pendapatan_id = $('#jenis_pendapatan_id').val();
         rincian_pendapatan_id = $('#rincian_pendapatan_id').val();
@@ -304,9 +302,17 @@
 
         params = from + "&to=" + to + "&opd_id=" + opd_id + "&jenis_pendapatan_id=" + jenis_pendapatan_id + "&status_bayar=" + status_bayar + "&jenis=" + jenis + "&channel_bayar=" + channel_bayar + "&rincian_pendapatan_id=" + rincian_pendapatan_id + "&year=" + year + "&status=" + status;
 
-        url1 = "{{ route('report.reportToExcel') }}?from=" + params
+        urlExcel = "{{ route('report.reportToExcel') }}?from=" + params
+        urlPDF = "{{ route('report.cetakSKRD') }}?from=" + params
+        urlGetTotalBayar = "{{ route('report.getTotalBayar') }}?from=" + params
 
-        $('#exportcsv').attr('href', url1)
+        $('#exportcsv').attr('href', urlExcel)
+        $('#exportpdf').attr('href', urlPDF)
+
+        // total bayar
+        $.get(urlGetTotalBayar, function(data){
+            $('#total_bayar').html(data.total_bayar)
+        }, 'JSON');
     }
 
     pressOnChange();
@@ -326,13 +332,13 @@
 
         params = from + "&to=" + to + "&opd_id=" + opd_id + "&jenis_pendapatan_id=" + jenis_pendapatan_id + "&status_bayar=" + status_bayar + "&jenis=" + jenis + "&channel_bayar=" + channel_bayar + "&rincian_pendapatan_id=" + rincian_pendapatan_id + "&year=" + year + "&status=" + status;
 
-        url1 = "{{ route('report.cetakSKRD') }}?from=" + params
-        url2 = "{{ route('report.getTotalBayar') }}?from=" + params
+        urlPDF = "{{ route('report.cetakSKRD') }}?from=" + params
+        urlGetTotalBayar = "{{ route('report.getTotalBayar') }}?from=" + params
 
-        $('#exportpdf').attr('href', url1)
+        $('#exportpdf').attr('href', urlPDF)
 
         // total bayar
-        $.get(url2, function(data){
+        $.get(urlGetTotalBayar, function(data){
             $('#total_bayar').html(data.total_bayar)
         }, 'JSON');
     }
