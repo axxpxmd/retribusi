@@ -40,6 +40,7 @@ return [
             'channels' => ['single'],
             'path' => storage_path('logs/error/info-log.log'),
             'ignore_exceptions' => false,
+            'days' => 15,
         ],
 
         'skrd_create' => [
