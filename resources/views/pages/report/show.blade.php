@@ -43,7 +43,7 @@
                                             <div class="row">
                                                 <label class="col-md-4 text-right font-weight-bold s-12"><strong>Jenis Pendapatan :</strong></label>
                                                 <label class="col-md-8 s-12">{{ $data->jenis_pendapatan->jenis_pendapatan }}</label>
-                                            </div>  
+                                            </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right font-weight-bold s-12"><strong>Rincian Jenis Retribusi :</strong></label>
                                                 <label class="col-md-8 s-12">{{ $data->rincian_jenis != null ? $data->rincian_jenis->rincian_pendapatan : '-' }}</label>
@@ -84,35 +84,43 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="row">
-                                                <label class="col-md-4 text-right font-weight-bold s-12"><strong>Nomor Daftar :</strong></label>
+                                                <label class="col-md-4 font-weight-bold text-right s-12">Nomor Daftar :</label>
                                                 <label class="col-md-8 s-12">{{ $data->nmr_daftar }}</label>
                                             </div>
                                             <div class="row">
-                                                <label class="col-md-4 text-right font-weight-bold s-12"><strong>Nama Wajib Retribusi :</strong></label>
+                                                <label class="col-md-4 font-weight-bold text-right s-12">Nama :</label>
                                                 <label class="col-md-8 s-12">{{ $data->nm_wajib_pajak }}</label>
                                             </div>
                                             <div class="row">
-                                                <label class="col-md-4 text-right font-weight-bold s-12"><strong>Alamat Wajib Retribusi :</strong></label>
+                                                <label class="col-md-4 font-weight-bold text-right s-12">Email :</label>
+                                                <label class="col-md-8 s-12">{{ $data->email }}</label>
+                                            </div>
+                                            <div class="row">
+                                                <label class="col-md-4 font-weight-bold text-right s-12">No Telp :</label>
+                                                <label class="col-md-8 s-12">{{ $data->no_telp }}</label>
+                                            </div>
+                                            <div class="row">
+                                                <label class="col-md-4 font-weight-bold text-right s-12">Alamat :</label>
                                                 <label class="col-md-8 s-12">{{ $data->alamat_wp }}</label>
                                             </div>
                                             <div class="row">
-                                                <label class="col-md-4 text-right font-weight-bold s-12"><strong>Kecamatan :</strong></label>
+                                                <label class="col-md-4 font-weight-bold text-right s-12">Kecamatan :</label>
                                                 <label class="col-md-8 s-12">{{ $data->kecamatan->n_kecamatan }}</label>
-                                            </div> 
+                                            </div>
                                             <div class="row">
-                                                <label class="col-md-4 text-right font-weight-bold s-12"><strong>Kelurahan :</strong></label>
+                                                <label class="col-md-4 font-weight-bold text-right s-12">Kelurahan :</label>
                                                 <label class="col-md-8 s-12">{{ $data->kelurahan->n_kelurahan }}</label>
                                             </div>
                                             <div class="row">
-                                                <label class="col-md-4 text-right font-weight-bold s-12"><strong>Lokasi :</strong></label>
+                                                <label class="col-md-4 font-weight-bold text-right s-12">Lokasi :</label>
                                                 <label class="col-md-8 s-12">{{ $data->lokasi }}</label>
                                             </div>
                                             <div class="row">
-                                                <label class="col-md-4 text-right font-weight-bold s-12"><strong>Tanggal SKRD :</strong></label>
+                                                <label class="col-md-4 font-weight-bold text-right s-12">Tanggal SKRD :</label>
                                                 <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_awal)->isoFormat('D MMMM Y') }}</label>
                                             </div>
                                             <div class="row">
-                                                <label class="col-md-4 text-right font-weight-bold s-12"><strong>Jatuh Tempo :</strong></label>
+                                                <label class="col-md-4 font-weight-bold text-right s-12">Jatuh Tempo :</label>
                                                 <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_akhir)->isoFormat('D MMMM Y') }}</label>
                                             </div>
                                         </div>
@@ -128,11 +136,11 @@
                                             <div class="row">
                                                 <label class="col-md-4 text-right font-weight-bold s-12"><strong>Ketetapan :</strong></label>
                                                 <label class="col-md-8 s-12">@currency($data->jumlah_bayar)</label>
-                                            </div> 
+                                            </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12 font-weight-bold">Denda  :</label>
                                                 <label class="col-md-8 s-12">({{ $kenaikan }}%) &nbsp;@currency($jumlahBunga)</label>
-                                            </div> 
+                                            </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right font-weight-bold s-12"><strong>Diskon  :</strong></label>
                                                 @if ($data->status_diskon == 0)
@@ -140,29 +148,29 @@
                                                 @else
                                                 <label class="col-md-8 s-12">({{ $data->diskon }}%) &nbsp;@currency(((int) $data->diskon / 100) * $data->jumlah_bayar)</label>
                                                 @endif
-                                            </div> 
+                                            </div>
                                             <!-- STRD (+bunga) -->
                                             @if ($data->tgl_skrd_akhir < $dateNow)
                                             <div class="row">
                                                 <label class="col-md-4 text-right font-weight-bold s-12"><strong>Total Bayar :</strong></label>
                                                 <label class="col-md-8 s-12">@currency($data->jumlah_bayar + $jumlahBunga)</label>
-                                            </div> 
+                                            </div>
                                             @endif
                                             <!-- SKRD -->
                                             @if ($data->tgl_skrd_akhir >= $dateNow)
                                             <div class="row">
                                                 <label class="col-md-4 text-right font-weight-bold s-12"><strong>Total Bayar :</strong></label>
                                                 <label class="col-md-8 s-12">@currency($data->total_bayar)</label>
-                                            </div> 
+                                            </div>
                                             @endif
                                             <div class="row">
                                                 <label class="col-md-4 font-weight-bold text-right s-12"><strong>Virtual Account BJB  :</strong></label>
                                                 <label class="col-md-8 s-12">{{ $status_ttd ? $data->nomor_va_bjb : '-' }}</label>
-                                            </div> 
+                                            </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right font-weight-bold s-12"><strong>Invoice ID QRIS  :</strong></label>
                                                 <label class="col-md-8 s-12">{{ $data->invoice_id }}</label>
-                                            </div> 
+                                            </div>
                                         </div>
                                     </div>
                                     <hr>
@@ -189,17 +197,17 @@
                                             <div class="row">
                                                 <label class="col-md-4 text-right font-weight-bold s-12"><strong>NO BKU :</strong></label>
                                                 <label class="col-md-8 s-12">{{ $data->no_bku != null ? $data->no_bku : '-'}}</label>
-                                            </div> 
+                                            </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="row">
                                                 <label class="col-md-4 text-right font-weight-bold s-12"><strong>Channel Bayar :</strong></label>
                                                 <label class="col-md-8 s-12">{{ $data->chanel_bayar != null ? $data->chanel_bayar : '-'}}</label>
-                                            </div> 
+                                            </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right font-weight-bold s-12"><strong>NTB :</strong></label>
                                                 <label class="col-md-8 s-12">{{ $data->ntb != null ? $data->ntb : '-'}}</label>
-                                            </div> 
+                                            </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right font-weight-bold s-12"><strong>Total Bayar BJB :</strong></label>
                                                 @if ($data->total_bayar_bjb != null)
@@ -207,7 +215,7 @@
                                                 @else
                                                 <label class="col-md-8 s-12">-</label>
                                                 @endif
-                                            </div> 
+                                            </div>
                                         </div>
                                     </div>
                                     <hr>
@@ -261,6 +269,6 @@
 @endsection
 @section('script')
 <script type="text/javascript">
-    // 
+    //
 </script>
 @endsection
