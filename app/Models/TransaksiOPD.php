@@ -28,12 +28,16 @@ class TransaksiOPD extends Model
 
     public function kelurahan()
     {
-        return $this->belongsTo(Kelurahan::class, 'kelurahan_id');
+        return $this->belongsTo(Kelurahan::class, 'kelurahan_id')->withDefault([
+            'n_kelurahan' => '-'
+        ]);
     }
 
     public function kecamatan()
     {
-        return $this->belongsTo(Kecamatan::class, 'kecamatan_id');
+        return $this->belongsTo(Kecamatan::class, 'kecamatan_id')->withDefault([
+            'n_kecamatan' => '-'
+        ]);
     }
 
     public static function queryReportDashboard($opd_id, $status, $tahun)
@@ -67,7 +71,7 @@ class TransaksiOPD extends Model
         return $data->orderBy('id', 'DESC')->get();
     }
 
-    // 
+    //
     public static function queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar, $rincian_pendapatan_id, $status = null, $tahun = null)
     {
         switch ($status) {
@@ -78,7 +82,7 @@ class TransaksiOPD extends Model
                 return self::queryReportDashboard($opd_id, $status, $tahun);
                 break;
             default:
-                $data = TransaksiOPD::select('id', 'id_opd', 'id_rincian_jenis_pendapatan', 'no_skrd', 'no_bayar', 'nm_wajib_pajak', 'id_jenis_pendapatan', 'tgl_skrd_awal', 'status_ttd', 'ntb', 'tgl_bayar', 'total_bayar', 'total_bayar_bjb', 'jumlah_bayar', 'status_bayar', 'chanel_bayar', 'rincian_jenis_pendapatan', 'tgl_skrd_akhir', 'tgl_skrd_awal')
+                $data = TransaksiOPD::select('id', 'id_opd', 'id_rincian_jenis_pendapatan', 'no_skrd', 'no_bayar', 'nm_wajib_pajak', 'id_jenis_pendapatan', 'tgl_skrd_awal', 'status_ttd', 'ntb', 'tgl_bayar', 'total_bayar', 'total_bayar_bjb', 'jumlah_bayar', 'status_bayar', 'chanel_bayar', 'rincian_jenis_pendapatan', 'tgl_skrd_akhir', 'tgl_skrd_awal', 'kelurahan_id', 'kecamatan_id')
                     ->with(['jenis_pendapatan', 'opd', 'rincian_jenis'])
                     ->when($opd_id != 0, function ($q) use ($opd_id) {
                         $q->where('id_opd', $opd_id);
@@ -169,7 +173,7 @@ class TransaksiOPD extends Model
         }
     }
 
-    // 
+    //
     public static function queryDiskon($opd_id, $jenis_pendapatan_id, $from, $to, $status_diskon, $no_skrd)
     {
         $data = TransaksiOPD::with(['jenis_pendapatan', 'opd', 'rincian_jenis'])->where('status_bayar', 0)
@@ -199,7 +203,7 @@ class TransaksiOPD extends Model
         return $data->get();
     }
 
-    // 
+    //
     public static function queryDenda($opd_id, $jenis_pendapatan_id, $from, $to, $status_denda_filter, $no_skrd)
     {
         $data = TransaksiOPD::with(['jenis_pendapatan', 'opd', 'rincian_jenis'])->where('status_bayar', 0)
@@ -289,7 +293,7 @@ class TransaksiOPD extends Model
         return [$getDuplicate, $data];
     }
 
-    // 
+    //
     public static function querySTRD($from, $to, $opd_id, $no_skrd, $status_ttd, $status = null, $tahun = null)
     {
         $date = Carbon::now()->format('Y-m-d');
@@ -334,7 +338,7 @@ class TransaksiOPD extends Model
         return $data->orderBy('id', 'DESC')->get();
     }
 
-    // 
+    //
     public static function querySTS($from, $to, $opd_id, $status_bayar, $jenis_tanggal, $no_bayar, $status)
     {
         $now = Carbon::now();
@@ -387,7 +391,7 @@ class TransaksiOPD extends Model
         return $data->orderBy('id', 'DESC')->get();
     }
 
-    // 
+    //
     public static function queryTandaTangan($belum_ttd, $from, $to, $opd_id, $no_skrd, $status_ttd, $nip)
     {
         $data = TransaksiOPD::with(['jenis_pendapatan', 'opd', 'rincian_jenis'])->whereNotIn('status_ttd', [0])
@@ -420,7 +424,7 @@ class TransaksiOPD extends Model
         return $data->orderBy('id', 'ASC')->get();
     }
 
-    // 
+    //
     public static function querySearchNoSkrd($no_skrd)
     {
         $data = TransaksiOPD::select('id', 'id_opd', 'no_skrd', 'no_bayar', 'nm_wajib_pajak', 'id_jenis_pendapatan', 'tgl_skrd_awal', 'tgl_skrd_akhir', 'status_ttd', 'jumlah_bayar', 'history_ttd')
