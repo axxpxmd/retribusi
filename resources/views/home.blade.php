@@ -29,7 +29,7 @@
             <div class="row p-t-b-10 ">
                 <div class="col">
                     <h4>
-                        <i class="icon icon-dashboard mr-2"></i> 
+                        <i class="icon icon-dashboard mr-2"></i>
                         Dashboard
                     </h4>
                 </div>
@@ -218,6 +218,7 @@
                         <table id="tableChannelBayar" class="table table-hover fs-12" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
+                                    <th>#</th>
                                     <th>Metode Bayar</th>
                                     <th>Jumlah</th>
                                     <th>Total Pembayaran</th>
@@ -227,7 +228,7 @@
                                 @foreach ($totalChannelBayar as $index => $i)
                                     @if ($i['total'])
                                     <tr>
-                                        {{-- <td><a href="#" title="Lihat Data">{{ str_contains($i['chanel_bayar'], 'QRIS') ? 'QRIS' : $i['chanel_bayar'] }}</a></td> --}}
+                                        <td>{{ $index+1 }}</td>
                                         <td>{{ str_contains($i['chanel_bayar'], 'QRIS') ? 'QRIS' : $i['chanel_bayar'] }}</td>
                                         <td>{{ number_format($i['total']) }}</td>
                                         <td>@currency($i['total_bayar'])</td>
@@ -408,9 +409,9 @@
 
     function getParamFilter()
     {
-        tahun =  $("#tahun_filter").val(); 
+        tahun =  $("#tahun_filter").val();
         opd_id = $("#opd_filter").val();
-       
+
         url = "{{ route('home') }}?tahun=" + tahun + "&opd_id=" + opd_id;
 
         $('#filterData').attr('href', url);
