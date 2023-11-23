@@ -131,7 +131,7 @@ class HomeController extends Controller
             ->get()->toArray();
         $channelBayar = TransaksiOPD::select('chanel_bayar', DB::raw("COUNT('id') as total"), DB::raw("SUM(total_bayar) as total_bayar"))
             ->where('status_bayar', 1)
-            ->whereIn('chanel_bayar', ['Bendahara OPD', 'ATM', 'BJB Virtual Account', 'Lainnya', 'TELLER', 'Transfer RKUD', 'Virtual Account'])
+            ->whereIn('chanel_bayar', ['Bendahara OPD', 'ATM', 'Lainnya', 'TELLER', 'Transfer RKUD', 'Virtual Account', 'RTGS/SKN'])
             ->when($opd_id != 0, function ($q) use ($opd_id) {
                 $q->where('tmtransaksi_opd.id_opd', $opd_id);
             })
