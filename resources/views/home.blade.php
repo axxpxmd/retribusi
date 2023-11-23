@@ -218,7 +218,6 @@
                         <table id="tableChannelBayar" class="table table-hover fs-12" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
-                                    <th>#</th>
                                     <th>Metode Bayar</th>
                                     <th>Jumlah</th>
                                     <th>Total Pembayaran</th>
@@ -228,7 +227,6 @@
                                 @foreach ($totalChannelBayar as $index => $i)
                                     @if ($i['total'])
                                     <tr>
-                                        <td>{{ $index+1 }}</td>
                                         <td>{{ str_contains($i['chanel_bayar'], 'QRIS') ? 'QRIS' : $i['chanel_bayar'] }}</td>
                                         <td>{{ number_format($i['total']) }}</td>
                                         <td>@currency($i['total_bayar'])</td>
