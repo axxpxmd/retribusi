@@ -38,7 +38,9 @@ class Handler extends ExceptionHandler
     public function report(Throwable $exception)
     {
         $logError = 'Message : ' . $exception->getMessage() . ' | File : ' . $exception->getFile() . ' | Line : ' . $exception->getLine() . '| URL : ' . request()->url();
-        Tebot::alert($logError)->channel('log_skrd');
+        if (config('app.log_tebot') == 1) {
+            Tebot::alert($logError)->channel('log_skrd');
+        }
         parent::report($exception);
     }
 

@@ -168,6 +168,8 @@ return [
 
     'url_retribusi' => env('URL_RETRIBUSI'),
 
+    'log_tebot' => env('LOG_TEBOT'),
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers
@@ -215,7 +217,7 @@ return [
         Spatie\Permission\PermissionServiceProvider::class,
         SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
         Explorin\Tebot\TebotServiceProvider::class,
-        
+
         /*
          * Application Service Providers...
          */
