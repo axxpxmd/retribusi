@@ -51,7 +51,7 @@
                                 <div class="col-sm-2"></div>
                                 <div class="col-sm-8">
                                     <button class="btn btn-success btn-sm" onclick="pressOnChange()"><i class="icon-search mr-2"></i>Cari Data</button>
-                                </div> 
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -153,22 +153,22 @@
 @endsection
 @section('script')
 <script type="text/javascript">
-     $(function() {
+    $(function() {
         $('#displaySudahBayarButton').hide();
-        $('#displaySudahBayarAlert').hide();  
+        $('#displaySudahBayarAlert').hide();
 
         $('#status_bayar').change(function(){
             var status_bayar = $('#status_bayar').val();
             if (status_bayar == 0) {
-                $('#displayBelumBayarForm').show(); 
-                $('#displayBelumBayarAlert').show(); 
-                $('#displayBelumBayarButton').show(); 
-                $('#displaySudahBayarButton').hide(); 
+                $('#displayBelumBayarForm').show();
+                $('#displayBelumBayarAlert').show();
+                $('#displayBelumBayarButton').show();
+                $('#displaySudahBayarButton').hide();
             }else{
-                $('#displayBelumBayarForm').hide(); 
-                $('#displayBelumBayarAlert').hide(); 
-                $('#displayBelumBayarButton').hide(); 
-                $('#displaySudahBayarButton').show(); 
+                $('#displayBelumBayarForm').hide();
+                $('#displayBelumBayarAlert').hide();
+                $('#displayBelumBayarButton').hide();
+                $('#displaySudahBayarButton').show();
             }
         });
     });
@@ -203,6 +203,11 @@
     }
 
     function batalSkrd(id){
+        $("#status_bayar").val(0).trigger("change.select2");
+        $('#displayBelumBayarForm').show();
+        $('#displayBelumBayarAlert').show();
+        $('#displayBelumBayarButton').show();
+        $('#displaySudahBayarButton').hide();
         $('#batalSkrd').modal('show');
         $('#batalSkrd').modal({keyboard: false});
 
@@ -212,17 +217,19 @@
 
         urlGetDataSKRD = "{{ route('skrd.getDataSKRD', ':id') }}".replace(':id', id);
         $.get(urlGetDataSKRD, function(data){
-            status_ttd = data.status_ttd; 
+            status_ttd = data.status_ttd;
 
-            if (status_ttd != 1 || status_ttd != 3) {
+            console.log(status_ttd);
+            if (status_ttd != 1 && status_ttd != 3) {
+                console.log('jala');
                 $("#editsts").removeAttr('href');
 
                 $('#status_bayar').change(function(){
                     var status_bayar = $('#status_bayar').val();
                     if (status_bayar == 0) {
-                        $('#displaySudahBayarAlert').hide(); 
+                        $('#displaySudahBayarAlert').hide();
                     }else{
-                        $('#displaySudahBayarAlert').show(); 
+                        $('#displaySudahBayarAlert').show();
                     }
                 });
             }
@@ -268,7 +275,7 @@
         $(this).addClass('was-validated');
     });
 
-  
+
     $('#inputGroupFile').on('change',function(){
         // get the file name
         var fileName = $(this).val();
@@ -276,6 +283,6 @@
         // replace the "Choose a file" label
         $(this).next('.custom-file-label').html(text);
     })
-    
+
 </script>
 @endsection

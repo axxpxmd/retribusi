@@ -210,7 +210,7 @@ class SKRDController extends Controller
     //* Get data SKRD for detail TTD
     public function getDataSKRD($id)
     {
-        $data = TransaksiOPD::select('no_skrd', 'nm_wajib_pajak', 'jumlah_bayar')->where('id', $id)->first();
+        $data = TransaksiOPD::where('id', $id)->first();
 
         return $data;
     }
