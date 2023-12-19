@@ -425,23 +425,23 @@ class ReportController extends Controller
         $i = 0;
         foreach ($data->lazy(1000) as $q) {
             $writer->addRow([
-                'no_bayar' => $q->no_bayar,
-                'no_skrd'  => $q->no_skrd,
-                'nm_wajib_pajak' => $q->nm_wajib_pajak,
+                'No Bayar' => $q->no_bayar,
+                'No SKRD'  => $q->no_skrd,
+                'Nama' => $q->nm_wajib_pajak,
                 'opd' => $q->opd->n_opd,
-                'jenis_pendapatan' => $q->jenis_pendapatan->jenis_pendapatan,
-                'rincian_pendapatan' => $q->rincian_jenis->rincian_pendapatan,
+                'Jenis Pendapatan' => $q->jenis_pendapatan->jenis_pendapatan,
+                'Rincian Pendapatan' => $q->rincian_jenis->rincian_pendapatan,
                 'kelurahan' => $q->kelurahan->n_kelurahan,
                 'kecamatan' => $q->kecamatan->n_kecamatan,
-                'tgl_skrd_awal' => $q->tgl_skrd_awal,
-                'tgl_bayar' => $q->tgl_bayar,
-                'ntb' => $q->ntb,
-                'chanel_bayar' => $q->chanel_bayar,
-                'jumlah_bayar' => $q->jumlah_bayar,
-                'diskon' => $q->diskon,
-                'denda' => $q->status_bayar == 1 ? $q->total_bayar_bjb - $q->jumlah_bayar : 0,
-                'total_bayar_bjb' => $q->total_bayar_bjb,
-                'status_bayar' => $q->status_bayar == 1 ? 'Sudah Bayar' : 'Belum Bayar',
+                'Tanggal SKRD' => $q->tgl_skrd_awal,
+                'Tanggal Bayar' => $q->tgl_bayar,
+                'NTB' => $q->ntb,
+                'Channel Bayar' => $q->chanel_bayar,
+                'Ketetapan' => $q->jumlah_bayar,
+                'Diskon' => $q->diskon,
+                'Denda' => $q->status_bayar == 1 ? $q->total_bayar_bjb - $q->jumlah_bayar : 0,
+                'Total Bayar' => $q->total_bayar_bjb,
+                'Status Bayar' => $q->status_bayar == 1 ? 'Sudah Bayar' : 'Belum Bayar',
             ]);
 
             if ($i % 1000 === 0) {
