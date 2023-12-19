@@ -208,6 +208,7 @@
         $('#displayBelumBayarAlert').show();
         $('#displayBelumBayarButton').show();
         $('#displaySudahBayarButton').hide();
+        $('#displaySudahBayarAlert').hide();
         $('#batalSkrd').modal('show');
         $('#batalSkrd').modal({keyboard: false});
 
