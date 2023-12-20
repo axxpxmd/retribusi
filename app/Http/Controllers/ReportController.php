@@ -252,7 +252,7 @@ class ReportController extends Controller
         $datas = TransaksiOPD::queryReport($opd_id, $jenis_pendapatan_id, $status_bayar, $from, $to, $jenis, $channel_bayar, $rincian_pendapatan_id, $status, $tahun);
         $data  = [];
         $totalDenda = [0];
-        foreach ($datas as $key => $i) {
+        foreach ($datas->lazy(1000) as $key => $i) {
             $tgl_bayar      = $i->tgl_bayar;
             $status_bayar   = $i->status_bayar;
             $tgl_skrd_awal  = $i->tgl_skrd_awal;
