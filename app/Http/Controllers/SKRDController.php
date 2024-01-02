@@ -137,7 +137,7 @@ class SKRDController extends Controller
                             foreach ($getDuplicate as $value) {
                                 if ($value['no_bayar'] == $p->no_bayar) {
                                     return $edit . $delete;
-                                }else{
+                                } else {
                                     if ($p->history_ttd == 1) {
                                         return $edit . $sendttd;
                                     } else {
@@ -329,7 +329,7 @@ class SKRDController extends Controller
             'uraian_retribusi'    => 'required',
             'id_jenis_pendapatan' => 'required',
             'id_rincian_jenis_pendapatan' => 'required'
-        ],[
+        ], [
             'tgl_skrd_awal.after' => 'Tanggal SKRD tidak sesuai'
         ]);
 
@@ -685,7 +685,6 @@ class SKRDController extends Controller
                 $invoiceId = null;
                 $textQRIS = null;
             }
-
         } else {
             $VABJB = null;
             $invoiceId = null;

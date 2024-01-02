@@ -3,7 +3,7 @@
 namespace App\Libraries;
 
 use App\Http\Services\VABJB;
-
+use Explorin\Tebot\Services\Tebot;
 use Illuminate\Support\Facades\Log;
 
 class VABJBRes
@@ -33,7 +33,11 @@ class VABJBRes
             }
         } else {
             $err = true;
-            $err = 'Terjadi kegagalan saat mengambil token. Error Server';
+            $errMsg = 'Terjadi kegagalan saat mengambil token. Error Server';
+        }
+
+        if ($err) {
+            VABJBRes::sendLog($errMsg);
         }
 
         return [$err, $errMsg, $tokenBJB];
@@ -82,6 +86,10 @@ class VABJBRes
             $errMsg = 'Terjadi kegagalan saat membuat Virtual Account. Error Server';
         }
 
+        if ($err) {
+            VABJBRes::sendLog($errMsg);
+        }
+
         return [$err, $errMsg, $VABJB];
     }
 
@@ -125,6 +133,10 @@ class VABJBRes
         } else {
             $err = true;
             $errMsg = 'Terjadi kegagalan saat memperbarui Virtual Account. Error Server';
+        }
+
+        if ($err) {
+            VABJBRes::sendLog($errMsg);
         }
 
         return [$err, $errMsg, $VABJB];
@@ -173,6 +185,18 @@ class VABJBRes
             $errMsg = 'Terjadi kegagalan saat check inquiry Virtual Account. Error Server';
         }
 
+        if ($err) {
+            VABJBRes::sendLog($errMsg);
+        }
+
         return [$err, $errMsg, $VABJB, $status, $transactionTime, $transactionAmount];
+    }
+
+    public static function sendLog($errMsg)
+    {
+        $logError = 'Message : ' . $errMsg;
+        if (config('app.log_tebot') == 1) {
+            Tebot::alert($logError)->channel('log_va');
+        }
     }
 }

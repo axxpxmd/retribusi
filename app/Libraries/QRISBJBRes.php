@@ -3,7 +3,7 @@
 namespace App\Libraries;
 
 use App\Http\Services\QRISBJB;
-
+use Explorin\Tebot\Services\Tebot;
 use Illuminate\Support\Facades\Log;
 
 class QRISBJBRes
@@ -26,6 +26,10 @@ class QRISBJBRes
         } else {
             $err = true;
             $errMsg = 'Terjadi kegagalan saat mengambil token QRIS BJB. Error Server';
+        }
+
+        if ($err) {
+            QRISBJBRes::sendLog($errMsg);
         }
 
         return [$err, $errMsg, $tokenQRISBJB];
@@ -78,6 +82,18 @@ class QRISBJBRes
             $errMsg = 'Terjadi kegagalan saat membuat QRIS BJB. Error Server';
         }
 
+        if ($err) {
+            QRISBJBRes::sendLog($errMsg);
+        }
+
         return [$err, $errMsg, $invoiceId, $textQRIS];
+    }
+
+    public static function sendLog($errMsg)
+    {
+        $logError = 'Message : ' . $errMsg;
+        if (config('app.log_tebot') == 1) {
+            Tebot::alert($logError)->channel('log_qris');
+        }
     }
 }
