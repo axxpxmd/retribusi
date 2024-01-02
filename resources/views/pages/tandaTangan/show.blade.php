@@ -112,7 +112,7 @@
                                             <div class="row">
                                                 <label class="col-md-4 font-weight-bold text-right s-12"><strong>Kecamatan  :</strong></label>
                                                 <label class="col-md-8 s-12">{{ $data->kecamatan->n_kecamatan }}</label>
-                                            </div> 
+                                            </div>
                                             <div class="row">
                                                 <label class="col-md-4 font-weight-bold text-right s-12"><strong>Kelurahan  :</strong></label>
                                                 <label class="col-md-8 s-12">{{ $data->kelurahan->n_kelurahan }}</label>
@@ -142,11 +142,11 @@
                                             <div class="row">
                                                 <label class="col-md-4 font-weight-bold text-right s-12"><strong>Ketetapan  :</strong></label>
                                                 <label class="col-md-8 s-12">@currency($data->jumlah_bayar)</label>
-                                            </div> 
+                                            </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12 font-weight-bold">Denda  :</label>
                                                 <label class="col-md-8 s-12">({{ $kenaikan }}%) &nbsp;@currency($jumlahBunga)</label>
-                                            </div> 
+                                            </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12 font-weight-bold">Diskon  :</label>
                                                 @if ($data->status_diskon == 0)
@@ -154,7 +154,7 @@
                                                 @else
                                                 <label class="col-md-8 s-12">({{ $data->diskon }}%) &nbsp;@currency(((int) $data->diskon / 100) * $data->jumlah_bayar)</label>
                                                 @endif
-                                            </div> 
+                                            </div>
                                             <div class="row">
                                                 <label class="col-md-4 font-weight-bold text-right s-12"><strong>Total Bayar  :</strong></label>
                                                 @if (!$jatuh_tempo)
@@ -162,15 +162,15 @@
                                                 @else
                                                     <label class="col-md-8 s-12">@currency($data->total_bayar + $jumlahBunga)</label>
                                                 @endif
-                                            </div> 
+                                            </div>
                                             <div class="row">
                                                 <label class="col-md-4 font-weight-bold text-right s-12"><strong>Virtual Account BJB  :</strong></label>
                                                 <label class="col-md-8 s-12">{{ $status_ttd ? $data->nomor_va_bjb : '-' }}</label>
-                                            </div> 
+                                            </div>
                                             <div class="row">
                                                 <label class="col-md-4 font-weight-bold text-right s-12"><strong>Invoice ID QRIS  :</strong></label>
                                                 <label class="col-md-8 s-12">{{ $data->invoice_id }}</label>
-                                            </div> 
+                                            </div>
                                         </div>
                                     </div>
                                     <hr>
@@ -226,7 +226,7 @@
                                             @endif
                                             @if ($data->status_bayar == 0)
                                             <div class="col-auto p-1">
-                                                <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#restore"><i class="icon-refresh2 mr-2"></i>Kembalikan</button> 
+                                                <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#restore"><i class="icon-refresh2 mr-2"></i>Kembalikan</button>
                                             </div>
                                             @endif
                                         </div>
@@ -265,9 +265,10 @@
                     <div class="card-body">
                         <form class="needs-validation" method="POST" action="{{ $tte_backup == 1 ? route('tanda-tangan.tteBackup') : route('tanda-tangan.tandaTangan') }}" enctype="multipart/form-data" novalidate>
                             {{ method_field('POST') }}
-                            {{ csrf_field() }} 
+                            {{ csrf_field() }}
                             <input type="hidden" name="nip" value="{{ $nip }}">
                             <div class="text-center row">
+                                <!-- BSRE -->
                                 <div class="col {{ $bsre_status == 'OFF' ? 'd-none' : '' }}">
                                     <div class="justify-content-center row mb-2">
                                         <label class="col-md-2 p-0">
@@ -276,14 +277,15 @@
                                                 Pilih TTE.
                                             </div>
                                         </label>
-                                        <div class="col-md-8 p-0">  
+                                        <div class="col-md-8 p-0">
                                             <div class="border py-2" style="background: {{ $nik ? '' : '#F7F7F7' }}">
                                                 <img src="{{ asset('images/bsre.png') }}" width="118" alt="">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col {{ $aurograf_status == 'OFF' ? 'd-none' : '' }}">
+                                 <!-- AUROGRAF -->
+                                <div class="col ml-1 {{ $aurograf_status == 'OFF' ? 'd-none' : '' }}">
                                     <div class="justify-content-center row mb-2">
                                         <label class="col-md-2 p-0">
                                             <input type="radio" class="form-control" name="tte" value="aurograf" {{ $nik ? 'required' : '' }} {{ $nik ? '-' : 'disabled' }} style="margin-top: 25px !important">
@@ -291,14 +293,15 @@
                                                 Pilih TTE.
                                             </div>
                                         </label>
-                                        <div class="col-md-8 p-0">  
+                                        <div class="col-md-8 p-0">
                                             <div class="border py-2" style="background: {{ $nik ? '' : '#F7F7F7' }}">
-                                                <img src="{{ asset('images/aurograf.png') }}" width="85" alt="">
+                                                <img src="{{ asset('images/aurograf.png') }}" width="84" alt="">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col {{ $iotentik_status == 'OFF' ? 'd-none' : '' }}">
+                                 <!-- IOTENTIK -->
+                                <div class="col ml-1 {{ $iotentik_status == 'OFF' ? 'd-none' : '' }}">
                                     <div class="justify-content-center row mb-2">
                                         <label class="col-md-2 p-0">
                                             <input type="radio" class="form-control" name="tte" value="iotentik" style="margin-top: 25px !important">
@@ -306,7 +309,7 @@
                                                 Pilih TTE.
                                             </div>
                                         </label>
-                                        <div class="col-md-8 p-0">  
+                                        <div class="col-md-8 p-0">
                                             <div class="border py-2" style="background: {{ $nik ? '' : '#F7F7F7' }}">
                                                 <img src="{{ asset('images/iotentik.jpg') }}" width="105" alt="">
                                             </div>
@@ -326,8 +329,8 @@
                             @endif
                             <hr>
                             <input type="hidden" name="id" value="{{ $id }}">
-                            <input type="hidden" name="nik" value="{{ $nik }}"> 
-                            <input type="hidden" name="nip" value="{{ $nip }}">    
+                            <input type="hidden" name="nik" value="{{ $nik }}">
+                            <input type="hidden" name="nip" value="{{ $nip }}">
                             @if ($aurografCerts)
                             <div class="row mb-2" id="aurograf_cert" style="display: none">
                                 <label for="password" class="col-form-label s-12 col-md-2 font-weight-bold">Sertifikat</label>
@@ -348,7 +351,7 @@
                                     </div>
                                 </div>
                             </div>
-                            @endif 
+                            @endif
                             <div class="row mb-2">
                                 <label for="password" class="col-form-label s-12 col-md-2 font-weight-bold">Passphrase</label>
                                 <div class="col-md-10">
@@ -426,7 +429,7 @@
 
                     form.classList.add('was-validated')
                     if (form.checkValidity()) {
-                        $('#loading').modal('show');   
+                        $('#loading').modal('show');
                     }
                 }, false)
             })
