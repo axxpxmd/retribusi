@@ -369,6 +369,9 @@ class SKRDController extends Controller
 
         $penanda_tangan = TtdOPD::where('id', $request->penanda_tangan_id)->first();
 
+        //* Get Rekening
+        $dataRekening = $this->getKodeRekening($request->id_rincian_jenis_pendapatan);
+
         $data = [
             'id_opd'  => $request->id_opd,
             'tgl_ttd' => $request->tgl_ttd,
@@ -409,8 +412,8 @@ class SKRDController extends Controller
         $amount       = \strval((int) str_replace(['.', 'Rp', ' '], '', $request->jumlah_bayar));
         $expiredDate  = $request->tgl_skrd_akhir . ' 23:59:59';
         $customerName = $request->nm_wajib_pajak;
-        $productCode  = $request->kd_jenis;
-        $no_hp = $request->no_hp;
+        $productCode  = $dataRekening->kd_jenis;
+        $no_hp = $dataRekening->no_hp;
 
         //*: Check Expired Date (jika tgl_skrd_akhir kurang dari tanggal sekarang maka VA dan QRIS tidak terbuat)
         //*: Check Amount (jika nominal 0 rupiah makan VA dan QRIS tidak terbuat)
@@ -471,7 +474,7 @@ class SKRDController extends Controller
         DB::commit(); //* DB Transaction Success
 
         //* LOG
-        Log::channel('skrd_create')->info('Create Data SKRD', $dataSKRD->toArray());
+        Log::channel('skrd_create')->info('Create Data SKRD', $request->all());
 
         //* Tahap 5
         $data = [

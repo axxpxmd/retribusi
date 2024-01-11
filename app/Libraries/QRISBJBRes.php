@@ -63,7 +63,8 @@ class QRISBJBRes
         //* LOG QRIS
         $dataQris = [
             'no_bayar' => $no_bayar,
-            'data' => $resJsonQRIS
+            'data' => $resJsonQRIS,
+            'no_hp' => $no_hp,
         ];
         Log::channel('create_qris')->info($log, $dataQris);
 
