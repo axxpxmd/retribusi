@@ -474,7 +474,7 @@ class SKRDController extends Controller
         DB::commit(); //* DB Transaction Success
 
         //* LOG
-        Log::channel('skrd_create')->info('Create Data SKRD', $request->all());
+        Log::channel('skrd_create')->info('Create Data SKRD', array_merge($request->all(), $dataSKRD->toArray()));
 
         //* Tahap 5
         $data = [
