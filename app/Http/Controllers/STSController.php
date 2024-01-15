@@ -18,6 +18,7 @@ use DataTables;
 use Carbon\Carbon;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Crypt;
 
 use App\Libraries\VABJBRes;
@@ -247,6 +248,12 @@ class STSController extends Controller
         $data = TransaksiOPD::find($id);
         $dateNow = Carbon::now()->format('Y-m-d');
 
+        if ($data->status_bayar == 1) {
+            return redirect()
+                ->route($this->route . 'index')
+                ->withSuccess('SKRD sudah dibayar.');
+        }
+
         $va_number = (int) $data->nomor_va_bjb;
         $no_bayar  = $data->no_bayar;
         $tgl_skrd_akhir = $data->tgl_skrd_akhir;
@@ -374,6 +381,9 @@ class STSController extends Controller
             ], 500);
         }
 
+        //* LOG
+        Log::channel('sts_edit')->info('Edit Data SRKD | ' . 'Oleh:' . Auth::user()->pengguna->full_name, array_merge($data->toArray(), $request->all()));
+
         if ($data->no_telp) {
             $this->whatsapp->sendSTS($tgl_bayar, $ntb, $chanel_bayar, $total_bayar_bjb, $data);
         }
@@ -473,6 +483,9 @@ class STSController extends Controller
             'denda' => 0,
             'status_denda' => 1
         ]);
+
+        //* LOG
+        Log::channel('sts_batal_bayar')->info('Edit Data SRKD | ' . 'Oleh:' . Auth::user()->pengguna->full_name, $data->toArray());
 
         return redirect()
             ->route($this->route . 'show', $id_encrypt)

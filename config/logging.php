@@ -63,6 +63,20 @@ return [
             'days' => 0,
         ],
 
+        'sts_edit' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/sts/edit.log'),
+            'level' => 'info',
+            'days' => 0,
+        ],
+
+        'sts_batal_bayar' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/sts/batal_bayar.log'),
+            'level' => 'info',
+            'days' => 0,
+        ],
+
         'create_qris' => [
             'driver' => 'daily',
             'path' => storage_path('logs/qris/create_qris.log'),

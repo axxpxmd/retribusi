@@ -48,13 +48,13 @@
                                                 <label for="rincian_jenis_pendapatan" class="col-form-label s-12 col-sm-4 text-right">Jenis Pendapatan</label>
                                                 <div class="col-md-8">
                                                     <input type="text" name="rincian_jenis_pendapatan" id="rincian_jenis_pendapatan" value="{{ $data->jenis_pendapatan->jenis_pendapatan }}"  class="form-control s-12" autocomplete="off" readonly required/>
-                                                </div>    
+                                                </div>
                                             </div>
                                             <div class="row mb-2">
                                                 <label for="rincian_jenis_pendapatan" class="col-form-label s-12 col-sm-4 text-right">Rincian Jenis Pendapatan</label>
                                                 <div class="col-md-8">
                                                     <input type="text" name="rincian_jenis_pendapatan" id="rincian_jenis_pendapatan" value="{{  $data->rincian_jenis != null ? $data->rincian_jenis->rincian_pendapatan : '' }}"  class="form-control s-12" autocomplete="off" readonly required/>
-                                                </div>    
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -86,13 +86,13 @@
                                                 <label for="nmr_daftar" class="col-form-label s-12 col-sm-4 text-right">Nomor Daftar</label>
                                                 <div class="col-md-8">
                                                     <input type="text" name="nmr_daftar" id="nmr_daftar" value="{{ $data->nmr_daftar }}" readonly class="form-control s-12" autocomplete="off" required/>
-                                                </div>    
+                                                </div>
                                             </div>
                                             <div class="row mb-2">
                                                 <label for="nm_wajib_pajak" class="col-form-label s-12 col-sm-4 text-right">Nama</label>
                                                 <div class="col-md-8">
                                                     <input type="text" name="nm_wajib_pajak" id="nm_wajib_pajak" value="{{ $data->nm_wajib_pajak }}" readonly class="form-control s-12" autocomplete="off" required/>
-                                                </div>    
+                                                </div>
                                             </div>
                                             <div class="row mb-2">
                                                 <label for="alamat_wp" class="col-form-label s-12 col-sm-4 text-right">Alamat</label>
@@ -104,19 +104,19 @@
                                                 <label for="lokasi" class="col-form-label s-12 col-sm-4 text-right">Lokasi</label>
                                                 <div class="col-md-8">
                                                     <input type="text" name="lokasi" id="lokasi" value="{{ $data->lokasi }}" readonly placeholder="Contoh: Ruko Sektor 1.2 BSD" class="form-control s-12" autocomplete="off" required/>
-                                                </div>    
+                                                </div>
                                             </div>
                                             <div class="row mb-2">
                                                 <label for="kecamatan_id" class="col-form-label s-12 col-sm-4 text-right">Kecamatan</label>
                                                 <div class="col-md-8">
                                                     <input type="text" name="kecamatan_id" id="kecamatan_id" value="{{ $data->kecamatan->n_kecamatan }}" readonly class="form-control s-12" autocomplete="off"/>
-                                                </div>    
+                                                </div>
                                             </div>
                                             <div class="row mb-2">
                                                 <label for="kelurahan_id" class="col-form-label s-12 col-sm-4 text-right">Kelurahan</label>
                                                 <div class="col-md-8">
                                                     <input type="text" name="kelurahan_id" id="kelurahan_id" value="{{ $data->kelurahan->n_kelurahan }}" readonly class="form-control s-12" autocomplete="off"/>
-                                                </div>    
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -124,7 +124,7 @@
                                                 <label for="no_skrd" class="col-form-label s-12 col-sm-4 text-right">Nomor SKRD</label>
                                                 <div class="col-md-8">
                                                     <input type="text" name="no_skrd" id="no_skrd" value="{{ $data->no_skrd }}" readonly class="form-control s-12" autocomplete="off"/>
-                                                </div>    
+                                                </div>
                                             </div>
                                             <div class="row mb-2">
                                                 <label for="tgl_skrd_awal" class="col-form-label s-12 col-sm-4 text-right">Tanggal SKRD</label>
@@ -142,13 +142,13 @@
                                                 <label for="nm_ttd" class="col-form-label s-12 col-sm-4 text-right">Penanda Tangan</label>
                                                 <div class="col-md-8">
                                                     <input type="text" name="nm_ttd" id="nm_ttd" value="{{ $data->nm_ttd }}" readonly class="form-control s-12" autocomplete="off" required/>
-                                                </div>    
+                                                </div>
                                             </div>
                                             <div class="row mb-2">
                                                 <label for="nip_ttd" class="col-form-label s-12 col-sm-4 text-right">NIP Penandatangan</label>
                                                 <div class="col-md-8">
                                                     <input type="text" name="nip_ttd" id="nip_ttd" value="{{ $data->nip_ttd }}" readonly class="form-control s-12" autocomplete="off" required/>
-                                                </div>    
+                                                </div>
                                             </div>
                                             <div class="row mb-2">
                                                 <label for="tgl_ttd" class="col-form-label s-12 col-sm-4 text-right">Tanggal TTD</label>
@@ -160,10 +160,10 @@
                                                 <label for="jumlah_bayar" class="col-form-label s-12 col-sm-4 text-right">Ketetapan</label>
                                                 <div class="col-md-8">
                                                     <input type="text" name="jumlah_bayar" value="{{ $data->jumlah_bayar }}" readonly class="form-control s-12" autocomplete="off" required/>
-                                                </div>    
+                                                </div>
                                             </div>
                                         </div>
-                                    </div> 
+                                    </div>
                                     <hr>
 
                                     <div class="row">
@@ -187,7 +187,7 @@
                                                 <label for="no_bku" class="col-form-label s-12 col-sm-4 text-right">Nomor BKU</label>
                                                 <div class="col-md-8">
                                                     <input type="text" name="no_bku" value="{{ $data->no_bku }}" {{ $readonly }} id="no_bku" class="form-control s-12" autocomplete="off"/>
-                                                </div>    
+                                                </div>
                                             </div>
                                             <div class="row mb-2">
                                                 <label for="chanel_bayar" class="col-form-label s-12 col-sm-4 text-right">Chanel Bayar<span class="text-danger ml-1">*</span></label>
@@ -210,7 +210,7 @@
                                                 <label for="ntb" class="col-form-label s-12 col-sm-4 text-right">NTB</label>
                                                 <div class="col-md-8">
                                                     <input type="text" name="ntb" value="{{ $data->ntb }}" {{ $readonly }} id="ntb" class="form-control s-12" autocomplete="off"/>
-                                                </div>    
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -221,22 +221,22 @@
                                                     @if ($jumlahBunga != 0)
                                                     <span class="text-danger fs-10">ubah jadi 0 jika ingin menghapus denda</span>
                                                     @endif
-                                                </div>    
+                                                </div>
                                             </div>
                                             <div class="row mb-2">
                                                 <label for="diskon" class="col-form-label s-12 col-sm-4 text-right">Diskon</label>
                                                 <div class="col-md-2 mb-5-m">
                                                     <input type="text" name="diskon" value="{{ $data->diskon }} %" readonly id="diskon" class="form-control s-12" autocomplete="off"/>
-                                                </div> 
+                                                </div>
                                                 <div class="col-md-6">
                                                     <input type="text" name="jumlah_diskon" value="@currency($data->diskon / 100 * $data->jumlah_bayar )" readonly id="diskon" class="form-control s-12" autocomplete="off"/>
-                                                </div>    
+                                                </div>
                                             </div>
                                             <div class="row mb-2">
                                                 <label for="total_bayar_bjb" class="col-form-label s-12 col-sm-4 text-right">Total Bayar Bank<span class="text-danger ml-1">*</span></label>
                                                 <div class="col-md-8">
                                                     <input type="text" name="total_bayar_bjb" {{ $data->status_bayar == 1 ? 'readonly' : '' }} value="{{ $data->total_bayar_bjb }}" {{ $readonly }} id="rupiah2" class="form-control s-12" autocomplete="off" required/>
-                                                </div>    
+                                                </div>
                                             </div>
                                             <div class="row">
                                                 <label for="file_pendukung" class="col-form-label s-12 col-sm-4 text-right">File Pendukung<span class="text-danger ml-1">*</span></label>
@@ -253,7 +253,7 @@
                                                 <div class="col-md-8">
                                                     <button type="submit" class="btn btn-primary btn-sm btn-block"><i class="icon-save mr-2"></i>Simpan Perubahan</button>
                                                 </div>
-                                            </div>  
+                                            </div>
                                         </div>
                                     </div>
                                 </form>
@@ -285,7 +285,7 @@
         if (isNaN(totalBJB)) {
             $('#rupiah2').val("{{ $data->total_bayar }}")
         }else{
-            $('#rupiah2').val(totalBJB)     
+            $('#rupiah2').val(totalBJB)
         }
     }
 
@@ -367,5 +367,13 @@
             return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
         }
     }
+
+    $('#inputGroupFile').on('change',function(){
+        // get the file name
+        var fileName = $(this).val();
+        text = fileName.substring(fileName.lastIndexOf("\\") + 1, fileName.length);
+        // replace the "Choose a file" label
+        $(this).next('.custom-file-label').html(text);
+    })
 </script>
 @endsection

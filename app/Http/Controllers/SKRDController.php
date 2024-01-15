@@ -717,7 +717,7 @@ class SKRDController extends Controller
         ]);
 
         //* LOG
-        Log::channel('skrd_edit')->info('Edit Data SRKD | ' . 'Oleh:' . Auth::user()->pengguna->full_name, $data->toArray());
+        Log::channel('skrd_edit')->info('Edit Data SRKD | ' . 'Oleh:' . Auth::user()->pengguna->full_name, array_merge($data->toArray(), $request->all()));
 
         return response()->json([
             'message' => 'Data ' . $this->title . ' berhasil diperbaharui.'
