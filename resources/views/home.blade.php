@@ -249,7 +249,7 @@
             <div class="col-md-5">
                 <div class="card r-15 no-b" style="height: 300px !important">
                     <div class="card-body py-1 px-2">
-                        @include('pages.dashboard.chartTest')
+                        @include('pages.dashboard.chartPendapatanTahun')
                     </div>
                 </div>
             </div>
