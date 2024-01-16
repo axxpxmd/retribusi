@@ -59,7 +59,7 @@
                     </div>
                 </div>
                 <div class="card no-b r-15">
-                    <h6 class="card-header r-15 bg-white font-weight-bold">Pendapatan</h6>
+                    <h6 class="card-header r-15 bg-white font-weight-bold">Pendapatan {{ $year }}</h6>
                     <div class="card-body pt-1">
                         <table id="dtHorizontalVerticalExample" class="table table-hover fs-12" cellspacing="0" width="100%">
                             <thead>
@@ -104,7 +104,7 @@
                 <div class="row">
                     <div class="col-md-6 px-1 mb-5-m">
                         <div class="card no-b r-15">
-                            <h6 class="card-header font-weight-bold text-white" style="background: #FFCE3B; border-top-right-radius: 15px; border-top-left-radius: 15px">Total SKRD</h6>
+                            <h6 class="card-header font-weight-bold text-white" style="background: #FFCE3B; border-top-right-radius: 15px; border-top-left-radius: 15px">Total SKRD {{ $year }}</h6>
                             <div class="card-body text-center">
                                 <div class="mb-2">
                                     <i class="icon-notebook-text fs-24 amber-text mr-2"></i>
@@ -117,7 +117,7 @@
                     </div>
                     <div class="col-md-6 px-2 mb-5-m">
                         <div class="card no-b r-15">
-                            <h6 class="card-header font-weight-bold text-white bg-danger" title="SKRD yang telah jatuh tempo" style="border-top-right-radius: 15px; border-top-left-radius: 15px">Total STRD</h6>
+                            <h6 class="card-header font-weight-bold text-white bg-danger" title="SKRD yang telah jatuh tempo" style="border-top-right-radius: 15px; border-top-left-radius: 15px">Total STRD {{ $year }}</h6>
                             <div class="card-body text-center">
                                 <div class="mb-2">
                                     <i class="icon-notebook-text fs-24 text-danger mr-2"></i>
@@ -134,7 +134,7 @@
                 <div class="row mt-3">
                     <div class="col-md-6 px-1 mb-5-m">
                         <div class="card no-b r-15">
-                            <h6 class="card-header font-weight-bold text-white bg-primary" title="SKRD yang sudah dibayar" style="border-top-right-radius: 15px; border-top-left-radius: 15px">Total STS</h6>
+                            <h6 class="card-header font-weight-bold text-white bg-primary" title="SKRD yang sudah dibayar" style="border-top-right-radius: 15px; border-top-left-radius: 15px">Total STS {{ $year }}</h6>
                             <div class="card-body text-center">
                                 <div class="mb-2">
                                     <i class="icon-notebook-text fs-24 text-primary mr-2"></i>
@@ -147,7 +147,7 @@
                     </div>
                     <div class="col-md-6 px-2 mb-5-m">
                         <div class="card no-b r-15">
-                            <h6 class="card-header font-weight-bold text-white bg-success" style="border-top-right-radius: 15px; border-top-left-radius: 15px">Keseluruhan</h6>
+                            <h6 class="card-header font-weight-bold text-white bg-success" style="border-top-right-radius: 15px; border-top-left-radius: 15px">Keseluruhan {{ $year }}</h6>
                             <div class="card-body text-center">
                                 <div class="mb-2">
                                     <i class="icon-notebook-text fs-24 text-success mr-2"></i>
@@ -213,7 +213,7 @@
         <div class="row mt-3">
             <div class="col-md-4 mb-5-m">
                 <div class="card no-b r-15" style="height: 300px !important">
-                    <h6 class="card-header bg-danger text-white font-weight-bold" style="border-top-right-radius: 15px; border-top-left-radius: 15px">Metode Pembayaran <i class="icon-payment ml-2"></i></h6>
+                    <h6 class="card-header bg-danger text-white font-weight-bold" style="border-top-right-radius: 15px; border-top-left-radius: 15px">Metode Pembayaran {{ $year }}<i class="icon-payment ml-2"></i></h6>
                     <div class="card-body pt-1">
                         <table id="tableChannelBayar" class="table table-hover fs-12" cellspacing="0" width="100%">
                             <thead>
@@ -240,7 +240,7 @@
             </div>
             <div class="col-md-3 mb-5-m">
                 <div class="card r-15 no-b" style="height: 300px !important">
-                    <h6 class="card-header bg-success text-white font-weight-bold" style="border-top-right-radius: 15px; border-top-left-radius: 15px">Metode Pembayaran <i class="icon-payment ml-2"></i></h6>
+                    <h6 class="card-header bg-success text-white font-weight-bold" style="border-top-right-radius: 15px; border-top-left-radius: 15px">Metode Pembayaran {{ $year }}<i class="icon-payment ml-2"></i></h6>
                     <div class="card-body py-0 px-1">
                         @include('pages.dashboard.pieMetodePembayaran')
                     </div>
@@ -258,7 +258,7 @@
         <div class="row mt-3">
             <div class="col-md-7 mb-5-m">
                 <div class="card no-b r-15" style="height: 475px !important">
-                    <h6 class="card-header text-white font-weight-bold" style="background: #FFCE3B; border-top-right-radius: 15px; border-top-left-radius: 15px">Pendapatan OPD</h6>
+                    <h6 class="card-header text-white font-weight-bold" style="background: #FFCE3B; border-top-right-radius: 15px; border-top-left-radius: 15px">Pendapatan OPD {{ $year }}</h6>
                     <div class="card-body p-0">
                         @include('pages.dashboard.chartDiagram')
                     </div>
