@@ -37,11 +37,12 @@ class Handler extends ExceptionHandler
      */
     public function report(Throwable $exception)
     {
+        $user_id = auth()->user() ? auth()->user()->username : ' ';
+
         $logError = 'Message : ' . $exception->getMessage() .
-            ' | File : ' . $exception->getFile() .
-            ' | Line : ' . $exception->getLine() .
             ' | URL : ' . request()->url() .
-            ' | Params : ' . request()->getContent().
+            ' | Params : ' . request()->getContent() .
+            ' | User ID : ' . $user_id .
             ' | IP : ' . request()->getClientIp();
         if (config('app.log_tebot') == 1) {
             Tebot::alert($logError)->channel('log_skrd');
