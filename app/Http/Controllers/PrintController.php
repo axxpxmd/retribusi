@@ -28,12 +28,12 @@ class PrintController extends Controller
     //* Create Bunga
     public static function createBunga($tgl_skrd_akhir, $total_bayar)
     {
-        //TODO: Create Bunga (kenaikan 2% tiap bulan)
+        //TODO: Create Bunga (kenaikan 1% tiap bulan)
         $toDate = Carbon::parse($tgl_skrd_akhir);
         $fromDate = Carbon::now();
         $monthDiff = $toDate->diffInMonths($fromDate);
 
-        $kenaikan = ((int) $monthDiff + 1) * 2;
+        $kenaikan = ((int) $monthDiff + 1) * 1;
         $bunga    = $kenaikan / 100;
         $jumlahBunga = $total_bayar * $bunga;
 
@@ -99,7 +99,7 @@ class PrintController extends Controller
 
         //* Tanggal Jatuh Tempo STRD
         $tgl_jatuh_tempo = Utility::tglJatuhTempo($tgl_strd_akhir, $tgl_skrd_akhir);
-       
+
         $pdf = app('dompdf.wrapper');
         $pdf->getDomPDF()->set_option("enable_php", true);
         $pdf->setPaper('legal', 'portrait');

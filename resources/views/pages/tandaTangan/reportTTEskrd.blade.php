@@ -342,7 +342,7 @@
                         <li>Untuk pembayaran melalui SKN dan RTGS atau yang melebihi limit transaksi transfer online
                             dapat menghubungi perangkat daerah penerbit SKRD.</li>
                         <li>Apabila SKRD ini tidak atau kurang dibayar lewat waktu paling lama 30 hari setelah SKRD
-                            diterima atau (tanggal jatuh tempo) sanksi administrasi bunga sebesar 2% per bulan</li>
+                            diterima atau (tanggal jatuh tempo) sanksi administrasi bunga sebesar 1% per bulan</li>
                     </ol>
                 </td>
             </tr>

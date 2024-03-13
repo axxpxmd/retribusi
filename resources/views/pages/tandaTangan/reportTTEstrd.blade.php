@@ -13,7 +13,7 @@
 		table.d {
             border-collapse: collapse;
             width: 100%
-        } 
+        }
 
         table.d tr.d,th.d,td.d{
             table-layout: fixed;
@@ -29,7 +29,7 @@
         }
 
         table.c{
-            font-size: 15px 
+            font-size: 15px
         }
 
         .t-bold {
@@ -152,7 +152,7 @@
             </th>
         </tr>
     </table>
-    
+
     <div class="m-t-15 m-l-50">
         <table class="c">
             <tr class="c">
@@ -264,7 +264,7 @@
                         </li>
                         <li>Pembayaran dilakukan melalui transfer VA (virtual account) bank BJB atau transfer antar bank online menggunakan nomor virtual account bank BJB <b>{{ $data->nomor_va_bjb ? $data->nomor_va_bjb  : '-' }}</b>. (mengikuti ketentuan limit transaksi transfer yang berlaku, dan tidak berlaku untuk transaksi SKN & RTGS) ,berlaku sampai <b>{{ Carbon\Carbon::createFromFormat('Y-m-d', $tgl_jatuh_tempo)->isoFormat('D MMMM Y') }}</b>.</li>
                         <li>Untuk pembayaran melalui SKN dan RTGS atau yang melebihi limit transaksi transfer online dapat menghubungi perangkat daerah penerbit SKRD.</li>
-                        <li>Apabila SKRD ini tidak atau kurang dibayar lewat waktu paling lama 30 hari setelah SKRD diterima atau (tanggal jatuh tempo) sanksi administrasi bunga sebesar 2% per bulan</li>
+                        <li>Apabila SKRD ini tidak atau kurang dibayar lewat waktu paling lama 30 hari setelah SKRD diterima atau (tanggal jatuh tempo) sanksi administrasi bunga sebesar 1% per bulan</li>
                     </ol>
                 </td>
             </tr>
