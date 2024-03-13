@@ -363,6 +363,7 @@ class STSController extends Controller
                 $request->file('file_pendukung')->storeAs('file_pendukung/', $fileName, 'sftp', 'public');
             }
 
+            
             $data->update([
                 'status_bayar' => 1,
                 'tgl_bayar'    => $tgl_bayar,

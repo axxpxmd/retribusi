@@ -416,7 +416,7 @@ class SKRDController extends Controller
         $no_hp = $dataRekening->no_hp;
 
         //*: Check Expired Date (jika tgl_skrd_akhir kurang dari tanggal sekarang maka VA dan QRIS tidak terbuat)
-        //*: Check Amount (jika nominal 0 rupiah makan VA dan QRIS tidak terbuat)
+        //*: Check Amount (jika nominal 0 rupiah maka VA dan QRIS tidak terbuat)
         list($dayDiff, $monthDiff) = Utility::getDiffDate($request->tgl_skrd_akhir);
         if ($dayDiff > 0 && $amount != 0) {
             //* Tahap 3

@@ -46,7 +46,7 @@
                                 <div class="col-sm-8">
                                     <select name="status_bayar" id="status_bayar" class="select2 form-control r-0 s-12">
                                         <option value="">Semua</option>
-                                        <option value="0">Belum Dibayar</option>
+                                        <option value="0" {{ $status == 2 ? 'selected' : '-' }}>Belum Dibayar</option>
                                         <option value="1">Sudah Dibayar</option>
                                     </select>
                                 </div>
@@ -62,7 +62,7 @@
                                 <div class="col-md-2 mb-5-m">
                                     <select name="jenis_tanggal" id="jenis_tanggal" class="select2 form-control r-0 s-12">
                                         <option value="2" {{ $status == 1 ? 'selected' : '' }}>Bayar</option>
-                                        <option value="1">SKRD</option>
+                                        <option value="1" {{ $status == 2 ? 'selected' : '' }}>SKRD</option>
                                     </select>
                                 </div>
                                 <div class="col-md-3">
