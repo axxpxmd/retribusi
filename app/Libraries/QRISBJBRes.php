@@ -18,6 +18,7 @@ class QRISBJBRes
             $resJsonQRIS = $resGetTokenQRISBJB->json();
             if ($resJsonQRIS["status"]["code"] != 200) {
                 $err = true;
+                $res_message = "status : " .  $resJsonQRIS["status"]["code"] . " | " . "message : " . $resJsonQRIS["status"]["description"];
                 $errMsg = 'Terjadi kegagalan saat mengambil token QRIS BJB';
             } else {
                 $err = false;
@@ -29,7 +30,7 @@ class QRISBJBRes
         }
 
         if ($err) {
-            QRISBJBRes::sendLog($errMsg);
+            QRISBJBRes::sendLog($errMsg . " | " . $res_message);
         }
 
         return [$err, $errMsg, $tokenQRISBJB];
@@ -71,6 +72,7 @@ class QRISBJBRes
         if ($resCreateQRISBJB->successful()) {
             if ($resJsonQRIS["status"]["code"] != 200) {
                 $err = true;
+                $res_message = "status : " .  $resJsonQRIS["status"]["code"] . " " . "message : " . $resJsonQRIS["status"]["description"];
                 $errMsg = 'Terjadi kegagalan saat membuat QRIS BJB';
             } else {
                 $err = false;
@@ -84,12 +86,13 @@ class QRISBJBRes
         }
 
         if ($err) {
-            QRISBJBRes::sendLog($errMsg);
+            QRISBJBRes::sendLog($errMsg . " " . $res_message);
         }
 
         return [$err, $errMsg, $invoiceId, $textQRIS];
     }
 
+    // send log to telegram with tebot
     public static function sendLog($errMsg)
     {
         $logError = 'Message : ' . $errMsg;
