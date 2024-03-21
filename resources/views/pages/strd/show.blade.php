@@ -90,7 +90,7 @@
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12 font-weight-bold"><strong>Kecamatan :</strong></label>
                                                 <label class="col-md-8 s-12">{{ $data->kecamatan->n_kecamatan }}</label>
-                                            </div> 
+                                            </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12 font-weight-bold"><strong>Kelurahan :</strong></label>
                                                 <label class="col-md-8 s-12">{{ $data->kelurahan->n_kelurahan }}</label>
@@ -105,7 +105,7 @@
                                             </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12 font-weight-bold"><strong>Jatuh Tempo :</strong></label>
-                                                <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d', $tgl_jatuh_tempo)->isoFormat('D MMMM Y') }} | 
+                                                <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d', $tgl_jatuh_tempo)->isoFormat('D MMMM Y') }} |
                                                     @if ($checkJatuhTempo)
                                                     <span class="badge badge-warning" style="font-size: 10.5px !important">Kadaluarsa</span>
                                                     @else
@@ -126,11 +126,11 @@
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12 font-weight-bold"><strong>Ketetapan :</strong></label>
                                                 <label class="col-md-8 s-12">@currency($data->jumlah_bayar)</label>
-                                            </div> 
+                                            </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12 font-weight-bold">Denda  :</label>
                                                 <label class="col-md-8 s-12">({{ $kenaikan }}%) &nbsp;@currency($jumlahBunga)</label>
-                                            </div> 
+                                            </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12 font-weight-bold"><strong>Diskon  :</strong></label>
                                                 @if ($data->status_diskon == 0)
@@ -138,19 +138,19 @@
                                                 @else
                                                 <label class="col-md-8 s-12">({{ $data->diskon }}%) &nbsp;@currency(((int) $data->diskon / 100) * $data->jumlah_bayar)</label>
                                                 @endif
-                                            </div> 
+                                            </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12 font-weight-bold"><strong>Total Bayar :</strong></label>
                                                 <label class="col-md-8 s-12">@currency($data->total_bayar + $jumlahBunga)</label>
-                                            </div> 
+                                            </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12 font-weight-bold"><strong>Virtual Account BJB :</strong></label>
                                                 <label class="col-md-8 s-12">{{ $status_ttd ? $data->nomor_va_bjb : '-' }}</label>
-                                            </div> 
+                                            </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12 font-weight-bold"><strong>Invoice ID QRIS  :</strong></label>
                                                 <label class="col-md-8 s-12">{{ $data->invoice_id }}</label>
-                                            </div> 
+                                            </div>
                                         </div>
                                     </div>
                                     <hr>

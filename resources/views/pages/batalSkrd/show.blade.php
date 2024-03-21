@@ -105,7 +105,7 @@
                                         <div class="row">
                                             <label class="col-md-4 font-weight-bold text-right s-12">Kecamatan :</label>
                                             <label class="col-md-8 s-12">{{ $data->kecamatan->n_kecamatan }}</label>
-                                        </div> 
+                                        </div>
                                         <div class="row">
                                             <label class="col-md-4 font-weight-bold text-right s-12">Kelurahan :</label>
                                             <label class="col-md-8 s-12">{{ $data->kelurahan->n_kelurahan }}</label>
@@ -135,15 +135,11 @@
                                         <div class="row">
                                             <label class="col-md-4 font-weight-bold text-right s-12">Ketetapan :</label>
                                             <label class="col-md-8 s-12">@currency($data->jumlah_bayar)</label>
-                                        </div> 
+                                        </div>
                                         <div class="row">
-                                            <label class="col-md-4 font-weight-bold text-right s-12">Denda :</label>
-                                            @if ($data->status_denda == 0)
-                                            <label class="col-md-8 s-12">(Tidak) @currency($data->denda)</label>
-                                            @else
-                                            <label class="col-md-8 s-12">(Ya) @currency($data->denda)</label>
-                                            @endif
-                                        </div> 
+                                            <label class="col-md-4 text-right s-12 font-weight-bold">Denda  :</label>
+                                            <label class="col-md-8 s-12">({{ $kenaikan }}%) &nbsp;@currency($jumlahBunga)</label>
+                                        </div>
                                         <div class="row">
                                             <label class="col-md-4 font-weight-bold text-right s-12">Diskon :</label>
                                             @if ($data->status_diskon == 0)
@@ -151,19 +147,19 @@
                                             @else
                                             <label class="col-md-8 s-12">({{ $data->diskon }}%) &nbsp;@currency(((int) $data->diskon / 100) * $data->jumlah_bayar)</label>
                                             @endif
-                                        </div> 
+                                        </div>
                                         <div class="row">
-                                            <label class="col-md-4 font-weight-bold text-right s-12">Total Bayar :</label>
-                                            <label class="col-md-8 s-12">@currency($data->total_bayar)</label>
-                                        </div> 
+                                            <label class="col-md-4 text-right s-12 font-weight-bold"><strong>Total Bayar :</strong></label>
+                                            <label class="col-md-8 s-12">@currency($data->total_bayar + $jumlahBunga)</label>
+                                        </div>
                                         <div class="row">
                                             <label class="col-md-4 font-weight-bold text-right s-12">Virtual Account BJB :</label>
                                             <label class="col-md-8 s-12">{{ $status_ttd ? $data->nomor_va_bjb : '-' }}</label>
-                                        </div> 
+                                        </div>
                                         <div class="row">
                                             <label class="col-md-4 font-weight-bold text-right s-12">Invoice ID QRIS :</label>
                                             <label class="col-md-8 s-12">{{ $data->invoice_id }}</label>
-                                        </div> 
+                                        </div>
                                     </div>
                                 </div>
                                 <hr>
@@ -230,6 +226,6 @@
 @endsection
 @section('script')
 <script type="text/javascript">
-    // 
+    //
 </script>
 @endsection

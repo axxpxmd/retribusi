@@ -146,6 +146,9 @@ class VABJBRes
     {
         $VABJB  = '';
         $errMsg = '';
+        $status = 0;
+        $transactionTime   = null;
+        $transactionAmount = null;
 
         switch ($jenis) {
             case 1:
@@ -170,7 +173,7 @@ class VABJBRes
         Log::channel('check_va')->info($log, $dataVA);
 
         if ($resCheckVABJB->successful()) {
-            if (isset($resJson['response_code']) != '0000') {
+            if (isset($resJson['response_code']) != 0000) {
                 $err = true;
                 $errMsg = isset($resJson['repsonse_code_desc']) ? 'Terjadi kegagalan saat check inquiry Virtual Account. Message : ' . $resJson['repsonse_code_desc'] : 'Terjadi kegagalan saat check inquiry Virtual Account.';
             } else {
@@ -180,6 +183,7 @@ class VABJBRes
                 $transactionTime = $resJson['transactions']['transaction_date'];
                 $transactionAmount = $resJson['transactions']['transaction_amount'];
             }
+
         } else {
             $err = true;
             $errMsg = 'Terjadi kegagalan saat check inquiry Virtual Account. Error Server';

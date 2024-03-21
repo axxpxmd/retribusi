@@ -234,7 +234,7 @@ class STRDController extends Controller
     {
         $data = TransaksiOPD::find($id);
 
-        /* Tahapan : 
+        /* Tahapan :
          * 1. VA
          * 2. QRIS
          * 2. tmtransaksi_opd

@@ -163,6 +163,7 @@ class BatalSKRDController extends Controller
         $title = $this->title;
 
         $id = \Crypt::decrypt($id);
+        $dateNow = Carbon::now()->format('Y-m-d');
 
         $data = TransaksiOPD::find($id);
 
@@ -173,11 +174,28 @@ class BatalSKRDController extends Controller
         $status_ttd = $data->status_ttd;
         $status_ttd = Utility::checkStatusTTD($status_ttd);
 
+        $tgl_skrd_akhir = $data->tgl_skrd_akhir;
+        $tgl_strd_akhir = $data->tgl_strd_akhir;
+        $total_bayar    = $data->jumlah_bayar;
+        $status_ttd     = $data->status_ttd;
+
+        $status_ttd = Utility::checkStatusTTD($status_ttd);
+        $tgl_jatuh_tempo = Utility::tglJatuhTempo($tgl_strd_akhir, $tgl_skrd_akhir);
+
+        //TODO: Get diff days
+        list($dayDiff, $monthDiff) = Utility::getDiffDate($tgl_skrd_akhir);
+        $checkJatuhTempo = Utility::isJatuhTempo($tgl_jatuh_tempo, $dateNow);
+
+        //TODO: Get bunga
+        list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $total_bayar);
+
         return view($this->view . 'show', compact(
             'route',
             'title',
             'data',
-            'status_ttd'
+            'status_ttd',
+            'kenaikan',
+            'jumlahBunga'
         ));
     }
 

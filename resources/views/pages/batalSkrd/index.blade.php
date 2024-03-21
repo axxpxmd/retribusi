@@ -64,7 +64,7 @@
                                 <div class="col-sm-2"></div>
                                 <div class="col-sm-8">
                                     <button class="btn btn-success btn-sm" onclick="pressOnChange()"><i class="icon-filter mr-2"></i>Filter</button>
-                                </div> 
+                                </div>
                             </div>
                         </div>
                     </div>
