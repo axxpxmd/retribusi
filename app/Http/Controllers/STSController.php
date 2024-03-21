@@ -191,36 +191,36 @@ class STSController extends Controller
         }
 
         //* Check status pembayaran VA BJB
-        if ($data->status_bayar == 0 && $data->nomor_va_bjb != null && $jatuh_tempo == false) {
-            //TODO: Get Token BJB
-            list($err, $errMsg, $tokenBJB) = $this->vabjbres->getTokenBJBres();
-            if ($err) {
-                return redirect()
-                    ->route($this->route . 'index')
-                    ->withErrors($errMsg);
-            }
+        // if ($data->status_bayar == 0 && $data->nomor_va_bjb != null && $jatuh_tempo == false) {
+        //     //TODO: Get Token BJB
+        //     list($err, $errMsg, $tokenBJB) = $this->vabjbres->getTokenBJBres();
+        //     if ($err) {
+        //         return redirect()
+        //             ->route($this->route . 'index')
+        //             ->withErrors($errMsg);
+        //     }
 
-            //TODO: Check VA BJB
-            list($err, $errMsg, $VABJB, $status, $transactionTime, $transactionAmount) = $this->vabjbres->CheckVABJBres($tokenBJB, $va_number, 1, $no_bayar);
-            if ($err) {
-                return redirect()
-                    ->route($this->route . 'index')
-                    ->withErrors($errMsg);
-            }
+        //     //TODO: Check VA BJB
+        //     list($err, $errMsg, $VABJB, $status, $transactionTime, $transactionAmount) = $this->vabjbres->CheckVABJBres($tokenBJB, $va_number, 1, $no_bayar);
+        //     if ($err) {
+        //         return redirect()
+        //             ->route($this->route . 'index')
+        //             ->withErrors($errMsg);
+        //     }
 
-            //TODO: Update tmtransaksi_opd
-            if ($status == 2) {
-                $ntb = \md5($data->no_bayar);
-                $data->update([
-                    'ntb'        => $ntb,
-                    'tgl_bayar'  => $transactionTime,
-                    'updated_by' => 'Bank BJB | Check Inquiry',
-                    'status_bayar' => 1,
-                    'chanel_bayar' => 'Virtual Account',
-                    'total_bayar_bjb' => $transactionAmount,
-                ]);
-            }
-        }
+        //     //TODO: Update tmtransaksi_opd
+        //     if ($status == 2) {
+        //         $ntb = \md5($data->no_bayar);
+        //         $data->update([
+        //             'ntb'        => $ntb,
+        //             'tgl_bayar'  => $transactionTime,
+        //             'updated_by' => 'Bank BJB | Check Inquiry',
+        //             'status_bayar' => 1,
+        //             'chanel_bayar' => 'Virtual Account',
+        //             'total_bayar_bjb' => $transactionAmount,
+        //         ]);
+        //     }
+        // }
 
         return view($this->view . 'show', compact(
             'id',
