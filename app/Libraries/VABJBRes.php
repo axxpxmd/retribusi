@@ -74,7 +74,7 @@ class VABJBRes
         Log::channel('create_va')->info($log, $dataVA);
 
         if ($resCreateVABJB->successful()) {
-            if (isset($resJson['response_code']) != '0000') {
+            if (isset($resJson['response_code']) != 0000) {
                 $err = true;
                 $errMsg = isset($resJson['repsonse_code_desc']) ? 'Terjadi kegagalan saat membuat Virtual Account. Message : ' . $resJson['repsonse_code_desc'] : 'Terjadi kegagalan saat membuat Virtual Account.';
             } else {
@@ -123,7 +123,7 @@ class VABJBRes
         ];
         Log::channel('update_va')->info($log, $dataVA);
         if ($resUpdateVABJB->successful()) {
-            if (isset($resJson['response_code']) != '0000') {
+            if (isset($resJson['response_code']) != 0000) {
                 $err = true;
                 $errMsg = isset($resJson['repsonse_code_desc']) ? 'Terjadi kegagalan saat memperbarui Virtual Account. Message : ' . $resJson['repsonse_code_desc'] : 'Terjadi kegagalan saat memperbarui Virtual Account.';
             } else {
@@ -136,7 +136,7 @@ class VABJBRes
         }
 
         if ($err) {
-            VABJBRes::sendLog($errMsg);
+            VABJBRes::sendLog($errMsg . ' | ' . 'No Bayar : ' . $no_bayar);
         }
 
         return [$err, $errMsg, $VABJB];
@@ -183,14 +183,13 @@ class VABJBRes
                 $transactionTime = $resJson['transactions']['transaction_date'];
                 $transactionAmount = $resJson['transactions']['transaction_amount'];
             }
-
         } else {
             $err = true;
             $errMsg = 'Terjadi kegagalan saat check inquiry Virtual Account. Error Server';
         }
 
         if ($err) {
-            VABJBRes::sendLog($errMsg);
+            VABJBRes::sendLog($errMsg . ' | ' . 'No Bayar : ' . $no_bayar);
         }
 
         return [$err, $errMsg, $VABJB, $status, $transactionTime, $transactionAmount];
