@@ -20,13 +20,12 @@ class VABJBRes
         $dataToken = [
             'data' => $resJson
         ];
+        Log::channel('token')->info('create token', $dataToken);
 
         if ($resGetTokenBJB->successful()) {
             if ($resJson['rc'] != 0000) {
                 $err = true;
                 $errMsg = 'Terjadi kegagalan saat mengambil token VA. Message : ' . $resJson['message'];
-
-                Log::channel('token')->info('Error create token', $dataToken);
             } else {
                 $err = false;
                 $tokenBJB = $resJson['data'];
@@ -37,7 +36,7 @@ class VABJBRes
         }
 
         if ($err) {
-            VABJBRes::sendLog($errMsg);
+            VABJBRes::sendLog('Terjadi kegagalan saat mengambil token'. ' | Data : ' . json_encode($dataToken));
         }
 
         return [$err, $errMsg, $tokenBJB];
