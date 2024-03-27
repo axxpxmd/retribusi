@@ -89,7 +89,7 @@ class VABJBRes
 
         //* Log Send to Telegram
         if ($err) {
-            VABJBRes::sendLog($errMsg . ' | Data : ' . json_encode($dataVA));
+            VABJBRes::sendLog($log . ' | Data : ' . json_encode($dataVA));
         }
 
         return [$err, $errMsg, $VABJB];
@@ -121,24 +121,27 @@ class VABJBRes
         //* LOG VA
         $dataVA = [
             'no_bayar' => $no_bayar,
-            'data' => $resJson
+            'data' => $resJson,
+            'payload' => [$tokenBJB, $amount, $expiredDate, $customerName, $va_number]
         ];
         Log::channel('update_va')->info($log, $dataVA);
+
         if ($resUpdateVABJB->successful()) {
-            if (isset($resJson['response_code']) != 0000) {
-                $err = true;
-                $errMsg = isset($resJson['response_code_desc']) ? 'Terjadi kegagalan saat memperbarui Virtual Account. Message : ' . $resJson['response_code_desc'] : 'Terjadi kegagalan saat memperbarui Virtual Account.';
-            } else {
+            if (isset($resJson['response_code']) == "0000") {
                 $err = false;
                 $VABJB = $resJson['va_number'];
+            } else {
+                $err = true;
+                $errMsg = 'Terjadi kegagalan saat membuat Virtual Account. Hubungi Administrator';
             }
         } else {
             $err = true;
-            $errMsg = 'Terjadi kegagalan saat memperbarui Virtual Account. Error Server';
+            $errMsg = 'Terjadi kegagalan saat membuat Virtual Account. Hubungi Administrator';
         }
 
+        //* Log Send to Telegram
         if ($err) {
-            VABJBRes::sendLog($errMsg . ' | ' . 'No Bayar : ' . $no_bayar);
+            VABJBRes::sendLog($log . ' | Data : ' . json_encode($dataVA));
         }
 
         return [$err, $errMsg, $VABJB];
