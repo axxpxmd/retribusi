@@ -69,25 +69,27 @@ class VABJBRes
         //* LOG VA
         $dataVA = [
             'no_bayar' => $no_bayar,
-            'data' => $resJson
+            'data' => $resJson,
+            'payload' => [$tokenBJB, $clientRefnum, $amount, $expiredDate, $customerName, $productCode]
         ];
         Log::channel('create_va')->info($log, $dataVA);
 
         if ($resCreateVABJB->successful()) {
-            if (isset($resJson['response_code']) != 0000) {
-                $err = true;
-                $errMsg = isset($resJson['repsonse_code_desc']) ? 'Terjadi kegagalan saat membuat Virtual Account. Message : ' . $resJson['repsonse_code_desc'] : 'Terjadi kegagalan saat membuat Virtual Account.';
-            } else {
+            if (isset($resJson['response_code']) == "0000") {
                 $err = false;
                 $VABJB = $resJson['va_number'];
+            } else {
+                $err = true;
+                $errMsg = 'Terjadi kegagalan saat membuat Virtual Account. Hubungi Administrator';
             }
         } else {
             $err = true;
-            $errMsg = 'Terjadi kegagalan saat membuat Virtual Account. Error Server';
+            $errMsg = 'Terjadi kegagalan saat membuat Virtual Account. Hubungi Administrator';
         }
 
+        //* Log Send to Telegram
         if ($err) {
-            VABJBRes::sendLog($errMsg);
+            VABJBRes::sendLog($errMsg . ' | Data : ' . json_encode($dataVA));
         }
 
         return [$err, $errMsg, $VABJB];
@@ -125,7 +127,7 @@ class VABJBRes
         if ($resUpdateVABJB->successful()) {
             if (isset($resJson['response_code']) != 0000) {
                 $err = true;
-                $errMsg = isset($resJson['repsonse_code_desc']) ? 'Terjadi kegagalan saat memperbarui Virtual Account. Message : ' . $resJson['repsonse_code_desc'] : 'Terjadi kegagalan saat memperbarui Virtual Account.';
+                $errMsg = isset($resJson['response_code_desc']) ? 'Terjadi kegagalan saat memperbarui Virtual Account. Message : ' . $resJson['response_code_desc'] : 'Terjadi kegagalan saat memperbarui Virtual Account.';
             } else {
                 $err = false;
                 $VABJB = $resJson['va_number'];
@@ -175,7 +177,7 @@ class VABJBRes
         if ($resCheckVABJB->successful()) {
             if (isset($resJson['response_code']) != 0000) {
                 $err = true;
-                $errMsg = isset($resJson['repsonse_code_desc']) ? 'Terjadi kegagalan saat check inquiry Virtual Account. Message : ' . $resJson['repsonse_code_desc'] : 'Terjadi kegagalan saat check inquiry Virtual Account.';
+                $errMsg = isset($resJson['response_code_desc']) ? 'Terjadi kegagalan saat check inquiry Virtual Account. Message : ' . $resJson['response_code_desc'] : 'Terjadi kegagalan saat check inquiry Virtual Account.';
             } else {
                 $err = false;
                 $VABJB  = $resJson['va_number'];

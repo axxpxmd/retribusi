@@ -35,13 +35,15 @@ return [
     */
 
     'channels' => [
+        // Log
         'stack' => [
             'driver' => 'daily',
             'path' => storage_path('logs/error/info-log.log'),
             'level' => 'info',
-            'days' => 15,
+            'days' => 30,
         ],
 
+        // SKRD
         'skrd_create' => [
             'driver' => 'daily',
             'path' => storage_path('logs/skrd/create.log'),
@@ -63,6 +65,7 @@ return [
             'days' => 0,
         ],
 
+        // STS
         'sts_edit' => [
             'driver' => 'daily',
             'path' => storage_path('logs/sts/edit.log'),
@@ -77,39 +80,41 @@ return [
             'days' => 0,
         ],
 
+        // QRIS
         'create_qris' => [
             'driver' => 'daily',
             'path' => storage_path('logs/qris/create_qris.log'),
             'level' => 'info',
-            'days' => 0,
+            'days' => 30,
         ],
 
+        // VA
         'token' => [
             'driver' => 'daily',
-            'path' => storage_path('logs/va/token.log'),
+            'path' => storage_path('logs/va/token/token.log'),
             'level' => 'info',
-            'days' => 0,
+            'days' => 30,
         ],
 
         'create_va' => [
             'driver' => 'daily',
-            'path' => storage_path('logs/va/create_va.log'),
+            'path' => storage_path('logs/va/create/create_va.log'),
             'level' => 'info',
-            'days' => 0,
+            'days' => 30,
         ],
 
         'update_va' => [
             'driver' => 'daily',
-            'path' => storage_path('logs/va/update_va.log'),
+            'path' => storage_path('logs/va/update/update_va.log'),
             'level' => 'info',
-            'days' => 0,
+            'days' => 30,
         ],
 
         'check_va' => [
             'driver' => 'daily',
-            'path' => storage_path('logs/va/check_va.log'),
+            'path' => storage_path('logs/va/check_va/check_va.log'),
             'level' => 'info',
-            'days' => 0,
+            'days' => 30,
         ],
 
         'single' => [
