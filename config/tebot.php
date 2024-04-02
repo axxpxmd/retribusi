@@ -19,6 +19,12 @@ return [
         'key' => 'a25eb0f55d3c36f511307d49ede6b890'
     ],
 
+    'log_skrd_local' => [
+        'name' => env('TEBOT_NAME', 'TEBOT'),
+        'url' => env('TEBOT_URL', 'localhost'),
+        'key' => 'a8a9957bfe15a25d3ef02aefafe4f0a8'
+    ],
+
     'log_va' => [
         'name' => env('TEBOT_NAME', 'TEBOT'),
         'url' => env('TEBOT_URL', 'localhost'),

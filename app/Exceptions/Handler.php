@@ -45,7 +45,11 @@ class Handler extends ExceptionHandler
             ' | User ID : ' . $user_id .
             ' | IP : ' . request()->getClientIp();
         if (config('app.log_tebot') == 1) {
-            Tebot::alert($logError)->channel('log_skrd');
+            if (config('app.log_tebot_local')) {
+                Tebot::alert($logError)->channel('log_skrd_local');
+            } else {
+                Tebot::alert($logError)->channel('log_skrd');
+            }
         }
         parent::report($exception);
     }

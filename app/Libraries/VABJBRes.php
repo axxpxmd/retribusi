@@ -172,7 +172,8 @@ class VABJBRes
         //* LOG VA
         $dataVA = [
             'no_bayar' => $no_bayar,
-            'data' => $resJson
+            'data' => $resJson,
+            'payload' => [$tokenBJB, $va_number]
         ];
         Log::channel('check_va')->info($log, $dataVA);
 
@@ -192,8 +193,9 @@ class VABJBRes
             $errMsg = 'Terjadi kegagalan saat check inquiry Virtual Account. Error Server';
         }
 
+        //* Log Send to Telegram
         if ($err) {
-            VABJBRes::sendLog($errMsg . ' | ' . 'No Bayar : ' . $no_bayar);
+            VABJBRes::sendLog($log . ' | Data : ' . json_encode($dataVA));
         }
 
         return [$err, $errMsg, $VABJB, $status, $transactionTime, $transactionAmount];

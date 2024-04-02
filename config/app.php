@@ -169,6 +169,7 @@ return [
     'url_retribusi' => env('URL_RETRIBUSI'),
 
     'log_tebot' => env('LOG_TEBOT'),
+    'log_tebot_local' => env('LOG_TEBOT_LOCAL'),
 
     /*
     |--------------------------------------------------------------------------
