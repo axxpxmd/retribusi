@@ -35,6 +35,7 @@ class VABJBRes
             $errMsg = 'Terjadi kegagalan saat mengambil token. Error Server';
         }
 
+         //* Log Send to Telegram
         if ($err) {
             VABJBRes::sendLog('Terjadi kegagalan saat mengambil token'. ' | Data : ' . json_encode($dataToken));
         }
@@ -74,7 +75,7 @@ class VABJBRes
         Log::channel('create_va')->info($log, $dataVA);
 
         if ($resCreateVABJB->successful()) {
-            if (isset($resJson['response_code']) == "0000") {
+            if ($resJson['response_code'] == "0000") {
                 $err = false;
                 $VABJB = $resJson['va_number'];
             } else {
@@ -126,7 +127,7 @@ class VABJBRes
         Log::channel('update_va')->info($log, $dataVA);
 
         if ($resUpdateVABJB->successful()) {
-            if (isset($resJson['response_code']) == "0000") {
+            if ($resJson['response_code'] == "0000") {
                 $err = false;
                 $VABJB = $resJson['va_number'];
             } else {
@@ -178,19 +179,19 @@ class VABJBRes
         Log::channel('check_va')->info($log, $dataVA);
 
         if ($resCheckVABJB->successful()) {
-            if (isset($resJson['response_code']) != 0000) {
-                $err = true;
-                $errMsg = isset($resJson['response_code_desc']) ? 'Terjadi kegagalan saat check inquiry Virtual Account. Message : ' . $resJson['response_code_desc'] : 'Terjadi kegagalan saat check inquiry Virtual Account.';
-            } else {
+            if ($resJson['response_code'] == "0000") {
                 $err = false;
                 $VABJB  = $resJson['va_number'];
                 $status = $resJson['status'];
                 $transactionTime = $resJson['transactions']['transaction_date'];
                 $transactionAmount = $resJson['transactions']['transaction_amount'];
+            } else {
+                $err = true;
+                $errMsg = 'Terjadi kegagalan saat membuat Virtual Account. Hubungi Administrator';
             }
         } else {
             $err = true;
-            $errMsg = 'Terjadi kegagalan saat check inquiry Virtual Account. Error Server';
+            $errMsg = 'Terjadi kegagalan saat membuat Virtual Account. Hubungi Administrator';
         }
 
         //* Log Send to Telegram
