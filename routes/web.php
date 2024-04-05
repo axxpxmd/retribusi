@@ -150,7 +150,7 @@ Route::group(['middleware' => ['auth', 'checksinglesession']], function () {
     Route::post('batal-skrd/batal', 'BatalSKRDController@batalSKRD')->name('batalSkrd.batal');
 
     //
-    Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);
+    Route::get('chudai33', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);
 });
 
 Route::get('sts/report/{id}', 'UtilityController@printDataTTD')->name('sendSTS');
