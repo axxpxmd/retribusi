@@ -26,6 +26,7 @@ use App\Models\OPD;
 use App\Models\Pengguna;
 use App\Models\ModelHasRoles;
 use App\Models\OPDJenisPendapatan;
+use App\Models\TtdOPD;
 use Spatie\Permission\Models\Role;
 
 class PenggunaController extends Controller
@@ -149,7 +150,7 @@ class PenggunaController extends Controller
             $opd_id = $request->opd_id;
         }
 
-        /* Tahapan : 
+        /* Tahapan :
          * 1. tmusers
          * 2. tmpenggunas
          * 3. model_has_roles
@@ -269,7 +270,7 @@ class PenggunaController extends Controller
         $nip     = $request->nip;
         $nik     = $request->nik;
 
-        /* Tahapan : 
+        /* Tahapan :
          * 1. tmusers
          * 2. tmpenggunas
          * 3. model_has_roles
@@ -303,9 +304,10 @@ class PenggunaController extends Controller
 
     public function destroy($id)
     {
-        /* Tahapan : 
+        /* Tahapan :
          * 1. admin_details
          * 2. admins
+         * 3. tr_ttd_opds
          */
 
         // Tahap 1
@@ -321,6 +323,9 @@ class PenggunaController extends Controller
 
         // Tahap 2
         User::whereid($pengguna->user_id)->delete();
+
+        // Tahap 3
+        TtdOPD::where('user_id', $pengguna->user_id)->delete();
 
         return response()->json([
             'message' => 'Data ' . $this->title . ' berhasil dihapus.'
