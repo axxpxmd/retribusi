@@ -19,6 +19,7 @@
         "laravel/tinker": "^2.0",
         "laravel/ui": "2.4",
         "league/flysystem-sftp": "~1.0",
+        "rap2hpoutre/laravel-log-viewer": "^2.4",
         "simplesoftwareio/simple-qrcode": "~2",
         "spatie/laravel-permission": "^4.4",
         "spatie/simple-excel": "^1.2",
