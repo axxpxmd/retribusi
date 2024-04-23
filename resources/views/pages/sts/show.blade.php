@@ -99,7 +99,7 @@
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12 font-weight-bold">Kecamatan :</label>
                                                 <label class="col-md-8 s-12">{{ $data->kecamatan->n_kecamatan }}</label>
-                                            </div> 
+                                            </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12 font-weight-bold">Kelurahan :</label>
                                                 <label class="col-md-8 s-12">{{ $data->kelurahan->n_kelurahan }}</label>
@@ -129,11 +129,11 @@
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12 font-weight-bold">Ketetapan :</label>
                                                 <label class="col-md-8 s-12">@currency($data->jumlah_bayar)</label>
-                                            </div> 
+                                            </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12 font-weight-bold">Denda  :</label>
                                                 <label class="col-md-8 s-12">({{ $kenaikan }}%) &nbsp;@currency($jumlahBunga)</label>
-                                            </div> 
+                                            </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12 font-weight-bold">Diskon  :</label>
                                                 @if ($data->status_diskon == 0)
@@ -141,12 +141,11 @@
                                                 @else
                                                 <label class="col-md-8 s-12">({{ $data->diskon }}%) &nbsp;@currency(((int) $data->diskon / 100) * $data->jumlah_bayar)</label>
                                                 @endif
-                                            </div> 
-
+                                            </div>
                                             <div class="row">
-                                                <label class="col-md-4 text-right s-12 font-weight-bold">Total Bayar :</label>
-                                                <label class="col-md-8 s-12">@currency($data->total_bayar)</label>
-                                            </div> 
+                                                <label class="col-md-4 text-right s-12 font-weight-bold"><strong>Total Bayar :</strong></label>
+                                                <label class="col-md-8 s-12">@currency($data->total_bayar + $jumlahBunga)</label>
+                                            </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12 font-weight-bold">Virtual Account BJB :</label>
                                                 <label class="col-md-8 s-12">{{ $status_ttd ? $data->nomor_va_bjb : '-' }}</label>
@@ -154,7 +153,7 @@
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12 font-weight-bold">Invoice ID QRIS  :</label>
                                                 <label class="col-md-8 s-12">{{ $data->invoice_id }}</label>
-                                            </div>  
+                                            </div>
                                         </div>
                                     </div>
                                     <hr>
@@ -188,18 +187,18 @@
                                                 <label class="col-md-8 s-12">
                                                     <a href="{{ config('app.sftp_src').'file_pendukung/'.$data->file_pendukung }}" target="blank" class="fs-16"><span class="badge badge-primary"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</span></a>
                                                 </label>
-                                            </div> 
+                                            </div>
                                             @endif
                                         </div>
                                         <div class="col-md-6">
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12 font-weight-bold">Channel Bayar :</label>
                                                 <label class="col-md-8 s-12">{{ $data->chanel_bayar != null ? $data->chanel_bayar : '-'}}</label>
-                                            </div> 
+                                            </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12 font-weight-bold">NTB :</label>
                                                 <label class="col-md-8 s-12">{{ $data->ntb != null ? $data->ntb : '-'}}</label>
-                                            </div> 
+                                            </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12 font-weight-bold">Total Bayar BJB :</label>
                                                 @if ($data->total_bayar_bjb != null)
@@ -207,7 +206,7 @@
                                                 @else
                                                 <label class="col-md-8 s-12">-</label>
                                                 @endif
-                                            </div> 
+                                            </div>
                                         </div>
                                     </div>
                                     <hr>
@@ -342,7 +341,7 @@
                 $.confirm({
                     title: 'Success',
                     content: data.message,
-                    icon: 'icon icon-check', 
+                    icon: 'icon icon-check',
                     theme: 'modern',
                     animation: 'scale',
                     autoClose: 'ok|3000',
