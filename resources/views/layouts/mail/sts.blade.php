@@ -44,7 +44,7 @@
                                             Kepada, {{ $nama }}
                                         </h1>
                                         <p style="font-family: Avenir, Helvetica, sans-serif; font-weight: bolder; box-sizing: border-box; color: #74787e; font-size: 16px; line-height: 1.5em; margin-top: 0; text-align: left;">
-                                            TAGIHAN PEMBAYARAN RETRIBUSI
+                                            PEMBAYARAN RETRIBUSI BERHASIL
                                         </p>
                                         <p style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #74787e; font-size: 16px; line-height: 1.5em; margin-top: 0; text-align: left;">
                                             Untuk <span style="color: #74787e !important; font-weight: bolder">{{ $rincian_retribusi }}</span>
@@ -52,6 +52,22 @@
                                         <div class="table" style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box;">
                                             <table style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; margin: 30px auto; width: 100%; -premailer-cellpadding: 0; -premailer-cellspacing: 0; -premailer-width: 100%;">
                                                 <tbody style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box;">
+                                                    <tr>
+                                                        <td style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #74787e; font-size: 15px; padding: 5px 0;">
+                                                            Tanggal Bayar
+                                                        </td>
+                                                        <td style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #74787e; font-size: 15px; padding: 5px 0;">
+                                                            {{ Carbon\Carbon::parse($tanggal_bayar)->format('d F Y | H:i:s') }}
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #74787e; font-size: 15px; padding: 5px 0;">
+                                                            Nomor Transaksi
+                                                        </td>
+                                                        <td style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #74787e; font-size: 15px; padding: 5px 0;">
+                                                            {{ $nomor_transaksi }}
+                                                        </td>
+                                                    </tr>
                                                     <tr>
                                                         <td style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #74787e; font-size: 15px; padding: 5px 0;">
                                                             Nominal
@@ -62,26 +78,10 @@
                                                     </tr>
                                                     <tr>
                                                         <td style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #74787e; font-size: 15px; padding: 5px 0;">
-                                                            Jatuh Tempo
+                                                            Metode Pembayaran
                                                         </td>
                                                         <td style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #74787e; font-size: 15px; padding: 5px 0;">
-                                                            {{ $jatuh_tempo }}
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #74787e; font-size: 15px; padding: 5px 0;">
-                                                            No Bayar
-                                                        </td>
-                                                        <td style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #74787e; font-size: 15px; padding: 5px 0;">
-                                                            {{ $nomor_bayar }}
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #74787e; font-size: 15px; padding: 5px 0;">
-                                                            Nomor VA
-                                                        </td>
-                                                        <td style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #74787e; font-size: 15px; padding: 5px 0;">
-                                                            {{ $nomor_va }}
+                                                            {{ $metode_pembayaran }}
                                                         </td>
                                                     </tr>
                                                     <hr>
@@ -113,8 +113,9 @@
                                             </table>
                                         </div>
                                         <p style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #74787e; font-size: 16px; line-height: 1.5em; margin-top: 0; text-align: left;">
-                                            Silahkan lakukan pembayaran sebelum lewat tanggal jatuh tempo.
+                                            Untuk data selengkapnya bisa dilihat pada link dibawah ini
                                         </p>
+                                        <a href="{{ $link }}">{{ $link }}</a>
                                     </td>
                                 </tr>
                             </table>

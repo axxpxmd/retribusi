@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Crypt;
 
 use App\Libraries\VABJBRes;
+use App\Http\Services\Email;
 use App\Http\Services\WhatsApp;
 use App\Libraries\Html\Html_number;
 use App\Http\Controllers\Controller;
@@ -40,8 +41,9 @@ class STSController extends Controller
     protected $view  = 'pages.sts.';
 
 
-    public function __construct(VABJBRes $vabjbres, WhatsApp $whatsapp)
+    public function __construct(VABJBRes $vabjbres, WhatsApp $whatsapp, Email $email)
     {
+        $this->email = $email;
         $this->vabjbres = $vabjbres;
         $this->whatsapp = $whatsapp;
 
@@ -387,7 +389,7 @@ class STSController extends Controller
 
         //* Send Email
         if ($data->email) {
-            # code...
+            $this->email->sendSTS($data);
         }
 
         //* Send WA

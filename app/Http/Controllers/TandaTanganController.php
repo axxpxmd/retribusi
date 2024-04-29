@@ -26,7 +26,6 @@ use App\Libraries\Html\Html_number;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Storage;
 
@@ -269,13 +268,13 @@ class TandaTanganController extends Controller
         //* Update status_ttd
         $update_ttd = $data->status_ttd == 2 ? 1 : 3;
         $data->update([
-            'status_ttd'  => 2,
+            'status_ttd'  => $update_ttd,
             'history_ttd' => 1
         ]);
 
         //* Send Email
         if ($data->email) {
-            $this->email->sendSKRD($data);
+            $this->email->sendSKRD($data, $tgl_jatuh_tempo);
         }
 
         //* Send WA
@@ -380,7 +379,7 @@ class TandaTanganController extends Controller
 
         //* Send Email
         if ($data->email) {
-            $this->email->sendSKRD($data);
+            $this->email->sendSKRD($data, $tgl_jatuh_tempo);
         }
 
         //* Send WA
