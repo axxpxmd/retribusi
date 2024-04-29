@@ -136,11 +136,13 @@ class PenggunaController extends Controller
 
         //TODO: Validation untuk User API
         if ($request->role_id == 12) {
-            $request->validate([
-                'opd_id' => 'required|unique:tmpenggunas,opd_id'
-            ], [
-                'opd_id.unique' => 'OPD sudah memiliki API Key.'
-            ]);
+            $checkApiKey = Pengguna::where('opd_id', $request->opd_id)->whereNotNull('api_key')->first();
+
+            if ($checkApiKey) {
+                return response()->json([
+                    'message' => "OPD sudah memiliki API Key." . $checkApiKey
+                ], 422);
+            }
         }
 
         //TODO: Check opd_id
