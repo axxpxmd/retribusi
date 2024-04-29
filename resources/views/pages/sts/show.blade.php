@@ -93,6 +93,14 @@
                                                 <label class="col-md-8 s-12">{{ $data->nm_wajib_pajak }}</label>
                                             </div>
                                             <div class="row">
+                                                <label class="col-md-4 font-weight-bold text-right s-12">Email :</label>
+                                                <label class="col-md-8 s-12">{{ $data->email }}</label>
+                                            </div>
+                                            <div class="row">
+                                                <label class="col-md-4 font-weight-bold text-right s-12">No Telp :</label>
+                                                <label class="col-md-8 s-12">{{ $data->no_telp }}</label>
+                                            </div>
+                                            <div class="row">
                                                 <label class="col-md-4 text-right s-12 font-weight-bold">Alamat :</label>
                                                 <label class="col-md-8 s-12">{{ $data->alamat_wp }}</label>
                                             </div>
@@ -185,7 +193,7 @@
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12 font-weight-bold">File Pendukung :</label>
                                                 <label class="col-md-8 s-12">
-                                                    <a href="{{ config('app.sftp_src').'file_pendukung/'.$data->file_pendukung }}" target="blank" class="fs-16"><span class="badge badge-primary"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</span></a>
+                                                    <a href="{{ config('app.sftp_src').'file_pendukung/'.$data->file_pendukung }}" target="_blank" class="fs-16"><span class="badge badge-primary"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</span></a>
                                                 </label>
                                             </div>
                                             @endif

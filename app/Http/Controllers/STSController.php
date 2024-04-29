@@ -280,36 +280,36 @@ class STSController extends Controller
         }
 
         //* Check status pembayaran VA BJB
-        // if ($data->status_bayar == 0 && $data->nomor_va_bjb != null && $data->tgl_skrd_akhir > $dateNow) {
-        //     //TODO: Get Token BJB
-        //     list($err, $errMsg, $tokenBJB) = $this->vabjbres->getTokenBJBres();
-        //     if ($err) {
-        //         return redirect()
-        //             ->route($this->route . 'index')
-        //             ->withErrors($errMsg);
-        //     }
+        if ($data->status_bayar == 0 && $data->nomor_va_bjb != null && $data->tgl_skrd_akhir > $dateNow) {
+            //TODO: Get Token BJB
+            list($err, $errMsg, $tokenBJB) = $this->vabjbres->getTokenBJBres();
+            if ($err) {
+                return redirect()
+                    ->route($this->route . 'index')
+                    ->withErrors($errMsg);
+            }
 
-        //     //TODO: Check VA BJB
-        //     list($err, $errMsg, $VABJB, $status, $transactionTime, $transactionAmount) = $this->vabjbres->CheckVABJBres($tokenBJB, $va_number, 2, $no_bayar);
-        //     if ($err) {
-        //         return redirect()
-        //             ->route($this->route . 'index')
-        //             ->withErrors($errMsg);
-        //     }
+            //TODO: Check VA BJB
+            list($err, $errMsg, $VABJB, $status, $transactionTime, $transactionAmount) = $this->vabjbres->CheckVABJBres($tokenBJB, $va_number, 2, $no_bayar);
+            if ($err) {
+                return redirect()
+                    ->route($this->route . 'index')
+                    ->withErrors($errMsg);
+            }
 
-        //     //TODO: Update tmtransaksi_opd
-        //     if ($status == 2) {
-        //         $ntb = \md5($data->no_bayar);
-        //         $data->update([
-        //             'ntb'        => $ntb,
-        //             'tgl_bayar'  => $transactionTime,
-        //             'updated_by' => 'Bank BJB | Check Inquiry',
-        //             'status_bayar' => 1,
-        //             'chanel_bayar' => 'Virtual Account',
-        //             'total_bayar_bjb' => $transactionAmount,
-        //         ]);
-        //     }
-        // }
+            //TODO: Update tmtransaksi_opd
+            if ($status == 2) {
+                $ntb = \md5($data->no_bayar);
+                $data->update([
+                    'ntb'        => $ntb,
+                    'tgl_bayar'  => $transactionTime,
+                    'updated_by' => 'Bank BJB | Check Inquiry',
+                    'status_bayar' => 1,
+                    'chanel_bayar' => 'Virtual Account',
+                    'total_bayar_bjb' => $transactionAmount,
+                ]);
+            }
+        }
 
         return view($this->view . 'edit', compact(
             'id',
@@ -385,6 +385,12 @@ class STSController extends Controller
         //* LOG
         Log::channel('sts_edit')->info('Edit Data SRKD | ' . 'Oleh:' . Auth::user()->pengguna->full_name, array_merge($data->toArray(), $request->all()));
 
+        //* Send Email
+        if ($data->email) {
+            # code...
+        }
+
+        //* Send WA
         if ($data->no_telp) {
             $this->whatsapp->sendSTS($tgl_bayar, $ntb, $chanel_bayar, $total_bayar_bjb, $data);
         }

@@ -18,6 +18,7 @@ use DataTables;
 use Carbon\Carbon;
 
 use App\Http\Services\BSRE;
+use App\Http\Services\Email;
 use App\Http\Services\AUROGRAF;
 use App\Http\Services\WhatsApp;
 use App\Http\Services\Iontentik;
@@ -42,9 +43,10 @@ class TandaTanganController extends Controller
     protected $view  = 'pages.tandaTangan.';
 
     // Check Permission
-    public function __construct(Iontentik $iotentik, BSRE $bsre, WhatsApp $whatsapp, AUROGRAF $aurograf)
+    public function __construct(Iontentik $iotentik, BSRE $bsre, WhatsApp $whatsapp, AUROGRAF $aurograf, Email $email)
     {
-        $this->bsre = $bsre;
+        $this->email = $email;
+        $this->bsre  = $bsre;
         $this->iotentik = $iotentik;
         $this->whatsapp = $whatsapp;
         $this->aurograf = $aurograf;
@@ -267,9 +269,14 @@ class TandaTanganController extends Controller
         //* Update status_ttd
         $update_ttd = $data->status_ttd == 2 ? 1 : 3;
         $data->update([
-            'status_ttd'  => $update_ttd,
+            'status_ttd'  => 2,
             'history_ttd' => 1
         ]);
+
+        //* Send Email
+        if ($data->email) {
+            $this->email->sendSKRD($data);
+        }
 
         //* Send WA
         if ($no_telp) {
@@ -286,7 +293,7 @@ class TandaTanganController extends Controller
         $id  = $request->id;
         $tte = $request->tte;
         $nik = $request->nik;
-        
+
         $nip = $request->nip;
         $passphrase = $request->passphrase;
         $aurograf_cert_id = $request->aurograf_cert_id;
@@ -373,26 +380,7 @@ class TandaTanganController extends Controller
 
         //* Send Email
         if ($data->email) {
-            $email    = $data->email;
-            $mailFrom = config('app.mail_from');
-            $mailName = config('app.mail_name');
-
-            $dataEmail = array(
-                'nama'     => $data->nm_wajib_pajak,
-                'no_bayar' => $data->no_bayar,
-                'jumlah_bayar'    => 'Rp. ' . number_format($data->jumlah_bayar),
-                'tgl_jatuh_tempo' => Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_akhir)->isoFormat('D MMMM Y')
-            );
-
-            $fileName  = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
-            $path_sftp = 'file_ttd_skrd/';
-            $file      = Storage::disk('sftp')->get($path_sftp . $fileName);
-
-            Mail::send('layouts.mail.skrd', $dataEmail, function ($message) use ($email, $mailFrom, $mailName, $fileName, $file) {
-                $message->to($email)->subject('SKRD');
-                $message->attachData($file, $fileName);
-                $message->from($mailFrom, $mailName);
-            });
+            $this->email->sendSKRD($data);
         }
 
         //* Send WA
