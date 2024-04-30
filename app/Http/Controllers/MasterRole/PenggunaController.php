@@ -140,7 +140,7 @@ class PenggunaController extends Controller
 
             if ($checkApiKey) {
                 return response()->json([
-                    'message' => "OPD sudah memiliki API Key." . $checkApiKey
+                    'message' => "OPD sudah memiliki API Key."
                 ], 422);
             }
         }
