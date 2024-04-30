@@ -271,12 +271,12 @@
                                                 @if ($data->status_bayar == 1)
                                                     @if ($data->email)
                                                     <div class="col-auto p-1">
-                                                        <a href="#" onclick="sendEmailConfirm({{ $data->id }})" class="btn btn-sm btn-success"><i class="icon-envelope mr-2"></i>Kirim STS via Email</a>
+                                                        <a href="#" data-toggle="modal" data-target="#sendEmail" class="btn btn-sm btn-success"><i class="icon-envelope mr-2"></i>Kirim STS via Email</a>
                                                     </div>
                                                     @endif
                                                     @if ($data->no_telp)
                                                     <div class="col-auto p-1">
-                                                        <a href="#" onclick="sendWAConfirm({{ $data->id }})" class="btn btn-sm btn-success"><i class="icon-envelope mr-2"></i>Kirim STS via WA</a>
+                                                        <a href="#" data-toggle="modal" data-target="#sendWA" class="btn btn-sm btn-success"><i class="icon-envelope mr-2"></i>Kirim STS via WA</a>
                                                     </div>
                                                     @endif
                                                 @endif
@@ -301,7 +301,7 @@
                     <p class="font-weight-bold text-black-50">Apakah yakin ingin membatalkan pembayaran ini ?</p>
                 </div>
                 <hr>
-                <div class="text-right">
+                <div class="float-right">
                     <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="icon-times mr-2"></i>Tidak</button>
                     <a href="{{ route('sts.batalBayar', $data->id) }}" class="btn btn-sm btn-primary ml-2" id="kirimTTD"><i class="icon-check mr-2"></i>Batalkan</a>
                 </div>
@@ -315,18 +315,22 @@
         <div class="modal-content">
             <div class="modal-body">
                 <div class="col-md-12">
-                    <div class="row">
-                        <label class="col-form-label col-sm-3 s-12 font-weight-bold font-weight-bold">Nama </label>
-                        <label class="col-form-label col-sm-9 font-weight-normal s-12">{{ $data->nm_wajib_pajak }}</label>
+                    <div class="row mb-2">
+                        <label for="email" class="col-form-label col-sm-3 s-12 font-weight-bold font-weight-bold">Nama</label>
+                        <div class="col-sm-9">
+                            <input type="text" name="nm_wajib_pajak" id="nm_wajib_pajak" value="{{ $data->nm_wajib_pajak }}" disabled class="form-control r-0 s-12" autocomplete="off"/>
+                        </div>
                     </div>
-                    <div class="row">
-                        <label class="col-form-label col-sm-3 s-12 font-weight-bold font-weight-bold">Email </label>
-                        <label class="col-form-label col-sm-9 font-weight-normal s-12">{{ $data->email }}</label>
+                    <div class="row mb-2">
+                        <label for="email" class="col-form-label col-sm-3 s-12 font-weight-bold font-weight-bold">Email</label>
+                        <div class="col-sm-9">
+                            <input type="email" name="email" id="email" value="{{ $data->email }}" class="form-control r-0 s-12" autocomplete="off"/>
+                        </div>
                     </div>
                     <p class="font-weight-bold text-black-50">Apakah anda yakin ingin mengirim file STS ini ?</p>
                 </div>
                 <hr>
-                <div class="text-right">
+                <div class="float-right">
                     <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="icon-times mr-2"></i>Batalkan</button>
                     <a onclick="sendEmail({{ $data->id }})" class="btn btn-sm btn-primary ml-2" id="kirimTTD"><i class="icon-send mr-2"></i>Kirim</a>
                 </div>
@@ -351,7 +355,7 @@
                     <p class="font-weight-bold text-black-50">Apakah anda yakin ingin mengirim file STS ini ?</p>
                 </div>
                 <hr>
-                <div class="text-right">
+                <div class="float-right">
                     <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="icon-times mr-2"></i>Batalkan</button>
                     <a onclick="sendWA({{ $data->id }})" class="btn btn-sm btn-primary ml-2" id="kirimTTD"><i class="icon-send mr-2"></i>Kirim</a>
                 </div>
@@ -363,22 +367,10 @@
 @endsection
 @section('script')
 <script type="text/javascript">
-    // Send STS via Email
-    function sendEmailConfirm(id){
-        $('#sendEmail').modal('show');
-        $('#sendEmail').modal({keyboard: false});
-    }
-
-    // Send STS via WA
-    function sendWAConfirm(id){
-        $('#sendWA').modal('show');
-        $('#sendWA').modal({keyboard: false});
-    }
-
     function sendWA(id){
         $('#loading').modal('show');
         $('#sendEmail').modal('toggle');
-        url = "{{ route('sendEmail', ':id') }}".replace(':id', id);
+        url = "{{ route('sendEmailSTS', ':id') }}".replace(':id', id);
         $.get(url, function(data){
             $('#loading').modal('toggle');
             console.log(data);
@@ -410,7 +402,8 @@
     function sendEmail(id){
         $('#loading').modal('show');
         $('#sendEmail').modal('toggle');
-        url = "{{ route('sendEmailSTS', ':id') }}".replace(':id', id);
+        email = $('#email').val();
+        url = "{{ route('sendEmailSTS', ':id') }}?email=".replace(':id', id)+email;
         $.get(url, function(data){
             $('#loading').modal('toggle');
             console.log(data);

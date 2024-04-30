@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
+
 use App\Http\Services\Email;
 use App\Http\Controllers\Controller;
 
@@ -38,18 +40,20 @@ class EmailController extends Controller
         ], 200);
     }
 
-    public function sendSTS($id)
+    public function sendSTS(Request $request, $id)
     {
+        $email = $request->email;
+
         try {
             $data = TransaksiOPD::find($id);
 
             if ($data->email) {
-                $this->email->sendSTS($data);
+                $this->email->sendSTS($data, $email);
             }
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => 500,
-                'message' => "Terjadi kesalahan saat mengirim email"
+                'message' => "Terjadi kesalahan saat mengirim email" . $id
             ]);
         }
 

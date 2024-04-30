@@ -37,9 +37,9 @@ class Email
         });
     }
 
-    public static function sendSTS($data)
+    public static function sendSTS($data, $email = null)
     {
-        $email    = $data->email;
+        $email    = $email == null ? $data->email : $email;
         $mailFrom = config('app.mail_from');
         $mailName = config('app.mail_name');
 
