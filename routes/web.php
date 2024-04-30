@@ -129,8 +129,10 @@ Route::group(['middleware' => ['auth', 'checksinglesession']], function () {
     Route::get('report-to-excel', 'ReportController@reportToExcel')->name('report.reportToExcel');
 
     // Send Email
-    Route::get('send-email/{id}', 'EmailController@sendEmail')->name('sendEmail');
-    Route::get('send-email/skrd/{id}', 'EmailController@skrd')->name('sendEmailSKRD');
+    Route::get('send-email/sts/{id}', 'EmailController@sendSTS')->name('sendEmailSTS');
+    Route::get('send-email/skrd/{id}', 'EmailController@sendSKRD')->name('sendEmailSKRD');
+
+    // Send WA
 
     // Log
     Route::get('log', 'LogController@index')->name('log.index');

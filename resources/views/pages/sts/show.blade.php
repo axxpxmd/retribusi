@@ -268,10 +268,17 @@
                                                     <a href="{{ config('app.sftp_src').$path_sftp.$fileName }}" target="blank" class="btn btn-primary btn-sm"><i class="icon-document-file-pdf2 mr-2"></i>File TTD SKRD</a>
                                                 </div>
                                                 <!-- Send Email -->
-                                                @if ($data->email && $data->status_bayar == 1)
+                                                @if ($data->status_bayar == 1)
+                                                    @if ($data->email)
                                                     <div class="col-auto p-1">
-                                                        <a href="#" onclick="sendEmailConfirm({{ $data->id }})" class="btn btn-sm btn-success"><i class="icon-envelope mr-2"></i>Kirim STS</a>
+                                                        <a href="#" onclick="sendEmailConfirm({{ $data->id }})" class="btn btn-sm btn-success"><i class="icon-envelope mr-2"></i>Kirim STS via Email</a>
                                                     </div>
+                                                    @endif
+                                                    @if ($data->no_telp)
+                                                    <div class="col-auto p-1">
+                                                        <a href="#" onclick="sendWAConfirm({{ $data->id }})" class="btn btn-sm btn-success"><i class="icon-envelope mr-2"></i>Kirim STS via WA</a>
+                                                    </div>
+                                                    @endif
                                                 @endif
                                             @endif
                                         </div>
@@ -327,20 +334,83 @@
         </div>
     </div>
 </div>
+<!-- Send WA -->
+<div class="modal fade" id="sendWA" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="col-md-12">
+                    <div class="row">
+                        <label class="col-form-label col-sm-3 s-12 font-weight-bold font-weight-bold">Nama </label>
+                        <label class="col-form-label col-sm-9 font-weight-normal s-12">{{ $data->nm_wajib_pajak }}</label>
+                    </div>
+                    <div class="row">
+                        <label class="col-form-label col-sm-3 s-12 font-weight-bold font-weight-bold">No Telp </label>
+                        <label class="col-form-label col-sm-9 font-weight-normal s-12">{{ $data->no_telp }}</label>
+                    </div>
+                    <p class="font-weight-bold text-black-50">Apakah anda yakin ingin mengirim file STS ini ?</p>
+                </div>
+                <hr>
+                <div class="text-right">
+                    <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="icon-times mr-2"></i>Batalkan</button>
+                    <a onclick="sendWA({{ $data->id }})" class="btn btn-sm btn-primary ml-2" id="kirimTTD"><i class="icon-send mr-2"></i>Kirim</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @include('layouts.loading')
 @endsection
 @section('script')
 <script type="text/javascript">
-     // Send Email
+    // Send STS via Email
     function sendEmailConfirm(id){
         $('#sendEmail').modal('show');
         $('#sendEmail').modal({keyboard: false});
     }
 
-    function sendEmail(id){
+    // Send STS via WA
+    function sendWAConfirm(id){
+        $('#sendWA').modal('show');
+        $('#sendWA').modal({keyboard: false});
+    }
+
+    function sendWA(id){
         $('#loading').modal('show');
         $('#sendEmail').modal('toggle');
         url = "{{ route('sendEmail', ':id') }}".replace(':id', id);
+        $.get(url, function(data){
+            $('#loading').modal('toggle');
+            console.log(data);
+            if (data.status === 200) {
+                $('#loading').modal('toggle');
+                $.confirm({
+                    title: 'Success',
+                    content: data.message,
+                    icon: 'icon icon-check',
+                    theme: 'modern',
+                    animation: 'scale',
+                    autoClose: 'ok|3000',
+                    type: 'green',
+                    buttons: {
+                        ok: {
+                            text: "ok!",
+                            btnClass: 'btn-primary',
+                            keys: ['enter']
+                        }
+                    }
+                });
+            }else{
+                $('#loading').modal('toggle');
+                $('#alert').html("<div role='alert' class='alert alert-danger alert-dismissible'><butto type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></butto font-weight-boldn>Error! " + data.message + "</div>");
+            }
+        }, 'JSON');
+    }
+
+    function sendEmail(id){
+        $('#loading').modal('show');
+        $('#sendEmail').modal('toggle');
+        url = "{{ route('sendEmailSTS', ':id') }}".replace(':id', id);
         $.get(url, function(data){
             $('#loading').modal('toggle');
             console.log(data);

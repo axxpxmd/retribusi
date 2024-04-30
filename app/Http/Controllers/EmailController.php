@@ -2,11 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Mail;
-
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Storage;
-
 use App\Http\Services\Email;
 use App\Http\Controllers\Controller;
 
@@ -21,7 +16,7 @@ class EmailController extends Controller
         $this->email = $email;
     }
 
-    public function skrd($id)
+    public function sendSKRD($id)
     {
         try {
             $data = TransaksiOPD::find($id);
@@ -43,7 +38,7 @@ class EmailController extends Controller
         ], 200);
     }
 
-    public function sendEmail($id)
+    public function sendSTS($id)
     {
         try {
             $data = TransaksiOPD::find($id);
