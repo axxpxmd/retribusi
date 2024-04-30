@@ -105,7 +105,7 @@
                                         <div class="row">
                                             <label class="col-md-4 font-weight-bold text-right s-12">Kecamatan :</label>
                                             <label class="col-md-8 s-12">{{ $data->kecamatan->n_kecamatan }}</label>
-                                        </div> 
+                                        </div>
                                         <div class="row">
                                             <label class="col-md-4 font-weight-bold text-right s-12">Kelurahan :</label>
                                             <label class="col-md-8 s-12">{{ $data->kelurahan->n_kelurahan }}</label>
@@ -135,7 +135,7 @@
                                         <div class="row">
                                             <label class="col-md-4 font-weight-bold text-right s-12">Ketetapan :</label>
                                             <label class="col-md-8 s-12">@currency($data->jumlah_bayar)</label>
-                                        </div> 
+                                        </div>
                                         <div class="row">
                                             <label class="col-md-4 font-weight-bold text-right s-12">Denda :</label>
                                             @if ($data->status_denda == 0)
@@ -143,7 +143,7 @@
                                             @else
                                             <label class="col-md-8 s-12">(Ya) @currency($data->denda)</label>
                                             @endif
-                                        </div> 
+                                        </div>
                                         <div class="row">
                                             <label class="col-md-4 font-weight-bold text-right s-12">Diskon :</label>
                                             @if ($data->status_diskon == 0)
@@ -151,19 +151,19 @@
                                             @else
                                             <label class="col-md-8 s-12">({{ $data->diskon }}%) &nbsp;@currency(((int) $data->diskon / 100) * $data->jumlah_bayar)</label>
                                             @endif
-                                        </div> 
+                                        </div>
                                         <div class="row">
                                             <label class="col-md-4 font-weight-bold text-right s-12">Total Bayar :</label>
                                             <label class="col-md-8 s-12">@currency($data->total_bayar)</label>
-                                        </div> 
+                                        </div>
                                         <div class="row">
                                             <label class="col-md-4 font-weight-bold text-right s-12">Virtual Account BJB :</label>
                                             <label class="col-md-8 s-12">{{ $status_ttd ? $data->nomor_va_bjb : '-' }}</label>
-                                        </div> 
+                                        </div>
                                         <div class="row">
                                             <label class="col-md-4 font-weight-bold text-right s-12">Invoice ID QRIS :</label>
                                             <label class="col-md-8 s-12">{{ $data->invoice_id }}</label>
-                                        </div> 
+                                        </div>
                                     </div>
                                 </div>
                                 <hr>
@@ -208,7 +208,7 @@
                                 <div class="container col-md-6">
                                     <div class="row justify-content-center">
                                         <div class="col-auto p-1">
-                                            <button class="btn btn-sm btn-primary mr-1" data-toggle="modal" data-target="#preview-file"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</button> 
+                                            <button class="btn btn-sm btn-primary mr-1" data-toggle="modal" data-target="#preview-file"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</button>
                                         </div>
                                         @if ($data->status_ttd == 1 || $data->status_ttd == 3)
                                             <div class="col-auto p-1">
@@ -217,7 +217,7 @@
                                             <!-- Send Email -->
                                             @if ($data->email)
                                                 <div class="col-auto p-1">
-                                                    <a href="#" onclick="sendEmailConfirm({{ $data->id }})" class="btn btn-sm btn-success"><i class="icon-envelope mr-2"></i>Kirim SKRD</a>
+                                                    <a href="#" data-toggle="modal" data-target="#sendEmail" class="btn btn-sm btn-success"><i class="icon-envelope mr-2"></i>Kirim SKRD via Email</a>
                                                 </div>
                                             @endif
                                         @endif
@@ -249,20 +249,24 @@
         <div class="modal-content">
             <div class="modal-body">
                 <div class="col-md-12">
-                    <div class="row">
-                        <label class="col-form-label col-sm-3 s-12 font-weight-bold">Nama </label>
-                        <label class="col-form-label col-sm-9 font-weight-normal s-12">{{ $data->nm_wajib_pajak }}</label>
+                    <div class="row mb-2">
+                        <label for="email" class="col-form-label col-sm-3 s-12 font-weight-bold font-weight-bold">Nama</label>
+                        <div class="col-sm-9">
+                            <input type="text" name="nm_wajib_pajak" id="nm_wajib_pajak" value="{{ $data->nm_wajib_pajak }}" disabled class="form-control r-0 s-12" autocomplete="off"/>
+                        </div>
                     </div>
-                    <div class="row">
-                        <label class="col-form-label col-sm-3 s-12 font-weight-bold">Email </label>
-                        <label class="col-form-label col-sm-9 font-weight-normal s-12">{{ $data->email }}</label>
+                    <div class="row mb-2">
+                        <label for="email" class="col-form-label col-sm-3 s-12 font-weight-bold font-weight-bold">Email</label>
+                        <div class="col-sm-9">
+                            <input type="email" name="email" id="email" value="{{ $data->email }}" class="form-control r-0 s-12" autocomplete="off"/>
+                        </div>
                     </div>
                     <p class="font-weight-bold text-black-50">Apakah anda yakin ingin mengirim file SKRD ini ?</p>
                 </div>
                 <hr>
-                <div class="text-right">
+                <div class="float-right">
                     <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="icon-times mr-2"></i>Batalkan</button>
-                    <a onclick="sendEmail({{ $data->id }})" class="btn btn-sm btn-primary ml-2" id="kirimTTD"><i class="icon-send mr-2"></i>Kirim</a>
+                    <a onclick="sendEmail({{ $data->id }})" class="btn btn-sm btn-primary ml-2"><i class="icon-send mr-2"></i>Kirim</a>
                 </div>
             </div>
         </div>
@@ -272,16 +276,11 @@
 @endsection
 @section('script')
 <script type="text/javascript">
-    // Send Email
-    function sendEmailConfirm(id){
-        $('#sendEmail').modal('show');
-        $('#sendEmail').modal({keyboard: false});
-    }
-
     function sendEmail(id){
         $('#loading').modal('show');
         $('#sendEmail').modal('toggle');
-        url = "{{ route('sendEmailSKRD', ':id') }}".replace(':id', id);
+        email = $('#email').val();
+        url = "{{ route('sendEmailSKRD', ':id') }}?email=".replace(':id', id)+email;
         $.get(url, function(data){
             $('#loading').modal('toggle');
             console.log(data);
@@ -290,7 +289,7 @@
                 $.confirm({
                     title: 'Success',
                     content: data.message,
-                    icon: 'icon icon-check', 
+                    icon: 'icon icon-check',
                     theme: 'modern',
                     animation: 'scale',
                     autoClose: 'ok|3000',

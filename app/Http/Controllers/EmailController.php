@@ -18,14 +18,16 @@ class EmailController extends Controller
         $this->email = $email;
     }
 
-    public function sendSKRD($id)
+    public function sendSKRD(Request $request, $id)
     {
+        $email = $request->email;
+
         try {
             $data = TransaksiOPD::find($id);
             $tgl_jatuh_tempo = Utility::tglJatuhTempo($data->tgl_strd_akhir, $data->tgl_skrd_akhir);
 
             if ($data->email) {
-                $this->email->sendSKRD($data, $tgl_jatuh_tempo);
+                $this->email->sendSKRD($data, $tgl_jatuh_tempo, $email);
             }
         } catch (\Throwable $th) {
             return response()->json([

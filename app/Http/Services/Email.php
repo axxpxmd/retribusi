@@ -9,9 +9,9 @@ use Illuminate\Support\Facades\Storage;
 
 class Email
 {
-    public static function sendSKRD($data, $tgl_jatuh_tempo)
+    public static function sendSKRD($data, $tgl_jatuh_tempo, $email = null)
     {
-        $email    = $data->email;
+        $email    = $email == null ? $data->email : $email;
         $mailFrom = config('app.mail_from');
         $mailName = config('app.mail_name');
 

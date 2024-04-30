@@ -112,8 +112,11 @@
                                                 </tbody>
                                             </table>
                                         </div>
-                                        <p style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #74787e; font-size: 16px; line-height: 1.5em; margin-top: 0; text-align: left;">
+                                        <p style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #ED5564; font-size: 16px; line-height: 1.5em; margin-top: 0; text-align: left; text-transform: uppercase; font-weight: bolder">
                                             Silahkan lakukan pembayaran sebelum lewat tanggal jatuh tempo.
+                                        </p>
+                                        <p style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #74787e; font-size: 12px; line-height: 1.5em; margin-top: 0; text-align: left;">
+                                            *Silahkan buka lampiran untuk melihat file SKRD.
                                         </p>
                                     </td>
                                 </tr>
@@ -126,7 +129,7 @@
                                 <tr>
                                     <td class="content-cell" align="center" style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; padding: 35px;">
                                         <p style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; line-height: 1.5em; margin-top: 0; color: #aeaeae; font-size: 14px; text-align: center;">
-                                            Copyright © Kota Tangerang Selatan 2022.
+                                            Copyright © Kota Tangerang Selatan {{ date('Y') }}.
                                         </p>
                                     </td>
                                 </tr>
