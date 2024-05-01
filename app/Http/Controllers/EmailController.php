@@ -22,6 +22,17 @@ class EmailController extends Controller
     {
         $email = $request->email;
 
+        $validator = \Validator::make($request->all(), [
+            "email" => "required|email"
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 500,
+                'message' => 'Email wajib diisi atau format email salah!'
+            ]);
+        } // end validator fails
+
         try {
             $data = TransaksiOPD::find($id);
             $tgl_jatuh_tempo = Utility::tglJatuhTempo($data->tgl_strd_akhir, $data->tgl_skrd_akhir);
@@ -45,6 +56,17 @@ class EmailController extends Controller
     public function sendSTS(Request $request, $id)
     {
         $email = $request->email;
+
+        $validator = \Validator::make($request->all(), [
+            "email" => "required|email"
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 500,
+                'message' => 'Email wajib diisi atau format email salah!'
+            ]);
+        } // end validator fails
 
         try {
             $data = TransaksiOPD::find($id);
