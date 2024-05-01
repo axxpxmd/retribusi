@@ -190,9 +190,11 @@ class TandaTanganController extends Controller
         $status_ttd = Utility::checkStatusTTD($status_ttd);
 
         //* Get Sertifikat Aurograf
+        $aurograf_status = config('app.aurograf_status');
         $aurografCerts = [];
-        // list($err, $errMsg, $aurografCerts) = $this->aurograf->getListCert($nik);
-        $aurografCerts = [];
+        if ($aurograf_status == 'ON') {
+            list($err, $errMsg, $aurografCerts) = $this->aurograf->getListCert($nik);
+        }
 
         if (!$status_ttd) {
             //TODO: generate QR Code (TTD)
