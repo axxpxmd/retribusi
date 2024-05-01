@@ -5,18 +5,18 @@ namespace App\Http\Services;
 use Carbon\Carbon;
 
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Crypt;
 
 class WhatsApp
 {
-    public static function sendSTS($tgl_bayar, $ntb, $chanel_bayar, $total_bayar_bjb, $data)
+    public static function sendSTS($tgl_bayar, $ntb, $chanel_bayar, $total_bayar_bjb, $data, $no_telp = null)
     {
         $endpoint = config('app.wagateway_ipserver');
         $api_key  = config('app.wagateway_apikey');
         $link = route('sendSTS', base64_encode($data->id));
+        $no_telp    = $no_telp == null ? $data->no_telp : $no_telp;
 
         //* Send message to WA
-        $text = "*PEMBAYARAN RETRIBUSI BERHASIL* 
+        $text = "*PEMBAYARAN RETRIBUSI BERHASIL*
 
 Untuk *" . $data->rincian_jenis->rincian_pendapatan . "*
 
@@ -35,20 +35,21 @@ Untuk *" . $data->rincian_jenis->rincian_pendapatan . "*
 Retribusi, Tangerang Selatan.
 ";
         Http::post($endpoint . 'send-text', [
-            'number'  => $data->no_telp,
+            'number'  => $no_telp,
             'api_key' => $api_key,
             'message' => $text
         ]);
     }
 
-    public static function sendSKRD($data, $tgl_jatuh_tempo)
+    public static function sendSKRD($data, $tgl_jatuh_tempo, $no_telp = null)
     {
         $endpoint = config('app.wagateway_ipserver');
         $api_key  = config('app.wagateway_apikey');
         $link = route('sendSKRD', base64_encode($data->id));
+        $no_telp    = $no_telp == null ? $data->no_telp : $no_telp;
 
         //* Send message to WA
-        $text = "*TAGIHAN PEMBAYARAN RETRIBUSI* 
+        $text = "*TAGIHAN PEMBAYARAN RETRIBUSI*
 
 Untuk *" . $data->rincian_jenis->rincian_pendapatan . "*
 
@@ -70,7 +71,7 @@ Untuk *" . $data->rincian_jenis->rincian_pendapatan . "*
 Retribusi, Tangerang Selatan.
 ";
         Http::post($endpoint . 'send-text', [
-            'number'  => $data->no_telp,
+            'number'  => $no_telp,
             'api_key' => $api_key,
             'message' => $text
         ]);

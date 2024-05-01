@@ -267,18 +267,15 @@
                                                 <div class="col-auto p-1">
                                                     <a href="{{ config('app.sftp_src').$path_sftp.$fileName }}" target="blank" class="btn btn-primary btn-sm"><i class="icon-document-file-pdf2 mr-2"></i>File TTD SKRD</a>
                                                 </div>
-                                                <!-- Send Email -->
                                                 @if ($data->status_bayar == 1)
-                                                    @if ($data->email)
+                                                    <!-- Send Email -->
                                                     <div class="col-auto p-1">
                                                         <a href="#" data-toggle="modal" data-target="#sendEmail" class="btn btn-sm btn-success"><i class="icon-envelope mr-2"></i>Kirim STS via Email</a>
                                                     </div>
-                                                    @endif
-                                                    @if ($data->no_telp)
+                                                    <!-- Send WA -->
                                                     <div class="col-auto p-1">
                                                         <a href="#" data-toggle="modal" data-target="#sendWA" class="btn btn-sm btn-success"><i class="icon-envelope mr-2"></i>Kirim STS via WA</a>
                                                     </div>
-                                                    @endif
                                                 @endif
                                             @endif
                                         </div>
@@ -316,7 +313,7 @@
             <div class="modal-body">
                 <div class="col-md-12">
                     <div class="row mb-2">
-                        <label for="email" class="col-form-label col-sm-3 s-12 font-weight-bold font-weight-bold">Nama</label>
+                        <label for="nm_wajib_pajak" class="col-form-label col-sm-3 s-12 font-weight-bold font-weight-bold">Nama</label>
                         <div class="col-sm-9">
                             <input type="text" name="nm_wajib_pajak" id="nm_wajib_pajak" value="{{ $data->nm_wajib_pajak }}" disabled class="form-control r-0 s-12" autocomplete="off"/>
                         </div>
@@ -344,13 +341,17 @@
         <div class="modal-content">
             <div class="modal-body">
                 <div class="col-md-12">
-                    <div class="row">
-                        <label class="col-form-label col-sm-3 s-12 font-weight-bold font-weight-bold">Nama </label>
-                        <label class="col-form-label col-sm-9 font-weight-normal s-12">{{ $data->nm_wajib_pajak }}</label>
+                    <div class="row mb-2">
+                        <label for="nm_wajib_pajak" class="col-form-label col-sm-3 s-12 font-weight-bold font-weight-bold">Nama</label>
+                        <div class="col-sm-9">
+                            <input type="text" name="nm_wajib_pajak" id="nm_wajib_pajak" value="{{ $data->nm_wajib_pajak }}" disabled class="form-control r-0 s-12" autocomplete="off"/>
+                        </div>
                     </div>
-                    <div class="row">
-                        <label class="col-form-label col-sm-3 s-12 font-weight-bold font-weight-bold">No Telp </label>
-                        <label class="col-form-label col-sm-9 font-weight-normal s-12">{{ $data->no_telp }}</label>
+                    <div class="row mb-2">
+                        <label for="no_telp" class="col-form-label col-sm-3 s-12 font-weight-bold font-weight-bold">No Telp</label>
+                        <div class="col-sm-9">
+                            <input type="email" name="no_telp" id="no_telp" value="{{ $data->no_telp }}" class="form-control r-0 s-12" autocomplete="off"/>
+                        </div>
                     </div>
                     <p class="font-weight-bold text-black-50">Apakah anda yakin ingin mengirim file STS ini ?</p>
                 </div>
@@ -367,10 +368,12 @@
 @endsection
 @section('script')
 <script type="text/javascript">
+    // Send WA
     function sendWA(id){
         $('#loading').modal('show');
-        $('#sendEmail').modal('toggle');
-        url = "{{ route('sendEmailSTS', ':id') }}".replace(':id', id);
+        $('#sendWA').modal('toggle');
+        no_telp = $('#no_telp').val();
+        url = "{{ route('sendWASTS', ':id') }}?no_telp=".replace(':id', id)+no_telp;
         $.get(url, function(data){
             $('#loading').modal('toggle');
             console.log(data);
@@ -399,6 +402,7 @@
         }, 'JSON');
     }
 
+    // Send Email
     function sendEmail(id){
         $('#loading').modal('show');
         $('#sendEmail').modal('toggle');

@@ -215,11 +215,13 @@
                                                 <a href="{{ route('print.download', $data->id) }}" target="blank" class="btn btn-sm btn-secondary mr-1"><i class="icon-download mr-2"></i>Download File</a>
                                             </div>
                                             <!-- Send Email -->
-                                            @if ($data->email)
-                                                <div class="col-auto p-1">
-                                                    <a href="#" data-toggle="modal" data-target="#sendEmail" class="btn btn-sm btn-success"><i class="icon-envelope mr-2"></i>Kirim SKRD via Email</a>
-                                                </div>
-                                            @endif
+                                            <div class="col-auto p-1">
+                                                <a href="#" data-toggle="modal" data-target="#sendEmail" class="btn btn-sm btn-success"><i class="icon-envelope mr-2"></i>Kirim SKRD via Email</a>
+                                            </div>
+                                            <!-- Send WA -->
+                                            <div class="col-auto p-1">
+                                                <a href="#" data-toggle="modal" data-target="#sendWA" class="btn btn-sm btn-success"><i class="icon-envelope mr-2"></i>Kirim SKRD via WA</a>
+                                            </div>
                                         @endif
                                     </div>
                                 </div>
@@ -250,7 +252,7 @@
             <div class="modal-body">
                 <div class="col-md-12">
                     <div class="row mb-2">
-                        <label for="email" class="col-form-label col-sm-3 s-12 font-weight-bold font-weight-bold">Nama</label>
+                        <label for="nm_wajib_pajak" class="col-form-label col-sm-3 s-12 font-weight-bold font-weight-bold">Nama</label>
                         <div class="col-sm-9">
                             <input type="text" name="nm_wajib_pajak" id="nm_wajib_pajak" value="{{ $data->nm_wajib_pajak }}" disabled class="form-control r-0 s-12" autocomplete="off"/>
                         </div>
@@ -272,15 +274,79 @@
         </div>
     </div>
 </div>
+<!-- Send WA -->
+<div class="modal fade" id="sendWA" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="col-md-12">
+                    <div class="row mb-2">
+                        <label for="nm_wajib_pajak" class="col-form-label col-sm-3 s-12 font-weight-bold font-weight-bold">Nama</label>
+                        <div class="col-sm-9">
+                            <input type="text" name="nm_wajib_pajak" id="nm_wajib_pajak" value="{{ $data->nm_wajib_pajak }}" disabled class="form-control r-0 s-12" autocomplete="off"/>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <label for="no_telp" class="col-form-label col-sm-3 s-12 font-weight-bold font-weight-bold">No Telp</label>
+                        <div class="col-sm-9">
+                            <input type="text" name="no_telp" id="no_telp" value="{{ $data->no_telp }}" class="form-control r-0 s-12" autocomplete="off"/>
+                        </div>
+                    </div>
+                    <p class="font-weight-bold text-black-50">Apakah anda yakin ingin mengirim file STS ini ?</p>
+                </div>
+                <hr>
+                <div class="float-right">
+                    <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="icon-times mr-2"></i>Batalkan</button>
+                    <a onclick="sendWA({{ $data->id }})" class="btn btn-sm btn-primary ml-2" id="kirimTTD"><i class="icon-send mr-2"></i>Kirim</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @include('layouts.loading')
 @endsection
 @section('script')
 <script type="text/javascript">
+    // Send Email
     function sendEmail(id){
         $('#loading').modal('show');
         $('#sendEmail').modal('toggle');
         email = $('#email').val();
         url = "{{ route('sendEmailSKRD', ':id') }}?email=".replace(':id', id)+email;
+        $.get(url, function(data){
+            $('#loading').modal('toggle');
+            console.log(data);
+            if (data.status === 200) {
+                $('#loading').modal('toggle');
+                $.confirm({
+                    title: 'Success',
+                    content: data.message,
+                    icon: 'icon icon-check',
+                    theme: 'modern',
+                    animation: 'scale',
+                    autoClose: 'ok|3000',
+                    type: 'green',
+                    buttons: {
+                        ok: {
+                            text: "ok!",
+                            btnClass: 'btn-primary',
+                            keys: ['enter']
+                        }
+                    }
+                });
+            }else{
+                $('#loading').modal('toggle');
+                $('#alert').html("<div role='alert' class='alert alert-danger alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button>Error!</strong> " + data.message + "</div>");
+            }
+        }, 'JSON');
+    }
+
+    // Send WA
+    function sendWA(id){
+        $('#loading').modal('show');
+        $('#sendWA').modal('toggle');
+        no_telp = $('#no_telp').val();
+        url = "{{ route('sendWASKRD', ':id') }}?no_telp=".replace(':id', id)+no_telp;
         $.get(url, function(data){
             $('#loading').modal('toggle');
             console.log(data);

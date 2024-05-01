@@ -4,86 +4,90 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Http\Services\Email;
+use App\Http\Services\WhatsApp;
 use App\Http\Controllers\Controller;
 
 // Models
 use App\Models\Utility;
 use App\Models\TransaksiOPD;
 
-class EmailController extends Controller
+class WAController extends Controller
 {
-    public function __construct(Email $email)
+    public function __construct(WhatsApp $whatsapp)
     {
-        $this->email = $email;
+        $this->whatsapp = $whatsapp;
     }
 
     public function sendSKRD(Request $request, $id)
     {
-        $email = $request->email;
+        $no_telp = $request->no_telp;
 
         $validator = \Validator::make($request->all(), [
-            "email" => "required|email"
+            "no_telp" => "required|min:10"
         ]);
 
         if ($validator->fails()) {
             return response()->json([
                 'status' => 500,
-                'message' => 'Email wajib diisi atau format email salah!'
+                'message' => 'No Telp wajib diisi!'
             ]);
         } // end validator fails
 
         try {
             $data = TransaksiOPD::find($id);
+
             $tgl_jatuh_tempo = Utility::tglJatuhTempo($data->tgl_strd_akhir, $data->tgl_skrd_akhir);
 
-            // Send Email
-            $this->email->sendSKRD($data, $tgl_jatuh_tempo, $email);
-
+            // Send WA
+            $this->whatsapp->sendSKRD($data, $tgl_jatuh_tempo, $no_telp);
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => 500,
-                'message' => "Terjadi kesalahan saat mengirim email"
+                'message' => "Terjadi kesalahan saat mengirim Whatsapp"
             ]);
         }
 
         return response()->json([
             'status' => 200,
-            'message' => "Selamat! Email berhasil terkirim kepada ' . $data->nm_wajib_pajak"
+            'message' => "Selamat! WA berhasil terkirim kepada ' . $data->nm_wajib_pajak"
         ], 200);
     }
 
     public function sendSTS(Request $request, $id)
     {
-        $email = $request->email;
+        $no_telp = $request->no_telp;
 
         $validator = \Validator::make($request->all(), [
-            "email" => "required|email"
+            "no_telp" => "required|min:10"
         ]);
 
         if ($validator->fails()) {
             return response()->json([
                 'status' => 500,
-                'message' => 'Email wajib diisi atau format email salah!'
+                'message' => 'No Telp wajib diisi!'
             ]);
         } // end validator fails
 
         try {
             $data = TransaksiOPD::find($id);
 
-            // Send Email
-            $this->email->sendSTS($data, $email);
+            $tgl_bayar = $data->tgl_bayar;
+            $ntb = $data->ntb;
+            $chanel_bayar = $data->chanel_bayar;
+            $total_bayar_bjb = $data->total_bayar_bjb;
 
+            // Send WA
+            $this->whatsapp->sendSTS($tgl_bayar, $ntb, $chanel_bayar, $total_bayar_bjb, $data, $no_telp);
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => 500,
-                'message' => "Terjadi kesalahan saat mengirim email" . $id
+                'message' => "Terjadi kesalahan saat mengirim Whatsapp" . $th
             ]);
         }
 
         return response()->json([
             'status' => 200,
-            'message' => "Selamat! Email berhasil terkirim kepada ' . $data->nm_wajib_pajak"
+            'message' => "Selamat! WA berhasil terkirim kepada ' . $data->nm_wajib_pajak"
         ], 200);
     }
 }

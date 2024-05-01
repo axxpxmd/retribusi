@@ -133,6 +133,8 @@ Route::group(['middleware' => ['auth', 'checksinglesession']], function () {
     Route::get('send-email/skrd/{id}', 'EmailController@sendSKRD')->name('sendEmailSKRD');
 
     // Send WA
+    Route::get('send-wa/skrd/{id}', 'WAController@sendSKRD')->name('sendWASKRD');
+    Route::get('send-wa/sts/{id}', 'WAController@sendSTS')->name('sendWASTS');
 
     // Log
     Route::get('log', 'LogController@index')->name('log.index');
