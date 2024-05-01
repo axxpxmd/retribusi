@@ -191,7 +191,8 @@ class TandaTanganController extends Controller
 
         //* Get Sertifikat Aurograf
         $aurografCerts = [];
-        list($err, $errMsg, $aurografCerts) = $this->aurograf->getListCert($nik);
+        // list($err, $errMsg, $aurografCerts) = $this->aurograf->getListCert($nik);
+        $aurografCerts = [];
 
         if (!$status_ttd) {
             //TODO: generate QR Code (TTD)
