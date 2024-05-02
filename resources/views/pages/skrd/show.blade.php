@@ -315,9 +315,7 @@
         url = "{{ route('sendEmailSKRD', ':id') }}?email=".replace(':id', id)+email;
         $.get(url, function(data){
             $('#loading').modal('toggle');
-            console.log(data);
             if (data.status === 200) {
-                $('#loading').modal('toggle');
                 $.confirm({
                     title: 'Success',
                     content: data.message,
@@ -335,7 +333,6 @@
                     }
                 });
             }else{
-                $('#loading').modal('toggle');
                 $('#alert').html("<div role='alert' class='alert alert-danger alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button>Error!</strong> " + data.message + "</div>");
             }
         }, 'JSON');
@@ -349,9 +346,7 @@
         url = "{{ route('sendWASKRD', ':id') }}?no_telp=".replace(':id', id)+no_telp;
         $.get(url, function(data){
             $('#loading').modal('toggle');
-            console.log(data);
             if (data.status === 200) {
-                $('#loading').modal('toggle');
                 $.confirm({
                     title: 'Success',
                     content: data.message,
@@ -369,7 +364,6 @@
                     }
                 });
             }else{
-                $('#loading').modal('toggle');
                 $('#alert').html("<div role='alert' class='alert alert-danger alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button>Error!</strong> " + data.message + "</div>");
             }
         }, 'JSON');
