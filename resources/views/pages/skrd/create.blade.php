@@ -223,8 +223,6 @@
         }
     }
 
-
-
     $('#id_rincian_jenis_pendapatan').on('change', function(){
         val = $(this).val();
         url = "{{ route('skrd.getKodeRekening', ':id') }}".replace(':id', val);

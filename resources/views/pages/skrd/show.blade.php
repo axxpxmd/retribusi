@@ -345,6 +345,7 @@
         no_telp = $('#no_telp').val();
         url = "{{ route('sendWASKRD', ':id') }}?no_telp=".replace(':id', id)+no_telp;
         $.get(url, function(data){
+            console.log(data)
             $('#loading').modal('toggle');
             if (data.status === 200) {
                 $.confirm({
