@@ -39,7 +39,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                        </div>  
+                        </div>
                         <div class="form-group row" style="margin-top: -8px !important">
                             <label for="role_filter" class="col-form-label s-12 col-md-4 text-right font-weight-bold">Role : </label>
                             <div class="col-sm-4">
@@ -50,7 +50,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                        </div>  
+                        </div>
                     </div>
                 </div>
                 <div class="row">
@@ -86,12 +86,12 @@
                             <div class="card-body">
                                 <form class="needs-validation" id="form" method="POST"  enctype="multipart/form-data" novalidate>
                                     {{ method_field('POST') }}
-                                    <div class="form-row form-inline">
-                                        <div class="col-md-8">
-                                            <div class="form-group m-0">
-                                                <label for="role_id" class="form-control label-input-custom col-md-2">Role<span class="text-danger ml-1">*</span></label>
-                                                <div class="col-md-6 p-0 bg-light">
-                                                    <select class="select2 form-control r-0 light s-12" name="role_id" id="role_id" autocomplete="off">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="row mb-2">
+                                                <label class="col-form-label s-12 col-sm-4 text-right">Role<span class="text-danger ml-1">*</span></label>
+                                                <div class="col-sm-8">
+                                                    <select class="select2 form-control bg s-12" id="role_id" name="role_id" autocomplete="off">
                                                         <option value="">Pilih</option>
                                                         @foreach ($roles as $i)
                                                             <option value="{{ $i->id }}">{{ $i->name }}</option>
@@ -99,32 +99,41 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="form-group mt-1">
-                                                <label for="username" class="form-control label-input-custom col-md-2">Username<span class="text-danger ml-1">*</span></label>
-                                                <input type="text" name="username" id="username" class="form-control r-0 light s-12 col-md-6" autocomplete="off" required/>
+                                            <div class="row mb-2">
+                                                <label class="col-form-label s-12 col-sm-4 text-right">Username<span class="text-danger ml-1">*</span></label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" name="username" id="username" class="form-control r-0 s-12" autocomplete="off" required/>
+                                                </div>
                                             </div>
-                                            <div class="form-group m-0">
-                                                <label for="password" class="form-control label-input-custom col-md-2">Password<span class="text-danger ml-1">*</span></label>
-                                                <input type="password" name="password" id="password" class="form-control r-0 light s-12 col-md-6" autocomplete="off" required/>
+                                            <div class="row mb-2">
+                                                <label class="col-form-label s-12 col-sm-4 text-right">Password<span class="text-danger ml-1">*</span></label>
+                                                <div class="col-sm-8">
+                                                    <input type="password" name="password" id="password" class="form-control r-0 s-12" autocomplete="off" required/>
+                                                </div>
                                             </div>
                                             <hr>
-
-                                            <div class="form-group m-0">
-                                                <label for="full_name" class="form-control label-input-custom col-md-2">Nama Lengkap<span class="text-danger ml-1">*</span></label>
-                                                <input type="text" name="full_name" id="full_name" class="form-control r-0 light s-12 col-md-6" autocomplete="off" required/>
+                                            <div class="row mb-2">
+                                                <label class="col-form-label s-12 col-sm-4 text-right">Nama Lengkap<span class="text-danger ml-1">*</span></label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" name="full_name" id="full_name" class="form-control r-0 s-12" autocomplete="off" required/>
+                                                </div>
                                             </div>
-                                            <div class="form-group m-0" id="nip_display">
-                                                <label for="nip" class="form-control label-input-custom col-md-2">NIP<span class="text-danger ml-1" id="nip_required"></span></label>
-                                                <input type="number" name="nip" id="nip" class="form-control r-0 light s-12 col-md-6" autocomplete="off"/>
+                                            <div class="row mb-2" id="nip_display">
+                                                <label class="col-form-label s-12 col-sm-4 text-right">NIP<span class="text-danger ml-1">*</span></label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" name="nip" id="nip" class="form-control r-0 s-12" autocomplete="off" required/>
+                                                </div>
                                             </div>
-                                            <div class="form-group m-0" id="nip_display">
-                                                <label for="nik" class="form-control label-input-custom col-md-2">NIK<span class="text-danger ml-1" id="nik_required"></span></label>
-                                                <input type="number" name="nik" id="nik" class="form-control r-0 light s-12 col-md-6" autocomplete="off"/>
+                                            <div class="row mb-2" id="nip_display">
+                                                <label class="col-form-label s-12 col-sm-4 text-right">NIK<span class="text-danger ml-1">*</span></label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" name="nik" id="nik" class="form-control r-0 s-12" autocomplete="off" required/>
+                                                </div>
                                             </div>
-                                            <div class="form-group mb-1" id="opd_display">
-                                                <label for="opd_id" class="form-control label-input-custom col-md-2">OPD<span class="text-danger ml-1">*</span></label>
-                                                <div class="col-md-6 p-0 bg-light">
-                                                    <select class="select2 form-control r-0 light s-12" name="opd_id" id="opd_id" autocomplete="off">
+                                            <div class="row mb-2" id="opd_display">
+                                                <label class="col-form-label s-12 col-sm-4 text-right">OPD<span class="text-danger ml-1">*</span></label>
+                                                <div class="col-sm-8">
+                                                    <select class="select2 form-control bg s-12" id="opd_id" name="opd_id" autocomplete="off">
                                                         <option value="">Pilih</option>
                                                         @foreach ($opds as $i)
                                                             <option value="{{ $i->id }}">{{ $i->n_opd }}</option>
@@ -132,22 +141,30 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="form-group">
-                                                <label for="email" class="form-control label-input-custom col-md-2">Email<span class="text-danger ml-1">*</span></label>
-                                                <input type="email" name="email" id="email" class="form-control r-0 light s-12 col-md-6" autocomplete="off" required/>
+                                            <div class="row mb-2">
+                                                <label class="col-form-label s-12 col-sm-4 text-right">Email</label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" name="email" id="email" class="form-control r-0 s-12" autocomplete="off" required/>
+                                                </div>
                                             </div>
-                                            <div class="row m-0">
-                                                <label for="phone" class="form-control label-input-custom col-md-2">No Telp<span class="text-danger ml-1">*</span></label>
-                                                <input type="text" name="phone" id="phone" class="form-control r-0 light s-12 col-md-6" autocomplete="off" required/>
+                                            <div class="row mb-2">
+                                                <label class="col-form-label s-12 col-sm-4 text-right">No Telp</label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" name="phone" id="phone" class="form-control r-0 s-12" autocomplete="off" required/>
+                                                </div>
                                             </div>
-                                            <div class="form-group"  id="url_callback_display">
-                                                <label for="url_callback" class="form-control label-input-custom col-md-2">URL Callback<span class="text-danger ml-1">*</span></label>
-                                                <input type="text" name="url_callback" id="url_callback" class="form-control r-0 light s-12 col-md-6" autocomplete="off" placeholder="http://{host}/"/>
+                                            <div class="row mb-2" id="url_callback_display">
+                                                <label class="col-form-label s-12 col-sm-4 text-right">URL Callback</label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" name="url_callback" id="url_callback" class="form-control r-0 s-12" autocomplete="off" required/>
+                                                </div>
                                             </div>
-                                            <div class="form-group mt-2">
-                                                <div class="col-md-2"></div>
-                                                <button type="submit" class="btn btn-primary btn-sm"><i class="icon-save mr-2"></i>Simpan</button>
-                                                <a class="btn btn-sm" onclick="add()" id="reset">Reset</a>
+                                            <div class="row mb-2">
+                                                <label class="col-sm-4"></label>
+                                                <div class="col-md-8">
+                                                    <button type="submit" class="btn btn-primary btn-sm"><i class="icon-save mr-2"></i>Simpan</button>
+                                                    <a class="btn btn-sm" onclick="add()" id="reset">Reset</a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -165,37 +182,37 @@
 @section('script')
 <script type="text/javascript">
     $(function() {
-        $('#opd_display').hide(); 
-        $('#nip_display').hide(); 
-        $('#url_callback_display').hide(); 
+        $('#opd_display').hide();
+        $('#nip_display').hide();
+        $('#url_callback_display').hide();
 
         $('#role_id').change(function(){
             var role_id = $('#role_id').val();
             if(role_id == 7 || role_id == 0) {
-                $('#opd_display').hide(); 
-                $('#nip_display').hide(); 
-                $('#nip').val(''); 
+                $('#opd_display').hide();
+                $('#nip_display').hide();
+                $('#nip').val('');
                 $('#opd_id').val("");
                 $('#opd_id').trigger('change.select2');
             } else {
-                $('#opd_display').show(); 
-                $('#nip_display').show(); 
-            } 
+                $('#opd_display').show();
+                $('#nip_display').show();
+            }
 
             if (role_id == 12) {
-                $('#url_callback_display').show(); 
-                $('#url_callback').prop('required', true); 
-                $('#nip_display').hide(); 
+                $('#url_callback_display').show();
+                $('#url_callback').prop('required', true);
+                $('#nip_display').hide();
             }else{
-                $('#url_callback_display').hide(); 
+                $('#url_callback_display').hide();
                 $('#url_callback').prop('required', false);
             }
 
             if (role_id == 11) {
-                $('#nip_required,#nik_required').html('*'); 
-                $('#nip,#nik').prop('required', true); 
+                $('#nip_required,#nik_required').html('*');
+                $('#nip,#nik').prop('required', true);
             } else {
-                $('#nip_required,#nik_required').html(''); 
+                $('#nip_required,#nik_required').html('');
                 $('#nip,#nik').prop('required', false);
             }
         });
@@ -272,7 +289,7 @@
                 success : function(data) {
                     $('#alert').html("<div role='alert' class='alert alert-success alert-dismissible'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>×</span></button><strong>Success!</strong> " + data.message + "</div>");
                     table.api().ajax.reload();
-                    add();    
+                    add();
                 },
                 error : function(data){
                     err = '';

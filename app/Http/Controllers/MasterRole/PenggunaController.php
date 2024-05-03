@@ -50,7 +50,8 @@ class PenggunaController extends Controller
 
         $opdArray = OPDJenisPendapatan::select('id_opd')->get()->toArray();
         $roles = Role::select('id', 'name')->whereNotIn('id', [5])->get();
-        $opds = OPD::select('id', 'n_opd')->whereIn('id', $opdArray)->get();
+        // $opds = OPD::select('id', 'n_opd')->whereIn('id', $opdArray)->get();
+        $opds = OPD::select('id', 'n_opd')->get();
 
         return view($this->view . 'index', compact(
             'route',
