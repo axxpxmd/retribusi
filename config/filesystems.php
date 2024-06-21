@@ -71,7 +71,7 @@ return [
             'password' => env('SFTP_PASSWORD'),
             'root' => env('SFTP_ROOT'),
             'directoryPerm' => 0755,
-            'timeout' => 10
+            'timeout' => 30
         ],
 
     ],
