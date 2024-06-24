@@ -75,6 +75,12 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row mb-2">
+                                <label for="status_ttd" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">Dari API</label>
+                                <div class="col-sm-8">
+                                    <input type="checkbox" id="user_api" class="form-check-input r-0 s-12 col-md-1 mt-2" onclick="checkboxUserApi()" value="0"/>
+                                </div>
+                            </div>
                             <div class="row mb-4">
                                 <div class="col-sm-2"></div>
                                 <div class="col-sm-8">
@@ -165,6 +171,13 @@
         <div class="modal-content">
             <div class="modal-body">
                 <div class="col-md-12">
+                    <div id="warningNominal">
+                        <div class="text-center">
+                            <i class="icon-warning text-danger fs-50"></i>
+                            <p class="font-weight-bold text-danger fs-14">SKRD ini nominalnya Rp. 0 apakah yakin ingin melanjutkan ?</p>
+                        </div>
+                        <hr>
+                    </div>
                     <div class="row">
                         <label class="col-form-label col-sm-3 s-12 font-weight-bold"><strong>Nama </strong></label>
                         <label class="col-form-label col-sm-9 font-weight-normal s-12" id="nm_wajib_pajak_ttd"></label>
@@ -203,6 +216,7 @@
             data: function (data) {
                 data.from = $('#from').val();
                 data.to   = $('#to').val();
+                data.user_api   = $('#user_api').val();
                 data.opd_id     = $('#opd').val();
                 data.no_skrd    = $('#no_skrd').val();
                 data.status_ttd = $('#status_ttd').val();
@@ -222,6 +236,17 @@
             {data: 'status_ttd', name: 'status_ttd', orderable: false, searchable: false, className: 'text-center'}
         ]
     });
+
+    checkboxUserApi()
+    function checkboxUserApi(){
+        val = $('#user_api').val()
+
+       if ($('#user_api').is(':checked')) {
+            val = $('#user_api').val(1)
+       } else {
+            val = $('#user_api').val(0)
+       }
+    }
 
     function pressOnChange(){
         table.api().ajax.reload();
@@ -331,6 +356,7 @@
 
     // Single TTD
     function updateStatusTTD(id){
+        $('#warningNominal').hide();
         $('#updateStatusTTD').modal('show');
         $('#updateStatusTTD').modal({keyboard: false});
 
@@ -339,6 +365,11 @@
         $.get(url, function(data){
             $('#no_skrd_ttd').html(data.no_skrd)
             $('#nm_wajib_pajak_ttd').html(data.nm_wajib_pajak)
+            if (data.jumlah_bayar == 0) {
+                $('#warningNominal').show();
+            }else{
+                $('#warningNominal').hide();
+            }
 
             var bilangan = data.jumlah_bayar;
             var	number_string = bilangan.toString(),

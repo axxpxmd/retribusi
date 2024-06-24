@@ -72,6 +72,7 @@ class SKRDController extends Controller
         $to     = $request->to;
         $no_skrd    = $request->no_skrd;
         $status_ttd = $request->status_ttd;
+        $user_api   = $request->user_api;
 
         //* Check Duplicate
         $date = Carbon::now();
@@ -79,7 +80,7 @@ class SKRDController extends Controller
         list($getDuplicate, $data) = TransaksiOPD::checkDuplicateNoBayar($date, $opd_id, $from, $to);
 
         if ($request->ajax()) {
-            return $this->dataTable($from, $to, $opd_id, $no_skrd, $status_ttd, $status_duplicate, $date, $getDuplicate);
+            return $this->dataTable($from, $to, $opd_id, $no_skrd, $status_ttd, $status_duplicate, $date, $getDuplicate, $user_api);
         }
 
         return view($this->view . 'index', compact(
@@ -112,12 +113,13 @@ class SKRDController extends Controller
         ]);
     }
 
-    public function dataTable($from, $to, $opd_id, $no_skrd, $status_ttd, $status_duplicate, $date, $getDuplicate)
+    public function dataTable($from, $to, $opd_id, $no_skrd, $status_ttd, $status_duplicate, $date, $getDuplicate, $user_api)
     {
+        // dd($user_api);
         if ($status_duplicate) {
             list($getDuplicate, $data) = TransaksiOPD::checkDuplicateNoBayar($date, $opd_id, $from, $to);
         } else {
-            $data = TransaksiOPD::querySKRD($from, $to, $opd_id, $no_skrd, $status_ttd);
+            $data = TransaksiOPD::querySKRD($from, $to, $opd_id, $no_skrd, $status_ttd, $user_api);
         }
 
         return DataTables::of($data)

@@ -239,7 +239,7 @@ class TransaksiOPD extends Model
     }
 
     //* Query get data SKRD
-    public static function querySKRD($from, $to, $opd_id, $no_skrd, $status_ttd)
+    public static function querySKRD($from, $to, $opd_id, $no_skrd, $status_ttd, $user_api)
     {
         $date =  Carbon::now()->format('Y-m-d');
 
@@ -255,6 +255,9 @@ class TransaksiOPD extends Model
             })
             ->when($status_ttd != null, function ($q) use ($status_ttd) {
                 return $q->where('status_ttd', $status_ttd);
+            })
+            ->when($user_api == 1, function ($q) use ($user_api) {
+                return $q->whereNotNull('user_api');
             });
 
         if ($from != null ||  $to != null) {
