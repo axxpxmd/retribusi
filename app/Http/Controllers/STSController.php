@@ -401,7 +401,7 @@ class STSController extends Controller
         }
 
         //* Send Callback
-        if ($data->userApi != null) {
+        if ($data->user_api != null) {
             $url = $data->userApi->url_callback;
             $reqBody = [
                 'nomor_va_bjb'  => $data->nomor_va_bjb,
