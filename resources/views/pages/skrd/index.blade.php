@@ -75,12 +75,14 @@
                                     </div>
                                 </div>
                             </div>
+                            @if ($checkUserApi)
                             <div class="row mb-2">
                                 <label for="status_ttd" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">Dari API</label>
                                 <div class="col-sm-8">
                                     <input type="checkbox" id="user_api" class="form-check-input r-0 s-12 col-md-1 mt-2" onclick="checkboxUserApi()" value="0"/>
                                 </div>
                             </div>
+                            @endif
                             <div class="row mb-4">
                                 <div class="col-sm-2"></div>
                                 <div class="col-sm-8">

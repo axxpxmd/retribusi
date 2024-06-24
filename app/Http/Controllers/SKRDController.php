@@ -40,6 +40,7 @@ use App\Models\TransaksiOPD;
 use App\Models\TransaksiDelete;
 use App\Models\JenisPendapatan;
 use App\Models\OPDJenisPendapatan;
+use App\Models\Pengguna;
 use App\Models\RincianJenisPendapatan;
 
 class SKRDController extends Controller
@@ -67,6 +68,7 @@ class SKRDController extends Controller
         $opd_id   = Auth::user()->pengguna->opd_id == 0 ? $request->opd_id : Auth::user()->pengguna->opd_id;
         $opdArray = OPDJenisPendapatan::select('id_opd')->get()->toArray();
         $opds     = OPD::getAll($opdArray, $opd_id);
+        $checkUserApi = Pengguna::where('opd_id', $opd_id)->whereNotNull('api_key')->count();
 
         $from   = $request->from;
         $to     = $request->to;
@@ -84,6 +86,7 @@ class SKRDController extends Controller
         }
 
         return view($this->view . 'index', compact(
+            'checkUserApi',
             'route',
             'title',
             'opds',
