@@ -27,6 +27,9 @@ use App\Http\Services\WhatsApp;
 use App\Libraries\Html\Html_number;
 use App\Http\Controllers\Controller;
 
+// Queue
+use App\Jobs\CallbackJob;
+
 // Models
 use App\User;
 use App\Models\OPD;
@@ -394,6 +397,24 @@ class STSController extends Controller
         //* Send WA
         if ($data->no_telp) {
             $this->whatsapp->sendSTS($tgl_bayar, $ntb, $chanel_bayar, $total_bayar_bjb, $data);
+        }
+
+        //* Send Callback
+        if ($data->userApi != null) {
+            $url = $data->userApi->url_callback;
+            $reqBody = [
+                'nomor_va_bjb'  => $data->nomor_va_bjb,
+                'no_bayar'      => $data->no_bayar,
+                'waktu_bayar'   => $data->tgl_bayar,
+                'jumlah_bayar'  => $data->total_bayar_bjb,
+                'status_bayar'  => 1,
+                'channel_bayar' => $data->chanel_bayar
+            ];
+
+            if ($url) {
+                // dispatch(new CallbackJob($reqBody, $url));
+                Http::post($url, $reqBody);
+            }
         }
 
         return response()->json([
