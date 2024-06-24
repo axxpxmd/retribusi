@@ -348,7 +348,7 @@ class STSController extends Controller
         $denda     = $request->denda;
         $status_bayar = $request->status_bayar;
         $chanel_bayar = $request->chanel_bayar;
-        $total_bayar_bjb = $request->total_bayar_bjb;
+        $total_bayar_bjb = \strval((int) str_replace(['.', 'Rp', ' '], '', $request->total_bayar_bjb));
         $file_pendukung  = $request->file_pendukung;
 
         //TODO: Check denda
