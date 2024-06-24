@@ -412,8 +412,8 @@ class STSController extends Controller
             ];
 
             if ($url) {
-                // dispatch(new CallbackJob($reqBody, $url));
-                Http::post($url, $reqBody);
+                dispatch(new CallbackJob($reqBody, $url));
+                // Http::post($url, $reqBody);
             }
         }
 
