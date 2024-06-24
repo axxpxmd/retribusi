@@ -422,6 +422,48 @@ class STSController extends Controller
         ]);
     }
 
+    public function batalBayar($id)
+    {
+        $data       = TransaksiOPD::find($id);
+        $id_encrypt = \Crypt::encrypt($id);
+
+        $data->update([
+            'status_bayar' => 0,
+            'tgl_bayar'    => null,
+            'no_bku'       => null,
+            'ntb'          => null,
+            'updated_by'   => Auth::user()->pengguna->full_name . ' | Batal Bayar',
+            'chanel_bayar' => null,
+            'total_bayar_bjb' => null,
+            'denda' => 0,
+            'status_denda' => 1
+        ]);
+
+        //* Send Callback
+        if ($data->userApi != null) {
+            $url = $data->userApi->url_callback;
+            $reqBody = [
+                'nomor_va_bjb'  => $data->nomor_va_bjb,
+                'no_bayar'      => $data->no_bayar,
+                'waktu_bayar'   => null,
+                'jumlah_bayar'  => null,
+                'status_bayar'  => 0,
+                'channel_bayar' => null
+            ];
+
+            if ($url) {
+                dispatch(new CallbackJob($reqBody, $url));
+            }
+        }
+
+        //* LOG
+        Log::channel('sts_batal_bayar')->info('Edit Data SRKD | ' . 'Oleh:' . Auth::user()->pengguna->full_name, $data->toArray());
+
+        return redirect()
+            ->route($this->route . 'show', $id_encrypt)
+            ->withSuccess('Selamat! Data berhasil diubah.');
+    }
+
     public function printDataTTD(Request $request, $id)
     {
         $id      = Crypt::decrypt($id);
@@ -494,30 +536,5 @@ class STSController extends Controller
         ));
 
         return $pdf->stream($data->nm_wajib_pajak . ' - ' . $data->no_skrd . ".pdf");
-    }
-
-    public function batalBayar($id)
-    {
-        $data       = TransaksiOPD::find($id);
-        $id_encrypt = \Crypt::encrypt($id);
-
-        $data->update([
-            'status_bayar' => 0,
-            'tgl_bayar'    => null,
-            'no_bku'       => null,
-            'ntb'          => null,
-            'updated_by'   => Auth::user()->pengguna->full_name . ' | Batal Bayar',
-            'chanel_bayar' => null,
-            'total_bayar_bjb' => null,
-            'denda' => 0,
-            'status_denda' => 1
-        ]);
-
-        //* LOG
-        Log::channel('sts_batal_bayar')->info('Edit Data SRKD | ' . 'Oleh:' . Auth::user()->pengguna->full_name, $data->toArray());
-
-        return redirect()
-            ->route($this->route . 'show', $id_encrypt)
-            ->withSuccess('Selamat! Data berhasil diubah.');
     }
 }
