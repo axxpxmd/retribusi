@@ -40,6 +40,11 @@ class TransaksiOPD extends Model
         ]);
     }
 
+    public function userApi()
+    {
+        return $this->belongsTo(Pengguna::class, 'user_api');
+    }
+
     public static function queryReportDashboard($opd_id, $status, $tahun)
     {
         $date  = Carbon::now()->format('Y-m-d');

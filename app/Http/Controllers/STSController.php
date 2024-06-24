@@ -19,6 +19,7 @@ use Carbon\Carbon;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Crypt;
 
 use App\Libraries\VABJBRes;
@@ -27,7 +28,7 @@ use App\Http\Services\WhatsApp;
 use App\Libraries\Html\Html_number;
 use App\Http\Controllers\Controller;
 
-// Queue
+// Queque
 use App\Jobs\CallbackJob;
 
 // Models
@@ -412,8 +413,7 @@ class STSController extends Controller
             ];
 
             if ($url) {
-                // dispatch(new CallbackJob($reqBody, $url));
-                Http::post($url, $reqBody);
+                dispatch(new CallbackJob($reqBody, $url));
             }
         }
 
