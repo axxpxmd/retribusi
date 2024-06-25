@@ -19,7 +19,6 @@ use Carbon\Carbon;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Crypt;
 
 use App\Libraries\VABJBRes;

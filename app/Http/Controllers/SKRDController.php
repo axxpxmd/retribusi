@@ -34,13 +34,13 @@ use App\Models\OPD;
 use App\Models\DataWP;
 use App\Models\TtdOPD;
 use App\Models\Utility;
+use App\Models\Pengguna;
 use App\Models\Kecamatan;
 use App\Models\Kelurahan;
 use App\Models\TransaksiOPD;
 use App\Models\TransaksiDelete;
 use App\Models\JenisPendapatan;
 use App\Models\OPDJenisPendapatan;
-use App\Models\Pengguna;
 use App\Models\RincianJenisPendapatan;
 
 class SKRDController extends Controller
