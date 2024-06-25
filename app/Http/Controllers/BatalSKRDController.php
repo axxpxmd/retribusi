@@ -242,8 +242,11 @@ class BatalSKRDController extends Controller
         $customerName = $data->nm_wajib_pajak;
         $va_number    = (int) $data->nomor_va_bjb;
         $clientRefnum = $data->no_bayar;
+        $tgl_skrd_akhir = $data->tgl_strd_akhir ? $data->tgl_strd_akhir : $data->tgl_skrd_akhir;
+        $dateNow = Carbon::now()->format('Y-m-d');
+        $skrd_kadaluarsa = Utility::isJatuhTempo($tgl_skrd_akhir, $dateNow);
 
-        if ($va_number) {
+        if ($va_number && $skrd_kadaluarsa == false) {
             $expiredDate = Carbon::now()->addMinutes(20)->format('Y-m-d H:i:s');
 
             //TODO: Get Token VA
