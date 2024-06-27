@@ -1,6 +1,7 @@
 @php
     $opd_id = Auth::user()->pengguna->opd_id;
     $nip = Auth::user()->pengguna->nip;
+    $role_id = Auth::user()->pengguna->modelHasRole->role_id;
 
     $dataTTD = App\Models\TransaksiOPD::when($opd_id != null, function($q) use($opd_id){
         return $q->where('id_opd', $opd_id);
@@ -9,6 +10,8 @@
         return $q->where('nip_ttd', $nip);
     })
     ->whereIn('status_ttd', [2,4])->count();
+
+    $check_job = App\Models\Job::count();
 @endphp
 <div class="has-sidebar-left ">
     <div class="sticky">
@@ -51,6 +54,9 @@
                         <ul class="dropdown-menu dropdown-menu-right bg-transparent" style="width: 300px !important">
                             <p class="header px-3 py-2 m-0 bg-success  text-white font-weight-bold fs-14" style="border-top-right-radius: 15px; border-top-left-radius: 15px">Notifikasi <i class="icon-notifications ml-2"></i></p>
                             <li class="bg-white px-3 py-2" style="border-bottom-right-radius: 15px; border-bottom-left-radius: 15px">
+                                @if ($check_job && $role_id == 5)
+                                <p class="fs-12 text-black m-0"><i class="icon icon-data_usage text-danger mr-2"></i>Terdapat {{ $check_job }} job belum dijalankan</p>
+                                @endif
                                 @if ($dataTTD)
                                 <p class="fs-12 text-black m-0"><i class="icon icon-data_usage text-primary mr-2"></i>{{ $dataTTD ? 'Terdapat ' . number_format($dataTTD) . ' SKRD belum ditanda tangani' : 'Tidak ada notifikasi' }}</p>
                                 <hr class="m-0 mt-2">
