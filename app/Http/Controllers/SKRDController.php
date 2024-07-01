@@ -118,7 +118,6 @@ class SKRDController extends Controller
 
     public function dataTable($from, $to, $opd_id, $no_skrd, $status_ttd, $status_duplicate, $date, $getDuplicate, $user_api)
     {
-        // dd($user_api);
         if ($status_duplicate) {
             list($getDuplicate, $data) = TransaksiOPD::checkDuplicateNoBayar($date, $opd_id, $from, $to);
         } else {
