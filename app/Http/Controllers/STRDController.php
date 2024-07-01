@@ -248,7 +248,11 @@ class STRDController extends Controller
         list($dayDiff, $monthDiff) = Utility::getDiffDate($tgl_skrd_akhir);
         $addDays = ($monthDiff + 1) * 30;
 
+        $dateNow = Carbon::now()->format('Y-m-d');
         $tgl_jatuh_tempo_baru = Carbon::createFromFormat('Y-m-d', $tgl_skrd_akhir)->addDays($addDays)->format('Y-m-d');
+        if ($tgl_jatuh_tempo_baru <= $dateNow) {
+            $tgl_jatuh_tempo_baru = Carbon::createFromFormat('Y-m-d', $tgl_jatuh_tempo_baru)->addDays(30)->format('Y-m-d');
+        }
 
         //* Bunga
         list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar);
