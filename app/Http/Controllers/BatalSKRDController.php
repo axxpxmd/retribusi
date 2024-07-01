@@ -233,7 +233,7 @@ class BatalSKRDController extends Controller
         $dataKet = [
             'updated_by' => Auth::user()->pengguna->full_name . ' | Batal SKRD',
             'keterangan' => $keterangan,
-            'file_pendukung' => $fileName
+            'file_pendukung' => $file_pendukung ? $fileName : null
         ];
         TransaksiDelete::create(array_merge($dataBackup, $dataKet));
 
