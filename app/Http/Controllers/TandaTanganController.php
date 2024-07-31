@@ -146,6 +146,7 @@ class TandaTanganController extends Controller
         $id   = \Crypt::decrypt($id);
         $data = TransaksiOPD::find($id);
         $dateNow = Carbon::now()->format('Y-m-d');
+        $role_id = Auth::user()->pengguna->modelHasRole->role_id;
 
         $nip = $data->nip_ttd;
         $nik = Auth::user()->pengguna->nik;
@@ -238,6 +239,7 @@ class TandaTanganController extends Controller
         }
 
         return view($this->view . 'show', compact(
+            'role_id',
             'id',
             'route',
             'title',
@@ -404,5 +406,18 @@ class TandaTanganController extends Controller
         return redirect()
             ->route('tanda-tangan.index')
             ->withSuccess('Data berhasil dikembalikan.');
+    }
+
+    public function batalkanTTD($id)
+    {
+        $status_ttd_sebelum = TransaksiOPD::where('id', $id)->first();
+
+        TransaksiOPD::where('id', $id)->update([
+            'status_ttd' => $status_ttd_sebelum->status_ttd == 1 ? 2 : 4
+        ]);
+
+        return redirect()
+            ->back()
+            ->withSuccess('Tanda tangan berhasil dibatalkan');
     }
 }

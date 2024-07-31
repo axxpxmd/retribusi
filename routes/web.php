@@ -112,6 +112,7 @@ Route::group(['middleware' => ['auth', 'checksinglesession']], function () {
     Route::post('tanda-tangan/tte', 'TandaTanganController@tte')->name('tanda-tangan.tte');
     Route::post('tanda-tangan/tte-bsre', 'TandaTanganController@tteBSRE')->name('tanda-tangan.tteBSRE');
     Route::post('tanda-tangan/', 'TandaTanganController@tandaTangan')->name('tanda-tangan.tandaTangan');
+    Route::get('tanda-tangan/batalkan/{id}', 'TandaTanganController@batalkanTTD')->name('tanda-tangan.batalkanTTD');
 
     // Print
     Route::get('print/skrd/{id}', 'PrintController@printSKRD')->name('print.skrd');

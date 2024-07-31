@@ -229,6 +229,11 @@
                                                 <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#restore"><i class="icon-refresh2 mr-2"></i>Kembalikan</button>
                                             </div>
                                             @endif
+                                            @if ($data->status_ttd == 1 || $data->status_ttd == 3 )
+                                            <div class="col-auto p-1">
+                                                <a class="btn btn-sm btn-danger" href="{{ route('tanda-tangan.batalkanTTD', $id) }}" onclick="return confirm('Apakah yakin ingin membatalkan tandatangan ?')"><i class="icon-times mr-2"></i>Batalkan</a>
+                                            </div>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
