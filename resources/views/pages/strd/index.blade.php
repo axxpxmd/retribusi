@@ -48,7 +48,7 @@
                                 <div class="col-sm-8">
                                     <input type="text" name="no_skrd" id="no_skrd" class="form-control r-0 s-12 col-md-12" autocomplete="off" required/>
                                 </div>
-                            </div> 
+                            </div>
                             <div class="row mb-2">
                                 <label for="status_ttd" class="col-form-label s-12 col-md-2 text-right font-weight-bolder">Status TTD</label>
                                 <div class="col-sm-8">
@@ -73,7 +73,7 @@
                                 <div class="col-sm-2"></div>
                                 <div class="col-sm-8">
                                     <button class="btn btn-success btn-sm" onclick="pressOnChange()"><i class="icon-filter mr-2"></i>Filter</button>
-                                </div> 
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -280,7 +280,7 @@
                 sisa 	= number_string.length % 3,
                 rupiah 	= number_string.substr(0, sisa),
                 ribuan 	= number_string.substr(sisa).match(/\d{3}/g);
-                                    
+
             if (ribuan) {
                 separator = sisa ? '.' : '';
                 rupiah += separator + ribuan.join('.');
@@ -305,7 +305,7 @@
                 sisa 	= number_string.length % 3,
                 rupiah 	= number_string.substr(0, sisa),
                 ribuan 	= number_string.substr(sisa).match(/\d{3}/g);
-                                    
+
             if (ribuan) {
                 separator = sisa ? '.' : '';
                 rupiah += separator + ribuan.join('.');

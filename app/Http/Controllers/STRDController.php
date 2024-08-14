@@ -17,18 +17,22 @@ use Auth;
 use DataTables;
 use Carbon\Carbon;
 
-use App\Libraries\QRISBJBRes;
 use App\Libraries\VABJBRes;
+use App\Libraries\QRISBJBRes;
+
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Crypt;
 
 // Models
 use App\Models\OPD;
+use App\Models\TtdOPD;
 use App\Models\Utility;
 use App\Models\TransaksiOPD;
 use App\Models\OPDJenisPendapatan;
+use App\Models\RincianJenisPendapatan;
 
 class STRDController extends Controller
 {
@@ -93,6 +97,7 @@ class STRDController extends Controller
 
                 $filettd = "<a href='" . config('app.sftp_src') . $path_sftp . $fileName . "' target='_blank' class='cyan-text' title='File TTD'><i class='icon-document-file-pdf2'></i></a>";
                 $sendttd = "<a href='#' onclick='updateStatusTTD(" . $p->id . ")' class='amber-text' title='Kirim Untuk TTD'><i class='icon icon-send'></i></a>";
+                $edit    = "<a href='" . route($this->route . 'edit', Crypt::encrypt($p->id)) . "' class='text-primary ml-2' title='Edit Data'><i class='icon icon-edit'></i></a>";
 
                 $tgl_skrd_akhir = $p->tgl_skrd_akhir;
                 $tgl_strd_akhir = $p->tgl_strd_akhir;
@@ -108,7 +113,7 @@ class STRDController extends Controller
                         return '-';
                     }
                     if ($p->status_ttd == 0 || $p->status_ttd == 1 || $p->status_ttd == 2) {
-                        return $sendttd;
+                        return $sendttd . $edit;
                     }
                 } else {
                     return '-';
@@ -343,6 +348,49 @@ class STRDController extends Controller
         return redirect()
             ->route($this->route . 'index')
             ->withSuccess('Selamat! Data berhasil dikirim untuk ditandatangan.');
+    }
+
+    public function edit($id)
+    {
+        $route = $this->route;
+        $title = $this->title;
+
+        $id = \Crypt::decrypt($id);
+
+        $data = TransaksiOPD::find($id);
+        $penanda_tangans = TtdOPD::where('id_opd', $data->id_opd)->get();
+        $rincian_jenis_pendapatans = RincianJenisPendapatan::where('id_jenis_pendapatan', $data->id_jenis_pendapatan)->get();
+
+        return view($this->view . 'edit', compact(
+            'route',
+            'title',
+            'data',
+            'rincian_jenis_pendapatans',
+            'penanda_tangans'
+        ));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $data = TransaksiOPD::find($id);
+
+        $request->validate([
+            'penanda_tangan_id' => 'required'
+        ]);
+
+        //* hanya update data TTD
+        $penanda_tangan = TtdOPD::where('id', $request->penanda_tangan_id)->first();
+        $data->update([
+            'nm_ttd'  => $penanda_tangan->user->pengguna->full_name,
+            'nip_ttd' => $penanda_tangan->user->pengguna->nip
+        ]);
+
+        //* LOG
+        Log::channel('skrd_edit')->info('Edit Data STRD (TTD) | ' . 'Oleh:' . Auth::user()->pengguna->full_name, array_merge($data->toArray(), $request->all()));
+
+        return response()->json([
+            'message' => 'Data ' . $this->title . ' berhasil diperbaharui.'
+        ]);
     }
 
     public function destroy($id)
