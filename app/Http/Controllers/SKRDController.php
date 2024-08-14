@@ -521,6 +521,7 @@ class SKRDController extends Controller
         $data = TransaksiOPD::find($id);
         $penanda_tangans = TtdOPD::where('id_opd', $data->id_opd)->get();
         $rincian_jenis_pendapatans = RincianJenisPendapatan::where('id_jenis_pendapatan', $data->id_jenis_pendapatan)->get();
+        $kecamatans = Kecamatan::select('id', 'n_kecamatan')->where('kabupaten_id', 40)->get();
 
         // Check Duplicate
         $checkDuplicate = TransaksiOPD::where('no_bayar', $data->no_bayar)->count();
@@ -531,7 +532,8 @@ class SKRDController extends Controller
             'data',
             'rincian_jenis_pendapatans',
             'penanda_tangans',
-            'checkDuplicate'
+            'checkDuplicate',
+            'kecamatans'
         ));
     }
 

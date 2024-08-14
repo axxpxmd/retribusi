@@ -136,15 +136,22 @@
                                                         </div>
                                                     </div>
                                                     <div class="row mb-2">
-                                                        <label for="kecamatan_id" class="col-form-label s-12 col-sm-4 text-right">Kecamatan<span class="text-danger ml-1">*</span></label>
+                                                        <label class="col-form-label s-12 col-sm-4 text-right">Kecamatan<span class="text-danger ml-1">*</span></label>
                                                         <div class="col-md-8">
-                                                            <input type="text" disabled id="kecamatan_id" value="{{ $data->kecamatan->n_kecamatan }}" class="form-control r-0 s-12" autocomplete="off"/>
+                                                            <select class="select2 form-control r-0 s-12" id="kecamatan_id" name="kecamatan_id" autocomplete="off">
+                                                                <option value="">Pilih</option>
+                                                                @foreach ($kecamatans as $i)
+                                                                    <option {{ $data->kecamatan_id == $i->id ? 'selected' : '-' }} value="{{ $i->id }}">{{ $i->n_kecamatan }}</option>
+                                                                @endforeach
+                                                            </select>
                                                         </div>
                                                     </div>
                                                     <div class="row mb-2">
-                                                        <label for="kelurahan_id" class="col-form-label s-12 col-sm-4 text-right">Kelurahan<span class="text-danger ml-1">*</span></label>
+                                                        <label class="col-form-label s-12 col-sm-4 text-right">Kelurahan<span class="text-danger ml-1">*</span></label>
                                                         <div class="col-md-8">
-                                                            <input type="text" disabled id="kelurahan_id" value="{{ $data->kelurahan->n_kelurahan }}" class="form-control r-0 s-12" autocomplete="off"/>
+                                                            <select class="select2 form-control r-0 s-12" id="kelurahan_id" name="kelurahan_id" autocomplete="off">
+                                                                <option value="">Pilih</option>
+                                                            </select>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -152,7 +159,7 @@
                                                     <div class="row mb-2">
                                                         <label for="" class="col-form-label s-12 col-sm-4 text-right">No Bayar<span class="text-danger ml-1">*</span></label>
                                                         <div class="col-md-8">
-                                                            <input type="text" disabled value="{{ $data->no_bayar }}" class="form-control r-0 s-12" autocomplete="off"/>
+                                                            <input type="text" disabled value="{{ substr($data->no_bayar, 0, 6) . 'xxxxxxxx' }}" class="form-control r-0 s-12" autocomplete="off"/>
                                                         </div>
                                                     </div>
                                                     <div class="row mb-2">
@@ -206,7 +213,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div> 
+                                            </div>
                                         </div>
                                     </div>
                                 </form>
@@ -282,6 +289,41 @@
         var dateFormated = someDate.toISOString().substr(0,10);
         $('#tgl_skrd_akhir').val(dateFormated);
     }
+
+    kelurahan_id = "{{ $data->kelurahan_id }}"
+    $(document).ready(function(){
+        $("#kecamatan_id").trigger('change');
+    })
+
+    $('#kecamatan_id').on('change', function(){
+        $('#kelurahan_id').val("").trigger("change.select2");
+        val = $(this).val();
+        optionKelurahan = "<option value=''>Pilih</option>";
+        if(val == ""){
+            $('#kelurahan_id').html(optionKelurahan);
+        }else{
+            $('#kelurahan_id').html("<option value=''>Loading...</option>");
+            url = "{{ route('skrd.kelurahanByKecamatan', ':id') }}".replace(':id', val);
+            $.get(url, function(data){
+                if(data){
+                    $.each(data, function(index, value){
+                        optionKelurahan += "<option value='" + value.id + "'>" + value.n_kelurahan +"</li>";
+                    });
+                    $('#kelurahan_id').empty().html(optionKelurahan);
+
+                    if (kelurahan_id) {
+                        $("#kelurahan_id").val(kelurahan_id);
+                        $("#kelurahan_id").trigger('change');
+                    } else {
+                        $("#kelurahan_id").val($("#kelurahan_id option:first").val());
+                    }
+
+                }else{
+                    $('#kelurahan_id').html(optionKelurahan);
+                }
+            }, 'JSON');
+        }
+    });
 
     $('#form').on('submit', function (e) {
         if ($(this)[0].checkValidity() === false) {
