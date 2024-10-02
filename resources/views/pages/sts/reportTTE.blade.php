@@ -337,8 +337,13 @@
                     <p class="m-l-5 m-t-1 m-b-0 text-right m-r-10">-</p>
                     <p class="m-l-5 m-t-1 text-right m-r-10">-</p>
                     @else
+                    @if ($data->no_bayar)
+                    <p class="m-l-5 m-t-1 m-b-0 text-right m-r-10">@currency($data->total_bayar_bjb - $data->total_bayar),-</p>
+                    <p class="m-l-5 m-t-1 text-right m-r-10">22%</p>
+                    @else
                     <p class="m-l-5 m-t-1 m-b-0 text-right m-r-10">@currency($jumlahBunga),-</p>
                     <p class="m-l-5 m-t-1 text-right m-r-10">{{ $kenaikan }}%</p>
+                    @endif
                     @endif
                 </td>
             </tr>
@@ -347,7 +352,11 @@
                     <p class="m-l-5 t-bold">Jumlah Keseluruhan :</p>
                 </td>
                 <td class="a">
+                    @if ($data->no_bayar)
+                    <p class="m-l-5 t-bold text-right m-r-10">@currency($data->total_bayar_bjb),-</p>
+                    @else
                     <p class="m-l-5 t-bold text-right m-r-10">@currency($total_bayar),-</p>
+                    @endif
                 </td>
             </tr>
             <tr class="a">
