@@ -122,7 +122,7 @@
                                             </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12 font-weight-bold">Jatuh Tempo :</label>
-                                                <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_akhir)->isoFormat('D MMMM Y') }}</label>
+                                                <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_strd_akhir ? $data->tgl_strd_akhir : $data->tgl_skrd_akhir)->isoFormat('D MMMM Y') }}</label>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -140,7 +140,12 @@
                                             </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12 font-weight-bold">Denda  :</label>
+                                                @if ($data->no_bayar == 1110220501899)
+                                                <label class="col-md-8 s-12">(22%) &nbsp; @currency($data->total_bayar_bjb - $data->total_bayar)</label>
+                                                @else
                                                 <label class="col-md-8 s-12">({{ $kenaikan }}%) &nbsp;@currency($jumlahBunga)</label>
+                                                @endif
+
                                             </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12 font-weight-bold">Diskon  :</label>
@@ -152,7 +157,11 @@
                                             </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12 font-weight-bold"><strong>Total Bayar :</strong></label>
+                                                @if ($data->no_bayar == 1110220501899)
+                                                <label class="col-md-8 s-12">@currency($data->total_bayar_bjb)</label>
+                                                @else
                                                 <label class="col-md-8 s-12">@currency($data->total_bayar + $jumlahBunga)</label>
+                                                @endif
                                             </div>
                                             <div class="row">
                                                 <label class="col-md-4 text-right s-12 font-weight-bold">Virtual Account BJB :</label>
