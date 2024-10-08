@@ -422,7 +422,7 @@ class SKRDController extends Controller
         //*: Check Expired Date (jika tgl_skrd_akhir kurang dari tanggal sekarang maka VA dan QRIS tidak terbuat)
         //*: Check Amount (jika nominal 0 rupiah maka VA dan QRIS tidak terbuat)
         list($dayDiff, $monthDiff) = Utility::getDiffDate($request->tgl_skrd_akhir);
-        if ($dayDiff > 0 && $amount != 0) {
+        if ($dayDiff < 0 && $amount != 0) {
             //* Tahap 3
             //TODO: Get Token VA
             list($err, $errMsg, $tokenBJB) = $this->vabjbres->getTokenBJBres();
