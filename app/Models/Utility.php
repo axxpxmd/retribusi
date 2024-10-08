@@ -8,35 +8,42 @@ use Illuminate\Database\Eloquent\Model;
 
 class Utility extends Model
 {
-    public static function getDiffDate($tgl_jatuh_tempo, $tgl_bayar = null)
+    public static function generateNewJatuhTempo($tgl_skrd_akhir)
     {
-        $startDate = Carbon::parse($tgl_jatuh_tempo);
-        $endDate   = $tgl_bayar ? Carbon::parse($tgl_bayar) : Carbon::now();
+        $dateNow = Carbon::now()->format('Y-m-d');
 
-        $dayDiff = $endDate->diff($startDate)->format('%r%a');
-        $monthDiff = $startDate->diffInMonths($endDate);
+        $tgl_jatuh_tempo_baru = Carbon::createFromFormat('Y-m-d', $tgl_skrd_akhir)->addDays(30)->format('Y-m-d');
+        while ($tgl_jatuh_tempo_baru <= $dateNow) {
+            $tgl_jatuh_tempo_baru = Carbon::createFromFormat('Y-m-d', $tgl_jatuh_tempo_baru)->addDays(30)->format('Y-m-d');
+        }
+
+        return $tgl_jatuh_tempo_baru;
+    }
+
+    public static function getDiffDate($tgl_skrd_akhir, $tgl_strd_akhir = null)
+    {
+        $startDate = Carbon::parse($tgl_skrd_akhir);
+        $endDate   = Carbon::parse($tgl_strd_akhir);
+
+        $dayDiff = $startDate->diff($endDate)->format('%r%a');
+        $monthDiff = $dayDiff / 30;
 
         return [$dayDiff, $monthDiff];
     }
 
-    public static function createBunga($tgl_skrd_akhir, $total_bayar, $tgl_bayar = null)
+    public static function createBunga($tgl_skrd_akhir, $jumlah_bayar)
     {
-        //TODO: Create Bunga (kenaikan 1% tiap bulan)
-        list($dayDiff, $monthDiff) = self::getDiffDate($tgl_skrd_akhir, $tgl_bayar);
+        //TODO: Generate New Jatuh Tempo
+        $tgl_jatuh_tempo_baru = self::generateNewJatuhTempo($tgl_skrd_akhir);
 
-        //TODO: Check status bayar
-        if ($tgl_bayar) {
-            if ($dayDiff >= 0) {
-                $kenaikan = 0;
-            } else {
-                $kenaikan = ((int) $monthDiff + 1) * 1;
-            }
-        } else {
-            $kenaikan = ((int) $monthDiff + 1) * 1;
-        }
+        //TODO: Get total ketelambatan
+        list($dayDiff, $monthDiff) = self::getDiffDate($tgl_skrd_akhir, $tgl_jatuh_tempo_baru);
+
+        //TODO: Create Bunga (kenaikan 1% tiap bulan)
+        $kenaikan = ((int) $monthDiff) * 1;
 
         $bunga = $kenaikan / 100;
-        $jumlahBunga = $total_bayar * $bunga;
+        $jumlahBunga = $jumlah_bayar * $bunga;
 
         return [$jumlahBunga, $kenaikan];
     }

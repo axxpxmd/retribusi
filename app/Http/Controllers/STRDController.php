@@ -143,8 +143,8 @@ class STRDController extends Controller
             })
             ->addColumn('bunga', function ($p) {
                 $tgl_skrd_akhir = $p->tgl_skrd_akhir;
-                $total_bayar    = $p->jumlah_bayar;
-                list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $total_bayar);
+                $jumlah_bayar   = $p->jumlah_bayar;
+                list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar);
 
                 return 'Rp. ' . number_format($jumlahBunga) . ' (' . $kenaikan . '%)';
             })
@@ -207,18 +207,17 @@ class STRDController extends Controller
         $path_sftp = 'file_ttd_skrd/';
         $tgl_skrd_akhir = $data->tgl_skrd_akhir;
         $tgl_strd_akhir = $data->tgl_strd_akhir;
-        $total_bayar    = $data->jumlah_bayar;
+        $jumlah_bayar   = $data->jumlah_bayar;
         $status_ttd     = $data->status_ttd;
 
         $status_ttd = Utility::checkStatusTTD($status_ttd);
         $tgl_jatuh_tempo = Utility::tglJatuhTempo($tgl_strd_akhir, $tgl_skrd_akhir);
 
         //TODO: Get diff days
-        list($dayDiff, $monthDiff) = Utility::getDiffDate($tgl_skrd_akhir);
         $checkJatuhTempo = Utility::isJatuhTempo($tgl_jatuh_tempo, $dateNow);
 
         //TODO: Get bunga
-        list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $total_bayar);
+        list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar);
 
         return view($this->view . 'show', compact(
             'route',
@@ -226,7 +225,6 @@ class STRDController extends Controller
             'data',
             'path_sftp',
             'fileName',
-            'dayDiff',
             'tgl_jatuh_tempo',
             'jumlahBunga',
             'kenaikan',
@@ -247,24 +245,16 @@ class STRDController extends Controller
 
         $jumlah_bayar   = $data->jumlah_bayar;
         $tgl_skrd_akhir = $data->tgl_skrd_akhir;
-        $tgl_strd_akhir = $data->tgl_strd_akhir;
 
         //TODO: Generate new tgl_jatuh_tempo (+30 day from last jatuh tempo)
-        list($dayDiff, $monthDiff) = Utility::getDiffDate($tgl_skrd_akhir);
-        $addDays = ($monthDiff + 1) * 30;
-
-        $dateNow = Carbon::now()->format('Y-m-d');
-        $tgl_jatuh_tempo_baru = Carbon::createFromFormat('Y-m-d', $tgl_skrd_akhir)->addDays($addDays)->format('Y-m-d');
-        if ($tgl_jatuh_tempo_baru <= $dateNow) {
-            $tgl_jatuh_tempo_baru = Carbon::createFromFormat('Y-m-d', $tgl_jatuh_tempo_baru)->addDays(30)->format('Y-m-d');
-        }
+        $tgl_strd_akhir = Utility::generateNewJatuhTempo($tgl_skrd_akhir);
 
         //* Bunga
         list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar);
         $total_bayar = $jumlah_bayar + $jumlahBunga;
 
         $amount = (int) $total_bayar;
-        $expiredDate  = $tgl_jatuh_tempo_baru . ' 23:59:59';
+        $expiredDate  = $tgl_strd_akhir . ' 23:59:59';
         $customerName = $data->nm_wajib_pajak;
         $va_number    = (int) $data->nomor_va_bjb;
         $VABJB        = $data->nomor_va_bjb;
@@ -325,7 +315,7 @@ class STRDController extends Controller
 
         //* Tahap 3
         $data->update([
-            'tgl_strd_akhir' => $tgl_jatuh_tempo_baru,
+            'tgl_strd_akhir' => $tgl_strd_akhir,
             'nomor_va_bjb'   => $VABJB,
             'invoice_id' => $invoiceId,
             'text_qris'  => $textQRIS,
