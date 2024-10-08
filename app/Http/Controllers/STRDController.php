@@ -213,8 +213,8 @@ class STRDController extends Controller
         $status_ttd = Utility::checkStatusTTD($status_ttd);
         $tgl_jatuh_tempo = Utility::tglJatuhTempo($tgl_strd_akhir, $tgl_skrd_akhir);
 
-        //TODO: Get diff days
-        $checkJatuhTempo = Utility::isJatuhTempo($tgl_jatuh_tempo, $dateNow);
+        //TODO: check jatuh tempo
+        $checkJatuhTempo = Utility::isJatuhTempo($tgl_jatuh_tempo);
 
         //TODO: Get bunga
         list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar);
