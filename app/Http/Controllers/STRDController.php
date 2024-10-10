@@ -253,6 +253,8 @@ class STRDController extends Controller
         list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar);
         $total_bayar = $jumlah_bayar + $jumlahBunga;
 
+        dd($jumlah_bayar, $jumlahBunga, $total_bayar);
+
         $amount = (int) $total_bayar;
         $expiredDate  = $tgl_strd_akhir . ' 23:59:59';
         $customerName = $data->nm_wajib_pajak;
@@ -315,6 +317,7 @@ class STRDController extends Controller
 
         //* Tahap 3
         $data->update([
+            'denda' => $jumlahBunga,
             'tgl_strd_akhir' => $tgl_strd_akhir,
             'nomor_va_bjb'   => $VABJB,
             'invoice_id' => $invoiceId,
