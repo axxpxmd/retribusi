@@ -21,6 +21,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Crypt;
+use Stevebauman\Purify\Facades\Purify;
 
 // Model
 use App\User;
@@ -237,9 +238,11 @@ class PenggunaController extends Controller
         $pengguna = Pengguna::find($id);
         $user_id  = $pengguna->user_id;
 
-        $purifier = new \HTMLPurifier();
+        //* Handle XSS
+        $input = $request->all();
+        $cleanText = Purify::clean($input);
 
-        if ($purifier->purify($request->full_name) == null) {
+        if (!$cleanText['full_name']) {
             return response()->json([
                 'message' => 'Karakter dilarang!.'
             ], 422);
@@ -277,7 +280,7 @@ class PenggunaController extends Controller
 
         // Get Data
         $username  = $request->username;
-        $full_name = $purifier->purify($request->full_name);
+        $full_name = $cleanText['full_name'];
         $email   = $request->email;
         $phone   = $request->phone;
         $role_id = $request->role_id;

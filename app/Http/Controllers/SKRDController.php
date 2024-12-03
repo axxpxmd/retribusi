@@ -28,6 +28,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Crypt;
+use Stevebauman\Purify\Facades\Purify;
 
 // Models
 use App\Models\OPD;
@@ -377,18 +378,18 @@ class SKRDController extends Controller
         $dataRekening = $this->getKodeRekening($request->id_rincian_jenis_pendapatan);
 
         //* Hande XSS
-        $purifier = new \HTMLPurifier();
+        $input = $request->all();
+        $cleanText = Purify::clean($input);
 
-        $lokasi = $purifier->purify($request->lokasi);
-        $email  = $purifier->purify($request->email);
-        $nmr_daftar = $purifier->purify($request->nmr_daftar);
-        $alamat_wp  = $purifier->purify($request->alamat_wp);
-        $nm_wajib_pajak   = $purifier->purify($request->nm_wajib_pajak);
-        $uraian_retribusi = $purifier->purify($request->uraian_retribusi);
+        $lokasi = $cleanText['lokasi'];
+        $nmr_daftar = $cleanText['nmr_daftar'];
+        $alamat_wp  = $cleanText['alamat_wp'];
+        $nm_wajib_pajak   = $cleanText['nm_wajib_pajak'];
+        $uraian_retribusi = $cleanText['uraian_retribusi'];
 
-        if (!$nmr_daftar || !$lokasi || !$email || !$alamat_wp || !$nm_wajib_pajak || !$uraian_retribusi) {
+        if (!$nmr_daftar || !$lokasi || !$alamat_wp || !$nm_wajib_pajak || !$uraian_retribusi) {
             return response()->json([
-                'message' => 'Karakter dilarang!. Cek kembali pada inputan terdapat karakter yang dilarang.'
+                'message' => 'Karakter dilarang!. Cek kembali pada inputan, terdapat karakter yang dilarang.'
             ], 422);
         }
 
@@ -400,13 +401,13 @@ class SKRDController extends Controller
             'id_jenis_pendapatan'      => $request->id_jenis_pendapatan,
             'rincian_jenis_pendapatan' => $request->rincian_jenis_pendapatan,
             'id_rincian_jenis_pendapatan' => \Crypt::decrypt($request->id_rincian_jenis_pendapatan),
-            'nmr_daftar'       => $purifier->purify($request->nmr_daftar),
-            'nm_wajib_pajak'   => $purifier->purify($request->nm_wajib_pajak),
-            'alamat_wp'        => $purifier->purify($request->alamat_wp),
-            'lokasi'           => $purifier->purify($request->lokasi),
+            'nmr_daftar'       => $nmr_daftar,
+            'nm_wajib_pajak'   => $nm_wajib_pajak,
+            'alamat_wp'        => $alamat_wp,
+            'lokasi'           => $lokasi,
             'kelurahan_id'     => $request->kelurahan_id,
             'kecamatan_id'     => $request->kecamatan_id,
-            'uraian_retribusi' => $purifier->purify($request->uraian_retribusi),
+            'uraian_retribusi' => $uraian_retribusi,
             'jumlah_bayar'     => (int) str_replace(['.', 'Rp', ' '], '', $request->jumlah_bayar),
             'denda'            => 0,
             'diskon'           => 0,
@@ -423,7 +424,7 @@ class SKRDController extends Controller
             'tgl_skrd_akhir'   => $request->tgl_skrd_akhir,
             'no_bayar'         => $no_bayar,
             'created_by'       => Auth::user()->pengguna->full_name,
-            'email'            => $purifier->purify($request->email),
+            'email'            => $request->email,
             'no_telp'          => $request->no_telp
         ];
         $dataSKRD = TransaksiOPD::create($data);

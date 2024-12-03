@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a42a3292113902e4370ec85bee145e5c",
+    "content-hash": "951ed0e632c6a9fd371edc50e55abbcf",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3966,6 +3966,71 @@
                 }
             ],
             "time": "2020-04-06T14:01:48+00:00"
+        },
+        {
+            "name": "stevebauman/purify",
+            "version": "v4.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/stevebauman/purify.git",
+                "reference": "e56289062ed8a25c78c88f35e9106f00d01369c1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/stevebauman/purify/zipball/e56289062ed8a25c78c88f35e9106f00d01369c1",
+                "reference": "e56289062ed8a25c78c88f35e9106f00d01369c1",
+                "shasum": ""
+            },
+            "require": {
+                "ezyang/htmlpurifier": "^4.9.0",
+                "illuminate/support": "~5.5|~6.0|~7.0|~8.0|~9.0",
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "orchestra/testbench": "~3.7|~4.0|~5.0|~6.0|~7.0",
+                "phpunit/phpunit": "~7.0|~8.0|~9.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Stevebauman\\Purify\\PurifyServiceProvider"
+                    ],
+                    "aliases": {
+                        "Purify": "Stevebauman\\Purify\\Facades\\Purify"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Stevebauman\\Purify\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Steve Bauman",
+                    "email": "steven_bauman@outlook.com"
+                }
+            ],
+            "description": "An HTML Purifier / Sanitizer for Laravel",
+            "keywords": [
+                "Purifier",
+                "clean",
+                "cleaner",
+                "html",
+                "laravel",
+                "purification",
+                "purify"
+            ],
+            "support": {
+                "issues": "https://github.com/stevebauman/purify/issues",
+                "source": "https://github.com/stevebauman/purify/tree/v4.0.1"
+            },
+            "time": "2022-01-21T21:41:41+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -9320,12 +9385,12 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": "^7.2.5"
     },
-    "platform-dev": [],
+    "platform-dev": {},
     "plugin-api-version": "2.6.0"
 }

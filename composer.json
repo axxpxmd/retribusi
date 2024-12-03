@@ -23,6 +23,7 @@
         "simplesoftwareio/simple-qrcode": "~2",
         "spatie/laravel-permission": "^4.4",
         "spatie/simple-excel": "^1.2",
+        "stevebauman/purify": "^4.0",
         "yajra/laravel-datatables": "1.5"
     },
     "require-dev": {
