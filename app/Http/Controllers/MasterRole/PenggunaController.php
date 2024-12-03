@@ -117,8 +117,8 @@ class PenggunaController extends Controller
         $request->validate([
             'username'  => 'required|max:50|unique:tmusers,username',
             'password'  => 'required|min:8',
-            'full_name' => 'required|max:100',
-            'email'   => 'required|max:100|email|unique:tmpenggunas,email',
+            'full_name' => 'required|string|max:100',
+            'email'   => 'required|max:100|string|email|unique:tmpenggunas,email',
             'role_id' => 'required',
             'phone'   => 'required|max:20',
         ]);
@@ -237,6 +237,14 @@ class PenggunaController extends Controller
         $pengguna = Pengguna::find($id);
         $user_id  = $pengguna->user_id;
 
+        $purifier = new \HTMLPurifier();
+
+        if ($purifier->purify($request->full_name) == null) {
+            return response()->json([
+                'message' => 'Karakter dilarang!.'
+            ], 422);
+        }
+
         // Validation
         $request->validate([
             'username'  => 'required|max:50|unique:tmusers,username,' . $user_id,
@@ -269,7 +277,7 @@ class PenggunaController extends Controller
 
         // Get Data
         $username  = $request->username;
-        $full_name = $request->full_name;
+        $full_name = $purifier->purify($request->full_name);
         $email   = $request->email;
         $phone   = $request->phone;
         $role_id = $request->role_id;
