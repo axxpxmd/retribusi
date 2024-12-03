@@ -16,9 +16,11 @@ namespace App\Http\Controllers\Profile;
 
 use Auth;
 
+use App\Http\Controllers\Controller;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Crypt;
 
 // Model
 use App\User;
@@ -47,7 +49,7 @@ class ProfileController extends Controller
 
     public function update()
     {
-        // 
+        //
     }
 
     public function editPassword($id)
@@ -55,6 +57,7 @@ class ProfileController extends Controller
         $route  = $this->route;
         $title  = $this->title;
 
+        $id     = Crypt::decrypt($id);
         $userId = $id;
         $data = User::find($id);
 

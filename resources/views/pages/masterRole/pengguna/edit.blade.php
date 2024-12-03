@@ -24,7 +24,7 @@
                         <a class="nav-link" id="tab2" data-toggle="tab" href="#edit-data" role="tab"><i class="icon icon-edit"></i>Edit Data</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('profile.editPassword', $pengguna->user_id) }}"><i class="icon icon-key3"></i>Ganti Password</a>
+                        <a class="nav-link" href="{{ route('profile.editPassword', Crypt::encrypt($pengguna->user_id)) }}"><i class="icon icon-key3"></i>Ganti Password</a>
                     </li>
                 </ul>
             </div>
@@ -115,20 +115,20 @@
                                             <div class="form-group mt-1">
                                                 <label for="username" class="form-control label-input-custom col-md-2">Username<span class="text-danger ml-1">*</span></label>
                                                 <input type="text" name="username" id="username" class="form-control r-0 light s-12 col-md-6" value="{{ $pengguna->user->username }}" autocomplete="off" required/>
-                                            </div> 
+                                            </div>
                                             <hr>
                                             <div class="form-group m-0">
                                                 <label for="full_name" class="form-control label-input-custom col-md-2">Nama Lengkap<span class="text-danger ml-1">*</span></label>
                                                 <input type="text" name="full_name" id="full_name" class="form-control r-0 light s-12 col-md-6" value="{{ $pengguna->full_name }}" autocomplete="off" required/>
-                                            </div> 
+                                            </div>
                                             <div class="form-group m-0" id="nip_display">
                                                 <label for="nip" class="form-control label-input-custom col-md-2">NIP<span class="text-danger ml-1" id="nip_required"></span></label>
                                                 <input type="number" name="nip" id="nip" class="form-control r-0 light s-12 col-md-6" value="{{ $pengguna->nip }}" autocomplete="off"/>
-                                            </div> 
+                                            </div>
                                             <div class="form-group m-0" id="nip_display">
                                                 <label for="nik" class="form-control label-input-custom col-md-2">NIK<span class="text-danger ml-1" id="nik_required"></span></label>
                                                 <input type="number" name="nik" id="nik" class="form-control r-0 light s-12 col-md-6" value="{{ $pengguna->nik }}" autocomplete="off"/>
-                                            </div> 
+                                            </div>
                                             <div class="form-group mb-1" id="opd_display">
                                                 <label for="opd_id" class="form-control label-input-custom col-md-2">OPD<span class="text-danger ml-1">*</span></label>
                                                 <div class="col-md-6 p-0 bg-light">
@@ -143,11 +143,11 @@
                                             <div class="form-group">
                                                 <label for="email" class="form-control label-input-custom col-md-2">Email<span class="text-danger ml-1">*</span></label>
                                                 <input type="text" name="email" id="email" class="form-control r-0 light s-12 col-md-6" value="{{ $pengguna->email }}" autocomplete="off" required/>
-                                            </div> 
+                                            </div>
                                             <div class="form-group m-0">
                                                 <label for="phone" class="form-control label-input-custom col-md-2">No. Telp<span class="text-danger ml-1">*</span></label>
                                                 <input type="text" name="phone" id="phone" class="form-control r-0 light s-12 col-md-6" value="{{ $pengguna->phone }}" autocomplete="off" required/>
-                                            </div> 
+                                            </div>
                                             <div class="form-group mt-2">
                                                 <div class="col-md-2"></div>
                                                 <button type="submit" class="btn btn-primary btn-sm" id="action"><i class="icon-save mr-2"></i>Simpan Perubahan<span id="txtAction"></span></button>
@@ -170,46 +170,46 @@
     $('#opd_id').trigger('change.select2');
     $('#role_id').val("{{ $pengguna->modelHasRole->role->id }}");
     $('#role_id').trigger('change.select2');
-    
+
     $(function() {
         var role_id = $('#role_id').val();
         if(role_id == 7 || role_id == 0) {
-            $('#opd_display').hide(); 
-            $('#nip_display').hide(); 
-            $('#nip').val(''); 
+            $('#opd_display').hide();
+            $('#nip_display').hide();
+            $('#nip').val('');
             $('#opd_id').val("0");
             $('#opd_id').trigger('change.select2');
         } else {
-            $('#opd_display').show(); 
-            $('#nip_display').show(); 
-        } 
+            $('#opd_display').show();
+            $('#nip_display').show();
+        }
 
         if (role_id == 11) {
-            $('#nip_required,#nik_required').html('*'); 
-            $('#nip,#nik').prop('required', true); 
+            $('#nip_required,#nik_required').html('*');
+            $('#nip,#nik').prop('required', true);
         } else {
-            $('#nip_required,#nik_required').html(''); 
+            $('#nip_required,#nik_required').html('');
             $('#nip,#nik').prop('required', false);
         }
-       
+
         $('#role_id').change(function(){
             var role_id = $('#role_id').val();
             if(role_id == 7 || role_id == 0) {
-                $('#opd_display').hide(); 
-                $('#nip_display').hide(); 
-                $('#nip').val(''); 
+                $('#opd_display').hide();
+                $('#nip_display').hide();
+                $('#nip').val('');
                 $('#opd_id').val("");
                 $('#opd_id').trigger('change.select2');
             } else {
-                $('#opd_display').show(); 
-                $('#nip_display').show(); 
-            } 
+                $('#opd_display').show();
+                $('#nip_display').show();
+            }
 
             if (role_id == 11) {
-                $('#nip_required,#nik_required').html('*'); 
-                $('#nip,#nik').prop('required', true); 
+                $('#nip_required,#nik_required').html('*');
+                $('#nip,#nik').prop('required', true);
             } else {
-                $('#nip_required,#nik_required').html(''); 
+                $('#nip_required,#nik_required').html('');
                 $('#nip,#nik').prop('required', false);
             }
         });

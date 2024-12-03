@@ -16,18 +16,20 @@ namespace App\Http\Controllers\MasterRole;
 
 use DataTables;
 
+use App\Http\Controllers\Controller;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Crypt;
 
 // Model
 use App\User;
 use App\Models\OPD;
+use App\Models\TtdOPD;
 use App\Models\Pengguna;
 use App\Models\ModelHasRoles;
-use App\Models\OPDJenisPendapatan;
-use App\Models\TtdOPD;
 use Spatie\Permission\Models\Role;
+use App\Models\OPDJenisPendapatan;
 
 class PenggunaController extends Controller
 {
@@ -76,7 +78,7 @@ class PenggunaController extends Controller
                 <a href='#' onclick='show(" . $p->id . ")' title='show data'><i class='icon icon-eye3 mr-1'></i></a>";
             })
             ->editColumn('full_name', function ($p) {
-                return "<a href='" . route($this->route . 'edit', $p->id) . "' class='text-primary' title='Menampilkan Data'>" . $p->full_name . "</a>";
+                return "<a href='" . route($this->route . 'edit', Crypt::encrypt($p->id)) . "' class='text-primary' title='Menampilkan Data'>" . $p->full_name . "</a>";
             })
             ->editColumn('opd', function ($p) {
                 if ($p->opd == null) {
@@ -210,6 +212,7 @@ class PenggunaController extends Controller
 
     public function edit($id)
     {
+        $id    = Crypt::decrypt($id);
         $route = $this->route;
         $title = $this->title;
         $path  = 'images/ava/';
