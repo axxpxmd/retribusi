@@ -29,6 +29,8 @@ class BatalSKRDController extends Controller
 
     public function __construct(VABJBRes $vabjbres)
     {
+        $this->middleware(['permission:Batal SKRD|Cari No SKRD']);
+
         $this->vabjbres   = $vabjbres;
     }
 
