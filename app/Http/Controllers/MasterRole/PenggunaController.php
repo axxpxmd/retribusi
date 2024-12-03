@@ -244,7 +244,7 @@ class PenggunaController extends Controller
 
         if (!$cleanText['full_name']) {
             return response()->json([
-                'message' => 'Karakter dilarang!.'
+                'message' => 'Karakter dilarang!. Cek kembali pada inputan, terdapat karakter yang dilarang.'
             ], 422);
         }
 
