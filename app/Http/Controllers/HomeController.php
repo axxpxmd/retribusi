@@ -20,6 +20,7 @@ use App\Models\JenisPendapatan;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Crypt;
 
 // Models
 use App\Models\OPD;
@@ -32,7 +33,7 @@ class HomeController extends Controller
     {
         $this->middleware('auth');
         $this->middleware('checksinglesession');
-        $this->middleware('checkopd');
+        // $this->middleware('checkopd');
     }
 
     public function index(Request $request)
@@ -41,8 +42,8 @@ class HomeController extends Controller
         $date  = $time->format('Y-m-d');
         $year  = $request->tahun ? $request->tahun : $time->format('Y');
         $role  = Auth::user()->pengguna->modelHasRole->role->name;
-        $opd_id = $request->opd_id ? base64_decode($request->opd_id) : Auth::user()->pengguna->opd_id;
-        $n_opd  = $request->opd_id ? OPD::select('n_opd', 'id')->where('id', base64_decode($request->opd_id))->first() : Auth::user()->pengguna->opd;
+        $opd_id = $request->opd_id ? Crypt::decrypt($request->opd_id) : Auth::user()->pengguna->opd_id;
+        $n_opd  = $request->opd_id ? OPD::select('n_opd', 'id')->where('id', Crypt::decrypt($request->opd_id))->first() : Auth::user()->pengguna->opd;
         $nip    = Auth::user()->pengguna->nip;
 
         $opdArray = OPDJenisPendapatan::select('id_opd')->get()->toArray();
