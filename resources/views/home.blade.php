@@ -48,7 +48,7 @@
                             <div class="col-auto mt-2">
                                 <div class="row">
                                     <div class="col-auto">
-                                        <span class="font-weight-bold">Tahun : {{ $year }}</span>
+                                        <span class="font-weight-bold">Tahun : {{ base64_decode($year) }}</span>
                                     </div>
                                     <div class="col-auto">
                                         <span class="font-weight-bold">OPD : {{ $n_opd->n_opd }}</span>
@@ -333,7 +333,7 @@
                                 <option value="0">Semua</option>
                             @endif
                             @foreach ($opds as $i)
-                                <option value="{{ $i->id }}" {{ $opd_id == $i->id ? 'selected' : '' }}>{{ $i->n_opd }}</option>
+                                <option value="{{ base64_encode($i->id) }}" {{ $opd_id == $i->id ? 'selected' : '' }}>{{ $i->n_opd }}</option>
                             @endforeach
                         </select>
                     </div>
