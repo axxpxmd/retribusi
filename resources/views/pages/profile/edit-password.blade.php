@@ -45,7 +45,7 @@
                             <div class="card-body">
                                 <form class="needs-validation" id="form" method="PATCH"  enctype="multipart/form-data" novalidate>
                                     {{ method_field('POST') }}
-                                    <input type="hidden" id="id_user" name="id" value="{{ $userId }}"/>
+                                    <input type="hidden" id="id_user" name="id" value="{{ Crypt::encrypt($userId) }}"/>
                                     <div class="form-row form-inline">
                                         <div class="col-md-8">
                                             <div class="form-group m-0">

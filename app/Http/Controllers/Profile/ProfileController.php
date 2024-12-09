@@ -76,6 +76,7 @@ class ProfileController extends Controller
             'confirm_password' => 'required|same:password'
         ]);
 
+        $id       = Crypt::decrypt($id);
         $password = $request->password;
 
         User::where('id', $id)->update([
