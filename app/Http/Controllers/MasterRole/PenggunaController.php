@@ -235,6 +235,7 @@ class PenggunaController extends Controller
 
     public function update(Request $request, $id)
     {
+        $id = Crypt::decrypt($id);
         $pengguna = Pengguna::find($id);
         $user_id  = $pengguna->user_id;
 
