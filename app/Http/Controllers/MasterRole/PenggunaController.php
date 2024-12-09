@@ -248,7 +248,7 @@ class PenggunaController extends Controller
             ], 422);
         }
 
-        // Validation
+        //* Validation
         $request->validate([
             'username'  => 'required|max:50|unique:tmusers,username,' . $user_id,
             'full_name' => 'required|max:100',
@@ -278,7 +278,7 @@ class PenggunaController extends Controller
             $opd_id = $request->opd_id;
         }
 
-        // Get Data
+        //* Get Data
         $username  = $request->username;
         $full_name = $cleanText['full_name'];
         $email   = $request->email;
