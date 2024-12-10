@@ -115,6 +115,21 @@ class PenggunaController extends Controller
 
     public function store(Request $request)
     {
+        //* Handle XSS
+        $input = $request->all();
+        $cleanText = Purify::clean($input);
+
+        $full_name = $cleanText['full_name'];
+        $email     = $cleanText['email'];
+        $nip = $cleanText['nip'];
+        $nik = $cleanText['nik'];
+
+        if (!$full_name || !$email || !$nip || !$nik) {
+            return response()->json([
+                'message' => 'Karakter dilarang!. Cek kembali pada inputan, terdapat karakter yang dilarang.'
+            ], 422);
+        }
+
         $request->validate([
             'username'  => 'required|max:50|unique:tmusers,username',
             'password'  => 'required|min:8',
@@ -184,12 +199,12 @@ class PenggunaController extends Controller
         $dataPengguna = [
             'user_id' => $user->id,
             'opd_id'  => $opd_id,
-            'full_name' => $request->full_name,
-            'email'     => $request->email,
+            'full_name' => $full_name,
+            'email'     => $email,
             'phone'     => $request->phone,
             'photo'     => 'default.png',
-            'nip'       => $request->nip,
-            'nik'       => $request->nik,
+            'nip'       => $nip,
+            'nik'       => $nik,
             'api_key'   => $api_key,
             'url_callback' => $url_callback
         ];
