@@ -61,12 +61,12 @@
                                     <table id="dataTable" class="table table-striped table-bordered" style="width:100%">
                                         <thead>
                                             <th width="5%">No</th>
-                                            <th width="15%">Nama</th>
+                                            <th width="19%">Nama</th>
                                             <th width="30%">OPD</th>
-                                            <th width="10%">Role</th>
-                                            <th width="10%">No Telp</th>
+                                            <th width="7%">Role</th>
+                                            <th width="9%">No Telp</th>
                                             <th width="10%">Nama Login</th>
-                                            <th width="10%">Foto</th>
+                                            {{-- <th width="10%">Foto</th> --}}
                                             <th width="5%"></th>
                                         </thead>
                                         <tbody></tbody>
@@ -237,7 +237,7 @@
             {data: 'role', name: 'role',  orderable: false, searchable: false},
             {data: 'phone', name: 'phone'},
             {data: 'user_id', name: 'user_id'},
-            {data: 'photo', name: 'photo'},
+            // {data: 'photo', name: 'photo'},
             {data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center'}
         ]
     });
