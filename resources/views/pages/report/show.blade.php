@@ -120,8 +120,17 @@
                                                 <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_awal)->isoFormat('D MMMM Y') }}</label>
                                             </div>
                                             <div class="row">
-                                                <label class="col-md-4 font-weight-bold text-right s-12">Jatuh Tempo :</label>
+                                                <label class="col-md-4 font-weight-bold text-right s-12">Tanggal SKRD Akhir :</label>
                                                 <label class="col-md-8 s-12">{{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_skrd_akhir)->isoFormat('D MMMM Y') }}</label>
+                                            </div>
+                                            <div class="row">
+                                                <label class="col-md-4 font-weight-bold text-right s-12">Jatuh Tempo :</label>
+                                                <label class="col-md-8 s-12">
+                                                    {{ Carbon\Carbon::createFromFormat('Y-m-d', $tgl_jatuh_tempo)->isoFormat('D MMMM Y') }}
+                                                    @if ($data->status_bayar == 0 && $tgl_jatuh_tempo < $dateNow)
+                                                        | <span class="badge badge-danger">expired</span>
+                                                    @endif
+                                                </label>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
