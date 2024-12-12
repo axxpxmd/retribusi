@@ -240,7 +240,7 @@ class STRDController extends Controller
         /* Tahapan :
          * 1. VA
          * 2. QRIS
-         * 2. tmtransaksi_opd
+         * 2. tmtransaksi_opd (update)
          */
 
         $jumlah_bayar   = $data->jumlah_bayar;
@@ -263,36 +263,38 @@ class STRDController extends Controller
         $no_hp        = $data->rincian_jenis->no_hp;
 
         //* Tahap 1
-        //TODO: Get Token BJB
-        list($err, $errMsg, $tokenBJB) = $this->vabjbres->getTokenBJBres();
-        if ($err) {
-            return redirect()
-                ->route($this->route . 'index')
-                ->withErrors($errMsg);
-        }
+        if ($jumlah_bayar != 0) {
+            if ($VABJB == null) {
+                //TODO: Get Token BJB
+                list($err, $errMsg, $tokenBJB) = $this->vabjbres->getTokenBJBres();
+                if ($err) {
+                    return redirect()
+                        ->route($this->route . 'index')
+                        ->withErrors($errMsg);
+                }
 
-        if ($VABJB == null) {
-            //TODO: Create VA BJB
-            list($err, $errMsg, $VABJB) = $this->vabjbres->createVABJBres($tokenBJB, $clientRefnum, strval($amount), $expiredDate, $customerName, $productCode, 3, $clientRefnum);
-            if ($err) {
-                return redirect()
-                    ->route($this->route . 'index')
-                    ->withErrors($errMsg);
-            }
-        } else {
-            //TODO: Update VA BJB
-            list($err, $errMsg, $VABJB) = $this->vabjbres->updateVABJBres($tokenBJB, strval($amount), $expiredDate, $customerName, $va_number, 3, $clientRefnum);
-            if ($err) {
-                return redirect()
-                    ->route($this->route . 'index')
-                    ->withErrors($errMsg);
+                //TODO: Create VA BJB
+                list($err, $errMsg, $VABJB) = $this->vabjbres->createVABJBres($tokenBJB, $clientRefnum, strval($amount), $expiredDate, $customerName, $productCode, 3, $clientRefnum);
+                if ($err) {
+                    return redirect()
+                        ->route($this->route . 'index')
+                        ->withErrors($errMsg);
+                }
+            } else {
+                //TODO: Update VA BJB
+                list($err, $errMsg, $VABJB) = $this->vabjbres->updateVABJBres($tokenBJB, strval($amount), $expiredDate, $customerName, $va_number, 3, $clientRefnum);
+                if ($err) {
+                    return redirect()
+                        ->route($this->route . 'index')
+                        ->withErrors($errMsg);
+                }
             }
         }
 
         //* Tahap 2
         $invoiceId = null;
         $textQRIS = null;
-        if ($amount <= 10000000 && config('app.status_qris') == 1) { //* Nominal QRIS maksimal 10 juta, jika lebih maka tidak terbuat
+        if ($jumlah_bayar != 0 &&  $amount <= 10000000 && config('app.status_qris') == 1) { //* Nominal QRIS maksimal 10 juta, jika lebih maka tidak terbuat
             //TODO: Get Token QRIS
             list($err, $errMsg, $tokenQRISBJB) = $this->qrisbjbres->getTokenQrisres();
             if ($err) {
