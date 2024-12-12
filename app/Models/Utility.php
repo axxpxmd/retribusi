@@ -8,12 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Utility extends Model
 {
-    public static function generateNewJatuhTempo($tgl_skrd_akhir)
+    public static function generateNewJatuhTempo($tgl_skrd_akhir, $tgl_bayar = null)
     {
         $dateNow = Carbon::now()->format('Y-m-d');
+        $endDate = $tgl_bayar ? $tgl_bayar : $dateNow;
 
         $tgl_jatuh_tempo_baru = Carbon::createFromFormat('Y-m-d', $tgl_skrd_akhir)->addDays(30)->format('Y-m-d');
-        while ($tgl_jatuh_tempo_baru <= $dateNow) {
+        while ($tgl_jatuh_tempo_baru <=  $endDate) {
             $tgl_jatuh_tempo_baru = Carbon::createFromFormat('Y-m-d', $tgl_jatuh_tempo_baru)->addDays(30)->format('Y-m-d');
         }
 
@@ -31,10 +32,10 @@ class Utility extends Model
         return [$dayDiff, $monthDiff];
     }
 
-    public static function createBunga($tgl_skrd_akhir, $jumlah_bayar)
+    public static function createBunga($tgl_skrd_akhir, $jumlah_bayar, $tgl_bayar = null)
     {
         //TODO: Generate New Jatuh Tempo
-        $tgl_jatuh_tempo_baru = self::generateNewJatuhTempo($tgl_skrd_akhir);
+        $tgl_jatuh_tempo_baru = self::generateNewJatuhTempo($tgl_skrd_akhir, $tgl_bayar);
 
         //TODO: Get total ketelambatan
         list($dayDiff, $monthDiff) = self::getDiffDate($tgl_skrd_akhir, $tgl_jatuh_tempo_baru);

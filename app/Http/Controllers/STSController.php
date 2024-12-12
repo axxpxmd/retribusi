@@ -175,10 +175,12 @@ class STSController extends Controller
         $fileName  = str_replace(' ', '', $data->nm_wajib_pajak) . '-' . $data->no_skrd . ".pdf";
         $path_sftp = 'file_ttd_skrd/';
         $tgl_skrd_akhir = $data->tgl_skrd_akhir;
+        $tgl_strd_akhir = $data->tgl_strd_akhir;
         $jumlah_bayar   = $data->jumlah_bayar;
         $status_ttd     = $data->status_ttd;
         $tgl_bayar      = $data->tgl_bayar;
         $status_bayar   = $data->status_bayar;
+        $tgl_jatuh_tempo = Utility::tglJatuhTempo($tgl_strd_akhir, $tgl_skrd_akhir);
 
         $jatuh_tempo = Utility::isJatuhTempo($tgl_skrd_akhir);
 
@@ -188,7 +190,9 @@ class STSController extends Controller
         $kenaikan    = 0;
         $jumlahBunga = 0;
         if ($status_bayar == 1) {
-            list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar, $tgl_bayar);
+            if (Carbon::parse($tgl_bayar)->format('Y-m-d') > $tgl_skrd_akhir) {
+                list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar, $tgl_bayar);
+            }
         } else {
             if ($jatuh_tempo) {
                 list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar);
@@ -196,7 +200,7 @@ class STSController extends Controller
         }
 
         //* Check status pembayaran VA BJB
-        if ($data->status_bayar == 0 && $data->nomor_va_bjb != null && $jatuh_tempo == false) {
+        if ($jumlah_bayar != 0 && $data->status_bayar == 0 && $data->nomor_va_bjb != null && $tgl_jatuh_tempo > $dateNow) {
             //TODO: Get Token BJB
             list($err, $errMsg, $tokenBJB) = $this->vabjbres->getTokenBJBres();
             if ($err) {
@@ -238,7 +242,8 @@ class STSController extends Controller
             'jumlahBunga',
             'dateNow',
             'status_ttd',
-            'jatuh_tempo'
+            'jatuh_tempo',
+            'tgl_jatuh_tempo'
         ));
     }
 
