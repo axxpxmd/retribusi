@@ -30,6 +30,9 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div id="alert"></div>
+                        @if ($data->status_bayar == 1)
+                        <div class="alert alert-success text-center font-weight-bold">SKRD ini sudah dibayar.</div>
+                        @endif
                         <div class="card">
                             <h6 class="card-header"><strong>Edit Data</strong></h6>
                             <div class="card-body">

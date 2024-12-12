@@ -180,7 +180,7 @@ class STSController extends Controller
         $tgl_bayar      = $data->tgl_bayar;
         $status_bayar   = $data->status_bayar;
 
-        $jatuh_tempo = Utility::isJatuhTempo($tgl_skrd_akhir, $dateNow);
+        $jatuh_tempo = Utility::isJatuhTempo($tgl_skrd_akhir);
 
         $status_ttd = Utility::checkStatusTTD($status_ttd);
 
@@ -251,31 +251,14 @@ class STSController extends Controller
         $role = Auth::user()->pengguna->modelHasRole->role->name;
         $now  = Carbon::now()->format('Y-m-d\TH:i');
         $data = TransaksiOPD::find($id);
-        $dateNow = Carbon::now()->format('Y-m-d');
-
-        if ($data->status_bayar == 1) {
-            return redirect()
-                ->route($this->route . 'index')
-                ->withSuccess('SKRD sudah dibayar.');
-        }
-
+        $dateNow   = Carbon::now()->format('Y-m-d');
         $va_number = (int) $data->nomor_va_bjb;
         $no_bayar  = $data->no_bayar;
         $tgl_skrd_akhir = $data->tgl_skrd_akhir;
+        $tgl_strd_akhir = $data->tgl_strd_akhir;
         $jumlah_bayar   = $data->jumlah_bayar;
         $status_bayar   = $data->status_bayar;
-
-        //TODO: Check role
-        $readonly = User::checkRole($role);
-
-        $jatuh_tempo = Utility::isJatuhTempo($tgl_skrd_akhir, $dateNow);
-
-        //TODO: Get bunga
-        $kenaikan    = 0;
-        $jumlahBunga = 0;
-        if ($jatuh_tempo) {
-            list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar);
-        }
+        $tgl_jatuh_tempo = Utility::tglJatuhTempo($tgl_strd_akhir, $tgl_skrd_akhir);
 
         //* Check status bayar
         if ($status_bayar == 1) {
@@ -284,8 +267,20 @@ class STSController extends Controller
                 ->withErrors('Data sudah dibayar');
         }
 
+        //TODO: Check role
+        $readonly = User::checkRole($role);
+
+        $jatuh_tempo = Utility::isJatuhTempo($tgl_skrd_akhir);
+
+        //TODO: Get bunga
+        $kenaikan    = 0;
+        $jumlahBunga = 0;
+        if ($jatuh_tempo) {
+            list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar);
+        }
+
         //* Check status pembayaran VA BJB
-        if ($data->status_bayar == 0 && $data->nomor_va_bjb != null && $data->tgl_skrd_akhir > $dateNow) {
+        if ($jumlah_bayar != 0 && $data->status_bayar == 0 && $data->nomor_va_bjb != null && $tgl_jatuh_tempo > $dateNow) {
             //TODO: Get Token BJB
             list($err, $errMsg, $tokenBJB) = $this->vabjbres->getTokenBJBres();
             if ($err) {
@@ -486,7 +481,7 @@ class STSController extends Controller
         $fileName = str_replace(' ', '', $nm_wajib_pajak) . '-' . $no_skrd . ".pdf";
         $file_url = config('app.sftp_src') . 'file_ttd_skrd/' . $fileName;
 
-        $jatuh_tempo = Utility::isJatuhTempo($tgl_skrd_akhir, $dateNow);
+        $jatuh_tempo = Utility::isJatuhTempo($tgl_skrd_akhir);
 
         //TODO: Get bunga
         $kenaikan    = 0;
