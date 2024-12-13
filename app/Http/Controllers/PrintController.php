@@ -78,17 +78,17 @@ class PrintController extends Controller
 
         $status_ttd  = $data->status_ttd;
         $text_qris   = $data->text_qris;
-        $total_bayar = $data->jumlah_bayar;
+        $jumlah_bayar = $data->jumlah_bayar;
         $tgl_skrd_akhir = $data->tgl_skrd_akhir;
         $tgl_strd_akhir = $data->tgl_strd_akhir;
 
         $status_ttd = Utility::checkStatusTTD($status_ttd);
 
         //* Bunga
-        list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $total_bayar);
+        list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar);
 
         //* Total Bayar + Bunga
-        $total_bayar = $data->total_bayar + $jumlahBunga;
+        $total_bayar = $jumlah_bayar + $jumlahBunga;
         $terbilang   = Html_number::terbilang($total_bayar) . 'rupiah';
 
         //TODO: generate QR Code (QRIS)
