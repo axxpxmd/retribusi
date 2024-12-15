@@ -32,7 +32,7 @@ class Utility extends Model
         return [$dayDiff, $monthDiff];
     }
 
-    public static function createBunga($tgl_skrd_akhir, $jumlah_bayar, $tgl_bayar = null)
+    public static function createBunga($tgl_skrd_akhir, $jumlah_bayar, $tgl_bayar = null, $percent = 1)
     {
         //TODO: Generate New Jatuh Tempo
         $tgl_jatuh_tempo_baru = self::generateNewJatuhTempo($tgl_skrd_akhir, $tgl_bayar);
@@ -41,7 +41,7 @@ class Utility extends Model
         list($dayDiff, $monthDiff) = self::getDiffDate($tgl_skrd_akhir, $tgl_jatuh_tempo_baru);
 
         //TODO: Create Bunga (kenaikan 1% tiap bulan)
-        $kenaikan = ((int) $monthDiff) * 1;
+        $kenaikan = ((int) $monthDiff) * $percent;
 
         $bunga = $kenaikan / 100;
         $jumlahBunga = $jumlah_bayar * $bunga;

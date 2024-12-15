@@ -104,4 +104,61 @@ class UtilityController extends Controller
 
         return storage::disk('sftp')->download($path_sftp . $fileName);
     }
+
+    public function checkDenda($no_bayar)
+    {
+        $data = TransaksiOPD::where('no_bayar', $no_bayar)->first();
+
+        $tgl_skrd_akhir  = $data->tgl_skrd_akhir;
+        $status_bayar    = $data->status_bayar;
+        $tgl_bayar       = $data->tgl_bayar;
+        $jumlah_bayar    = $data->jumlah_bayar;
+        $jatuh_tempo     = Utility::isJatuhTempo($tgl_skrd_akhir);
+        $total_bayar_bjb = $data->total_bayar_bjb;
+
+        //TODO: Get bunga
+        $kenaikan    = 0;
+        $jumlahBunga = 0;
+        if ($status_bayar == 1) {
+            if (Carbon::parse($tgl_bayar)->format('Y-m-d') > $tgl_skrd_akhir) {
+                list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar, $tgl_bayar);
+            }
+        } else {
+            if ($jatuh_tempo) {
+                list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar);
+            }
+        }
+
+        //* check percent
+        if ($jumlah_bayar + $jumlahBunga != $total_bayar_bjb) {
+            if ($status_bayar == 1) {
+                if (Carbon::parse($tgl_bayar)->format('Y-m-d') > $tgl_skrd_akhir) {
+                    list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar, $tgl_bayar, $percent = 2);
+                }
+            } else {
+                if ($jatuh_tempo) {
+                    list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar, $percent = 2);
+                }
+            }
+        }
+
+        //TODO: Generate New Jatuh Tempo
+        $tgl_jatuh_tempo_baru = Utility::generateNewJatuhTempo($tgl_skrd_akhir, $tgl_bayar);
+
+        //TODO: Get total ketelambatan
+        list($dayDiff, $monthDiff) = Utility::getDiffDate($tgl_skrd_akhir, $tgl_jatuh_tempo_baru);
+
+        $result = [
+            'hari' => $dayDiff,
+            'tgl_skrd_akhir' => $tgl_skrd_akhir,
+            'tgl_jatuh_tempo_baru' => $tgl_jatuh_tempo_baru,
+            'tgl_bayar' => $tgl_bayar,
+            'kenaikan' => $kenaikan,
+            'denda' => $jumlahBunga,
+            'jumlah_bayar' => (int) $jumlah_bayar,
+            'total_bayar_bjb' => (int) $total_bayar_bjb
+        ];
+
+        dd($result);
+    }
 }

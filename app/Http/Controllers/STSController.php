@@ -470,7 +470,6 @@ class STSController extends Controller
         $data    = TransaksiOPD::find($id);
         $dateNow = Carbon::now()->format('Y-m-d');
 
-        $tgl_skrd_akhir = $data->tgl_skrd_akhir;
         $jumlah_bayar   = $data->jumlah_bayar;
         $status_bayar   = $data->status_bayar;
         $denda          = $data->denda;
@@ -482,6 +481,7 @@ class STSController extends Controller
         $tgl_skrd_awal  = $data->tgl_skrd_awal;
         $tgl_bayar      = $data->tgl_bayar;
         $send_sts       = $request->send_sts;
+        $total_bayar_bjb = $data->total_bayar_bjb;
 
         $fileName = str_replace(' ', '', $nm_wajib_pajak) . '-' . $no_skrd . ".pdf";
         $file_url = config('app.sftp_src') . 'file_ttd_skrd/' . $fileName;
@@ -498,6 +498,19 @@ class STSController extends Controller
         } else {
             if ($jatuh_tempo) {
                 list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar);
+            }
+        }
+
+        //* check percent
+        if ($jumlah_bayar + $jumlahBunga != $total_bayar_bjb) {
+            if ($status_bayar == 1) {
+                if (Carbon::parse($tgl_bayar)->format('Y-m-d') > $tgl_skrd_akhir) {
+                    list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar, $tgl_bayar, $percent = 2);
+                }
+            } else {
+                if ($jatuh_tempo) {
+                    list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar, $percent = 2);
+                }
             }
         }
 
