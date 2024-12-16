@@ -124,13 +124,16 @@ class ReportController extends Controller
                 $status_bayar   = $p->status_bayar;
                 $tgl_skrd_akhir = $p->tgl_skrd_akhir;
                 $tgl_bayar      = $p->tgl_bayar;
+                $total_bayar_bjb = $p->total_bayar_bjb;
 
                 $jatuh_tempo = Utility::isJatuhTempo($tgl_skrd_akhir, $dateNow);
 
                 $kenaikan    = 0;
                 $jumlahBunga = 0;
                 if ($status_bayar == 1) {
-                    list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar, $tgl_bayar);
+                    if (Carbon::parse($tgl_bayar)->format('Y-m-d') > $tgl_skrd_akhir) {
+                        list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar, $tgl_bayar, $total_bayar_bjb);
+                    }
                 } else {
                     if ($jatuh_tempo) {
                         list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar);
@@ -138,7 +141,6 @@ class ReportController extends Controller
                 }
 
                 return 'Rp. ' . number_format($jumlahBunga);
-                // return 'Rp. 0';
             })
             ->editColumn('status_bayar', function ($p) {
                 if ($p->status_bayar == 1) {
@@ -190,6 +192,7 @@ class ReportController extends Controller
         $status_bayar   = $data->status_bayar;
         $jumlah_bayar   = $data->jumlah_bayar;
         $tgl_bayar      = $data->tgl_bayar;
+        $total_bayar_bjb = $data->total_bayar_bjb;
         $tgl_jatuh_tempo = Utility::tglJatuhTempo($tgl_strd_akhir, $tgl_skrd_akhir);
 
         $jatuh_tempo = Utility::isJatuhTempo($tgl_skrd_akhir, $dateNow);
@@ -199,7 +202,7 @@ class ReportController extends Controller
         $jumlahBunga = 0;
         if ($status_bayar == 1) {
             if (Carbon::parse($tgl_bayar)->format('Y-m-d') > $tgl_skrd_akhir) {
-                list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar, $tgl_bayar);
+                list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar, $tgl_bayar, $total_bayar_bjb);
             }
         } else {
             if ($jatuh_tempo) {
@@ -263,6 +266,7 @@ class ReportController extends Controller
             $tgl_skrd_awal  = $i->tgl_skrd_awal;
             $tgl_skrd_akhir = $i->tgl_skrd_akhir;
             $jumlah_bayar   = $i->jumlah_bayar;
+            $total_bayar_bjb = $i->total_bayar_bjb;
 
             $dateNow     = Carbon::now()->format('Y-m-d');
             $jatuh_tempo = Utility::isJatuhTempo($i->tgl_skrd_akhir, $dateNow);
@@ -271,7 +275,9 @@ class ReportController extends Controller
             $kenaikan    = 0;
             $jumlahBunga = 0;
             if ($status_bayar == 1) {
-                list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar, $tgl_bayar);
+                if (Carbon::parse($tgl_bayar)->format('Y-m-d') > $tgl_skrd_akhir) {
+                    list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar, $tgl_bayar, $total_bayar_bjb);
+                }
             } else {
                 if ($jatuh_tempo) {
                     list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar);

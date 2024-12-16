@@ -180,6 +180,7 @@ class STSController extends Controller
         $status_ttd     = $data->status_ttd;
         $tgl_bayar      = $data->tgl_bayar;
         $status_bayar   = $data->status_bayar;
+        $total_bayar_bjb = $data->total_bayar_bjb;
         $tgl_jatuh_tempo = Utility::tglJatuhTempo($tgl_strd_akhir, $tgl_skrd_akhir);
 
         $jatuh_tempo = Utility::isJatuhTempo($tgl_skrd_akhir);
@@ -191,7 +192,7 @@ class STSController extends Controller
         $jumlahBunga = 0;
         if ($status_bayar == 1) {
             if (Carbon::parse($tgl_bayar)->format('Y-m-d') > $tgl_skrd_akhir) {
-                list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar, $tgl_bayar);
+                list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar, $tgl_bayar, $total_bayar_bjb);
             }
         } else {
             if ($jatuh_tempo) {
@@ -209,7 +210,7 @@ class STSController extends Controller
                     ->withErrors($errMsg);
             }
 
-            //TODO: Check VA BJB
+            //TODO: Check VA BJB (INQUIRY)
             list($err, $errMsg, $VABJB, $status, $transactionTime, $transactionAmount) = $this->vabjbres->CheckVABJBres($tokenBJB, $va_number, 1, $no_bayar);
             if ($err) {
                 return redirect()
@@ -493,24 +494,11 @@ class STSController extends Controller
         $jumlahBunga = 0;
         if ($status_bayar == 1) {
             if (Carbon::parse($tgl_bayar)->format('Y-m-d') > $tgl_skrd_akhir) {
-                list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar, $tgl_bayar);
+                list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar, $tgl_bayar, $total_bayar_bjb);
             }
         } else {
             if ($jatuh_tempo) {
                 list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar);
-            }
-        }
-
-        //* check percent
-        if ($jumlah_bayar + $jumlahBunga != $total_bayar_bjb) {
-            if ($status_bayar == 1) {
-                if (Carbon::parse($tgl_bayar)->format('Y-m-d') > $tgl_skrd_akhir) {
-                    list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar, $tgl_bayar, $percent = 2);
-                }
-            } else {
-                if ($jatuh_tempo) {
-                    list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar, $percent = 2);
-                }
             }
         }
 

@@ -32,7 +32,7 @@ class Utility extends Model
         return [$dayDiff, $monthDiff];
     }
 
-    public static function createBunga($tgl_skrd_akhir, $jumlah_bayar, $tgl_bayar = null, $percent = 1)
+    public static function createBunga($tgl_skrd_akhir, $jumlah_bayar, $tgl_bayar = null, $total_bayar_bjb = null)
     {
         //TODO: Generate New Jatuh Tempo
         $tgl_jatuh_tempo_baru = self::generateNewJatuhTempo($tgl_skrd_akhir, $tgl_bayar);
@@ -40,11 +40,26 @@ class Utility extends Model
         //TODO: Get total ketelambatan
         list($dayDiff, $monthDiff) = self::getDiffDate($tgl_skrd_akhir, $tgl_jatuh_tempo_baru);
 
-        //TODO: Create Bunga (kenaikan 1% tiap bulan)
-        $kenaikan = ((int) $monthDiff) * $percent;
+        list($jumlahBunga, $kenaikan) = self::checkPercent($total_bayar_bjb, $monthDiff, $jumlah_bayar);
+
+        return [$jumlahBunga, $kenaikan];
+    }
+
+    public static function checkPercent($total_bayar_bjb, $monthDiff, $jumlah_bayar)
+    {
+        //TODO: bunga sudah berubah ke 1, pada 13 MARET 2024
+        $kenaikan = ((int) $monthDiff) * 1;
 
         $bunga = $kenaikan / 100;
         $jumlahBunga = $jumlah_bayar * $bunga;
+
+        //*TODO: bunga masih 2 percent sebelum berubah
+        if ($total_bayar_bjb && $jumlahBunga + $jumlah_bayar != $total_bayar_bjb) {
+            $kenaikan = ((int) $monthDiff) * 2;
+
+            $bunga = $kenaikan / 100;
+            $jumlahBunga = $jumlah_bayar * $bunga;
+        }
 
         return [$jumlahBunga, $kenaikan];
     }
