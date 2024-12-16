@@ -175,12 +175,8 @@ class TandaTanganController extends Controller
         //TODO: Get bunga
         $kenaikan    = 0;
         $jumlahBunga = 0;
-        if ($status_bayar == 1) {
-            list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $total_bayar, $tgl_bayar);
-        } else {
-            if ($jatuh_tempo) {
-                list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $total_bayar);
-            }
+        if ($jatuh_tempo) {
+            list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $total_bayar);
         }
 
         //TODO Total Bayar + Bunga
