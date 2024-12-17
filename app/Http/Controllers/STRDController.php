@@ -264,15 +264,14 @@ class STRDController extends Controller
 
         //* Tahap 1
         if ($jumlah_bayar != 0) {
+            //TODO: Get Token BJB
+            list($err, $errMsg, $tokenBJB) = $this->vabjbres->getTokenBJBres();
+            if ($err) {
+                return redirect()
+                    ->route($this->route . 'index')
+                    ->withErrors($errMsg);
+            }
             if ($VABJB == null) {
-                //TODO: Get Token BJB
-                list($err, $errMsg, $tokenBJB) = $this->vabjbres->getTokenBJBres();
-                if ($err) {
-                    return redirect()
-                        ->route($this->route . 'index')
-                        ->withErrors($errMsg);
-                }
-
                 //TODO: Create VA BJB
                 list($err, $errMsg, $VABJB) = $this->vabjbres->createVABJBres($tokenBJB, $clientRefnum, strval($amount), $expiredDate, $customerName, $productCode, 3, $clientRefnum);
                 if ($err) {
