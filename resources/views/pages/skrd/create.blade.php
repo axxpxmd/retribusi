@@ -93,6 +93,9 @@
                                             <label for="nm_wajib_pajak" class="col-form-label s-12 col-sm-4 text-right">Nama<span class="text-danger ml-1">*</span></label>
                                             <div class="col-sm-8">
                                                 <input type="text" name="nm_wajib_pajak" id="nm_wajib_pajak" value="{{ $data_wp != null ? $data_wp->nm_wajib_pajak : '' }}" class="form-control r-0 s-12" autocomplete="off" required onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode==32)"/>
+                                                <span class="text-danger fs-11">
+                                                    <span>hanya huruf, hindari menggunakan karakter spesial.</span>
+                                                </span>
                                             </div>
                                         </div>
                                         <div class="row mb-2">
