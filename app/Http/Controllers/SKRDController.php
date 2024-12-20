@@ -377,7 +377,7 @@ class SKRDController extends Controller
         //* Get Rekening
         $dataRekening = $this->getKodeRekening($request->id_rincian_jenis_pendapatan);
 
-        //* Hande XSS
+        //* Handle XSS
         $input = $request->all();
         $cleanText = Purify::clean($input);
 
