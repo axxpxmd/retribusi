@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 
+use App\Libraries\VABJBRes;
+use App\Libraries\QRISBJBRes;
+use App\Libraries\GenerateNumber;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -13,9 +17,19 @@ use App\Http\Controllers\Controller;
 // Models
 use App\Models\Utility;
 use App\Models\TransaksiOPD;
+use App\Models\RincianJenisPendapatan;
 
 class UtilityController extends Controller
 {
+    public function __construct(GenerateNumber $generateNumber, VABJBRes $vabjbres, QRISBJBRes $qrisbjbres)
+    {
+        $this->vabjbres   = $vabjbres;
+        $this->qrisbjbres = $qrisbjbres;
+        $this->generateNumber = $generateNumber;
+
+        $this->middleware(['permission:SKRD']);
+    }
+
     public function printDataTTD(Request $request, $id)
     {
         $id      = base64_decode($id);
@@ -160,5 +174,63 @@ class UtilityController extends Controller
         ];
 
         dd($result);
+    }
+
+    public function addVA()
+    {
+        $datas = TransaksiOPD::where('total_bayar', '!=', 0)
+            ->whereNull('nomor_va_bjb')
+            ->where('status_ttd', 0)
+            ->whereYear('tgl_skrd_awal', 2024)
+            ->where('created_by', 'PERKIM API | API Retribusi')
+            ->get();
+
+        foreach ($datas as $data) {
+            $rincian = RincianJenisPendapatan::where('id', $data->id_rincian_jenis_pendapatan)->first();
+
+            $amount  = $data->total_bayar;
+            $expiredDate  = $data->tgl_skrd_akhir . ' 23:59:59';
+            $customerName = $data->nm_wajib_pajak;
+            $clientRefnum = $data->no_bayar;
+            $no_bayar     = $data->no_bayar;
+            $productCode  = $rincian->kd_jenis;
+            $no_hp        = $rincian->no_hp;
+
+            if ($data->total_bayar != 0) {
+                // 1. VA
+                //TODO: Get Token BJB
+                list($err, $errMsg, $tokenBJB) = $this->vabjbres->getTokenBJBres();
+                if ($err) {
+                    return dd('gagal token VA', $errMsg);
+                }
+
+                //TODO: Create VA BJB
+                list($err, $errMsg, $VABJB) = $this->vabjbres->createVABJBres($tokenBJB, $clientRefnum, $amount, $expiredDate, $customerName, $productCode, 1, $no_bayar);
+                if ($err) {
+                    return dd('gagal create VA', $errMsg);
+                }
+
+                // 2. QRIS
+                //TODO: Get Token QRIS
+                list($err, $errMsg, $tokenQRISBJB) = $this->qrisbjbres->getTokenQrisres();
+                if ($err) {
+                    return dd('gagal create QRIS');
+                }
+
+                // TODO: Create QRIS
+                list($err, $errMsg, $invoiceId, $textQRIS) = $this->qrisbjbres->createQRISres($tokenQRISBJB, $amount, $no_hp, 2, $clientRefnum);
+                if ($err) {
+                    return dd('gagal create QRIS');
+                }
+            }
+
+            $data->update([
+                'nomor_va_bjb' => $VABJB,
+                'text_qris' => $textQRIS,
+                'invoice_id' => $invoiceId
+            ]);
+        }
+
+        return dd('berhasil');
     }
 }

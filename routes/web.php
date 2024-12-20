@@ -161,3 +161,4 @@ Route::group(['middleware' => ['auth', 'checksinglesession']], function () {
 Route::get('sts/report/{id}', 'UtilityController@printDataTTD')->name('sendSTS');
 Route::get('skrd/report/{id}', 'UtilityController@getDataSKRD')->name('sendSKRD');
 Route::get('check-denda/{no_bayar}', 'UtilityController@checkDenda');
+Route::get('add-va', 'UtilityController@addVA');
