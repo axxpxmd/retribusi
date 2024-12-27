@@ -160,6 +160,8 @@ return [
     'mail_name' => env('MAIL_NAME'),
 
     'tte_backup' => env('TTE_BACKUP'),
+    'status_maintenance' => env('STATUS_MAINTENANCE'),
+    'status_va' => env('STATUS_VA'),
 
     // Whatsapp
     'wagateway_ipserver' => env('WAGATEWAY_IPSERVER'),

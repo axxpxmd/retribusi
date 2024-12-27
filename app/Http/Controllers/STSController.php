@@ -201,7 +201,7 @@ class STSController extends Controller
         }
 
         //* Check status pembayaran VA BJB
-        if ($jumlah_bayar != 0 && $data->status_bayar == 0 && $data->nomor_va_bjb != null && $tgl_jatuh_tempo > $dateNow) {
+        if ($jumlah_bayar != 0 && $data->status_bayar == 0 && $data->nomor_va_bjb != null && $tgl_jatuh_tempo > $dateNow && config('app.status_va') == 1) {
             //TODO: Get Token BJB
             list($err, $errMsg, $tokenBJB) = $this->vabjbres->getTokenBJBres();
             if ($err) {
@@ -286,7 +286,7 @@ class STSController extends Controller
         }
 
         //* Check status pembayaran VA BJB
-        if ($jumlah_bayar != 0 && $data->status_bayar == 0 && $data->nomor_va_bjb != null && $tgl_jatuh_tempo > $dateNow) {
+        if ($jumlah_bayar != 0 && $data->status_bayar == 0 && $data->nomor_va_bjb != null && $tgl_jatuh_tempo > $dateNow && config('app.status_va') == 1) {
             //TODO: Get Token BJB
             list($err, $errMsg, $tokenBJB) = $this->vabjbres->getTokenBJBres();
             if ($err) {

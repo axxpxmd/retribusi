@@ -243,6 +243,13 @@ class STRDController extends Controller
          * 2. tmtransaksi_opd (update)
          */
 
+        //* Under Maintenance
+        if (config('app.status_maintenance') == 1) {
+            return response()->json([
+                'message' => 'Silahkan tunggu beberapa saat. Mohon maaf atas ketidaknyamanan ini.'
+            ], 500);
+        }
+
         $jumlah_bayar   = $data->jumlah_bayar;
         $tgl_skrd_akhir = $data->tgl_skrd_akhir;
 
@@ -263,7 +270,7 @@ class STRDController extends Controller
         $no_hp        = $data->rincian_jenis->no_hp;
 
         //* Tahap 1
-        if ($jumlah_bayar != 0) {
+        if ($jumlah_bayar != 0 && config('app.status_va') == 1) {
             //TODO: Get Token BJB
             list($err, $errMsg, $tokenBJB) = $this->vabjbres->getTokenBJBres();
             if ($err) {
@@ -271,6 +278,7 @@ class STRDController extends Controller
                     ->route($this->route . 'index')
                     ->withErrors($errMsg);
             }
+            //* Mengecek VA, jika VA kosong maka akan dibuat VA baru, jika VA sudah ada maka akan diupdate datanya
             if ($VABJB == null) {
                 //TODO: Create VA BJB
                 list($err, $errMsg, $VABJB) = $this->vabjbres->createVABJBres($tokenBJB, $clientRefnum, strval($amount), $expiredDate, $customerName, $productCode, 3, $clientRefnum);

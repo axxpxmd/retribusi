@@ -338,6 +338,13 @@ class SKRDController extends Controller
             'tgl_skrd_awal.after' => 'Tanggal SKRD tidak sesuai'
         ]);
 
+        //* Under Maintenance
+        if (config('app.status_maintenance') == 1) {
+            return response()->json([
+                'message' => 'Silahkan tunggu beberapa saat. Mohon maaf atas ketidaknyamanan ini.'
+            ], 500);
+        }
+
         /* Tahapan :
          * 1. Generate Nomor (no_skrd & no_bayar)
          * 2. tmtransaksi_opd (store)
@@ -441,27 +448,29 @@ class SKRDController extends Controller
         list($dayDiff, $monthDiff) = Utility::getDiffDate($request->tgl_skrd_akhir);
         if ($dayDiff < 0 && $amount != 0) {
             //* Tahap 3
-            //TODO: Get Token VA
-            list($err, $errMsg, $tokenBJB) = $this->vabjbres->getTokenBJBres();
-            if ($err) {
-                DB::rollback(); //* DB Transaction Failed
-                return response()->json([
-                    'message' => $errMsg
-                ], 500);
-            }
+            if (config('app.status_va') == 1) {
+                //TODO: Get Token VA
+                list($err, $errMsg, $tokenBJB) = $this->vabjbres->getTokenBJBres();
+                if ($err) {
+                    DB::rollback(); //* DB Transaction Failed
+                    return response()->json([
+                        'message' => $errMsg
+                    ], 500);
+                }
 
-            //TODO: Create VA
-            list($err, $errMsg, $VABJB) = $this->vabjbres->createVABJBres($tokenBJB, $clientRefnum, $amount, $expiredDate, $customerName, $productCode, 1, $no_bayar);
-            if ($err) {
-                DB::rollback(); //* DB Transaction Failed
-                return response()->json([
-                    'message' => $errMsg
-                ], 500);
-            } else {
-                //* Update data SKRD
-                $dataSKRD->update([
-                    'nomor_va_bjb' => $VABJB
-                ]);
+                //TODO: Create VA
+                list($err, $errMsg, $VABJB) = $this->vabjbres->createVABJBres($tokenBJB, $clientRefnum, $amount, $expiredDate, $customerName, $productCode, 1, $no_bayar);
+                if ($err) {
+                    DB::rollback(); //* DB Transaction Failed
+                    return response()->json([
+                        'message' => $errMsg
+                    ], 500);
+                } else {
+                    //* Update data SKRD
+                    $dataSKRD->update([
+                        'nomor_va_bjb' => $VABJB
+                    ]);
+                }
             }
 
             //* Tahap 4
@@ -629,6 +638,13 @@ class SKRDController extends Controller
             'id_rincian_jenis_pendapatan' => 'required',
         ]);
 
+        //* Under Maintenance
+        if (config('app.status_maintenance') == 1) {
+            return response()->json([
+                'message' => 'Silahkan tunggu beberapa saat. Mohon maaf atas ketidaknyamanan ini.'
+            ], 500);
+        }
+
         /* Tahapan :
          * 1. VA
          * 2. QRIS
@@ -652,39 +668,45 @@ class SKRDController extends Controller
         list($dayDiff, $monthDiff) = Utility::getDiffDate($request->tgl_skrd_akhir);
         if ($dayDiff < 0 && $amount != 0) {
             //* Tahap 1
-            //TODO: Get Token BJB
-            list($err, $errMsg, $tokenBJB) = $this->vabjbres->getTokenBJBres();
-            if ($err) {
-                DB::rollback(); //* DB Transaction Failed
-                return response()->json([
-                    'message' => $errMsg
-                ], 500);
-            }
-
-            if ($VABJB == null) {
-                //TODO: Create VA BJB
-                list($err, $errMsg, $VABJB) = $this->vabjbres->createVABJBres($tokenBJB, $clientRefnum, $amount, $expiredDate, $customerName, $productCode, 2, $clientRefnum);
+            if (config('app.status_va') == 1) {
+                //TODO: Get Token BJB
+                list($err, $errMsg, $tokenBJB) = $this->vabjbres->getTokenBJBres();
                 if ($err) {
                     DB::rollback(); //* DB Transaction Failed
                     return response()->json([
                         'message' => $errMsg
                     ], 500);
                 }
-            } else {
-                if ($amount != $data->total_bayar || $customerName != $data->nm_wajib_pajak || $data->tgl_skrd_akhir != $request->tgl_skrd_akhir) {
-                    //TODO: Update VA BJB
-                    list($err, $errMsg, $VABJB) = $this->vabjbres->updateVABJBres($tokenBJB, $amount, $expiredDate, $customerName, $va_number, 1, $clientRefnum);
+
+                //* Mengecek VA, jika VA kosong maka akan dibuat VA baru, jika VA sudah ada maka akan diupdate datanya
+                if ($VABJB == null) {
+                    //TODO: Create VA BJB
+                    list($err, $errMsg, $VABJB) = $this->vabjbres->createVABJBres($tokenBJB, $clientRefnum, $amount, $expiredDate, $customerName, $productCode, 2, $clientRefnum);
                     if ($err) {
                         DB::rollback(); //* DB Transaction Failed
                         return response()->json([
                             'message' => $errMsg
                         ], 500);
                     }
+                } else {
+                    if ($amount != $data->total_bayar || $customerName != $data->nm_wajib_pajak || $data->tgl_skrd_akhir != $request->tgl_skrd_akhir) {
+                        //TODO: Update VA BJB
+                        list($err, $errMsg, $VABJB) = $this->vabjbres->updateVABJBres($tokenBJB, $amount, $expiredDate, $customerName, $va_number, 1, $clientRefnum);
+                        if ($err) {
+                            DB::rollback(); //* DB Transaction Failed
+                            return response()->json([
+                                'message' => $errMsg
+                            ], 500);
+                        }
+                    }
                 }
+            } else {
+                $VABJB = null;
             }
 
             //* Tahap 2
             if ($amount <= 10000000 && config('app.status_qris') == 1) { //* Nominal QRIS maksimal 10 juta, jika lebih maka tidak terbuat
+                //* Mengecek nominal pembayaran, jika nominal pembayaran tidak sama dengan nominal pembayaran sebelumnya maka akan dibuat QRIS baru
                 if ($data->total_bayar != $amount) {
                     //TODO: Get Token QRIS
                     list($err, $errMsg, $tokenQRISBJB) = $this->qrisbjbres->getTokenQrisres();
@@ -771,7 +793,8 @@ class SKRDController extends Controller
         $dateNow = Carbon::now()->format('Y-m-d');
         $skrd_kadaluarsa = Utility::isJatuhTempo($tgl_skrd_akhir, $dateNow);
 
-        if ($va_number && $skrd_kadaluarsa == false) {
+        //* Membuat VA Expired, agar VA tidak bisa digunakan
+        if ($va_number && $skrd_kadaluarsa == false && config('app.status_va') == 1) {
             $expiredDate = Carbon::now()->addMinutes(20)->format('Y-m-d H:i:s');
 
             //TODO: Get Token VA
@@ -783,7 +806,7 @@ class SKRDController extends Controller
                 ], 500);
             }
 
-            //TODO: Update VA BJB (make Va expired)
+            //TODO: Update VA BJB (make VA expired)
             list($err, $errMsg, $VABJB) = $this->vabjbres->updateVABJBres($tokenBJB, $amount, $expiredDate, $customerName, $va_number, 2, $clientRefnum);
             if ($err) {
                 DB::rollback(); //* DB Transaction Failed
