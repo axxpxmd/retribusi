@@ -245,9 +245,9 @@ class STRDController extends Controller
 
         //* Under Maintenance
         if (config('app.status_maintenance') == 1) {
-            return response()->json([
-                'message' => 'Silahkan tunggu beberapa saat. Mohon maaf atas ketidaknyamanan ini.'
-            ], 500);
+            return redirect()
+                ->route($this->route . 'index')
+                ->withErrors('Silahkan tunggu beberapa saat. Mohon maaf atas ketidaknyamanan ini.');
         }
 
         $jumlah_bayar   = $data->jumlah_bayar;
