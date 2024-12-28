@@ -340,6 +340,13 @@ class STSController extends Controller
             'file_pendukung'  => 'required'
         ]);
 
+        //* Under Maintenance
+        if (config('app.status_maintenance') == 1) {
+            return response()->json([
+                'message' => 'Silahkan tunggu beberapa saat. Mohon maaf atas ketidaknyamanan ini.'
+            ], 500);
+        }
+
         $id   = \Crypt::decrypt($id);
         $data = TransaksiOPD::find($id);
 
