@@ -69,7 +69,7 @@
     </aside>
     @include('layouts.topbar')
     <main>
-    <div class="alert alert-light text-center position-absolute font-weight-bold text-black fs-12 p-2" style="z-index: 9999999; left: 50%; margin-top: -40px; background-color: #F3D55B !important; border-color: #F3D55B !important; display: none" id="loading1">Harap Tunggu ...</div>
+    {{-- <div class="alert alert-light text-center position-absolute font-weight-bold text-black fs-12 p-2" style="z-index: 9999999; left: 50%; margin-top: -40px; background-color: #F3D55B !important; border-color: #F3D55B !important; display: none" id="loading1">Harap Tunggu ...</div> --}}
     @yield('content')
     </main>
 </div>
@@ -88,13 +88,13 @@
     <script type="text/javascript">
         $.ajaxSetup({headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});
 
-        $( document ).on( "ajaxStart", function() {
-            $('#loading1').show();
-        } );
+        // $( document ).on( "ajaxStart", function() {
+        //     $('#loading1').show();
+        // } );
 
-        $( document ).on( "ajaxStop", function() {
-            $('#loading1').hide();
-        } );
+        // $( document ).on( "ajaxStop", function() {
+        //     $('#loading1').hide();
+        // } );
     </script>
 
     @yield('script')
