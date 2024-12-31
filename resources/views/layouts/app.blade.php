@@ -90,12 +90,10 @@
 
         $( document ).on( "ajaxStart", function() {
             $('#loading1').show();
-            console.log('loading1');
         } );
 
         $( document ).on( "ajaxStop", function() {
             $('#loading1').hide();
-            console.log('loading1');
         } );
     </script>
 
