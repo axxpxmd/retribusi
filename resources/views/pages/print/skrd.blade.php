@@ -45,6 +45,18 @@
             font-weight: bold
         }
 
+        .m-l-5 {
+            margin-left: 5px;
+        }
+
+        .m-l-15 {
+            margin-left: 15px;
+        }
+
+        .m-l-25 {
+            margin-left: 25px;
+        }
+
         .m-b-0 {
             margin-bottom: 0px;
         }

@@ -35,6 +35,18 @@
             font-size: 15px
         }
 
+        .m-l-5 {
+            margin-left: 5px;
+        }
+
+        .m-l-15 {
+            margin-left: 15px;
+        }
+
+        .m-l-25 {
+            margin-left: 25px;
+        }
+
         .t-bold {
             font-weight: bold
         }
