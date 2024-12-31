@@ -247,7 +247,7 @@ class STRDController extends Controller
         if (config('app.status_maintenance') == 1) {
             return redirect()
                 ->route($this->route . 'index')
-                ->withErrors('Silahkan tunggu beberapa saat. Mohon maaf atas ketidaknyamanan ini.');
+                ->withErrors('Penerimaan setoran pajak daerah dan retribusi daerah tahun anggaran 2025 dimulai pada tanggal 02 Januari 2025.');
         }
 
         $jumlah_bayar   = $data->jumlah_bayar;

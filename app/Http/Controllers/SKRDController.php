@@ -341,7 +341,7 @@ class SKRDController extends Controller
         //* Under Maintenance
         if (config('app.status_maintenance') == 1) {
             return response()->json([
-                'message' => 'Silahkan tunggu beberapa saat. Mohon maaf atas ketidaknyamanan ini.'
+                'message' => 'Penerimaan setoran pajak daerah dan retribusi daerah tahun anggaran 2025 dimulai pada tanggal 02 Januari 2025.'
             ], 500);
         }
 
@@ -641,7 +641,7 @@ class SKRDController extends Controller
         //* Under Maintenance
         if (config('app.status_maintenance') == 1) {
             return response()->json([
-                'message' => 'Silahkan tunggu beberapa saat. Mohon maaf atas ketidaknyamanan ini.'
+                'message' => 'Penerimaan setoran pajak daerah dan retribusi daerah tahun anggaran 2025 dimulai pada tanggal 02 Januari 2025.'
             ], 500);
         }
 
