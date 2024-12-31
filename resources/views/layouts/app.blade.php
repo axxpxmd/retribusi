@@ -69,7 +69,7 @@
     </aside>
     @include('layouts.topbar')
     <main>
-    <div class="alert alert-light text-center position-absolute font-weight-bold text-black fs-12 p-2" style="z-index: 9999999; left: 50%; margin-top: -40px; background-color: #F3D55B !important; border-color: #F3D55B !important;" id="loading">Harap Tunggu ...</div>
+    <div class="alert alert-light text-center position-absolute font-weight-bold text-black fs-12 p-2" style="z-index: 9999999; left: 50%; margin-top: -40px; background-color: #F3D55B !important; border-color: #F3D55B !important; display: none" id="loading">Harap Tunggu ...</div>
     @yield('content')
     </main>
 </div>
