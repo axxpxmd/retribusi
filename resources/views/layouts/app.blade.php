@@ -69,6 +69,7 @@
     </aside>
     @include('layouts.topbar')
     <main>
+    <div class="alert alert-light text-center position-absolute font-weight-bold text-black fs-12 p-2" style="z-index: 9999999; left: 50%; margin-top: -40px; background-color: #F3D55B !important; border-color: #F3D55B !important;" id="loading">Harap Tunggu ...</div>
     @yield('content')
     </main>
 </div>
@@ -86,6 +87,16 @@
     <script src="{{ asset('assets/js/_datatables/vfs_fonts.js') }}"></script>
     <script type="text/javascript">
         $.ajaxSetup({headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});
+
+        $( document ).on( "ajaxStart", function() {
+            $('#loading').show();
+            console.log('loading');
+        } );
+
+        $( document ).on( "ajaxStop", function() {
+            $('#loading').hide();
+            console.log('loading');
+        } );
     </script>
 
     @yield('script')
