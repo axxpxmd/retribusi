@@ -221,7 +221,7 @@ class HomeController extends Controller
             ->where('status_bayar', 1)
             ->whereIn(DB::raw('YEAR(created_at)'),  [2021, 2022, 2023, 2024, 2025])
             ->groupBy('tahun')->get();
-        $tahunMulai = count($retribusiPerTahun) != 0 ? $retribusiPerTahun[0]['tahun'] : 2024;
+        $tahunMulai = count($retribusiPerTahun) != 0 ? $retribusiPerTahun[0]['tahun'] : 2025;
         $parentsRetribusiPerTahun = [];
         foreach ($retribusiPerTahun as $keyretribusiPerTahun => $retribusiPerTahun) {
             $parentsRetribusiPerTahun[$keyretribusiPerTahun] = $retribusiPerTahun->total_bayar;
