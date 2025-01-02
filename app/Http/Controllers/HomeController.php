@@ -219,7 +219,7 @@ class HomeController extends Controller
                 $q->where('tmtransaksi_opd.id_opd', $opd_id);
             })
             ->where('status_bayar', 1)
-            ->whereIn(DB::raw('YEAR(created_at)'),  [2021, 2022, 2023, 2024])
+            ->whereIn(DB::raw('YEAR(created_at)'),  [2021, 2022, 2023, 2024, 2025])
             ->groupBy('tahun')->get();
         $tahunMulai = count($retribusiPerTahun) != 0 ? $retribusiPerTahun[0]['tahun'] : 2024;
         $parentsRetribusiPerTahun = [];
