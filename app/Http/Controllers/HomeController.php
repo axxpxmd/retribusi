@@ -210,7 +210,8 @@ class HomeController extends Controller
             ->join('tmopds', 'tmopds.id', '=', 'tmtransaksi_opd.id_opd')
             ->when($opd_id != 0, function ($q) use ($opd_id) {
                 $q->where('tmtransaksi_opd.id_opd', $opd_id);
-            })->whereDate('tgl_bayar', $time)
+            })
+            ->whereDate('tgl_bayar', $time)
             ->orderBy('tgl_bayar', 'DESC')->get();
 
         //* Chart Pendapatan per Tahun

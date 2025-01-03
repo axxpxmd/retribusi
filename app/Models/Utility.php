@@ -40,12 +40,12 @@ class Utility extends Model
         //TODO: Get total ketelambatan
         list($dayDiff, $monthDiff) = self::getDiffDate($tgl_skrd_akhir, $tgl_jatuh_tempo_baru);
 
-        list($jumlahBunga, $kenaikan) = self::checkPercent($total_bayar_bjb, $monthDiff, $jumlah_bayar);
+        list($jumlahBunga, $kenaikan) = self::checkPercent($total_bayar_bjb, $monthDiff, $jumlah_bayar, $tgl_bayar);
 
         return [$jumlahBunga, $kenaikan];
     }
 
-    public static function checkPercent($total_bayar_bjb, $monthDiff, $jumlah_bayar)
+    public static function checkPercent($total_bayar_bjb, $monthDiff, $jumlah_bayar, $tgl_bayar)
     {
         //TODO: bunga sudah berubah ke 1, pada 13 MARET 2024
         $kenaikan = ((int) $monthDiff) * 1;
@@ -53,13 +53,16 @@ class Utility extends Model
         $bunga = $kenaikan / 100;
         $jumlahBunga = $jumlah_bayar * $bunga;
 
-        //*TODO: ngecek bunga masih 2 percent sebelum berubah
-        // if ($total_bayar_bjb && $jumlahBunga + $jumlah_bayar != $total_bayar_bjb) {
-        //     $kenaikan = ((int) $monthDiff) * 2;
+        //TODO: pembayaran sebelum 13 MARET 2024 bunga masih 2 percent
+        if ($tgl_bayar <= '2024-03-13') {
+            //*TODO: ngecek bunga masih 2 percent sebelum berubah
+            if ($total_bayar_bjb && round($jumlahBunga + $jumlah_bayar) != $total_bayar_bjb) {
+                $kenaikan = ((int) $monthDiff) * 2;
 
-        //     $bunga = $kenaikan / 100;
-        //     $jumlahBunga = $jumlah_bayar * $bunga;
-        // }
+                $bunga = $kenaikan / 100;
+                $jumlahBunga = $jumlah_bayar * $bunga;
+            }
+        }
 
         return [$jumlahBunga, $kenaikan];
     }
