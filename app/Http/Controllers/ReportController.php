@@ -303,7 +303,9 @@ class ReportController extends Controller
             ];
         }
 
+        $totalKetetapan = $datas->sum('total_bayar');
         $totalBayar = $datas->sum('total_bayar') + array_sum($totalDenda);
+        $totalDenda = array_sum($totalDenda);
 
         if ($jenis == 1 || $jenis == 0) {
             $title = 'SKRD (Surat Ketetapan Retribusi Daerah)';
@@ -370,6 +372,8 @@ class ReportController extends Controller
         $pdf->getDomPDF()->set_option("enable_php", true);
         $pdf->setPaper('legal', 'landscape');
         $pdf->loadView($this->view . 'report', compact(
+            'totalKetetapan',
+            'totalDenda',
             'data',
             'title',
             'jenis',

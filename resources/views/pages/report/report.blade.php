@@ -139,7 +139,10 @@
             @endforelse
         </tbody>
         <tr class="d">
-            <th class="d" colspan="11">Total</th>
+            <th class="d" colspan="8">Total</th>
+            <th class="d" colspan="1">@currency($totalKetetapan)</th>
+            <th class="d" colspan="1">@currency(0)</th>
+            <th class="d" colspan="1">@currency($totalDenda)</th>
             <th class="d" colspan="2">@currency($totalBayar)</th>
         </tr>
     </table>
