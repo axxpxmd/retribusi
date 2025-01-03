@@ -123,6 +123,7 @@ class UtilityController extends Controller
     {
         $data = TransaksiOPD::where('no_bayar', $no_bayar)->first();
 
+        $tgl_skrd_awal   = $data->tgl_skrd_awal;
         $tgl_skrd_akhir  = $data->tgl_skrd_akhir;
         $status_bayar    = $data->status_bayar;
         $tgl_bayar       = $data->tgl_bayar;
@@ -164,6 +165,7 @@ class UtilityController extends Controller
 
         $result = [
             'hari' => $dayDiff,
+            'tgl_skrd_awal' => $tgl_skrd_awal,
             'tgl_skrd_akhir' => $tgl_skrd_akhir,
             'tgl_jatuh_tempo_baru' => $tgl_jatuh_tempo_baru,
             'tgl_bayar' => $tgl_bayar,

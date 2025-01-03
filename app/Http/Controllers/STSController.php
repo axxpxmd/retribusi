@@ -408,7 +408,7 @@ class STSController extends Controller
             $this->whatsapp->sendSTS($tgl_bayar, $ntb, $chanel_bayar, $total_bayar_bjb, $data);
         }
 
-        //* Send Callback
+        //* Send Callback to Client
         if ($data->user_api != null) {
             $url = $data->userApi->url_callback;
             $reqBody = [

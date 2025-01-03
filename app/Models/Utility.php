@@ -53,13 +53,13 @@ class Utility extends Model
         $bunga = $kenaikan / 100;
         $jumlahBunga = $jumlah_bayar * $bunga;
 
-        //*TODO: bunga masih 2 percent sebelum berubah
-        if ($total_bayar_bjb && $jumlahBunga + $jumlah_bayar != $total_bayar_bjb) {
-            $kenaikan = ((int) $monthDiff) * 2;
+        //*TODO: ngecek bunga masih 2 percent sebelum berubah
+        // if ($total_bayar_bjb && $jumlahBunga + $jumlah_bayar != $total_bayar_bjb) {
+        //     $kenaikan = ((int) $monthDiff) * 2;
 
-            $bunga = $kenaikan / 100;
-            $jumlahBunga = $jumlah_bayar * $bunga;
-        }
+        //     $bunga = $kenaikan / 100;
+        //     $jumlahBunga = $jumlah_bayar * $bunga;
+        // }
 
         return [$jumlahBunga, $kenaikan];
     }
