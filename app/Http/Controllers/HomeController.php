@@ -105,7 +105,7 @@ class HomeController extends Controller
             ->whereYear('tmtransaksi_opd.tgl_skrd_awal', $year)
             ->first();
 
-        $totalRetribusi = TransaksiOPD::select(DB::raw("SUM(tmtransaksi_opd.total_bayar) as total_bayar"), DB::raw("COUNT(tmtransaksi_opd.id) as total_skrd"))->whereYear('created_at', $year)->first();
+        $totalRetribusi = TransaksiOPD::select(DB::raw("SUM(tmtransaksi_opd.total_bayar) as total_bayar"), DB::raw("COUNT(tmtransaksi_opd.id) as total_skrd"))->whereYear('tgl_skrd_awal', $year)->first();
         $existedOPD = OPDJenisPendapatan::select('id_opd')->get()->toArray();
         $totalRetribusiOPD = TransaksiOPD::select(DB::raw("COUNT('id') as total"), DB::raw("SUM(total_bayar) as total_bayar"), 'initial', 'n_opd')
             ->join('tmopds', 'tmopds.id', '=', 'tmtransaksi_opd.id_opd')
@@ -215,12 +215,12 @@ class HomeController extends Controller
             ->orderBy('tgl_bayar', 'DESC')->get();
 
         //* Chart Pendapatan per Tahun
-        $retribusiPerTahun = TransaksiOPD::select(DB::raw('YEAR(created_at) as tahun'), DB::raw("SUM(total_bayar) as total_bayar"))
+        $retribusiPerTahun = TransaksiOPD::select(DB::raw('YEAR(tgl_skrd_awal) as tahun'), DB::raw("SUM(total_bayar) as total_bayar"))
             ->when($opd_id != 0, function ($q) use ($opd_id) {
                 $q->where('tmtransaksi_opd.id_opd', $opd_id);
             })
             ->where('status_bayar', 1)
-            ->whereIn(DB::raw('YEAR(created_at)'),  [2021, 2022, 2023, 2024, 2025])
+            ->whereIn(DB::raw('YEAR(tgl_skrd_awal)'),  [2021, 2022, 2023, 2024, 2025])
             ->groupBy('tahun')->get();
         $tahunMulai = count($retribusiPerTahun) != 0 ? $retribusiPerTahun[0]['tahun'] : 2025;
         $parentsRetribusiPerTahun = [];
