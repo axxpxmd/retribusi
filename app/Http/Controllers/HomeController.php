@@ -65,7 +65,7 @@ class HomeController extends Controller
         )
             ->join('tmtransaksi_opd', 'tmtransaksi_opd.id_jenis_pendapatan', '=', 'tmjenis_pendapatan.id')
             ->join('tmopds', 'tmopds.id', '=', 'tmtransaksi_opd.id_opd')
-            ->whereYear('tmtransaksi_opd.created_at', $year)
+            ->whereYear('tmtransaksi_opd.tgl_skrd_awal', $year)
             ->when($opd_id != 0, function ($q) use ($opd_id) {
                 $q->where('tmtransaksi_opd.id_opd', $opd_id);
             })
@@ -81,14 +81,14 @@ class HomeController extends Controller
             ->when($opd_id != 0, function ($q) use ($opd_id) {
                 $q->where('tmtransaksi_opd.id_opd', $opd_id);
             })
-            ->whereYear('tmtransaksi_opd.created_at', $year)
+            ->whereYear('tmtransaksi_opd.tgl_skrd_awal', $year)
             ->first();
         $totalSTS = TransaksiOPD::select(DB::raw("SUM(tmtransaksi_opd.total_bayar) as total_bayar"), DB::raw("COUNT(tmtransaksi_opd.id) as total_skrd"))
             ->where('status_bayar', 1)
             ->when($opd_id != 0, function ($q) use ($opd_id) {
                 $q->where('tmtransaksi_opd.id_opd', $opd_id);
             })
-            ->whereYear('tmtransaksi_opd.created_at', $year)
+            ->whereYear('tmtransaksi_opd.tgl_skrd_awal', $year)
             ->first();
         $totalSTRD = TransaksiOPD::select('id', DB::raw("SUM(tmtransaksi_opd.total_bayar) as total_bayar"), DB::raw("COUNT(tmtransaksi_opd.id) as total_skrd"))
             ->where('status_bayar', 0)
@@ -96,13 +96,13 @@ class HomeController extends Controller
             ->when($opd_id != 0, function ($q) use ($opd_id) {
                 $q->where('tmtransaksi_opd.id_opd', $opd_id);
             })
-            ->whereYear('tmtransaksi_opd.created_at', $year)
+            ->whereYear('tmtransaksi_opd.tgl_skrd_awal', $year)
             ->first();
         $totalKeseluruhan = TransaksiOPD::select(DB::raw("SUM(tmtransaksi_opd.total_bayar) as total_bayar"), DB::raw("COUNT(tmtransaksi_opd.id) as total_skrd"))
             ->when($opd_id != 0, function ($q) use ($opd_id) {
                 $q->where('tmtransaksi_opd.id_opd', $opd_id);
             })
-            ->whereYear('tmtransaksi_opd.created_at', $year)
+            ->whereYear('tmtransaksi_opd.tgl_skrd_awal', $year)
             ->first();
 
         $totalRetribusi = TransaksiOPD::select(DB::raw("SUM(tmtransaksi_opd.total_bayar) as total_bayar"), DB::raw("COUNT(tmtransaksi_opd.id) as total_skrd"))->whereYear('created_at', $year)->first();
@@ -110,7 +110,7 @@ class HomeController extends Controller
         $totalRetribusiOPD = TransaksiOPD::select(DB::raw("COUNT('id') as total"), DB::raw("SUM(total_bayar) as total_bayar"), 'initial', 'n_opd')
             ->join('tmopds', 'tmopds.id', '=', 'tmtransaksi_opd.id_opd')
             ->whereIn('id_opd', $existedOPD)
-            ->whereYear('tmtransaksi_opd.created_at', $year)
+            ->whereYear('tmtransaksi_opd.tgl_skrd_awal', $year)
             ->groupBy('id_opd')
             ->get();
 
@@ -121,7 +121,7 @@ class HomeController extends Controller
             ->when($opd_id != 0, function ($q) use ($opd_id) {
                 $q->where('tmtransaksi_opd.id_opd', $opd_id);
             })
-            ->whereYear('tmtransaksi_opd.created_at', $year)
+            ->whereYear('tmtransaksi_opd.tgl_skrd_awal', $year)
             ->get()->toArray();
         $mobileBanking = TransaksiOPD::select('chanel_bayar', DB::raw("COUNT('id') as total"), DB::raw("SUM(total_bayar) as total_bayar"))
             ->where('status_bayar', 1)
@@ -129,7 +129,7 @@ class HomeController extends Controller
             ->when($opd_id != 0, function ($q) use ($opd_id) {
                 $q->where('tmtransaksi_opd.id_opd', $opd_id);
             })
-            ->whereYear('tmtransaksi_opd.created_at', $year)
+            ->whereYear('tmtransaksi_opd.tgl_skrd_awal', $year)
             ->get()->toArray();
         $channelBayar = TransaksiOPD::select('chanel_bayar', DB::raw("COUNT('id') as total"), DB::raw("SUM(total_bayar) as total_bayar"))
             ->where('status_bayar', 1)
@@ -137,7 +137,7 @@ class HomeController extends Controller
             ->when($opd_id != 0, function ($q) use ($opd_id) {
                 $q->where('tmtransaksi_opd.id_opd', $opd_id);
             })
-            ->whereYear('tmtransaksi_opd.created_at', $year)
+            ->whereYear('tmtransaksi_opd.tgl_skrd_awal', $year)
             ->groupBy('chanel_bayar')
             ->get()->toArray();
         $totalChannelBayar = array_merge($channelBayar, $qris, $mobileBanking);
@@ -185,7 +185,7 @@ class HomeController extends Controller
         $pendapatanOPD = TransaksiOPD::select(DB::raw("SUM(total_bayar) as y"), 'tmopds.n_opd as name', 'id_opd', 'tmtransaksi_opd.id as id')
             ->join('tmopds', 'tmopds.id', '=', 'tmtransaksi_opd.id_opd')
             ->where('status_bayar', 1)
-            ->whereYear('tmtransaksi_opd.created_at', $year)
+            ->whereYear('tmtransaksi_opd.tgl_skrd_awal', $year)
             ->groupBy('id_opd')
             ->orderBy('y', 'DESC')
             ->get();
