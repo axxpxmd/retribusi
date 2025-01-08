@@ -59,7 +59,7 @@ class TransaksiOPD extends Model
             ->when($opd_id != 0, function ($q) use ($opd_id) {
                 $q->where('tmtransaksi_opd.id_opd', $opd_id);
             })
-            ->whereYear('tmtransaksi_opd.created_at', $tahun);
+            ->whereYear('tmtransaksi_opd.tgl_skrd_awal', $tahun);
 
         switch ($status) {
             case '1':
@@ -327,7 +327,7 @@ class TransaksiOPD extends Model
 
         switch ($status) {
             case '1':
-                $data->whereYear('tmtransaksi_opd.created_at', $tahun);
+                $data->whereYear('tmtransaksi_opd.tgl_skrd_awal', $tahun);
                 break;
             case '2':
                 return $data->orderBy('id', 'DESC')->get();
