@@ -13,9 +13,8 @@
 
 namespace App\Http\Controllers;
 
-use Auth;
-use DataTables;
 use Carbon\Carbon;
+use Yajra\DataTables\Facades\DataTables;
 
 use App\Http\Services\BSRE;
 use App\Http\Services\Email;
@@ -26,6 +25,7 @@ use App\Libraries\Html\Html_number;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Storage;
 
@@ -40,6 +40,12 @@ class TandaTanganController extends Controller
     protected $route = 'tanda-tangan.';
     protected $title = 'Tanda Tangan';
     protected $view  = 'pages.tandaTangan.';
+
+    protected $email;
+    protected $bsre;
+    protected $iotentik;
+    protected $whatsapp;
+    protected $aurograf;
 
     // Check Permission
     public function __construct(Iontentik $iotentik, BSRE $bsre, WhatsApp $whatsapp, AUROGRAF $aurograf, Email $email)
@@ -143,7 +149,7 @@ class TandaTanganController extends Controller
         $route = $this->route;
         $title = $this->title;
 
-        $id   = \Crypt::decrypt($id);
+        $id   = Crypt::decrypt($id);
         $data = TransaksiOPD::find($id);
         $dateNow = Carbon::now()->format('Y-m-d');
         $role_id = Auth::user()->pengguna->modelHasRole->role_id;
@@ -284,7 +290,7 @@ class TandaTanganController extends Controller
         }
 
         return redirect()
-            ->route($this->route . 'show', \Crypt::encrypt($id))
+            ->route($this->route . 'show', Crypt::encrypt($id))
             ->withSuccess('Berhasil melakukan tandatangan digital.');
     }
 
@@ -313,7 +319,7 @@ class TandaTanganController extends Controller
 
         if (!$tte) {
             return redirect()
-                ->route($this->route . 'show', \Crypt::encrypt($id))
+                ->route($this->route . 'show', Crypt::encrypt($id))
                 ->withErrors('Silahkan pilih jenis TTE');
         }
 
@@ -323,7 +329,7 @@ class TandaTanganController extends Controller
             list($err, $errMsg, $idCert) = $this->iotentik->getListCert($nip);
             if ($err) {
                 return redirect()
-                    ->route($this->route . 'show', \Crypt::encrypt($id))
+                    ->route($this->route . 'show', Crypt::encrypt($id))
                     ->withErrors($errMsg);
             }
 
@@ -331,14 +337,14 @@ class TandaTanganController extends Controller
             list($err, $errMsg, $tokenGodem) = $this->iotentik->getTokenGodem($nip);
             if ($err) {
                 return redirect()
-                    ->route($this->route . 'show', \Crypt::encrypt($id))
+                    ->route($this->route . 'show', Crypt::encrypt($id))
                     ->withErrors($errMsg);
             }
 
             list($err, $errMsg, $fileTTD) = $this->iotentik->iotentikRes($nip, $passphrase, $tokenGodem, $idCert, $qrimage, $file);
             if ($err) {
                 return redirect()
-                    ->route($this->route . 'show', \Crypt::encrypt($id))
+                    ->route($this->route . 'show', Crypt::encrypt($id))
                     ->withErrors($errMsg);
             }
         }
@@ -348,7 +354,7 @@ class TandaTanganController extends Controller
             list($err, $errMsg, $fileTTD) = $this->bsre->bsreRes($nik, $passphrase, $file, $qrimage);
             if ($err) {
                 return redirect()
-                    ->route($this->route . 'show', \Crypt::encrypt($id))
+                    ->route($this->route . 'show', Crypt::encrypt($id))
                     ->withErrors($errMsg);
             }
         }
@@ -358,7 +364,7 @@ class TandaTanganController extends Controller
             list($err, $errMsg, $fileTTD) = $this->aurograf->sign($aurograf_cert_id, $nik, $passphrase, $file, $qrimage);
             if ($err) {
                 return redirect()
-                    ->route($this->route . 'show', \Crypt::encrypt($id))
+                    ->route($this->route . 'show', Crypt::encrypt($id))
                     ->withErrors($errMsg);
             }
         }
@@ -389,7 +395,7 @@ class TandaTanganController extends Controller
         }
 
         return redirect()
-            ->route($this->route . 'show', \Crypt::encrypt($id))
+            ->route($this->route . 'show', Crypt::encrypt($id))
             ->withSuccess('Berhasil melakukan tandatangan digital dengan ' . $tte);
     }
 
