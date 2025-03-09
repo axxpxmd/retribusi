@@ -13,22 +13,24 @@
 
 namespace App\Http\Controllers;
 
-use Auth;
-use Validator;
-use DataTables;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
+use Stevebauman\Purify\Facades\Purify;
+use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Validator;
 
+// Libraries
 use App\Libraries\VABJBRes;
 use App\Libraries\QRISBJBRes;
 use App\Libraries\GenerateNumber;
 use Explorin\Tebot\Services\Tebot;
-use App\Http\Controllers\Controller;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Crypt;
-use Stevebauman\Purify\Facades\Purify;
+// Controllers
+use App\Http\Controllers\Controller;
 
 // Models
 use App\Models\OPD;
@@ -46,6 +48,9 @@ use App\Models\RincianJenisPendapatan;
 
 class SKRDController extends Controller
 {
+    protected $vabjbres;
+    protected $qrisbjbres;
+    protected $generateNumber;
     protected $route  = 'skrd.';
     protected $title  = 'SKRD';
     protected $view   = 'pages.skrd.';
@@ -66,16 +71,16 @@ class SKRDController extends Controller
 
         $today = Carbon::now()->format('Y-m-d');
         $role  = Auth::user()->pengguna->modelHasRole->role->name;
-        $opd_id   = Auth::user()->pengguna->opd_id == 0 ? $request->opd_id : Auth::user()->pengguna->opd_id;
-        $opdArray = OPDJenisPendapatan::select('id_opd')->get()->toArray();
-        $opds     = OPD::getAll($opdArray, $opd_id);
+        $opd_id = Auth::user()->pengguna->opd_id ?: $request->opd_id;
+        $opdArray = OPDJenisPendapatan::pluck('id_opd')->toArray();
+        $opds = OPD::getAll($opdArray, $opd_id);
         $checkUserApi = Pengguna::where('opd_id', $opd_id)->whereNotNull('api_key')->count();
 
-        $from   = $request->from;
-        $to     = $request->to;
-        $no_skrd    = $request->no_skrd;
+        $from = $request->from;
+        $to = $request->to;
+        $no_skrd = $request->no_skrd;
         $status_ttd = $request->status_ttd;
-        $user_api   = $request->user_api;
+        $user_api = $request->user_api;
 
         //* Check Duplicate
         $date = Carbon::now();
@@ -104,12 +109,12 @@ class SKRDController extends Controller
 
     public function checkDuplicate(Request $request)
     {
-        $from   = $request->from;
-        $to     = $request->to;
-        $date   = Carbon::now();
-        $opd_id = Auth::user()->pengguna->opd_id == 0 ? $request->opd_id : Auth::user()->pengguna->opd_id;
+        $from = $request->from;
+        $to = $request->to;
+        $date = Carbon::now();
+        $opd_id = Auth::user()->pengguna->opd_id ?: $request->opd_id;
 
-        //* Check Duplicate
+        // Check for duplicate entries
         list($getDuplicate, $data) = TransaksiOPD::checkDuplicateNoBayar($date, $opd_id, $from, $to);
 
         return response()->json([
@@ -132,35 +137,23 @@ class SKRDController extends Controller
                 $edit    = "<a href='" . route($this->route . 'edit', Crypt::encrypt($p->id)) . "' class='text-primary mr-2' title='Edit Data'><i class='icon icon-edit'></i></a>";
                 $delete  = "<a href='#' onclick='remove(" . $p->id . ")' class='text-danger mr-2' title='Hapus Data'><i class='icon icon-remove'></i></a>";
 
-                //* Sudah TTD
                 if ($p->status_ttd == 1) {
                     return $filettd;
+                } elseif ($p->status_ttd == 2) {
+                    return '-';
                 } else {
-                    //* Proses TTD
-                    if ($p->status_ttd != 2) {
-                        if ($getDuplicate) {
-                            foreach ($getDuplicate as $value) {
-                                if ($value['no_bayar'] == $p->no_bayar) {
-                                    return $edit . $delete;
-                                } else {
-                                    if ($p->history_ttd == 1) {
-                                        return $edit . $sendttd;
-                                    } else {
-                                        return $edit . $delete . $sendttd;
-                                    }
-                                }
-                            }
-                            return $edit . $delete;
-                        } else {
-                            if ($p->history_ttd == 1) {
-                                return $edit . $sendttd;
-                            } else {
-                                return $edit . $delete . $sendttd;
+                    $actions = $edit . $delete;
+                    if ($p->history_ttd == 1) {
+                        $actions .= $sendttd;
+                    }
+                    if ($getDuplicate) {
+                        foreach ($getDuplicate as $value) {
+                            if ($value['no_bayar'] == $p->no_bayar) {
+                                return $edit . $delete;
                             }
                         }
-                    } else {
-                        return '-';
                     }
+                    return $actions;
                 }
             })
             ->editColumn('no_skrd', function ($p) {
@@ -168,20 +161,16 @@ class SKRDController extends Controller
             })
             ->editColumn('no_bayar', function ($p) use ($getDuplicate) {
                 $status_ttd = Utility::checkStatusTTD($p->status_ttd);
-
                 $no_bayar = $status_ttd ? $p->no_bayar : substr($p->no_bayar, 0, 6) . 'xxxxxxxx';
 
                 if ($getDuplicate) {
                     foreach ($getDuplicate as $value) {
                         if ($value['no_bayar'] == $p->no_bayar) {
                             return "<span class='text-danger font-weight-bold'>" . $no_bayar . "</span>";
-                        } else {
-                            return $no_bayar;
                         }
                     }
-                } else {
-                    return $no_bayar;
                 }
+                return $no_bayar;
             })
             ->editColumn('id_opd', function ($p) {
                 return $p->opd->n_opd;
@@ -199,12 +188,15 @@ class SKRDController extends Controller
                 return 'Rp. ' . number_format($p->jumlah_bayar);
             })
             ->addColumn('status_ttd', function ($p) {
-                if ($p->status_ttd == 0) {
-                    return "<span class='badge badge-danger'>Belum</span>";
-                } elseif ($p->status_ttd == 1) {
-                    return "<span class='badge badge-success'>Sudah</span>";
-                } elseif ($p->status_ttd == 2) {
-                    return "<span class='badge badge-warning'>Proses</span>";
+                switch ($p->status_ttd) {
+                    case 0:
+                        return "<span class='badge badge-danger'>Belum</span>";
+                    case 1:
+                        return "<span class='badge badge-success'>Sudah</span>";
+                    case 2:
+                        return "<span class='badge badge-warning'>Proses</span>";
+                    default:
+                        return "<span class='badge badge-secondary'>Tidak Diketahui</span>";
                 }
             })
             ->addIndexColumn()
@@ -222,39 +214,34 @@ class SKRDController extends Controller
 
     public function getJenisPendapatanByOpd($opd_id)
     {
-        $opd_id = \Crypt::decrypt($opd_id);
+        $opd_id = Crypt::decrypt($opd_id);
 
         $datas = OPDJenisPendapatan::getJenisPendapatanByOpd($opd_id);
 
-        //TODO: Encrypt id
-        if ($datas->count() == 0) {
-            $response = [];
-        } else {
-            foreach ($datas as $key => $value) {
-                $response[$key] = [
-                    'id' => Crypt::encrypt($value->id),
-                    'jenis_pendapatan' => $value->jenis_pendapatan
-                ];
-            }
-        }
+        $response = $datas->map(function ($item) {
+            return [
+                'id' => Crypt::encrypt($item->id),
+                'jenis_pendapatan' => $item->jenis_pendapatan
+            ];
+        });
 
-        return $response;
+        return $response->isEmpty() ? [] : $response->toArray();
     }
 
     public function getKodeRekening($id_rincian_jenis_pendapatan)
     {
-        $id_rincian_jenis_pendapatan = \Crypt::decrypt($id_rincian_jenis_pendapatan);
+        $id_rincian_jenis_pendapatan = Crypt::decrypt($id_rincian_jenis_pendapatan);
 
-        if ($id_rincian_jenis_pendapatan != 0) {
-            $data = RincianJenisPendapatan::select('nmr_rekening', 'kd_jenis', 'no_hp')->where('id', $id_rincian_jenis_pendapatan)->first();
-        } else {
-            $data = [
+        $data = RincianJenisPendapatan::select('nmr_rekening', 'kd_jenis', 'no_hp')
+            ->where('id', $id_rincian_jenis_pendapatan)
+            ->first();
+
+        if (!$data) {
+            $data = (object) [
                 'nmr_rekening' => "",
                 'kd_jenis' => "",
                 'no_hp' => ""
             ];
-
-            $data = json_encode($data);
         }
 
         return $data;
@@ -276,18 +263,27 @@ class SKRDController extends Controller
         $data_wp_id = $request->data_wp_id;
         $jenis_pendapatan_id = $request->jenis_pendapatan_id;
 
-        //TODO: Check data wajib Retribusi
-        if (isset($data_wp_id)) {
-            $data_wp_id = \Crypt::decrypt($data_wp_id);
+        // Check data wajib Retribusi
+        if ($data_wp_id) {
+            $data_wp_id = Crypt::decrypt($data_wp_id);
         } else {
-            //TODO: Validation
-            if ($opd_id == '' || $jenis_pendapatan_id == '')
+            // Validation
+            $validator = Validator::make($request->all(), [
+                'opd_id' => 'required',
+                'jenis_pendapatan_id' => 'required'
+            ], [
+                'opd_id.required' => 'OPD wajib diisi.',
+                'jenis_pendapatan_id.required' => 'Jenis Pendapatan wajib diisi.'
+            ]);
+
+            if ($validator->fails()) {
                 return redirect()
                     ->route($this->route . 'index')
-                    ->withErrors('Semua form wajid diisi.');
+                    ->withErrors($validator);
+            }
 
-            $opd_id = \Crypt::decrypt($opd_id);
-            $jenis_pendapatan_id = \Crypt::decrypt($jenis_pendapatan_id);
+            $opd_id = Crypt::decrypt($opd_id);
+            $jenis_pendapatan_id = Crypt::decrypt($jenis_pendapatan_id);
         }
 
         //TODO: Get data wajib Retribusi
@@ -319,7 +315,7 @@ class SKRDController extends Controller
     {
         $request->validate([
             'id_opd'  => 'required',
-            'tgl_ttd' => 'required',
+            'tgl_ttd' => 'required|date',
             'no_telp' => 'required',
             'penanda_tangan_id' => 'required',
             'alamat_wp'      => 'required',
@@ -354,11 +350,8 @@ class SKRDController extends Controller
          */
 
         //* Tahap 1
-        $jenisGenerate = 'no_skrd';
-        $no_skrd = $this->generateNumber->generate($request->id_opd, $request->id_jenis_pendapatan, $jenisGenerate);
-
-        $jenisGenerate = 'no_bayar';
-        $no_bayar = $this->generateNumber->generate($request->id_opd, $request->id_jenis_pendapatan, $jenisGenerate);
+        $no_skrd = $this->generateNumber->generate($request->id_opd, $request->id_jenis_pendapatan, 'no_skrd');
+        $no_bayar = $this->generateNumber->generate($request->id_opd, $request->id_jenis_pendapatan, 'no_bayar');
 
         //TODO: Check Duplikat (no_bayar, no_skrd)
         $checkGenerate = [
@@ -373,31 +366,39 @@ class SKRDController extends Controller
 
         if ($validator->fails()) {
             Tebot::alert($validator->errors()->first(), array_merge($checkGenerate, ['user_id' => Auth::user()->id]))->channel('check_no_skrd');
-            $validator->validate();
+            return redirect()->back()->withErrors($validator)->withInput();
         }
 
         //* Tahap 2
         DB::beginTransaction(); //* DB Transaction Begin
 
         $penanda_tangan = TtdOPD::where('id', $request->penanda_tangan_id)->first();
-
-        //* Get Rekening
         $dataRekening = $this->getKodeRekening($request->id_rincian_jenis_pendapatan);
 
         //* Handle XSS
         $input = $request->all();
         $cleanText = Purify::clean($input);
 
-        $lokasi = $cleanText['lokasi'];
-        $nmr_daftar = $cleanText['nmr_daftar'];
-        $alamat_wp  = $cleanText['alamat_wp'];
-        $nm_wajib_pajak   = $cleanText['nm_wajib_pajak'];
-        $uraian_retribusi = $cleanText['uraian_retribusi'];
+        $lokasi = $cleanText['lokasi'] ?? null;
+        $nmr_daftar = $cleanText['nmr_daftar'] ?? null;
+        $alamat_wp  = $cleanText['alamat_wp'] ?? null;
+        $nm_wajib_pajak   = $cleanText['nm_wajib_pajak'] ?? null;
+        $uraian_retribusi = $cleanText['uraian_retribusi'] ?? null;
 
-        if (!$nmr_daftar || !$lokasi || !$alamat_wp || !$nm_wajib_pajak || !$uraian_retribusi) {
+        $requiredFields = [
+            'lokasi' => $lokasi,
+            'nmr_daftar' => $nmr_daftar,
+            'alamat_wp' => $alamat_wp,
+            'nm_wajib_pajak' => $nm_wajib_pajak,
+            'uraian_retribusi' => $uraian_retribusi
+        ];
+
+        foreach ($requiredFields as $field => $value) {
+            if (empty($value)) {
             return response()->json([
-                'message' => 'Karakter dilarang!. Cek kembali pada inputan, terdapat karakter yang dilarang.'
+                'message' => "Karakter dilarang!. Cek kembali pada inputan, terdapat karakter yang dilarang pada field $field."
             ], 422);
+            }
         }
 
         $data = [
@@ -407,7 +408,7 @@ class SKRDController extends Controller
             'nip_ttd' => $penanda_tangan->user->pengguna->nip,
             'id_jenis_pendapatan'      => $request->id_jenis_pendapatan,
             'rincian_jenis_pendapatan' => $request->rincian_jenis_pendapatan,
-            'id_rincian_jenis_pendapatan' => \Crypt::decrypt($request->id_rincian_jenis_pendapatan),
+            'id_rincian_jenis_pendapatan' => Crypt::decrypt($request->id_rincian_jenis_pendapatan),
             'nmr_daftar'       => $nmr_daftar,
             'nm_wajib_pajak'   => $nm_wajib_pajak,
             'alamat_wp'        => $alamat_wp,
@@ -507,7 +508,7 @@ class SKRDController extends Controller
         Log::channel('skrd_create')->info('Create Data SKRD', array_merge($request->all(), $dataSKRD->toArray()));
 
         //* Tahap 5
-        $data = [
+        $dataWP = [
             'email'   => $request->email,
             'id_opd'  => $request->id_opd,
             'lokasi'  => $request->lokasi,
@@ -517,20 +518,18 @@ class SKRDController extends Controller
             'kecamatan_id'   => $request->kecamatan_id,
             'nm_wajib_pajak' => $request->nm_wajib_pajak,
             'id_jenis_pendapatan'         => $request->id_jenis_pendapatan,
-            'id_rincian_jenis_pendapatan' => \Crypt::decrypt($request->id_rincian_jenis_pendapatan),
+            'id_rincian_jenis_pendapatan' => Crypt::decrypt($request->id_rincian_jenis_pendapatan),
         ];
 
-        $where = [
+        $whereWP = [
             'id_opd' => $request->id_opd,
             'nm_wajib_pajak' => $request->nm_wajib_pajak,
             'id_jenis_pendapatan' => $request->id_jenis_pendapatan,
-            'id_rincian_jenis_pendapatan' => \Crypt::decrypt($request->id_rincian_jenis_pendapatan)
+            'id_rincian_jenis_pendapatan' => Crypt::decrypt($request->id_rincian_jenis_pendapatan)
         ];
 
-        //TODO: Check existed data wajib Retribusi (menyimpan data wp jika belum pernah dibuat)
-        $check = DataWP::where($where)->count();
-        if ($check == 0)
-            DataWP::create($data);
+        // Check if data wajib Retribusi already exists, if not, create new entry
+        DataWP::updateOrCreate($whereWP, $dataWP);
 
         return response()->json([
             'message' => "Data " . $this->title . " berhasil tersimpan."
@@ -542,7 +541,7 @@ class SKRDController extends Controller
         $route = $this->route;
         $title = $this->title;
 
-        $id = \Crypt::decrypt($id);
+        $id = Crypt::decrypt($id);
 
         $data = TransaksiOPD::find($id);
         $penanda_tangans = TtdOPD::where('id_opd', $data->id_opd)->get();
@@ -600,7 +599,7 @@ class SKRDController extends Controller
         $route = $this->route;
         $title = $this->title;
 
-        $id = \Crypt::decrypt($id);
+        $id = Crypt::decrypt($id);
 
         $data = TransaksiOPD::find($id);
 
@@ -756,7 +755,7 @@ class SKRDController extends Controller
             'total_bayar'   => (int) str_replace(['.', 'Rp', ' '], '', $request->jumlah_bayar),
             'jumlah_bayar'  => (int) str_replace(['.', 'Rp', ' '], '', $request->jumlah_bayar),
             'updated_by'    => Auth::user()->pengguna->full_name . ' | Update data menu SKRD',
-            'id_rincian_jenis_pendapatan' => \Crypt::decrypt($request->id_rincian_jenis_pendapatan),
+            'id_rincian_jenis_pendapatan' => Crypt::decrypt($request->id_rincian_jenis_pendapatan),
             'email'   => $email,
             'no_telp' => $no_telp
         ]);

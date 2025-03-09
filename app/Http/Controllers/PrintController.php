@@ -18,6 +18,7 @@ use Carbon\Carbon;
 use App\Libraries\Html\Html_number;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Crypt;
 
 // Models
 use App\Models\Utility;
@@ -43,7 +44,7 @@ class PrintController extends Controller
     //* SKRD
     public function printSKRD($id)
     {
-        $id = \Crypt::decrypt($id);
+        $id = Crypt::decrypt($id);
 
         $data = TransaksiOPD::find($id);
 
@@ -72,7 +73,7 @@ class PrintController extends Controller
     //* STRD
     public function printSTRD($id)
     {
-        $id = \Crypt::decrypt($id);
+        $id = Crypt::decrypt($id);
 
         $data = TransaksiOPD::find($id);
 

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Auth;
-use DataTables;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Yajra\DataTables\Facades\DataTables;
 
 use App\Libraries\VABJBRes;
 use App\Http\Controllers\Controller;
@@ -23,6 +23,7 @@ use App\Models\OPDJenisPendapatan;
 
 class BatalSKRDController extends Controller
 {
+    protected $vabjbres;
     protected $route  = 'batalSkrd.';
     protected $title  = 'Batal SKRD';
     protected $view   = 'pages.batalSkrd.';
@@ -31,7 +32,7 @@ class BatalSKRDController extends Controller
     {
         $this->middleware(['permission:Batal SKRD|Cari No SKRD']);
 
-        $this->vabjbres   = $vabjbres;
+        $this->vabjbres = $vabjbres;
     }
 
     public function cari(Request $request)
@@ -164,7 +165,7 @@ class BatalSKRDController extends Controller
         $route = $this->route;
         $title = $this->title;
 
-        $id = \Crypt::decrypt($id);
+        $id = Crypt::decrypt($id);
         $dateNow = Carbon::now()->format('Y-m-d');
 
         $data = TransaksiOPD::find($id);

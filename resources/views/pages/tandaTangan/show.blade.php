@@ -439,28 +439,5 @@
                 }, false)
             })
     })()
-
-    function alertSend(){
-        $.confirm({
-            title: 'INFO',
-            content: 'Terdapat Error, cek error atau hubungi administrator.',
-            icon: 'icon icon-info',
-            theme: 'modern',
-            closeIcon: true,
-            animation: 'scale',
-            autoClose: 'ok|5000',
-            type: 'red',
-            buttons: {
-                ok: {
-                    text: "ok!",
-                    btnClass: 'btn-primary',
-                    keys: ['enter'],
-                    action: function () {
-                        location.reload();
-                    }
-                }
-            }
-        });
-    }
 </script>
 @endsection

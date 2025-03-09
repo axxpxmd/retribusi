@@ -13,7 +13,7 @@
 
 namespace App\Http\Controllers;
 
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
 use App\Models\JenisPendapatan;
@@ -75,34 +75,34 @@ class HomeController extends Controller
             ->get();
 
         //* Total SKRD, STRD, STS, Wajib Retribusi
-        $totalSKRD = TransaksiOPD::select(DB::raw("SUM(tmtransaksi_opd.total_bayar) as total_bayar"), DB::raw("COUNT(tmtransaksi_opd.id) as total_skrd"))
+        $totalSKRD = TransaksiOPD::select(DB::raw("SUM(total_bayar) as total_bayar"), DB::raw("COUNT(id) as total_skrd"))
             ->where('status_bayar', 0)
             ->where('tgl_skrd_akhir', '>=', $date)
-            ->when($opd_id != 0, function ($q) use ($opd_id) {
-                $q->where('tmtransaksi_opd.id_opd', $opd_id);
+            ->when($opd_id != 0, function ($query) use ($opd_id) {
+                $query->where('id_opd', $opd_id);
             })
-            ->whereYear('tmtransaksi_opd.tgl_skrd_awal', $year)
+            ->whereYear('tgl_skrd_awal', $year)
             ->first();
-        $totalSTS = TransaksiOPD::select(DB::raw("SUM(tmtransaksi_opd.total_bayar) as total_bayar"), DB::raw("COUNT(tmtransaksi_opd.id) as total_skrd"))
+        $totalSTS = TransaksiOPD::select(DB::raw("SUM(total_bayar) as total_bayar"), DB::raw("COUNT(id) as total_skrd"))
             ->where('status_bayar', 1)
-            ->when($opd_id != 0, function ($q) use ($opd_id) {
-                $q->where('tmtransaksi_opd.id_opd', $opd_id);
+            ->when($opd_id != 0, function ($query) use ($opd_id) {
+                $query->where('id_opd', $opd_id);
             })
-            ->whereYear('tmtransaksi_opd.tgl_skrd_awal', $year)
+            ->whereYear('tgl_skrd_awal', $year)
             ->first();
-        $totalSTRD = TransaksiOPD::select('id', DB::raw("SUM(tmtransaksi_opd.total_bayar) as total_bayar"), DB::raw("COUNT(tmtransaksi_opd.id) as total_skrd"))
+        $totalSTRD = TransaksiOPD::select(DB::raw("SUM(total_bayar) as total_bayar"), DB::raw("COUNT(id) as total_skrd"))
             ->where('status_bayar', 0)
             ->where('tgl_skrd_akhir', '<', $date)
-            ->when($opd_id != 0, function ($q) use ($opd_id) {
-                $q->where('tmtransaksi_opd.id_opd', $opd_id);
+            ->when($opd_id != 0, function ($query) use ($opd_id) {
+                $query->where('id_opd', $opd_id);
             })
-            ->whereYear('tmtransaksi_opd.tgl_skrd_awal', $year)
+            ->whereYear('tgl_skrd_awal', $year)
             ->first();
-        $totalKeseluruhan = TransaksiOPD::select(DB::raw("SUM(tmtransaksi_opd.total_bayar) as total_bayar"), DB::raw("COUNT(tmtransaksi_opd.id) as total_skrd"))
-            ->when($opd_id != 0, function ($q) use ($opd_id) {
-                $q->where('tmtransaksi_opd.id_opd', $opd_id);
+        $totalKeseluruhan = TransaksiOPD::select(DB::raw("SUM(total_bayar) as total_bayar"), DB::raw("COUNT(id) as total_skrd"))
+            ->when($opd_id != 0, function ($query) use ($opd_id) {
+                $query->where('id_opd', $opd_id);
             })
-            ->whereYear('tmtransaksi_opd.tgl_skrd_awal', $year)
+            ->whereYear('tgl_skrd_awal', $year)
             ->first();
 
         $totalRetribusi = TransaksiOPD::select(DB::raw("SUM(tmtransaksi_opd.total_bayar) as total_bayar"), DB::raw("COUNT(tmtransaksi_opd.id) as total_skrd"))->whereYear('tgl_skrd_awal', $year)->first();
@@ -115,90 +115,113 @@ class HomeController extends Controller
             ->get();
 
         //* Channel Bayar
-        $qris = TransaksiOPD::select('chanel_bayar', DB::raw("COUNT('id') as total"), DB::raw("SUM(total_bayar) as total_bayar"))
-            ->where('status_bayar', 1)
-            ->where('chanel_bayar', 'like', '%qris%')
-            ->when($opd_id != 0, function ($q) use ($opd_id) {
-                $q->where('tmtransaksi_opd.id_opd', $opd_id);
-            })
-            ->whereYear('tmtransaksi_opd.tgl_skrd_awal', $year)
-            ->get()->toArray();
-        $mobileBanking = TransaksiOPD::select('chanel_bayar', DB::raw("COUNT('id') as total"), DB::raw("SUM(total_bayar) as total_bayar"))
-            ->where('status_bayar', 1)
-            ->where('chanel_bayar', 'like', '%MOBIL%')
-            ->when($opd_id != 0, function ($q) use ($opd_id) {
-                $q->where('tmtransaksi_opd.id_opd', $opd_id);
-            })
-            ->whereYear('tmtransaksi_opd.tgl_skrd_awal', $year)
-            ->get()->toArray();
-        $channelBayar = TransaksiOPD::select('chanel_bayar', DB::raw("COUNT('id') as total"), DB::raw("SUM(total_bayar) as total_bayar"))
-            ->where('status_bayar', 1)
-            ->whereIn('chanel_bayar', ['Bendahara OPD', 'ATM', 'Lainnya', 'TELLER', 'Transfer RKUD', 'Virtual Account', 'RTGS/SKN'])
-            ->when($opd_id != 0, function ($q) use ($opd_id) {
-                $q->where('tmtransaksi_opd.id_opd', $opd_id);
-            })
-            ->whereYear('tmtransaksi_opd.tgl_skrd_awal', $year)
-            ->groupBy('chanel_bayar')
-            ->get()->toArray();
-        $totalChannelBayar = array_merge($channelBayar, $qris, $mobileBanking);
-        $dataPieChartChanelBayar = [];
-        foreach ($totalChannelBayar as $key => $i) {
-            if ($i['chanel_bayar']) {
-                if (str_contains($i['chanel_bayar'], 'QRIS')) {
+        $channels = [
+            'channelBayar' => ['Bendahara OPD', 'ATM', 'Lainnya', 'TELLER', 'Transfer RKUD', 'Virtual Account', 'RTGS/SKN'],
+            'qris' => 'qris',
+            'mobileBanking' => 'MOBIL'
+        ];
+
+        $channelBayarData = [];
+        foreach ($channels as $key => $value) {
+            $query = TransaksiOPD::select('chanel_bayar', DB::raw("COUNT('id') as total"), DB::raw("SUM(total_bayar) as total_bayar"))
+                ->where('status_bayar', 1)
+                ->when($opd_id != 0, function ($q) use ($opd_id) {
+                    $q->where('tmtransaksi_opd.id_opd', $opd_id);
+                })
+                ->whereYear('tmtransaksi_opd.tgl_skrd_awal', $year);
+
+            if (is_array($value)) {
+                $query->whereIn('chanel_bayar', $value)->groupBy('chanel_bayar');
+            } else {
+                $query->where('chanel_bayar', 'like', '%' . $value . '%');
+            }
+            $channelBayarData[$key] = $query->get()->toArray();
+        }
+
+        $totalChannelBayar = array_merge(...array_values($channelBayarData));
+        $dataPieChartChanelBayar = collect($totalChannelBayar)->map(function ($item, $key) use ($color) {
+            if ($item['chanel_bayar']) {
+                if (str_contains($item['chanel_bayar'], 'QRIS')) {
                     $chanel_bayar = 'QRIS';
-                } else if (str_contains($i['chanel_bayar'], 'Virtual Account')) {
+                } elseif (str_contains($item['chanel_bayar'], 'Virtual Account')) {
                     $chanel_bayar = 'VA';
                 } else {
-                    $chanel_bayar = $i['chanel_bayar'];
+                    $chanel_bayar = $item['chanel_bayar'];
                 }
 
-                $dataPieChartChanelBayar[$key] = [
-                    'y'    => $i['total'],
+                return [
+                    'y'    => $item['total'],
                     'name' => $chanel_bayar,
-                    'color' => $color[$key]
+                    'color' => $color[$key] ?? '#000000'
                 ];
             }
-        }
-        $dataPieChartChanelBayar = json_encode($dataPieChartChanelBayar);
+        })->filter()->values()->toJson();
 
         //* Notifikasi
-        $skrdToday = TransaksiOPD::when($opd_id != 0, function ($q) use ($opd_id) {
-            $q->where('tmtransaksi_opd.id_opd', $opd_id);
-        })->where('tgl_skrd_awal', $date)->count();
-        $stsToday = TransaksiOPD::when($opd_id != 0, function ($q) use ($opd_id) {
-            $q->where('tmtransaksi_opd.id_opd', $opd_id);
-        })->whereDate('tgl_bayar', $time)
-            ->where('status_bayar', 1)->count();
-        $strdToday = TransaksiOPD::when($opd_id != 0, function ($q) use ($opd_id) {
-            $q->where('tmtransaksi_opd.id_opd', $opd_id);
-        })->where('tgl_skrd_akhir', '<', $date)
-            ->where('status_bayar', 0)->count();
-        $tandaTanganToday = TransaksiOPD::when($opd_id != 0, function ($q) use ($opd_id) {
-            $q->where('tmtransaksi_opd.id_opd', $opd_id);
-        })->where('tgl_ttd', $date)
+        $skrdToday = TransaksiOPD::where('tgl_skrd_awal', $date)
+            ->when($opd_id != 0, function ($q) use ($opd_id) {
+                $q->where('id_opd', $opd_id);
+            })->count();
+        $stsToday = TransaksiOPD::whereDate('tgl_bayar', $time)
+            ->where('status_bayar', 1)
+            ->when($opd_id != 0, function ($q) use ($opd_id) {
+                $q->where('id_opd', $opd_id);
+            })->count();
+        $strdToday = TransaksiOPD::where('tgl_skrd_akhir', '<', $date)
+            ->where('status_bayar', 0)
+            ->when($opd_id != 0, function ($q) use ($opd_id) {
+                $q->where('id_opd', $opd_id);
+            })->count();
+        $tandaTanganToday = TransaksiOPD::where('tgl_ttd', $date)
+            ->when($opd_id != 0, function ($q) use ($opd_id) {
+                $q->where('id_opd', $opd_id);
+            })
             ->when($nip, function ($q) use ($nip) {
                 $q->where('nip_ttd', $nip);
             })
             ->whereIn('status_ttd', [2, 4])->count();
 
         //* Diagram Chart (Role: super-admin)
-        $pendapatanOPD = TransaksiOPD::select(DB::raw("SUM(total_bayar) as y"), 'tmopds.n_opd as name', 'id_opd', 'tmtransaksi_opd.id as id')
+        $dataOpd = TransaksiOPD::select(DB::raw("SUM(total_bayar) as y"), 'tmopds.n_opd as name', 'tmopds.n_opd as drilldown', 'id_opd')
             ->join('tmopds', 'tmopds.id', '=', 'tmtransaksi_opd.id_opd')
-            ->where('status_bayar', 1)
-            ->whereYear('tmtransaksi_opd.tgl_skrd_awal', $year)
+            ->whereYear('tmtransaksi_opd.created_at', $year)
             ->groupBy('id_opd')
             ->orderBy('y', 'DESC')
             ->get();
 
         $parents = [];
         $childs  = [];
+        $color = ['#26a69a', '#26c6da', '#42a5f5', '#ef5350', '#ff7043', '#5c6bc0', '#ffee58', '#bdbdbd', '#66bb6a', '#ec407a'];
 
-        foreach ($pendapatanOPD as $keyOPD => $opd) {
-            $parents[$keyOPD] = [
-                'name' => $opd->name,
-                'y'    => $opd->y,
-                'drilldown' => $opd->name,
-                'color'     => $color[$keyOPD]
+        foreach ($dataOpd as $key => $value) {
+            $parents[] = [
+                'y'    => $value->y,
+                'name' => $value->name,
+                'drilldown' => $value->drilldown,
+                'id_opd'    => $value->id_opd,
+                'color'     => $color[$key % count($color)]
+            ];
+
+            $dataJenisPendapatan = TransaksiOPD::select(DB::raw("SUM(total_bayar) as y"), 'id_jenis_pendapatan', 'id_opd')
+                ->where('id_opd', $value->id_opd)
+                ->whereYear('tmtransaksi_opd.created_at', $year)
+                ->groupBy('id_jenis_pendapatan')
+                ->orderBy('y', 'DESC')
+                ->get();
+
+            $dataChills = [];
+            foreach ($dataJenisPendapatan as $value1) {
+                $dataChills[] = [
+                    'name' => $value1->jenis_pendapatan->jenis_pendapatan,
+                    'y'    => $value1->y
+                ];
+            }
+
+            $childs[] = [
+                'name'  => 'Jenis Pendapatan',
+                'id'    => $value->name,
+                'data'  => $dataChills,
+                'color' => $color[$key % count($color)]
             ];
         }
 
@@ -220,13 +243,11 @@ class HomeController extends Controller
                 $q->where('tmtransaksi_opd.id_opd', $opd_id);
             })
             ->where('status_bayar', 1)
-            ->whereIn(DB::raw('YEAR(tgl_skrd_awal)'),  [2021, 2022, 2023, 2024, 2025])
-            ->groupBy('tahun')->get();
-        $tahunMulai = count($retribusiPerTahun) != 0 ? $retribusiPerTahun[0]['tahun'] : 2025;
-        $parentsRetribusiPerTahun = [];
-        foreach ($retribusiPerTahun as $keyretribusiPerTahun => $retribusiPerTahun) {
-            $parentsRetribusiPerTahun[$keyretribusiPerTahun] = $retribusiPerTahun->total_bayar;
-        }
+            ->whereIn(DB::raw('YEAR(tgl_skrd_awal)'), range(2021, 2025))
+            ->groupBy('tahun')
+            ->get();
+        $tahunMulai = $retribusiPerTahun->isNotEmpty() ? $retribusiPerTahun->first()->tahun : 2025;
+        $parentsRetribusiPerTahun = $retribusiPerTahun->pluck('total_bayar')->toArray();
         $parentJsonRetribusiPerTahun = json_encode($parentsRetribusiPerTahun);
 
         return view('home', compact(
