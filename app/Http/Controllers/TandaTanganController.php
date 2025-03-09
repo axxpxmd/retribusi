@@ -230,14 +230,14 @@ class TandaTanganController extends Controller
                 'imgQRIS'
             ));
 
-            // get content PDF
-            $content = $pdf->download()->getOriginalContent();
-
-            // save PDF to sftp storage
-            Storage::disk('sftp')->put($path_sftp . $fileName, $content);
+            // Generate PDF content
+            $content = $pdf->output();
 
             // Save PDF to local storage
             Storage::put($path_local . $fileName, $content);
+
+            // Save PDF to sftp storage
+            Storage::disk('sftp')->put($path_sftp . $fileName, $content);
         }
 
         return view($this->view . 'show', compact(
