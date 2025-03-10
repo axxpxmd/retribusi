@@ -203,41 +203,34 @@ class TandaTanganController extends Controller
             //TODO: generate QR Code (TTD)
             $img = Utility::createQrTTD($file_url);
 
-            //TODO: generate QR Code (QRIS)
-            $imgQRIS = '';
-            if ($text_qris) {
-                $imgQRIS = Utility::createQrQris($text_qris);
+            // Generate QR Code (QRIS) if text_qris is available
+            $imgQRIS = $text_qris ? Utility::createQrQris($text_qris) : '';
+
+            // Determine the file based on status_ttd
+            $file = $data->status_ttd == 2 ? 'pages.tandaTangan.reportTTEskrd' : ($data->status_ttd == 4 ? 'pages.tandaTangan.reportTTEstrd' : '');
+
+            if ($file) {
+                $pdf = app('dompdf.wrapper');
+                $pdf->getDomPDF()->set_option("enable_php", true);
+                $pdf->setPaper('legal', 'portrait');
+                $pdf->loadView($file, compact(
+                    'data',
+                    'terbilang',
+                    'jumlahBunga',
+                    'total_bayar',
+                    'kenaikan',
+                    'tgl_jatuh_tempo',
+                    'img',
+                    'imgQRIS'
+                ));
+
+                // Get content PDF
+                $content = $pdf->download()->getOriginalContent();
+
+                // Save PDF to sftp storage and local storage concurrently
+                Storage::disk('sftp')->put($path_sftp . $fileName, $content);
+                Storage::put($path_local . $fileName, $content);
             }
-
-            //TODO: Check status TTD
-            if ($data->status_ttd == 2) {
-                $file = 'pages.tandaTangan.reportTTEskrd';
-            } elseif ($data->status_ttd == 4) {
-                $file = 'pages.tandaTangan.reportTTEstrd';
-            }
-
-            $pdf = app('dompdf.wrapper');
-            $pdf->getDomPDF()->set_option("enable_php", true);
-            $pdf->setPaper('legal', 'portrait');
-            $pdf->loadView($file, compact(
-                'data',
-                'terbilang',
-                'jumlahBunga',
-                'total_bayar',
-                'kenaikan',
-                'tgl_jatuh_tempo',
-                'img',
-                'imgQRIS'
-            ));
-
-            // get content PDF
-            $content = $pdf->download()->getOriginalContent();
-
-            // save PDF to sftp storage
-            Storage::disk('sftp')->put($path_sftp . $fileName, $content);
-
-            // Save PDF to local storage
-            // Storage::put($path_local . $fileName, $content);
         }
 
         return view($this->view . 'show', compact(
