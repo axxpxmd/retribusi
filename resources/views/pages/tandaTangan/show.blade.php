@@ -384,7 +384,7 @@
 <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="preview-file" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
-            {{-- <!-- SKRD -->
+            <!-- SKRD -->
             @if ($data->status_ttd == 2)
             <iframe src="{{ route('print.skrd', \Crypt::encrypt($data->id)) }}" style="margin-left: -160px !important" width="850px" height="940px"></iframe>
             @endif
@@ -396,7 +396,7 @@
             <!-- TTE SKRD/STRD -->
             @if ($data->status_ttd == 1 || $data->status_ttd == 3)
             <iframe src="{{ config('app.sftp_src').$path_sftp.$fileName }}" style="margin-left: -160px !important" width="850px" height="940px"></iframe>
-            @endif --}}
+            @endif
         </div>
     </div>
 </div>
