@@ -210,26 +210,26 @@ class TandaTanganController extends Controller
             $file = $data->status_ttd == 2 ? 'pages.tandaTangan.reportTTEskrd' : ($data->status_ttd == 4 ? 'pages.tandaTangan.reportTTEstrd' : '');
 
             if ($file) {
-                $pdf = app('dompdf.wrapper');
-                $pdf->getDomPDF()->set_option("enable_php", true);
-                $pdf->setPaper('legal', 'portrait');
-                $pdf->loadView($file, compact(
-                    'data',
-                    'terbilang',
-                    'jumlahBunga',
-                    'total_bayar',
-                    'kenaikan',
-                    'tgl_jatuh_tempo',
-                    'img',
-                    'imgQRIS'
-                ));
+                // $pdf = app('dompdf.wrapper');
+                // $pdf->getDomPDF()->set_option("enable_php", true);
+                // $pdf->setPaper('legal', 'portrait');
+                // $pdf->loadView($file, compact(
+                //     'data',
+                //     'terbilang',
+                //     'jumlahBunga',
+                //     'total_bayar',
+                //     'kenaikan',
+                //     'tgl_jatuh_tempo',
+                //     'img',
+                //     'imgQRIS'
+                // ));
 
-                // Get content PDF
-                $content = $pdf->download()->getOriginalContent();
+                // // Get content PDF
+                // $content = $pdf->download()->getOriginalContent();
 
-                // Save PDF to sftp storage and local storage concurrently
-                Storage::disk('sftp')->put($path_sftp . $fileName, $content);
-                Storage::put($path_local . $fileName, $content);
+                // // Save PDF to sftp storage and local storage concurrently
+                // Storage::disk('sftp')->put($path_sftp . $fileName, $content);
+                // Storage::put($path_local . $fileName, $content);
             }
         }
 
