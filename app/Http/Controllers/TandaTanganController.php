@@ -228,7 +228,6 @@ class TandaTanganController extends Controller
                 $content = $pdf->download()->getOriginalContent();
 
                 // Save PDF to sftp storage and local storage concurrently
-                Storage::disk('sftp')->put($path_sftp . $fileName, $content);
                 Storage::put($path_local . $fileName, $content);
             }
         }
