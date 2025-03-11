@@ -2,33 +2,35 @@
 <html lang="en">
 <head>
     <title>{{ $data->nm_wajib_pajak }} - {{ $data->no_skrd }}</title>
-    <link rel="stylesheet" href="{{ asset('css/util.css') }}">
 
-    <style type="text/css">
-
-        html{
+    <style>
+        html {
             margin: 30px
         }
 
-		table.d {
+        table.d {
             border-collapse: collapse;
             width: 100%
         }
 
-        table.d tr.d,th.d,td.d{
+        table.d tr.d,
+        th.d,
+        td.d {
             table-layout: fixed;
             border: 1px solid black;
             font-size: 12px;
             height: 100;
         }
 
-        table.a tr.a,th.a,td.a{
+        table.a tr.a,
+        th.a,
+        td.a {
             table-layout: fixed;
             border: 1px solid black;
             font-size: 12px;
         }
 
-        table.c{
+        table.c {
             font-size: 15px
         }
 
@@ -36,89 +38,99 @@
             font-weight: bold
         }
 
-        .m-b-0{
+        .m-b-0 {
             margin-bottom: 0px;
         }
-        .m-r-10{
+
+        .m-r-10 {
             margin-right: 10px;
         }
 
-        .m-t-0{
+        .m-t-0 {
             margin-top: 0px;
-        }
-
-        .m-l-5{
-            margin-left: 5px;
-        }
-
-        .text-right{
-            text-align: right
-        }
-        .text-center{
-            text-align: center
-        }
-        .m-t-100{
-            margin-top: 100px
         }
 
         .m-l-5 {
             margin-left: 5px;
         }
 
-        .m-l-15 {
-            margin-left: 15px;
+        .text-right {
+            text-align: right
         }
 
-        .m-l-25 {
-            margin-left: 25px;
+        .text-center {
+            text-align: center
         }
 
-        .text-left{
+        .m-t-100 {
+            margin-top: 100px
+        }
+
+        .text-left {
             text-align: left
         }
 
-        .m-l-14{
+        .m-l-14 {
             margin-left: 25px
         }
 
-        .m-r-20{
+        .m-r-20 {
             margin-right: 20px
         }
 
-        .f-w-n{
+        .f-w-n {
             font-weight: normal
         }
-        .m-t-1{
+
+        .m-t-1 {
             margin-top: 1px
         }
 
-        .m-l-50{
+        .m-l-50 {
             margin-left: 50px;
         }
-        .m-t-15{
+
+        .m-t-15 {
             margin-top: 15px
         }
-        .m-b-5{
+
+        .m-b-5 {
             margin-bottom: 5px
         }
-        .f-normal{
+
+        .f-normal {
             font-weight: normal
         }
-        .mt-n40{
+
+        .mt-n40 {
             margin-top: -30px !important
         }
-        .mt-n40{
+
+        .mt-n40 {
             margin-top: -30px !important
         }
-        .mt-n15{
+
+        .mt-n15 {
             margin-top: -15px !important
         }
-        .fs-10{
+
+        .fs-10 {
             font-size: 10px
-        }.t-blue{
+        }
+
+        .t-blue {
             color: blue
         }
-	</style>
+
+        .m-l-10 {
+            margin-left: 10px
+        }
+
+        .m-l-15 {
+            margin-left: 15px
+        }
+    </style>
+
 </head>
 <body >
     <table class="d">
@@ -281,20 +293,21 @@
                 </td>
             </tr>
             <tr class="a">
-                <td colspan="1" class="a" style="border-right: none !important; margin-left: 10px !important">
+                <td colspan="2" class="a" style="border-right: none !important; margin-left: 10px !important">
                     @if ($data->text_qris)
                         <div style="margin-top: 10px !important; margin-bottom: 5px !important">
                             <img width="80" class="m-b-5" style="margin-left: 37px !important" src="{{ public_path('images/qr-logo.png') }}" alt="qris"><br>
-                            {!! $imgQRIS !!}
-                            <br style="margin-top: -30px !important">
-                            <span class="m-l-5" style="font-weight: 400; font-size: 12px; font-family: 'Open Sans'">NIMD:{{ $data->rincian_jenis->nmid }}</span>
+                            <div>
+                                {!! $imgQRIS !!}
+                            </div>
+                            <span class="m-l-5" style="font-weight: 400; font-size: 12px; font-family: 'Open Sans'; margin-top: -100px !important">NIMD:{{ $data->rincian_jenis->nmid }}</span>
                         </div>
                     @endif
                 </td>
-                <td colspan="3" class="a" style="border-left: none !important">
-                    <div style="text-align:center; margin-right: -400px !important">
+                <td colspan="2" class="a" style="border-left: none !important">
+                    <div style="text-align:center; margin-right: -200px !important">
                         <p>Tangerang Selatan, {{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_ttd)->isoFormat('D MMMM Y') }}</p>
-                        <table style="margin-left: 410px !important; margin-top: -8px; margin-bottom: -8px">
+                        <table style="margin-left: 240px !important; margin-top: -8px; margin-bottom: -8px">
                             <tr class="a">
                                 <td style="padding: 1px" width="8%" class="a"> {!! $img !!}</td>
                                 <td style="padding: 3px" width="92%" class="a">

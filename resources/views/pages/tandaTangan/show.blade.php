@@ -216,7 +216,6 @@
                                         <div class="row justify-content-center">
                                             @if ($data->status_ttd == 0 || $data->status_ttd == 2 || $data->status_ttd == 4)
                                                 <div class="col-auto p-1">
-                                                    <button class="btn btn-sm btn-success mr-1" data-toggle="modal" data-target="#preview-file"><i class="icon-document-file-pdf2 mr-2"></i>Lihat File</button>
                                                     <button class="btn btn-sm btn-primary mr-1" data-toggle="modal" data-target="#tte"><i class="icon-pencil mr-2"></i>Tanda Tangan</button>
                                                 </div>
                                             @else
@@ -384,15 +383,6 @@
 <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="preview-file" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
-            <!-- SKRD -->
-            @if ($data->status_ttd == 2)
-            <iframe src="{{ route('print.skrd', \Crypt::encrypt($data->id)) }}" style="margin-left: -160px !important" width="850px" height="940px"></iframe>
-            @endif
-            <!-- STRD -->
-            @if ($data->status_ttd == 4)
-            <iframe src="{{ route('print.strd', \Crypt::encrypt($data->id)) }}" style="margin-left: -160px !important" width="850px" height="940px"></iframe>
-            @endif
-
             <!-- TTE SKRD/STRD -->
             @if ($data->status_ttd == 1 || $data->status_ttd == 3)
             <iframe src="{{ config('app.sftp_src').$path_sftp.$fileName }}" style="margin-left: -160px !important" width="850px" height="940px"></iframe>
