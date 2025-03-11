@@ -224,6 +224,8 @@ class TandaTanganController extends Controller
                     'imgQRIS'
                 ));
 
+                return $pdf->stream();
+
                 // Get content PDF
                 $content = $pdf->download()->getOriginalContent();
 

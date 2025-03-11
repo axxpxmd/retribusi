@@ -137,23 +137,35 @@ class SKRDController extends Controller
                 $edit    = "<a href='" . route($this->route . 'edit', Crypt::encrypt($p->id)) . "' class='text-primary mr-2' title='Edit Data'><i class='icon icon-edit'></i></a>";
                 $delete  = "<a href='#' onclick='remove(" . $p->id . ")' class='text-danger mr-2' title='Hapus Data'><i class='icon icon-remove'></i></a>";
 
-                if ($p->status_ttd == 1) {
+                 //* Sudah TTD
+                 if ($p->status_ttd == 1) {
                     return $filettd;
-                } elseif ($p->status_ttd == 2) {
-                    return '-';
                 } else {
-                    $actions = $edit . $delete;
-                    if ($p->history_ttd == 1) {
-                        $actions .= $sendttd;
-                    }
-                    if ($getDuplicate) {
-                        foreach ($getDuplicate as $value) {
-                            if ($value['no_bayar'] == $p->no_bayar) {
-                                return $edit . $delete;
+                    //* Proses TTD
+                    if ($p->status_ttd != 2) {
+                        if ($getDuplicate) {
+                            foreach ($getDuplicate as $value) {
+                                if ($value['no_bayar'] == $p->no_bayar) {
+                                    return $edit . $delete;
+                                } else {
+                                    if ($p->history_ttd == 1) {
+                                        return $edit . $sendttd;
+                                    } else {
+                                        return $edit . $delete . $sendttd;
+                                    }
+                                }
+                            }
+                            return $edit . $delete;
+                        } else {
+                            if ($p->history_ttd == 1) {
+                                return $edit . $sendttd;
+                            } else {
+                                return $edit . $delete . $sendttd;
                             }
                         }
+                    } else {
+                        return '-';
                     }
-                    return $actions;
                 }
             })
             ->editColumn('no_skrd', function ($p) {
