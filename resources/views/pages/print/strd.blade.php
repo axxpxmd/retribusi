@@ -7,116 +7,133 @@
     <!-- Font -->
     <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
 
-    <style type="text/css">
-
-        html{
+    <style>
+        html {
             margin: 30px
         }
 
-		table.d {
+        table.d {
             border-collapse: collapse;
             width: 100%
         }
 
-        table.d tr.d,th.d,td.d{
+        table.d tr.d,
+        th.d,
+        td.d {
             table-layout: fixed;
             border: 1px solid black;
             font-size: 12px;
             height: 100;
         }
 
-        table.a tr.a,th.a,td.a{
+        table.a tr.a,
+        th.a,
+        td.a {
             table-layout: fixed;
             border: 1px solid black;
             font-size: 12px;
         }
 
-        table.c{
+        table.c {
             font-size: 15px
-        }
-
-        .m-l-5 {
-            margin-left: 5px;
-        }
-
-        .m-l-15 {
-            margin-left: 15px;
-        }
-
-        .m-l-25 {
-            margin-left: 25px;
         }
 
         .t-bold {
             font-weight: bold
         }
 
-        .m-b-0{
+        .m-b-0 {
             margin-bottom: 0px;
         }
-        .m-r-10{
+
+        .m-r-10 {
             margin-right: 10px;
         }
 
-        .m-t-0{
+        .m-t-0 {
             margin-top: 0px;
         }
 
-        .m-l-5{
+        .m-l-5 {
             margin-left: 5px;
         }
 
-        .text-right{
+        .text-right {
             text-align: right
         }
-        .text-center{
+
+        .text-center {
             text-align: center
         }
-        .m-t-100{
+
+        .m-t-100 {
             margin-top: 100px
         }
 
-        .text-left{
+        .text-left {
             text-align: left
         }
 
-        .m-l-14{
+        .m-l-14 {
             margin-left: 25px
         }
 
-        .m-r-20{
+        .m-r-20 {
             margin-right: 20px
         }
 
-        .f-w-n{
+        .f-w-n {
             font-weight: normal
         }
-        .m-t-1{
+
+        .m-t-1 {
             margin-top: 1px
         }
 
-        .m-l-50{
+        .m-l-50 {
             margin-left: 50px;
         }
-        .m-t-15{
+
+        .m-t-15 {
             margin-top: 15px
         }
-        .m-b-5{
+
+        .m-b-5 {
             margin-bottom: 5px
         }
-        .f-normal{
+
+        .f-normal {
             font-weight: normal
         }
-        .mt-n40{
+
+        .mt-n40 {
             margin-top: -30px !important
         }
-        .mt-n40{
+
+        .mt-n40 {
             margin-top: -30px !important
         }
-        .mt-n15{
+
+        .mt-n15 {
             margin-top: -15px !important
         }
-	</style>
+
+        .fs-10 {
+            font-size: 10px
+        }
+
+        .t-blue {
+            color: blue
+        }
+
+        .m-l-10 {
+            margin-left: 10px
+        }
+
+        .m-l-15 {
+            margin-left: 15px
+        }
+    </style>
 </head>
 <body >
     <table class="d">
@@ -228,8 +245,8 @@
                 <td class="a"><p class="m-l-5">{{ $data->rincian_jenis != null ? $data->rincian_jenis->nmr_rekening : '-' }}</p></td>
                 <td class="a">
                     <p class="m-l-5 m-b-0">{{ $data->jenis_pendapatan->jenis_pendapatan }}</p>
-                    <p class="m-l-15 m-b-0 m-t-0 m-l-10">{{ $data->rincian_jenis != null ? $data->rincian_jenis->rincian_pendapatan : '-' }}</p>
-                    <p class="m-l-25 m-t-0 m-l-15">{{ $data->uraian_retribusi }}</p>
+                    <p class="m-l-5 m-b-0 m-t-0 m-l-10">{{ $data->rincian_jenis != null ? $data->rincian_jenis->rincian_pendapatan : '-' }}</p>
+                    <p class="m-l-5 m-t-0 m-l-15">{{ $data->uraian_retribusi }}</p>
                 </td>
                 <td class="a">
                     <p class="m-l-5 text-right m-r-10">@currency($data->jumlah_bayar)</p>

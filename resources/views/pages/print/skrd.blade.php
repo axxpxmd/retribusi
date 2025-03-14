@@ -4,9 +4,6 @@
 <head>
     <title>{{ $data->nm_wajib_pajak }} - {{ $data->no_skrd }}</title>
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="{{ asset('css/util.css') }}">
-
     <!-- Font -->
     <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
 
@@ -43,18 +40,6 @@
 
         .t-bold {
             font-weight: bold
-        }
-
-        .m-l-5 {
-            margin-left: 5px;
-        }
-
-        .m-l-15 {
-            margin-left: 15px;
-        }
-
-        .m-l-25 {
-            margin-left: 25px;
         }
 
         .m-b-0 {
@@ -139,6 +124,14 @@
 
         .t-blue {
             color: blue
+        }
+
+        .m-l-10 {
+            margin-left: 10px
+        }
+
+        .m-l-15 {
+            margin-left: 15px
         }
     </style>
 
@@ -294,8 +287,8 @@
                 </td>
                 <td class="a">
                     <p class="m-l-5 m-b-0">{{ $data->jenis_pendapatan->jenis_pendapatan }}</p>
-                    <p class="m-l-15 m-b-0 m-t-0 m-l-10">{{ $data->rincian_jenis != null ? $data->rincian_jenis->rincian_pendapatan : '-' }}</p>
-                    <p class="m-l-25 m-t-0 m-l-15">{{ $data->uraian_retribusi }}</p>
+                    <p class="m-l-5 m-b-0 m-t-0 m-l-10">{{ $data->rincian_jenis != null ? $data->rincian_jenis->rincian_pendapatan : '-' }}</p>
+                    <p class="m-l-5 m-t-0 m-l-15">{{ $data->uraian_retribusi }}</p>
                 </td>
                 <td class="a">
                     <p class="m-l-5 text-right m-r-10">@currency($data->jumlah_bayar),-</p>
