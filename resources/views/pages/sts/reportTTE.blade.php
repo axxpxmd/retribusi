@@ -4,9 +4,6 @@
 <head>
     <title>{{ $data->nm_wajib_pajak }} - {{ $data->no_skrd }}</title>
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="{{ asset('css/util.css') }}">
-
     <!-- Font -->
     <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
 
@@ -41,10 +38,6 @@
             font-size: 15px
         }
 
-        table.z {
-            font-size: 14px
-        }
-
         .t-bold {
             font-weight: bold
         }
@@ -63,14 +56,6 @@
 
         .m-l-5 {
             margin-left: 5px;
-        }
-
-        .m-l-15 {
-            margin-left: 15px;
-        }
-
-        .m-l-25 {
-            margin-left: 25px;
         }
 
         .text-right {
@@ -139,6 +124,14 @@
 
         .t-blue {
             color: blue
+        }
+
+        .m-l-10 {
+            margin-left: 10px
+        }
+
+        .m-l-15 {
+            margin-left: 15px
         }
 
         .bgtext {
@@ -378,20 +371,21 @@
                 </td>
             </tr>
             <tr class="a">
-                <td colspan="1" class="a" style="border-right: none !important; margin-left: 10px !important">
+                <td colspan="2" class="a" style="border-right: none !important; margin-left: 10px !important">
                     @if ($data->text_qris)
                         <div style="margin-top: 10px !important; margin-bottom: 5px !important">
                             <img width="80" class="m-b-5" style="margin-left: 37px !important" src="{{ public_path('images/qr-logo.png') }}" alt="qris"><br>
-                            {!! $imgQRIS !!}
-                            <br style="margin-top: -30px !important">
-                            <span class="m-l-5" style="font-weight: 400; font-size: 12px; font-family: 'Open Sans'">NIMD:{{ $data->rincian_jenis->nmid }}</span>
+                            <div>
+                                {!! $imgQRIS !!}
+                            </div>
+                            <span class="m-l-5" style="font-weight: 400; font-size: 12px; font-family: 'Open Sans'; margin-top: -100px !important">NIMD:{{ $data->rincian_jenis->nmid }}</span>
                         </div>
                     @endif
                 </td>
-                <td colspan="3" class="a" style="border-left: none !important">
-                    <div style="text-align:center; margin-right: -400px !important">
+                <td colspan="2" class="a" style="border-left: none !important">
+                    <div style="text-align:center; margin-right: -200px !important">
                         <p>Tangerang Selatan, {{ Carbon\Carbon::createFromFormat('Y-m-d', $data->tgl_ttd)->isoFormat('D MMMM Y') }}</p>
-                        <table style="margin-left: 410px !important; margin-top: -8px; margin-bottom: -8px">
+                        <table style="margin-left: 240px !important; margin-top: -8px; margin-bottom: -8px">
                             <tr class="a">
                                 <td style="padding: 1px" width="8%" class="a"> {!! $img !!}</td>
                                 <td style="padding: 3px" width="92%" class="a">

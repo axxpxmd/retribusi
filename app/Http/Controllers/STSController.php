@@ -13,29 +13,36 @@
 
 namespace App\Http\Controllers;
 
-use Auth;
-use DataTables;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Yajra\DataTables\Facades\DataTables;
 
+// Illuminate
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Crypt;
 
+// App\Libraries
 use App\Libraries\VABJBRes;
+use App\Libraries\Html\Html_number;
+
+// App\Http\Services
 use App\Http\Services\Email;
 use App\Http\Services\WhatsApp;
-use App\Libraries\Html\Html_number;
+
+// App\Http\Controllers
 use App\Http\Controllers\Controller;
 
-// Queque
+// App\Jobs
 use App\Jobs\CallbackJob;
 
-// Models
+// App\Models
 use App\User;
 use App\Models\OPD;
 use App\Models\Utility;
 use App\Models\TransaksiOPD;
 use App\Models\OPDJenisPendapatan;
+
 
 class STSController extends Controller
 {
@@ -43,6 +50,9 @@ class STSController extends Controller
     protected $title = 'STS';
     protected $view  = 'pages.sts.';
 
+    protected $email;
+    protected $vabjbres;
+    protected $whatsapp;
 
     public function __construct(VABJBRes $vabjbres, WhatsApp $whatsapp, Email $email)
     {
@@ -166,7 +176,7 @@ class STSController extends Controller
         $route = $this->route;
         $title = $this->title;
 
-        $id      = \Crypt::decrypt($id);
+        $id      = Crypt::decrypt($id);
         $data    = TransaksiOPD::find($id);
         $dateNow = Carbon::now()->format('Y-m-d');
 
@@ -253,7 +263,7 @@ class STSController extends Controller
         $route = $this->route;
         $title = $this->title;
 
-        $id = is_numeric($id) ? $id : \Crypt::decrypt($id);
+        $id = is_numeric($id) ? $id : Crypt::decrypt($id);
         $role = Auth::user()->pengguna->modelHasRole->role->name;
         $now  = Carbon::now()->format('Y-m-d\TH:i');
         $data = TransaksiOPD::find($id);
@@ -347,7 +357,7 @@ class STSController extends Controller
             ], 500);
         }
 
-        $id   = \Crypt::decrypt($id);
+        $id   = Crypt::decrypt($id);
         $data = TransaksiOPD::find($id);
 
         $no_bku    = $request->no_bku;
@@ -433,8 +443,7 @@ class STSController extends Controller
     public function batalBayar($id)
     {
         $data       = TransaksiOPD::find($id);
-        $id_encrypt = \Crypt::encrypt($id);
-
+        $id_encrypt = Crypt::encrypt($id);
         $data->update([
             'status_bayar' => 0,
             'tgl_bayar'    => null,
