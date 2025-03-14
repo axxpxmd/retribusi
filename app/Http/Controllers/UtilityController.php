@@ -6,7 +6,6 @@ use Carbon\Carbon;
 
 use App\Libraries\VABJBRes;
 use App\Libraries\QRISBJBRes;
-use App\Libraries\GenerateNumber;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -21,13 +20,13 @@ use App\Models\RincianJenisPendapatan;
 
 class UtilityController extends Controller
 {
-    public function __construct(GenerateNumber $generateNumber, VABJBRes $vabjbres, QRISBJBRes $qrisbjbres)
+    private $vabjbres;
+    private $qrisbjbres;
+
+    public function __construct(VABJBRes $vabjbres, QRISBJBRes $qrisbjbres)
     {
         $this->vabjbres   = $vabjbres;
         $this->qrisbjbres = $qrisbjbres;
-        $this->generateNumber = $generateNumber;
-
-        $this->middleware(['permission:SKRD']);
     }
 
     public function printDataTTD(Request $request, $id)
