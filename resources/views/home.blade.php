@@ -218,9 +218,9 @@
                         <table id="tableChannelBayar" class="table table-hover fs-12" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
-                                    <th>Metode Bayar</th>
-                                    <th>Jumlah</th>
-                                    <th>Total Pembayaran</th>
+                                    <th class="font-weight-bold">Metode Bayar</th>
+                                    <th class="font-weight-bold">Jumlah</th>
+                                    <th class="font-weight-bold">Total Pembayaran</th>
                                 </tr>
                             </thead>
                             <tbody>
