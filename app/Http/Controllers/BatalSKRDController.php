@@ -179,17 +179,28 @@ class BatalSKRDController extends Controller
 
         $tgl_skrd_akhir = $data->tgl_skrd_akhir;
         $tgl_strd_akhir = $data->tgl_strd_akhir;
-        $jumlah_bayar    = $data->jumlah_bayar;
+        $jumlah_bayar   = $data->jumlah_bayar;
         $status_ttd     = $data->status_ttd;
+        $status_bayar   = $data->status_bayar;
+        $total_bayar    = $data->jumlah_bayar;
+         $denda         = $data->denda;
 
         $status_ttd = Utility::checkStatusTTD($status_ttd);
         $tgl_jatuh_tempo = Utility::tglJatuhTempo($tgl_strd_akhir, $tgl_skrd_akhir);
 
         //TODO: check jatuh tempo
         $checkJatuhTempo = Utility::isJatuhTempo($tgl_jatuh_tempo);
+        $jatuh_tempo = Utility::isJatuhTempo($tgl_skrd_akhir, $dateNow);
 
-        //TODO: Get bunga
-        list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $jumlah_bayar);
+         //TODO: Get bunga
+        $kenaikan    = 0;
+        $jumlahBunga = 0;
+        if ($jatuh_tempo) {
+            list($jumlahBunga, $kenaikan) = Utility::createBunga($tgl_skrd_akhir, $total_bayar);
+        }
+
+        //TODO Total Bayar + Bunga
+        $total_bayar = Utility::createDenda($status_bayar, $total_bayar, $denda, $jumlahBunga);
 
         return view($this->view . 'show', compact(
             'route',
